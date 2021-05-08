@@ -1,0 +1,26 @@
+# Ignore everything in repository root 
+/*
+
+# Files to not ignore
+!/.gitignore
+
+# Folder to not ignore
+!/scripts
+
+!/maps
+/maps/*
+!/maps/mp/
+/maps/mp/*
+!/maps/mp/bots/
+!/maps/mp/gametypes/
+/maps/mp/gametypes/*
+!/maps/mp/gametypes/_playercards.gsc
+
+
+*.zip
+*.log
+*.stat
+logs/
+demos/
+images/
+missingasset.csv
