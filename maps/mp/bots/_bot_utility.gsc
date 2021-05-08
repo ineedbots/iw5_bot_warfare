@@ -858,6 +858,8 @@ readWpsFromFile(mapname)
 	}
 
 	return waypoints;*/
+
+	return [];
 }
 
 /*
