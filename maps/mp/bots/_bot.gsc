@@ -1,7 +1,7 @@
 /*
 	_bot
 	Author: INeedGames
-	Date: 09/26/2020
+	Date: 05/07/2021
 	The entry point and manager of the bots.
 */
 
@@ -123,39 +123,11 @@ init()
 	level.bots = [];
 	
 	level.bots_fullautoguns = [];
-	level.bots_fullautoguns["aa12"] = true;
-	level.bots_fullautoguns["ak47"] = true;
-	level.bots_fullautoguns["aug"] = true;
-	level.bots_fullautoguns["fn2000"] = true;
-	level.bots_fullautoguns["glock"] = true;
-	level.bots_fullautoguns["kriss"] = true;
-	level.bots_fullautoguns["m4"] = true;
-	level.bots_fullautoguns["m240"] = true;
-	level.bots_fullautoguns["masada"] = true;
-	level.bots_fullautoguns["mg4"] = true;
-	level.bots_fullautoguns["mp5k"] = true;
-	level.bots_fullautoguns["p90"] = true;
-	level.bots_fullautoguns["pp2000"] = true;
-	level.bots_fullautoguns["rpd"] = true;
-	level.bots_fullautoguns["sa80"] = true;
-	level.bots_fullautoguns["scar"] = true;
-	level.bots_fullautoguns["tavor"] = true;
-	level.bots_fullautoguns["tmp"] = true;
-	level.bots_fullautoguns["ump45"] = true;
-	level.bots_fullautoguns["uzi"] = true;
-
-	level.bots_fullautoguns["ac130"] = true;
-	level.bots_fullautoguns["heli"] = true;
-
-	level.bots_fullautoguns["ak47classic"] = true;
-	level.bots_fullautoguns["ak74u"] = true;
-	level.bots_fullautoguns["peacekeeper"] = true;
 	
 	level thread fixGamemodes();
 	
 	level thread onPlayerConnect();
 	level thread addNotifyOnAirdrops();
-	level thread watchScrabler();
 	
 	level thread handleBots();
 	
@@ -360,50 +332,6 @@ onPlayerConnect()
 }
 
 /*
-	Watches players with scrambler perk
-*/
-watchScrabler()
-{
-	for (;;)
-	{
-		wait 1;
-
-		for ( i = level.players.size - 1; i >= 0; i-- )
-		{
-			player = level.players[i];
-			player.bot_isScrambled = false;
-		}
-
-		for ( i = level.players.size - 1; i >= 0; i-- )
-		{
-			player = level.players[i];
-
-			if (!player _HasPerk("specialty_localjammer") || !isReallyAlive(player))
-				continue;
-
-			if (player isEMPed())
-				continue;
-
-			for ( h = level.players.size - 1; h >= 0; h-- )
-			{
-				player2 = level.players[h];
-
-				if (player2 == player)
-					continue;
-
-				if(level.teamBased && player2.team == player.team)
-					continue;
-
-				if (DistanceSquared(player2.origin, player.origin) > 256*256)
-					continue;
-
-				player2.bot_isScrambled = true;
-			}
-		}
-	}
-}
-
-/*
 	When a bot disconnects.
 */
 onDisconnect()
@@ -463,14 +391,14 @@ added()
 */
 add_bot()
 {
-	bot = addtestclient();
+	setDvar("addBots", 1);
 
-	if (isdefined(bot))
+	/*if (isdefined(bot))
 	{
 		bot.pers["isBot"] = true;
 		bot.pers["isBotWarfare"] = true;
 		bot thread added();
-	}
+	}*/
 }
 
 /*
@@ -793,7 +721,7 @@ addBots()
 		{
 			tempBot = random(getBotArray());
 			if (isDefined(tempBot))
-				kick( tempBot getEntityNumber(), "EXE_PLAYERKICKED" );
+				setDvar("removeBot", tempBot getEntityNumber());
 		}
 	}
 }

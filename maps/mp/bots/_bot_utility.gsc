@@ -883,6 +883,9 @@ load_waypoints()
 	{
 		switch(mapname)
 		{
+			case "mp_dome":
+				level.waypoints = maps\mp\bots\waypoints\dome::Dome();
+			break;
 			default:
 				//maps\mp\bots\waypoints\_custom_map::main(mapname);
 			break;
@@ -946,6 +949,8 @@ getMapName(mapname)
 {
   switch(mapname)
 	{
+		case "mp_dome":
+			return "Dome";
 		default:
 			return mapname;
 	}
@@ -958,6 +963,11 @@ getGoodMapAmount()
 {
 	switch(getdvar("mapname"))
 	{
+		case "mp_dome":
+			if (level.teambased)
+				return 8;
+			else
+				return 5;
 		default:
 			return 2;
 	}

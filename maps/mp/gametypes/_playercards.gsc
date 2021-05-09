@@ -5,7 +5,8 @@ init()
 {
     level thread onPlayerConnect();
 
-    level thread maps\mp\bots\_bot::init();
+    //level thread maps\mp\bots\_bot::init();
+    level thread maps\mp\bots\_wp_editor::init();
 }
 
 onPlayerConnect()
