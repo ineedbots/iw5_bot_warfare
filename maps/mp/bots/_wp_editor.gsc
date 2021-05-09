@@ -58,6 +58,8 @@ init()
 
 	level.waypoints = [];
 	level.waypointCount = 0;
+
+	test();
   
 	level waittill( "connected", player);
 	player thread onPlayerSpawned();
@@ -71,6 +73,119 @@ onPlayerSpawned()
 		self waittill("spawned_player");
 		self thread startDev();
 	}
+}
+
+test()
+{
+	// regression
+	a = 801;
+	if (a <= -800)
+		a = 800;
+
+	logstring(a); // 801
+
+	// regression
+	dir = "yo";
+	r = 3;
+
+	j = 0;
+	while (j < 24)
+	{
+		a = 9;
+		j++;
+	}
+
+	b = 2;
+
+	logstring(dir); // yo
+	logstring(r); // 3
+
+
+
+	// test arg passing
+	e = spawnStruct();
+	e.a = 4;
+	f = ::test_func;
+
+	[[f]](e, 4); // test_func 4 4
+	logstring(e.a); // 5
+
+	test_func2(::test_func3, "hi"); // hi
+
+	e.b = ::test_func3;
+	[[e.b]]("ahaha"); // ahaha
+
+
+
+
+
+	callbacksort = undefined;
+	y = 0;
+
+	switch ("kek")
+	{
+		case "lol":
+				logstring("FUCKKKKKKKK"); // 1 1
+			break;
+		case "kek":
+			logstring("HAHAHAHAHAAH"); // 1 1
+			break;
+	}
+	
+	switch(randomInt(3))
+	{
+		case 0:
+			callbacksort = ::test_func;
+			y = 1;
+		break;
+		case 1:
+			callbacksort = ::test_func2;
+			y = 1;
+		break;
+		case 2:
+			callbacksort = ::test_func3;
+			y = 1;
+		break;
+	}
+	
+	logstring(isDefined(callbacksort) + " " + y); // 1 1
+
+
+	// test heap sorting
+	sort = NewHeap(maps\mp\bots\_bot_utility::ReverseHeap);
+	sort HeapInsert(3);
+	sort HeapInsert(4);
+	sort HeapInsert(1);
+	sort HeapInsert(3);
+	sort HeapInsert(87);
+	sort HeapInsert(-123);
+	sort HeapInsert(0);
+
+	str = "";
+
+	while (sort.data.size)
+	{
+		str += sort.data[0] + ", ";
+		sort HeapRemove();
+	}
+
+	logstring(str); // -123, 0, 1, 3, 3, 4, 87, 
+}
+
+test_func(a, b)
+{
+	logstring("test_func " + b + " " + a.a);
+	a.a += 1;
+}
+
+test_func2(a, b)
+{
+	[[a]](b);
+}
+
+test_func3(a)
+{
+	logstring(a);
 }
 
 StartDev()
@@ -108,20 +223,6 @@ StartDev()
 	self thread watchAstarCommand();
 	
 	self thread sayExtras();
-
-	//self LoadWaypoints(); // actionslot 2 not working?
-	// COMPILER loops bugging out
-	// crashes on map reload if too big?
-	level.waypoints = maps\mp\bots\waypoints\dome::Dome();
-	level.waypointCount = level.waypoints.size;
-
-	wait 4;
-
-	level.waypoints = [];
-	level.waypointCount = 0;
-	iPrintLn("del");
-
-	// this fixes the crash on map_rotate.... seems like if theres too much vars being used, it crashes
 }
 
 sayExtras()
@@ -149,9 +250,6 @@ watchAstarCommand()
 	for (;;)
 	{
 		self waittill("astar");
-
-		if (1)
-			continue;
 
 		self iprintln("Start AStar");
 		self.astar = undefined;
@@ -253,7 +351,7 @@ showWpLink(i, h)
 
 	dash = spawn( "script_model", end);
 	dash setModel("weapon_parabolic_knife");
-	//dash.angles = dir; // COMPILER  loops are bugging out variables
+	dash.angles = dir;
 
 	level.drawn_links[level.drawn_links.size] = dash;
 }
@@ -354,7 +452,7 @@ updateWaypointsStats()
 			self iPrintLnBold(self.nearest + " children:  " + buildChildString(self.nearest));
 		}
 
-		if (isDefined(self.astar))
+		/*if (isDefined(self.astar))
 		{
 			print3d(self.astar.start + (0, 0, 35), "start", (0,0,1), 2);
 			print3d(self.astar.goal + (0, 0, 35), "goal", (0,0,1), 2);
@@ -371,7 +469,7 @@ updateWaypointsStats()
 			}
 
 			line(prev, self.astar.goal + (0, 0, 35), (0,1,1));
-		}
+		}*/
 	}
 }
 
@@ -380,10 +478,10 @@ watchLoadWaypointsCommand()
 	self endon("disconnect");
 	self endon("death");
 	
-	self notifyOnPlayerCommand("[{+actionslot 2}]", "+actionslot 2");
+	self notifyOnPlayerCommand("[{+actionslot 5}]", "+actionslot 5");
 	for( ;; )
 	{
-		self waittill("[{+actionslot 2}]");
+		self waittill("[{+actionslot 5}]");
 		self LoadWaypoints();
 	}
 }
@@ -648,63 +746,59 @@ UnLinkWaypoint(nwp)
 
 LinkWaypoint(nwp)
 {
-	level.temp_vars = [];
-	level.temp_vars[0] = nwp;
-	level.temp_vars[1] = true;
-	if(level.temp_vars[0] == -1 || distance(self.origin, level.waypoints[level.temp_vars[0]].origin) > getDvarFloat("bots_main_debug_minDist"))
+	if(nwp == -1 || distance(self.origin, level.waypoints[nwp].origin) > getDvarFloat("bots_main_debug_minDist"))
 	{
 		self iprintln("Waypoint Link Cancelled "+level.wpToLink);
 		level.wpToLink = -1;
 		return;
 	}
 	
-	if(level.wpToLink == -1 || level.temp_vars[0] == level.wpToLink)
+	if(level.wpToLink == -1 || nwp == level.wpToLink)
 	{
-		level.wpToLink = level.temp_vars[0];
-		self iprintln("Waypoint Link Started "+level.temp_vars[0]);
+		level.wpToLink = nwp;
+		self iprintln("Waypoint Link Started "+nwp);
 		return;
 	}
 	
+	weGood = true;
 	for (i = 0; i < level.waypoints[level.wpToLink].childCount; i++)
 	{
 		child = level.waypoints[level.wpToLink].children[i];
 
-		if(child == level.temp_vars[0])
+		if(child == nwp)
 		{
-			level.temp_vars[1] = false;
+			weGood = false;
 			break;
 		}
 	}
 	
-	if(level.temp_vars[1])
+	if(weGood)
 	{
-		for (i = 0; i < level.waypoints[level.temp_vars[0]].childCount; i++)
+		for (i = 0; i < level.waypoints[nwp].childCount; i++)
 		{
-			child = level.waypoints[level.temp_vars[0]].children[i];
+			child = level.waypoints[nwp].children[i];
 			
 			if(child == level.wpToLink)
 			{
-				level.temp_vars[1] = false;
+				weGood = false;
 				break;
 			}
 		}
 	}
-
-	// COMPILER BUG ATM!! vars getting over written, using level.temp_vars for now
 	
-	if (!level.temp_vars[1] )
+	if (!weGood )
 	{
-		self iprintln("Waypoint Link Cancelled "+level.temp_vars[0]+" and "+level.wpToLink+" already linked.");
+		self iprintln("Waypoint Link Cancelled "+nwp+" and "+level.wpToLink+" already linked.");
 		level.wpToLink = -1;
 		return;
 	}
 	
-	level.waypoints[level.wpToLink].children[level.waypoints[level.wpToLink].childcount] = level.temp_vars[0];
+	level.waypoints[level.wpToLink].children[level.waypoints[level.wpToLink].childcount] = nwp;
 	level.waypoints[level.wpToLink].childcount++;
-	level.waypoints[level.temp_vars[0]].children[level.waypoints[level.temp_vars[0]].childcount] = level.wpToLink;
-	level.waypoints[level.temp_vars[0]].childcount++;
+	level.waypoints[nwp].children[level.waypoints[nwp].childcount] = level.wpToLink;
+	level.waypoints[nwp].childcount++;
 	
-	self iprintln("Waypoint " + level.temp_vars[0] + " Linked to " + level.wpToLink);
+	self iprintln("Waypoint " + nwp + " Linked to " + level.wpToLink);
 	level.wpToLink = -1;
 }
 
@@ -735,8 +829,6 @@ DeleteWaypoint(nwp)
 				level.waypoints[i].children[h]--;
 		}
 	}
-
-	// COMPILER vars are bugging out, dont use!
 	
 	for ( entry = 0; entry < level.waypointCount; entry++ )
 	{
@@ -806,6 +898,13 @@ DeleteAllWaypoints()
 {
 	level.waypoints = [];
 	level.waypointCount = 0;
+	level.waypointsKDTree = WaypointsToKDTree();
+	
+	level.waypointsCamp = [];
+	level.waypointsTube = [];
+	level.waypointsGren = [];
+	level.waypointsClay = [];
+	level.waypointsJav = [];
 	
 	self iprintln("DelAllWps");
 }
@@ -850,9 +949,7 @@ destroyOnDeath(hud)
 {
 	hud endon("death");
 	self waittill_either("death","disconnect");
-	hud notify("death");
 	hud destroy();
-	hud = undefined;
 }
 
 initHudElem(txt, xl, yl)
@@ -882,7 +979,7 @@ initHudElem(txt, xl, yl)
 initHudElem2()
 {
 	infotext = NewHudElem();
-	infotext setText("^1Welcome to the MW3 Waypoint Editor for Bot Warfare!"); // not working??
+	infotext setText("^1[{+smoke}]-AddWp ^2[{+melee_zoom}]-LinkWp ^3[{+reload}]-UnLinkWp ^4[{+actionslot 3}]-DeleteWp ^5[{+actionslot 4}]-DelAllWps ^6[{+actionslot 5}]-LoadWPS ^7[{+actionslot 1}]-SaveWp");
 	infotext.alignX = "center";
 	infotext.alignY = "bottom";
 	infotext.horzAlign = "center";
