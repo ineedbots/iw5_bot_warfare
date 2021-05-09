@@ -18,6 +18,7 @@ init()
 	if(!getDVarint("bots_main_debug"))
 		return;
 	
+	// COMPILER until gsc can be ran on the client...
 	/*if(!getDVarint("developer"))
 	{
 		setdvar("developer_script", 1);
@@ -88,6 +89,7 @@ StartDev()
 	self giveWeapon("semtex_mp");
 	self _clearperks();
 	self.specialty = [];
+	// need to find out how to setperks in mw3
 	/*self maps\mp\perks\_perks::givePerk("specialty_fastmantle");
 	self maps\mp\perks\_perks::givePerk("specialty_falldamage");
 	self maps\mp\perks\_perks::givePerk("specialty_marathon");
@@ -108,6 +110,8 @@ StartDev()
 	self thread sayExtras();
 
 	//self LoadWaypoints(); // actionslot 2 not working?
+	// COMPILER loops bugging out
+	// crashes on map reload if too big?
 	level.waypoints = maps\mp\bots\waypoints\dome::Dome();
 	level.waypointCount = level.waypoints.size;
 }
@@ -241,7 +245,7 @@ showWpLink(i, h)
 
 	dash = spawn( "script_model", end);
 	dash setModel("weapon_parabolic_knife");
-	//dash.angles = dir; // COMPILER
+	//dash.angles = dir; // COMPILER  loops are bugging out variables
 
 	level.drawn_links[level.drawn_links.size] = dash;
 }
@@ -279,6 +283,7 @@ updateWaypointsStats()
 		myAngles = self GetPlayerAngles();
 		timeToUpdate = ((intTimer % getDvarInt("bots_main_debug_updateRate")) == 0);
 
+		// COMPILER need client gsc
 		if (timeToUpdate)
 		{
 			clearWaypoints();
@@ -294,6 +299,7 @@ updateWaypointsStats()
 			
 			if(distance(level.waypoints[i].origin, self.origin) < getDvarFloat("bots_main_debug_distance") && (bulletTracePassed(myEye, wpOrg, false, self) || getDVarint("bots_main_debug_drawThrough")))
 			{
+				// COMPILER need client gsc
 				if (timeToUpdate)
 				{
 					if(getConeDot(wpOrg, myEye, myAngles) > getDvarFloat("bots_main_debug_cone"))
@@ -305,6 +311,7 @@ updateWaypointsStats()
 					}
 				}
 
+				// COMPILER need client gsc
 				/*for(h = 0; h < level.waypoints[i].childCount; h++)
 					line(wpOrg, level.waypoints[level.waypoints[i].children[h]].origin + (0, 0, 25), (1,0,1));
 				
@@ -675,7 +682,7 @@ LinkWaypoint(nwp)
 		}
 	}
 
-	// COMPILER BUG ATM!! nwp getting over written, using level.temp_vars for now
+	// COMPILER BUG ATM!! vars getting over written, using level.temp_vars for now
 	
 	if (!level.temp_vars[1] )
 	{
@@ -720,6 +727,8 @@ DeleteWaypoint(nwp)
 				level.waypoints[i].children[h]--;
 		}
 	}
+
+	// COMPILER vars are bugging out, dont use!
 	
 	for ( entry = 0; entry < level.waypointCount; entry++ )
 	{
