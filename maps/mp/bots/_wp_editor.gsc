@@ -114,6 +114,14 @@ StartDev()
 	// crashes on map reload if too big?
 	level.waypoints = maps\mp\bots\waypoints\dome::Dome();
 	level.waypointCount = level.waypoints.size;
+
+	wait 4;
+
+	level.waypoints = [];
+	level.waypointCount = 0;
+	iPrintLn("del");
+
+	// this fixes the crash on map_rotate.... seems like if theres too much vars being used, it crashes
 }
 
 sayExtras()
