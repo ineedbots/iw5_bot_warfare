@@ -1055,12 +1055,18 @@ _WaypointsToKDTree(waypoints, dem)
 
 	callbacksort = undefined;
 
-	if (dem == 0) // COMPILER bug! cannot assign variables outside the switch statement
-		callbacksort = ::HeapSortCoordX;
-	else if (dem == 1)
-		callbacksort = ::HeapSortCoordY;
-	else
-		callbacksort = ::HeapSortCoordZ;
+	switch(dem)
+	{
+		case 0:
+			callbacksort = ::HeapSortCoordX;
+		break;
+		case 1:
+			callbacksort = ::HeapSortCoordY;
+		break;
+		case 2:
+			callbacksort = ::HeapSortCoordZ;
+		break;
+	}
 	
 	heap = NewHeap(callbacksort);
 	

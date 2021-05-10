@@ -18,7 +18,6 @@ init()
 	if(!getDVarint("bots_main_debug"))
 		return;
 	
-	// COMPILER until gsc can be ran on the client...
 	/*if(!getDVarint("developer"))
 	{
 		setdvar("developer_script", 1);
@@ -152,7 +151,8 @@ test()
 
 
 	// test heap sorting
-	sort = NewHeap(maps\mp\bots\_bot_utility::ReverseHeap);
+	// DECOMPILER, for loops extra ;
+	sort = NewHeap(maps\mp\bots\_bot_utility::ReverseHeap); // COMPILER needs func pointers include search
 	sort HeapInsert(3);
 	sort HeapInsert(4);
 	sort HeapInsert(1);
@@ -284,6 +284,23 @@ drawWaypoint(i)
 	level.drawn_wps[level.drawn_wps.size] = newdeathicon;
 }
 
+drawPath(where)
+{
+	if (!isDefined(level.drawn_wps))
+		level.drawn_wps = [];
+
+	newdeathicon = newHudElem();
+	newdeathicon.x = where[0];
+	newdeathicon.y = where[1];
+	newdeathicon.z = where[2] + 20;
+	newdeathicon.alpha = .61;
+	newdeathicon.archived = true;
+	newdeathicon setShader("headicon_dead", 5, 5);
+	newdeathicon setwaypoint( true, false );
+
+	level.drawn_wps[level.drawn_wps.size] = newdeathicon;
+}
+
 clearWaypoints()
 {
 	if (!isDefined(level.drawn_wps))
@@ -389,7 +406,6 @@ updateWaypointsStats()
 		myAngles = self GetPlayerAngles();
 		timeToUpdate = ((intTimer % getDvarInt("bots_main_debug_updateRate")) == 0);
 
-		// COMPILER need client gsc
 		if (timeToUpdate)
 		{
 			clearWaypoints();
@@ -405,7 +421,6 @@ updateWaypointsStats()
 			
 			if(distance(level.waypoints[i].origin, self.origin) < getDvarFloat("bots_main_debug_distance") && (bulletTracePassed(myEye, wpOrg, false, self) || getDVarint("bots_main_debug_drawThrough")))
 			{
-				// COMPILER need client gsc
 				if (timeToUpdate)
 				{
 					if(getConeDot(wpOrg, myEye, myAngles) > getDvarFloat("bots_main_debug_cone"))
@@ -417,7 +432,7 @@ updateWaypointsStats()
 					}
 				}
 
-				// COMPILER need client gsc
+				// mw3 doesnt have debug gsc calls :(
 				/*for(h = 0; h < level.waypoints[i].childCount; h++)
 					line(wpOrg, level.waypoints[level.waypoints[i].children[h]].origin + (0, 0, 25), (1,0,1));
 				
@@ -452,10 +467,15 @@ updateWaypointsStats()
 			self iPrintLnBold(self.nearest + " children:  " + buildChildString(self.nearest));
 		}
 
-		/*if (isDefined(self.astar))
+		if (isDefined(self.astar))
 		{
-			print3d(self.astar.start + (0, 0, 35), "start", (0,0,1), 2);
-			print3d(self.astar.goal + (0, 0, 35), "goal", (0,0,1), 2);
+			//print3d(self.astar.start + (0, 0, 35), "start", (0,0,1), 2);
+			//print3d(self.astar.goal + (0, 0, 35), "goal", (0,0,1), 2);
+			if (timeToUpdate)
+			{
+				drawPath(self.astar.start);
+				drawPath(self.astar.goal);
+			}
 
 			prev = self.astar.start + (0, 0, 35);
 
@@ -463,13 +483,14 @@ updateWaypointsStats()
 			{
 				node = self.astar.nodes[i];
 
-				line(prev, level.waypoints[node].origin + (0, 0, 35), (0,1,1));
+				//line(prev, level.waypoints[node].origin + (0, 0, 35), (0,1,1));
+				if (timeToUpdate) drawPath(level.waypoints[node].origin);
 				
 				prev = level.waypoints[node].origin + (0, 0, 35);
 			}
 
-			line(prev, self.astar.goal + (0, 0, 35), (0,1,1));
-		}*/
+			//line(prev, self.astar.goal + (0, 0, 35), (0,1,1));
+		}
 	}
 }
 
