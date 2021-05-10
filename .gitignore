@@ -12,9 +12,6 @@
 !/maps/mp/
 /maps/mp/*
 !/maps/mp/bots/
-!/maps/mp/gametypes/
-/maps/mp/gametypes/*
-!/maps/mp/gametypes/_playercards.gsc
 
 
 *.zip
