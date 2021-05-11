@@ -473,7 +473,7 @@ getValidGrenade()
 */
 isWeaponPrimary(weap)
 {
-	//return (maps\mp\gametypes\_weapons::isPrimaryWeapon(weap) || maps\mp\gametypes\_weapons::isAltModeWeapon(weap));
+	return (maps\mp\gametypes\_weapons::isPrimaryWeapon(weap) || maps\mp\gametypes\_weapons::isAltModeWeapon(weap));
 }
 
 /*
@@ -510,7 +510,7 @@ isSecondaryGrenade(gnade)
 */
 isWeaponDroppable(weap)
 {
-	//return (maps\mp\gametypes\_weapons::mayDropWeapon(weap));
+	return (maps\mp\gametypes\_weapons::mayDropWeapon(weap));
 }
 
 /*
