@@ -490,11 +490,8 @@ entIsVehicle(ent)
 WeaponIsFullAuto(weap)
 {
 	weaptoks = strtok(weap, "_");
-
-	assert(isDefined(weaptoks[0]));
-	assert(isString(weaptoks[0]));
 	
-	return isDefined(level.bots_fullautoguns[weaptoks[0]]);
+	return isDefined(level.bots_fullautoguns[weaptoks[1]]);
 }
 
 /*

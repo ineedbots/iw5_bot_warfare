@@ -124,6 +124,31 @@ init()
 	level.bots = [];
 	
 	level.bots_fullautoguns = [];
+	level.bots_fullautoguns["fmg9"] = true;
+	level.bots_fullautoguns["skorpion"] = true;
+	level.bots_fullautoguns["mp9"] = true;
+	level.bots_fullautoguns["g18"] = true;
+	level.bots_fullautoguns["mp5"] = true;
+	level.bots_fullautoguns["m9"] = true;
+	level.bots_fullautoguns["p90"] = true;
+	level.bots_fullautoguns["pp90m1"] = true;
+	level.bots_fullautoguns["ump45"] = true;
+	level.bots_fullautoguns["mp7"] = true;
+	level.bots_fullautoguns["ak47"] = true;
+	level.bots_fullautoguns["m4"] = true;
+	level.bots_fullautoguns["fad"] = true;
+	level.bots_fullautoguns["acr"] = true;
+	level.bots_fullautoguns["scar"] = true;
+	level.bots_fullautoguns["g36c"] = true;
+	level.bots_fullautoguns["cm901"] = true;
+	level.bots_fullautoguns["aa12"] = true;
+	level.bots_fullautoguns["m60"] = true;
+	level.bots_fullautoguns["mk46"] = true;
+	level.bots_fullautoguns["pecheneg"] = true;
+	level.bots_fullautoguns["sa80"] = true;
+	level.bots_fullautoguns["mg36"] = true;
+	
+	level.bots_fullautoguns["ak47u"] = true;
 	
 	level thread fixGamemodes();
 	
@@ -394,12 +419,31 @@ add_bot()
 {
 	setDvar("addBots", 1);
 
-	/*if (isdefined(bot))
+	wait 0.05;
+
+	bot = undefined;
+
+	players = GetEntArray( "player", "classname" );
+	for (i = 0; i < players.size; i++)
+	{
+		player = players[i];
+
+		if (!player is_bot())
+			continue;
+
+		if (isDefined(self.pers["isBotWarfare"]))
+			continue;
+
+		bot = player;
+		break;
+	}
+
+	if (isdefined(bot))
 	{
 		bot.pers["isBot"] = true;
 		bot.pers["isBotWarfare"] = true;
 		bot thread added();
-	}*/
+	}
 }
 
 /*

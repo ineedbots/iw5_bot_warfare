@@ -1465,6 +1465,8 @@ start_bot_threads()
 	
 	gameFlagWait("prematch_done");
 
+  if (true) return;
+
 	// inventory usage
 	if (getDvarInt("bots_play_killstreak"))
 		self thread bot_killstreak_think();
