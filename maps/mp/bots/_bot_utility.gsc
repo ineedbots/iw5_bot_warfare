@@ -888,7 +888,7 @@ load_waypoints()
 				level.waypoints = maps\mp\bots\waypoints\dome::Dome();
 			break;
 			default:
-				//maps\mp\bots\waypoints\_custom_map::main(mapname);
+				maps\mp\bots\waypoints\_custom_map::main(mapname);
 			break;
 		}
 
