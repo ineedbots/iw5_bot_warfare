@@ -7,7 +7,7 @@
 
 #include common_scripts\utility;
 #include maps\mp\_utility;
-#include maps\mp\bots\_hud_util; // COMPILER needs the original in its list of includes!
+#include maps\mp\gametypes\_hud_util;
 #include maps\mp\bots\_bot_utility;
 
 init()
@@ -151,8 +151,7 @@ test()
 
 
 	// test heap sorting
-	// DECOMPILER, for loops extra ;
-	sort = NewHeap(maps\mp\bots\_bot_utility::ReverseHeap); // COMPILER needs func pointers include search
+	sort = NewHeap(::ReverseHeap);
 	sort HeapInsert(3);
 	sort HeapInsert(4);
 	sort HeapInsert(1);
