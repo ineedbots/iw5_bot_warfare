@@ -75,7 +75,7 @@ is_bot()
 */
 BotChangeToWeapon(weap)
 {
-	//self maps\mp\bots\_bot_internal::changeToWeap(weap);
+	self maps\mp\bots\_bot_internal::changeToWeap(weap);
 }
 
 /*
@@ -83,7 +83,7 @@ BotChangeToWeapon(weap)
 */
 BotPressFrag(time)
 {
-	//self maps\mp\bots\_bot_internal::frag(time);
+	self maps\mp\bots\_bot_internal::frag(time);
 }
 
 /*
@@ -91,7 +91,7 @@ BotPressFrag(time)
 */
 BotPressSmoke(time)
 {
-	//self maps\mp\bots\_bot_internal::smoke(time);
+	self maps\mp\bots\_bot_internal::smoke(time);
 }
 
 /*
@@ -99,7 +99,7 @@ BotPressSmoke(time)
 */
 BotPressADS(time)
 {
-	//self maps\mp\bots\_bot_internal::pressAds(time);
+	self maps\mp\bots\_bot_internal::pressAds(time);
 }
 
 /*
@@ -107,7 +107,7 @@ BotPressADS(time)
 */
 BotPressAttack(time)
 {
-	//self maps\mp\bots\_bot_internal::pressFire(time);
+	self maps\mp\bots\_bot_internal::pressFire(time);
 }
 
 /*
@@ -1306,7 +1306,7 @@ RectDistanceSquared(origin)
 */
 doExtraCheck()
 {
-	//maps\mp\bots\_bot_internal::checkTheBots();
+	maps\mp\bots\_bot_internal::checkTheBots();
 }
 
 /*
