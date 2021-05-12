@@ -12,6 +12,8 @@
 
 init()
 {
+	thread test();
+
 	if(getDvar("bots_main_debug") == "")
 		setDvar("bots_main_debug", 0);
 
@@ -57,8 +59,6 @@ init()
 
 	level.waypoints = [];
 	level.waypointCount = 0;
-
-	test();
   
 	level waittill( "connected", player);
 	player thread onPlayerSpawned();
@@ -76,12 +76,14 @@ onPlayerSpawned()
 
 test()
 {
+	wait 0.5;
+
 	// regression
 	a = 801;
 	if (a <= -800)
 		a = 800;
 
-	logstring(a); // 801
+	print(a); // 801
 
 	// regression
 	dir = "yo";
@@ -96,8 +98,8 @@ test()
 
 	b = 2;
 
-	logstring(dir); // yo
-	logstring(r); // 3
+	print(dir); // yo
+	print(r); // 3
 
 
 
@@ -107,7 +109,7 @@ test()
 	f = ::test_func;
 
 	[[f]](e, 4); // test_func 4 4
-	logstring(e.a); // 5
+	print(e.a); // 5
 
 	test_func2(::test_func3, "hi"); // hi
 
@@ -124,10 +126,10 @@ test()
 	switch ("kek")
 	{
 		case "lol":
-				logstring("FUCKKKKKKKK"); // 1 1
+				print("FUCKKKKKKKK");
 			break;
 		case "kek":
-			logstring("HAHAHAHAHAAH"); // 1 1
+			print("HAHAHAHAHAAH");
 			break;
 	}
 	
@@ -147,7 +149,7 @@ test()
 		break;
 	}
 	
-	logstring(isDefined(callbacksort) + " " + y); // 1 1
+	print(isDefined(callbacksort) + " " + y); // 1 1
 
 
 	// test heap sorting
@@ -168,12 +170,23 @@ test()
 		sort HeapRemove();
 	}
 
-	logstring(str); // -123, 0, 1, 3, 3, 4, 87, 
+	print(str); // -123, 0, 1, 3, 3, 4, 87, 
+
+
+	thread await();
+	level waittill("aaaa", aa, bb, cc, dd);
+	print(aa + " " + bb + " " + cc + " " + dd); // 1 2 3 4
+}
+
+await()
+{
+	wait 0.5;
+	level notify("aaaa", 1, 2, 3, "4");
 }
 
 test_func(a, b)
 {
-	logstring("test_func " + b + " " + a.a);
+	print("test_func " + b + " " + a.a);
 	a.a += 1;
 }
 
@@ -184,7 +197,7 @@ test_func2(a, b)
 
 test_func3(a)
 {
-	logstring(a);
+	print(a);
 }
 
 StartDev()

@@ -1710,3 +1710,7 @@ random_normal_distribution( mean, std_deviation, lower_bound, upper_bound )
 onUsePlantObjectFix( player )
 {
 }
+
+botGiveLoadout(team, class, copycat)
+{
+}

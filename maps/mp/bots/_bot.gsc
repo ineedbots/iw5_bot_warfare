@@ -417,6 +417,7 @@ added()
 */
 add_bot()
 {
+	//bot = addTestClient();
 	setDvar("addBots", 1);
 
 	wait 0.05;
@@ -766,7 +767,7 @@ addBots()
 		{
 			tempBot = random(getBotArray());
 			if (isDefined(tempBot))
-				setDvar("removeBot", tempBot getEntityNumber());
+				kick(tempBot getEntityNumber());
 		}
 	}
 }
