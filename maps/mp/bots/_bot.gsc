@@ -417,27 +417,7 @@ added()
 */
 add_bot()
 {
-	//bot = addTestClient();
-	setDvar("addBots", 1);
-
-	wait 0.05;
-
-	bot = undefined;
-
-	players = GetEntArray( "player", "classname" );
-	for (i = 0; i < players.size; i++)
-	{
-		player = players[i];
-
-		if (!player is_bot())
-			continue;
-
-		if (isDefined(self.pers["isBotWarfare"]))
-			continue;
-
-		bot = player;
-		break;
-	}
+	bot = addTestClient();
 
 	if (isdefined(bot))
 	{

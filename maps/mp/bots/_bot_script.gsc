@@ -171,7 +171,7 @@ getCardTitles()
 		if (!isSubStr(card_name, "cardtitle_"))
 			continue;
 
-		cards[cards.size] = card_name;
+		cards[cards.size] = i;
 	}
 
 	return cards;
@@ -194,7 +194,7 @@ getCardIcons()
 		if (!isSubStr(card_name, "cardicon_"))
 			continue;
 
-		cards[cards.size] = card_name;
+		cards[cards.size] = i;
 	}
 
 	return cards;
