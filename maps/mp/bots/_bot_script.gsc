@@ -48,7 +48,6 @@ connected()
 	self thread onSpawned();
 
 	self thread onDeath();
-	self thread onGiveLoadout();
 
 	self thread onKillcam();
 }
@@ -898,7 +897,7 @@ onDamage(eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint
 	if(!isAlive(eAttacker))
 		return;
 		
-	if (!isSubStr(sWeapon, "_silencer_"))
+	if (!isSubStr(sWeapon, "_silencer"))
 		self bot_cry_for_help( eAttacker );
 	
 	self SetAttacker( eAttacker );
@@ -1394,26 +1393,6 @@ onDeath()
 }
 
 /*
-	Watches when the bot is given a loadout
-*/
-onGiveLoadout()
-{
-	self endon("disconnect");
-
-	for(;;)
-	{
-		self waittill("giveLoadout");
-
-		class = self.class;
-		if (isDefined(self.bot_oma_class))
-			class = self.bot_oma_class;
-
-		self botGiveLoadout(self.team, class, !isDefined(self.bot_oma_class));
-		self.bot_oma_class = undefined;
-	}
-}
-
-/*
 	When the bot spawns.
 */
 onSpawned()
@@ -1428,7 +1407,6 @@ onSpawned()
 			self.bot_change_class = undefined;
 
 		self.bot_lock_goal = false;
-		self.bot_oma_class = undefined;
 		self.help_time = undefined;
 		self.bot_was_follow_script_update = undefined;
 		self.bot_stuck_on_carepackage = undefined;
@@ -1465,36 +1443,33 @@ start_bot_threads()
 	
 	gameFlagWait("prematch_done");
 
-  if (true) return;
-
 	// inventory usage
-	if (getDvarInt("bots_play_killstreak"))
-		self thread bot_killstreak_think();
+	//if (getDvarInt("bots_play_killstreak"))
+	//	self thread bot_killstreak_think();
 
-	self thread bot_weapon_think();
-	self thread doReloadCancel();
-	self thread bot_perk_think();
+	//self thread bot_weapon_think();
+	//self thread doReloadCancel();
 
 	// script targeting
 	if (getDvarInt("bots_play_target_other"))
 	{
-		self thread bot_target_vehicle();
-		self thread bot_equipment_kill_think();
-		self thread bot_turret_think();
+		//self thread bot_target_vehicle();
+		//self thread bot_equipment_kill_think();
+		//self thread bot_turret_think();
 	}
 
 	// airdrop
 	if (getDvarInt("bots_play_take_carepackages"))
 	{
-		self thread bot_watch_stuck_on_crate();
-		self thread bot_crate_think();
+		//self thread bot_watch_stuck_on_crate();
+		//self thread bot_crate_think();
 	}
 
 	// awareness
-	self thread bot_revenge_think();
-	self thread bot_uav_think();
-	self thread bot_listen_to_steps();
-	self thread follow_target();
+	//self thread bot_revenge_think();
+	//self thread bot_uav_think();
+	//self thread bot_listen_to_steps();
+	//self thread follow_target();
 
 	// camp and follow
 	if (getDvarInt("bots_play_camp"))
@@ -1517,7 +1492,7 @@ start_bot_threads()
 	// obj
 	if (getDvarInt("bots_play_obj"))
 	{
-		self thread bot_dom_def_think();
+		/*self thread bot_dom_def_think();
 		self thread bot_dom_spawn_kill_think();
 
 		self thread bot_hq();
@@ -1535,7 +1510,7 @@ start_bot_threads()
 		self thread bot_gtnw();
 		self thread bot_oneflag();
 		self thread bot_arena();
-		self thread bot_vip();
+		self thread bot_vip();*/
 	}
 
 	self thread bot_think_revive();
@@ -1975,8 +1950,8 @@ getLockonAmmo()
 {
 	answer = undefined;
 		
-	if(self getAmmoCount("at4_mp"))
-		answer = "at4_mp"; 
+	if(self getAmmoCount("iw5_smaw_mp"))
+		answer = "iw5_smaw_mp"; 
 		
 	if(self getAmmoCount("stinger_mp"))
 		answer = "stinger_mp";
@@ -2267,92 +2242,6 @@ followPlayer(who)
 }
 
 /*
-	Bots thinking of using one man army and blast shield
-*/
-bot_perk_think()
-{
-	self endon("disconnect");
-	self endon("death");
-	level endon("game_ended");
-
-	for (;;)
-	{
-		wait randomIntRange(5,7);
-
-		if (self IsUsingRemote())
-			continue;
-
-		if(self BotIsFrozen())
-			continue;
-
-		if(self isDefusing() || self isPlanting())
-			continue;
-
-		for (;self _hasPerk("specialty_blastshield");)
-		{
-			if (!self _hasPerk("_specialty_blastshield"))
-			{
-				if (randomInt(100) < 65)
-					break;
-
-				self _setPerk("_specialty_blastshield");
-			}
-			else
-			{
-				if (randomInt(100) < 90)
-					break;
-
-				self _unsetPerk("_specialty_blastshield");
-			}
-
-			break;
-		}
-
-		for (;self _hasPerk("specialty_onemanarmy") && self hasWeapon("onemanarmy_mp");)
-		{
-			if (self HasThreat() || self HasBotJavelinLocation())
-				break;
-
-			if (self InLastStand() && !self InFinalStand())
-				break;
-
-			anyWeapout = false;
-			weaponsList = self GetWeaponsListAll();
-			for (i = 0; i < weaponsList.size; i++)
-			{
-				weap = weaponsList[i];
-
-				if (self getAmmoCount(weap) || weap == "onemanarmy_mp")
-					continue;
-
-				anyWeapout = true;
-			}
-
-			if ((!anyWeapout && randomInt(100) < 90) || randomInt(100) < 10)
-				break;
-
-			class = self chooseRandomClass();
-			self.bot_oma_class = class;
-
-			if (!self changeToWeapon("onemanarmy_mp"))
-			{
-				self.bot_oma_class = undefined;
-				break;
-			}
-
-			self BotFreezeControls(true);
-			wait 1;
-			self BotFreezeControls(false);
-
-			self notify ( "menuresponse", game["menu_onemanarmy"], self.bot_oma_class );
-
-			self waittill_any_timeout ( 10, "changed_kit" );
-			break;
-		}
-	}
-}
-
-/*
 	Bots thinking of using a noobtube
 */
 bot_use_tube_think()
@@ -2509,6 +2398,14 @@ bot_use_equipment_think()
 			nade = "flare_mp";
 		if (self GetAmmoCount("c4_mp"))
 			nade = "c4_mp";
+		if (self GetAmmoCount("bouncingbetty_mp"))
+			nade = "bouncingbetty_mp";
+		if (self GetAmmoCount("portable_radar_mp"))
+			nade = "portable_radar_mp";
+		if (self GetAmmoCount("scrambler_mp"))
+			nade = "scrambler_mp";
+		if (self GetAmmoCount("trophy_mp"))
+			nade = "trophy_mp";
 		
 		if (!isDefined(nade))
 			continue;
@@ -2742,10 +2639,12 @@ bot_watch_think_mw2()
 		tube = self getValidTube();
 		if (!isDefined(tube))
 		{
-			if (self GetAmmoCount("at4_mp"))
-				tube = "at4_mp";
+			if (self GetAmmoCount("iw5_smaw_mp"))
+				tube = "iw5_smaw_mp";
 			else if (self GetAmmoCount("rpg_mp"))
 				tube = "rpg_mp";
+			else if (self GetAmmoCount("xm25_mp"))
+				tube = "xm25_mp";
 			else
 				continue;
 		}
@@ -2830,7 +2729,7 @@ bot_watch_riot_weapons()
 				if (!isWeaponPrimary(weapon))
 					continue;
 					
-				if(curWeap == weapon || weapon == "none" || weapon == "" || weapon == "javelin_mp" || weapon == "stinger_mp" || weapon == "onemanarmy_mp")
+				if(curWeap == weapon || weapon == "none" || weapon == "" || weapon == "javelin_mp" || weapon == "stinger_mp")
 					continue;
 					
 				weap = weapon;
@@ -3157,7 +3056,7 @@ bot_listen_to_steps()
 			break;
 		}
 
-		hasHeartbeat = (isSubStr(self GetCurrentWeapon(), "_heartbeat_") && !self IsEMPed());
+		hasHeartbeat = (isSubStr(self GetCurrentWeapon(), "_heartbeat") && !self IsEMPed());
 		heartbeatDist = 350*350;
 
 		if(!IsDefined(heard) && hasHeartbeat)
@@ -3767,13 +3666,6 @@ bot_weapon_think()
 
 			continue;
 		}
-
-		if (isDefined(self.bot_oma_class))
-		{
-			if (curWeap != "onemanarmy_mp")
-				self thread ChangeToWeapon("onemanarmy_mp");
-			continue;
-		}
 		
 		if (first)
 		{
@@ -3784,7 +3676,7 @@ bot_weapon_think()
 		}
 		else
 		{
-			if(curWeap != "none" && self getAmmoCount(curWeap) && curWeap != "stinger_mp" && curWeap != "javelin_mp" && curWeap != "onemanarmy_mp")
+			if(curWeap != "none" && self getAmmoCount(curWeap) && curWeap != "stinger_mp" && curWeap != "javelin_mp")
 			{
 				if(randomInt(100) > self.pers["bots"]["behavior"]["switch"])
 					continue;
@@ -3807,7 +3699,7 @@ bot_weapon_think()
 			if (!isWeaponPrimary(weapon))
 				continue;
 				
-			if(curWeap == weapon || weapon == "none" || weapon == "" || weapon == "javelin_mp" || weapon == "stinger_mp" || weapon == "onemanarmy_mp")
+			if(curWeap == weapon || weapon == "none" || weapon == "" || weapon == "javelin_mp" || weapon == "stinger_mp")
 				continue;
 				
 			weap = weapon;

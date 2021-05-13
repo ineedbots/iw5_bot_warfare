@@ -432,7 +432,7 @@ getValidTube()
 		if(!self getAmmoCount(weap))
 			continue;
 
-		if ((isSubStr(weap, "gl_") && !isSubStr(weap, "_gl_")) || weap == "m79_mp")
+		if ((isSubStr(weap, "alt_") && (isSubStr(weap, "_m320") || isSubStr(weap, "_gl") || isSubStr(weap, "_gp25"))) || weap == "m320_mp")
 			return weap;
 	}
 
@@ -451,6 +451,7 @@ getValidGrenade()
 	grenadeTypes[grenadeTypes.size] = "concussion_grenade_mp";
 	grenadeTypes[grenadeTypes.size] = "semtex_mp";
 	grenadeTypes[grenadeTypes.size] = "throwingknife_mp";
+	grenadeTypes[grenadeTypes.size] = "emp_grenade_mp";
 	
 	possibles = [];
 	
@@ -499,7 +500,7 @@ WeaponIsFullAuto(weap)
 */
 isSecondaryGrenade(gnade)
 {
-	return (gnade == "concussion_grenade_mp" || gnade == "flash_grenade_mp" || gnade == "smoke_grenade_mp");
+	return (gnade == "concussion_grenade_mp" || gnade == "flash_grenade_mp" || gnade == "smoke_grenade_mp" || gnade == "trophy_mp" || gnade == "emp_grenade_mp" || gnade == "flare_mp" || gnade == "scrambler_mp" || gnade == "portable_radar_mp");
 }
 
 /*
@@ -1708,9 +1709,5 @@ random_normal_distribution( mean, std_deviation, lower_bound, upper_bound )
 	Patches the plant sites so it exposes the defuseObject
 */
 onUsePlantObjectFix( player )
-{
-}
-
-botGiveLoadout(team, class, copycat)
 {
 }

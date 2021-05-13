@@ -226,7 +226,7 @@ onWeaponChange()
 		self.bot.is_cur_full_auto = WeaponIsFullAuto(newWeapon);
 		self.bot.cur_weap_dist_multi = SetWeaponDistMulti(newWeapon);
 		self.bot.is_cur_sniper = IsWeapSniper(newWeapon);
-		self.bot.is_cur_akimbo = isSubStr(newWeapon, "_akimbo_");
+		self.bot.is_cur_akimbo = isSubStr(newWeapon, "_akimbo");
 
 		if (newWeapon == "none")
 			continue;
@@ -917,7 +917,7 @@ target()
 		initReactTime = self.pers["bots"]["skill"]["init_react_time"];
 		hasTarget = isDefined(self.bot.target);
 		usingRemote = self isUsingRemote();
-		ignoreSmoke = isSubStr(self GetCurrentWeapon(), "_thermal_");
+		ignoreSmoke = isSubStr(self GetCurrentWeapon(), "_thermal");
 		vehEnt = undefined;
 		adsAmount = self PlayerADS();
 		adsFovFact = self.pers["bots"]["skill"]["ads_fov_multi"];
@@ -1011,7 +1011,7 @@ target()
 				if (usingRemote)
 				{
 					canTargetPlayer = (bulletTracePassed(myEye, player getTagOrigin( "j_head" ), false, vehEnt)
-														&& !player _hasPerk("specialty_coldblooded"));
+														&& !player _hasPerk("specialty_blindeye"));
 				}
 				else
 				{
@@ -1400,8 +1400,6 @@ aim()
 					}
 					
 					knifeDist = level.bots_maxKnifeDistance;
-					if (self _hasPerk("specialty_extendedmelee"))
-						knifeDist *= 1.4;
 					if((isplay || target.classname == "misc_turret") && !self.bot.isknifingafter && conedot > 0.9 && dist < knifeDist && trace_time > reaction_time && !usingRemote && getDvarInt("bots_play_knife"))
 					{
 						self clear_bot_after_target();
@@ -1558,7 +1556,7 @@ canFire(curweap)
 	if(curweap == "none")
 		return false;
 
-	if (curweap == "riotshield_mp" || curweap == "onemanarmy_mp")
+	if (curweap == "riotshield_mp")
 		return false;
 
 	if (self IsUsingRemote())
@@ -1592,7 +1590,7 @@ canAds(dist, curweap)
 	if(weapclass == "spread" || weapclass == "grenade")
 		return false;
 
-	if (curweap == "riotshield_mp" || curweap == "onemanarmy_mp")
+	if (curweap == "riotshield_mp")
 		return false;
 
 	if (self.bot.is_cur_akimbo)
@@ -2361,7 +2359,7 @@ bot_lookat(pos, time)
 
 botWeapon(weap)
 {
-  setDvar("bot" + self getEntityNumber() + "_weapon", weap);
+  self switchToWeapon(weap);
 }
 
 botAction(act)
@@ -2393,6 +2391,5 @@ botMovement(forward, right)
 botStop()
 {
   setDvar("bot" + self getEntityNumber() + "_movement", "0 0");
-  setDvar("bot" + self getEntityNumber() + "_weapon", "");
   setDvar("bot" + self getEntityNumber() + "_buttons", 0);
 }
