@@ -117,6 +117,31 @@ tester()
 	thread await();
 	level waittill("aaaa", aa, bb, cc, dd);
 	print(aa + " " + bb + " " + cc + " " + dd); // 1 2 3 4
+
+
+	new_arr[0] = true;
+	print(new_arr[0]); // 1
+
+
+
+	level tet(); // OK
+
+
+	level tet2(); // 0
+}
+
+tet2(a)
+{
+	print(isDefined(a));
+}
+
+tet()
+{
+	arr = [];
+
+	arr[0] = self;
+
+	print("OK");
 }
 
 await()

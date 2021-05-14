@@ -24,8 +24,7 @@ added()
 	self setPlayerData("cardTitle", random(getCardTitles()));
 	self setPlayerData("cardIcon", random(getCardIcons()));
 
-	//self setClasses();
-	//self setKillstreaks();
+	self setClasses();
 
 	self set_diff();
 }
@@ -247,10 +246,13 @@ getPrimaries()
 	{
 		weapon_type = tableLookupByRow( "mp/statstable.csv", i, 2 );
 
-		if (weapon_type != "weapon_assault" && weapon_type != "weapon_riot" && weapon_type != "weapon_smg" && weapon_type != "weapon_sniper" && weapon_type != "weapon_lmg")
+		if (weapon_type != "weapon_assault" && weapon_type != "weapon_riot" && weapon_type != "weapon_smg" && weapon_type != "weapon_sniper" && weapon_type != "weapon_lmg" && weapon_type != "weapon_shotgun")
 			continue;
 
 		weapon_name = tableLookupByRow( "mp/statstable.csv", i, 4 );
+
+		if (isSubStr(weapon_name, "jugg"))
+			continue;
 
 		primaries[primaries.size] = weapon_name;
 	}
@@ -269,12 +271,12 @@ getSecondaries()
 	{
 		weapon_type = tableLookupByRow( "mp/statstable.csv", i, 2 );
 
-		if (weapon_type != "weapon_pistol" && weapon_type != "weapon_machine_pistol" && weapon_type != "weapon_projectile" && weapon_type != "weapon_shotgun")
+		if (weapon_type != "weapon_pistol" && weapon_type != "weapon_machine_pistol" && weapon_type != "weapon_projectile")
 			continue;
 
 		weapon_name = tableLookupByRow( "mp/statstable.csv", i, 4 );
 
-		if (weapon_name == "gl")
+		if (weapon_name == "gl" || isSubStr(weapon_name, "jugg"))
 			continue;
 
 		secondaries[secondaries.size] = weapon_name;
@@ -304,12 +306,32 @@ getCamos()
 }
 
 /*
+	returns all reticles
+*/
+getReticles()
+{
+	reticles = [];
+
+	for (i = 0; i < 10; i++)
+	{
+		reticle_name = tableLookupByRow( "mp/reticletable.csv", i, 1 );
+
+		if (reticle_name == "")
+			continue;
+
+		reticles[reticles.size] = reticle_name;
+	}
+
+	return reticles;
+}
+
+/*
 	returns all perks for the given type
 */
 getPerks(perktype)
 {
 	perks = [];
-	for (i = 0; i < 50; i++)
+	for (i = 0; i < 100; i++)
 	{
 		perk_type = tableLookupByRow( "mp/perktable.csv", i, 5 );
 
@@ -318,10 +340,7 @@ getPerks(perktype)
 
 		perk_name = tableLookupByRow( "mp/perktable.csv", i, 1 );
 
-		if (perk_name == "specialty_c4death")
-			continue;
-
-		if (perk_name == "_specialty_blastshield")
+		if (perk_name == "specialty_uav")
 			continue;
 
 		perks[perks.size] = perk_name;
@@ -344,7 +363,7 @@ getKillsNeededForStreak(streak)
 getKillstreaks()
 {
 	killstreaks = [];
-	for (i = 0; i < 40; i++)
+	for (i = 0; i < 65; i++)
 	{
 		streak_name = tableLookupByRow( "mp/killstreakTable.csv", i, 1 );
 
@@ -354,10 +373,10 @@ getKillstreaks()
 		if(streak_name == "b1")
 			continue;
 
-		if(streak_name == "sentry") // theres an airdrop version
+		if(streak_name == "sentry" || streak_name == "remote_tank" || streak_name == "nuke" || streak_name == "all_perks_bonus") // theres an airdrop version
 			continue;
 
-		if (isSubstr(streak_name, "KILLSTREAKS_"))
+		if (isSubstr(streak_name, "specialty_") && isSubstr(streak_name, "_pro"))
 			continue;
 
 		killstreaks[killstreaks.size] = streak_name;
@@ -366,9 +385,70 @@ getKillstreaks()
 }
 
 /*
+	Returns the weapon buffs for a given weapon type
+*/
+getWeaponProfs(weapClass)
+{
+	answer = [];
+
+	if ( weapClass == "weapon_assault" )
+	{
+		answer[answer.size] = "specialty_bling";
+		answer[answer.size] = "specialty_bulletpenetration";
+		answer[answer.size] = "specialty_marksman";
+		answer[answer.size] = "specialty_sharp_focus";
+		answer[answer.size] = "specialty_holdbreathwhileads";
+		answer[answer.size] = "specialty_reducedsway";
+	}
+	else if ( weapClass == "weapon_smg" )
+	{
+		answer[answer.size] = "specialty_bling";
+		answer[answer.size] = "specialty_marksman";
+		answer[answer.size] = "specialty_sharp_focus";
+		answer[answer.size] = "specialty_reducedsway";
+		answer[answer.size] = "specialty_longerrange";
+		answer[answer.size] = "specialty_fastermelee";
+	}
+	else if ( weapClass == "weapon_lmg" )
+	{
+		answer[answer.size] = "specialty_bling";
+		answer[answer.size] = "specialty_bulletpenetration";
+		answer[answer.size] = "specialty_marksman";
+		answer[answer.size] = "specialty_sharp_focus";
+		answer[answer.size] = "specialty_reducedsway";
+		answer[answer.size] = "specialty_lightweight";
+	}
+	else if ( weapClass == "weapon_sniper" )
+	{
+		answer[answer.size] = "specialty_bling";
+		answer[answer.size] = "specialty_bulletpenetration";
+		answer[answer.size] = "specialty_marksman";
+		answer[answer.size] = "specialty_sharp_focus";
+		answer[answer.size] = "specialty_reducedsway";
+		answer[answer.size] = "specialty_lightweight";
+	}
+	else if ( weapClass == "weapon_shotgun" )
+	{
+		answer[answer.size] = "specialty_bling";
+		answer[answer.size] = "specialty_marksman";
+		answer[answer.size] = "specialty_sharp_focus";
+		answer[answer.size] = "specialty_longerrange";
+		answer[answer.size] = "specialty_fastermelee";
+		answer[answer.size] = "specialty_moredamage";
+	}
+	else if ( weapClass == "weapon_riot" )
+	{
+		answer[answer.size] = "specialty_fastermelee";
+		answer[answer.size] = "specialty_lightweight";
+	}
+
+	return answer;
+}
+
+/*
 	bots chooses a random perk
 */
-chooseRandomPerk(perkkind, primary, primaryAtts)
+chooseRandomPerk(perkkind)
 {
 	perks = getPerks(perkkind);
 	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData("experience") );
@@ -383,82 +463,10 @@ chooseRandomPerk(perkkind, primary, primaryAtts)
 		{
 			if (perkkind == "perk4")
 				return "specialty_null";
-
-			if (perk == "specialty_pistoldeath")
-				continue;
-
-			if (perk == "specialty_coldblooded")
-				continue;
-
-			if (perk == "specialty_localjammer")
-				continue;
 		}
 
 		if (reasonable)
 		{
-			if (perk == "specialty_bling")
-				continue;
-			if (perk == "specialty_localjammer")
-				continue;
-			if (perk == "throwingknife_mp")
-				continue;
-			if (perk == "specialty_blastshield")
-				continue;
-			if (perk == "frag_grenade_mp")
-				continue;
-			if (perk == "specialty_copycat")
-				continue;
-
-			if (perkkind == "perk1")
-			{
-				if (perk == "specialty_onemanarmy")
-				{
-					if (primaryAtts[0] != "gl"/* && primaryAtts[1] != "gl"*/)
-						continue;
-				}
-			}
-
-			if (perkkind == "perk2")
-			{
-				if (perk != "specialty_bulletdamage")
-				{
-					if (perk == "specialty_explosivedamage")
-					{
-						if (primaryAtts[0] != "gl"/* && primaryAtts[1] != "gl"*/)
-							continue;
-					}
-					else
-					{
-						if (randomInt(100) < 10)
-							continue;
-
-						if (primary == "cheytac")
-							continue;
-						if (primary == "rpd")
-							continue;
-						if (primary == "ak47" && randomInt(100) < 80)
-							continue;
-						if (primary == "aug")
-							continue;
-						if (primary == "barrett" && randomInt(100) < 80)
-							continue;
-						if (primary == "tavor" && randomInt(100) < 80)
-							continue;
-						if (primary == "scar")
-							continue;
-						if (primary == "masada" && randomInt(100) < 60)
-							continue;
-						if (primary == "m4" && randomInt(100) < 80)
-							continue;
-						if (primary == "m16")
-							continue;
-						if (primary == "fal")
-							continue;
-						if (primary == "famas")
-							continue;
-					}
-				}
-			}
 		}
 
 		if (perk == "specialty_null")
@@ -485,10 +493,22 @@ chooseRandomCamo()
 	{
 		camo = random(camos);
 
-		if (camo == "gold" || camo == "prestige")
-			continue;
-
 		return camo;
+	}
+}
+
+/*
+	choose a random camo
+*/
+chooseRandomReticle()
+{
+	reticles = getReticles();
+
+	while (true)
+	{
+		reticle = random(reticles);
+
+		return reticle;
 	}
 }
 
@@ -515,18 +535,6 @@ chooseRandomPrimary()
 		{
 			if (primary == "riotshield")
 				continue;
-			if (primary == "wa2000")
-				continue;
-			if (primary == "uzi")
-				continue;
-			if (primary == "sa80")
-				continue;
-			if (primary == "fn2000")
-				continue;
-			if (primary == "m240")
-				continue;
-			if (primary == "mg4")
-				continue;
 		}
 
 		if (!self isItemUnlocked(primary))
@@ -539,11 +547,8 @@ chooseRandomPrimary()
 /*
 	choose a random secondary
 */
-chooseRandomSecondary(perk1)
+chooseRandomSecondary()
 {
-	if (perk1 == "specialty_onemanarmy")
-		return "onemanarmy";
-
 	secondaries = getSecondaries();
 	allowOp = (getDvarInt("bots_loadout_allow_op") >= 1);
 	reasonable = getDvarInt("bots_loadout_reasonable");
@@ -554,25 +559,43 @@ chooseRandomSecondary(perk1)
 
 		if (!allowOp)
 		{
-			if (secondary == "at4" || secondary == "rpg" || secondary == "m79")
+			if (secondary == "iw5_smaw" || secondary == "rpg" || secondary == "m320" || secondary == "xm25")
 				continue;
 		}
 
 		if (reasonable)
 		{
-			if (secondary == "ranger")
-				continue;
-			if (secondary == "model1887")
-				continue;
 		}
 
 		if (!self isItemUnlocked(secondary))
 			continue;
 
-		if (secondary == "onemanarmy")
-			continue;
-
 		return secondary;
+	}
+}
+
+/*
+	Returns a random buff for a weapon
+*/
+chooseRandomBuff(weap)
+{
+	buffs = getWeaponProfs(tableLookup( "mp/statstable.csv", 4, weap, 2 ));
+	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData("experience") );
+	allowOp = (getDvarInt("bots_loadout_allow_op") >= 1);
+	reasonable = getDvarInt("bots_loadout_reasonable");
+
+	buffs[buffs.size] = "specialty_null";
+
+	if (RandomFloatRange(0, 1) >= ((rank / level.maxRank) + 0.1))
+	{
+		return "specialty_null";
+	}
+
+	while (true)
+	{
+		buff = random(buffs);
+
+		return buff;
 	}
 }
 
@@ -605,33 +628,12 @@ chooseRandomAttachmentComboForGun(gun)
 
 		if (!allowOp)
 		{
-			if (att1 == "gl" || att2 == "gl")
+			if (att1 == "gl" || att2 == "gl" || att1 == "gp25" || att2 == "gp25" || att1 == "m320" || att2 == "m320")
 				continue;
 		}
 
 		if (reasonable)
 		{
-			if (att1 == "shotgun" || att2 == "shotgun")
-				continue;
-
-			if (att1 == "akimbo" || att2 == "akimbo")
-			{
-				if (gun != "ranger" && gun != "model1887" && gun != "glock")
-					continue;
-			}
-
-			if (att1 == "acog" || att2 == "acog")
-				continue;
-			if (att1 == "thermal" || att2 == "thermal")
-				continue;
-			if (att1 == "rof" || att2 == "rof")
-				continue;
-
-			if (att1 == "silencer" || att2 == "silencer")
-			{
-				if (gun == "spas12" || gun == "aa12" || gun == "striker" || gun == "rpd" || gun == "m1014" || gun == "cheytac" || gun == "barrett" || gun == "aug" || gun == "m240" || gun == "mg4" || gun == "sa80" || gun == "wa2000")
-					continue;
-			}
 		}
 
 		retAtts = [];
@@ -647,77 +649,23 @@ chooseRandomAttachmentComboForGun(gun)
 */
 chooseRandomTactical()
 {
-	tacts = strTok("flash_grenade,smoke_grenade,concussion_grenade", ",");
-	reasonable = getDvarInt("bots_loadout_reasonable");
-
-	while (true)
-	{
-		tact = random(tacts);
-
-		if (reasonable)
-		{
-			if (tact == "smoke_grenade")
-				continue;
-		}
-
-		return tact;
-	}
+	
 }
 
 /*
-	sets up all classes for a bot
+	Choose a random grenade
 */
-setClasses()
+chooseRandomGrenade()
 {
-	n = 5;
-	if (!self is_bot())
-		n = 15;
-		
-	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData("experience") );
 
-	if (RandomFloatRange(0, 1) < ((rank / level.maxRank) + 0.1))
-	{
-		self.pers["bots"]["unlocks"]["ghillie"] = true;
-		self.pers["bots"]["behavior"]["quickscope"] = true;
-	}
+}
 
-	for (i = 0; i < n; i++)
-	{
-		equipment = chooseRandomPerk("equipment");
-		perk3 = chooseRandomPerk("perk3");
-		deathstreak = chooseRandomPerk("perk4");
-		tactical = chooseRandomTactical();
-		primary = chooseRandomPrimary();
-		primaryAtts = chooseRandomAttachmentComboForGun(primary);
-		perk1 = chooseRandomPerk("perk1", primary, primaryAtts);
+/*
+	Choose a random killstreak set
+*/
+chooseRandomKillstreaks(type)
+{
 
-		if (perk1 != "specialty_bling")
-			primaryAtts[1] = "none";
-
-		perk2 = chooseRandomPerk("perk2", primary, primaryAtts);
-		primaryCamo = chooseRandomCamo();
-		secondary = chooseRandomSecondary(perk1);
-		secondaryAtts = chooseRandomAttachmentComboForGun(secondary);
-
-		if (perk1 != "specialty_bling" || !isDefined(self.pers["bots"]["unlocks"]["upgraded_specialty_bling"]))
-			secondaryAtts[1] = "none";
-
-		self setPlayerData("customClasses", i, "weaponSetups", 0, "weapon", primary);
-		self setPlayerData("customClasses", i, "weaponSetups", 0, "attachment", 0, primaryAtts[0]);
-		self setPlayerData("customClasses", i, "weaponSetups", 0, "attachment", 1, primaryAtts[1]);
-		self setPlayerData("customClasses", i, "weaponSetups", 0, "camo", primaryCamo);
-
-		self setPlayerData("customClasses", i, "weaponSetups", 1, "weapon", secondary);
-		self setPlayerData("customClasses", i, "weaponSetups", 1, "attachment", 0, secondaryAtts[0]);
-		self setPlayerData("customClasses", i, "weaponSetups", 1, "attachment", 1, secondaryAtts[1]);
-
-		self setPlayerData("customClasses", i, "perks", 0, equipment);
-		self setPlayerData("customClasses", i, "perks", 1, perk1);
-		self setPlayerData("customClasses", i, "perks", 2, perk2);
-		self setPlayerData("customClasses", i, "perks", 3, perk3);
-		self setPlayerData("customClasses", i, "perks", 4, deathstreak);
-		self setPlayerData("customClasses", i, "specialGrenade", tactical);
-	}
 }
 
 /*
@@ -827,6 +775,102 @@ setKillstreaks()
 	self setPlayerData("killstreaks", 0, killstreaks[0]);
 	self setPlayerData("killstreaks", 1, killstreaks[1]);
 	self setPlayerData("killstreaks", 2, killstreaks[2]);
+}
+
+/*
+	sets up all classes for a bot
+*/
+setClasses()
+{
+	n = 5;
+	if (!self is_bot())
+		n = 15;
+		
+	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData("experience") );
+
+	if (RandomFloatRange(0, 1) < ((rank / level.maxRank) + 0.1))
+	{
+		// self.pers["bots"]["unlocks"]["ghillie"] = true; // already unlocked in mw3
+		self.pers["bots"]["behavior"]["quickscope"] = true;
+	}
+
+	whereToSave = "customClasses";
+	if( getDvarInt( "xblive_privatematch" ) )
+		whereToSave = "privateMatchCustomClasses";
+
+	for (i = 0; i < n; i++)
+	{
+		primary = chooseRandomPrimary();
+		primaryBuff = chooseRandomBuff(primary);
+		primaryAtts = chooseRandomAttachmentComboForGun(primary);
+		primaryReticle = chooseRandomReticle();
+		primaryCamo = chooseRandomCamo();
+
+		perk2 = chooseRandomPerk("perk2");
+
+		secondary = chooseRandomSecondary();
+		if (perk2 == "specialty_twoprimaries")
+		{
+			secondary = chooseRandomPrimary();
+			while (secondary == primary)
+				secondary = chooseRandomPrimary();
+		}
+
+		secondaryBuff = chooseRandomBuff(secondary);
+		secondaryAtts = chooseRandomAttachmentComboForGun(secondary);
+		secondaryReticle = chooseRandomReticle();
+		secondaryCamo = chooseRandomCamo();
+
+		perk1 = chooseRandomPerk("perk1");
+		perk3 = chooseRandomPerk("perk3");
+		deathstreak = chooseRandomPerk("perk4");
+		equipment = chooseRandomGrenade();
+		tactical = chooseRandomTactical();
+
+		ksType = chooseRandomPerk("perk5");
+		killstreaks = chooseRandomKillstreaks(ksType);
+
+		self setPlayerData(whereToSave, i, "weaponSetups", 0, "weapon", primary);
+		self setPlayerData(whereToSave, i, "weaponSetups", 0, "attachment", 0, primaryAtts[0]);
+		self setPlayerData(whereToSave, i, "weaponSetups", 0, "attachment", 1, primaryAtts[1]);
+		self setPlayerData(whereToSave, i, "weaponSetups", 0, "camo", primaryCamo);
+		self setPlayerData(whereToSave, i, "weaponSetups", 0, "reticle", primaryReticle);
+		self setPlayerData(whereToSave, i, "weaponSetups", 0, "buff", primaryBuff);
+
+		self setPlayerData(whereToSave, i, "weaponSetups", 1, "weapon", secondary);
+		self setPlayerData(whereToSave, i, "weaponSetups", 1, "attachment", 0, secondaryAtts[0]);
+		self setPlayerData(whereToSave, i, "weaponSetups", 1, "attachment", 1, secondaryAtts[1]);
+		self setPlayerData(whereToSave, i, "weaponSetups", 1, "camo", secondaryCamo);
+		self setPlayerData(whereToSave, i, "weaponSetups", 1, "reticle", secondaryReticle);
+		self setPlayerData(whereToSave, i, "weaponSetups", 1, "buff", secondaryBuff);
+
+		//self setPlayerData(whereToSave, i, "perks", 0, equipment);
+		self setPlayerData(whereToSave, i, "perks", 1, perk1);
+		self setPlayerData(whereToSave, i, "perks", 2, perk2);
+		self setPlayerData(whereToSave, i, "perks", 3, perk3);
+		self setPlayerData(whereToSave, i, "perks", 4, deathstreak);
+		//self setPlayerData(whereToSave, i, "perks", 6, tactical);
+
+		self setPlayerData(whereToSave, i, "perks", 5, ksType);
+
+		playerData = undefined;
+		switch( ksType )
+		{
+		case "streaktype_support":
+			playerData = "defenseStreaks";
+			break;
+		case "streaktype_specialist":
+			playerData = "specialistStreaks";
+			break;
+		default:
+			playerData = "assaultStreaks";
+			break;
+		}
+
+		//self setPlayerData(whereToSave, i, playerData, 0, killstreaks[0]);
+		//self setPlayerData(whereToSave, i, playerData, 1, killstreaks[1]);
+		//self setPlayerData(whereToSave, i, playerData, 2, killstreaks[2]);
+	}
 }
 
 /*
