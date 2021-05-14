@@ -2364,18 +2364,45 @@ botWeapon(weap)
 
 botAction(act)
 {
-  buttons = 0;
-  switch (act)
-  {
-    case "+ads":
-    case "-ads":
-      buttons = (524288) | (2048);
-    break;
-    case "+fire":
-    case "-fire":
-      buttons = 1;
-    break;
-  }
+	if (!isDefined(level.bot_buttons))
+	{
+		level.bot_buttons = [];
+
+		level.bot_buttons["+ads"] = (524288) | (2048);
+		level.bot_buttons["-ads"] = (524288) | (2048);
+
+		level.bot_buttons["+fire"] = 1;
+		level.bot_buttons["-fire"] = 1;
+
+		level.bot_buttons["+sprint"] = 2;
+		level.bot_buttons["-sprint"] = 2;
+
+		level.bot_buttons["+melee"] = 4;
+		level.bot_buttons["-melee"] = 4;
+
+		level.bot_buttons["+frag"] = 16384;
+		level.bot_buttons["-frag"] = 16384;
+
+		level.bot_buttons["+reload"] = 16;
+		level.bot_buttons["-reload"] = 16;
+
+		level.bot_buttons["+smoke"] = 32768;
+		level.bot_buttons["-smoke"] = 32768;
+
+		level.bot_buttons["+holdbreath"] = 8192;
+		level.bot_buttons["-holdbreath"] = 8192;
+
+		level.bot_buttons["+gostand"] = 1024;
+		level.bot_buttons["-gostand"] = 1024;
+
+		level.bot_buttons["+gocrouch"] = 512;
+		level.bot_buttons["-gocrouch"] = 512;
+
+		level.bot_buttons["+goprone"] = 256;
+		level.bot_buttons["-goprone"] = 256;
+	}
+
+  buttons = level.bot_buttons[act];
 
   if (act[0] == "+")
     setDvar("bot" + self getEntityNumber() + "_buttons", getDvarInt("bot" + self getEntityNumber() + "_buttons") | buttons);
