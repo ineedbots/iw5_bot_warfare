@@ -110,7 +110,7 @@ doGreetings()
 	wait 1;
 	self iPrintln("Welcome to Bot Warfare "+self.name+"!");
 	wait 5;
-	self iPrintln("Press [{+actionslot 5}] to open menu!");
+	self iPrintln("Press [{+actionslot 1}] to open menu!");
 }
 
 watchPlayerOpenMenu()
@@ -118,7 +118,7 @@ watchPlayerOpenMenu()
 	self endon ( "disconnect" );
 	self endon ( "bots_kill_menu" );
 	
-	self notifyOnPlayerCommand( "bots_open_menu", "+actionslot 5" );
+	self notifyOnPlayerCommand( "bots_open_menu", "+actionslot 1" );
 	for(;;)
 	{
 		self waittill( "bots_open_menu" );

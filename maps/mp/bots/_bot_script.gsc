@@ -446,6 +446,9 @@ getWeaponProfs(weapClass)
 	return answer;
 }
 
+/*
+	Returns the level for unlocking the item
+*/
 getUnlockLevel(forWhat)
 {
 	return int(tableLookup( "mp/unlocktable.csv", 0, forWhat, 2 ));
