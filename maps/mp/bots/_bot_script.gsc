@@ -47,6 +47,7 @@ connected()
 	self thread onSpawned();
 
 	self thread onDeath();
+	self thread onGiveLoadout();
 
 	self thread onKillcam();
 }
@@ -445,6 +446,11 @@ getWeaponProfs(weapClass)
 	return answer;
 }
 
+getUnlockLevel(forWhat)
+{
+	return int(tableLookup( "mp/unlocktable.csv", 0, forWhat, 2 ));
+}
+
 /*
 	bots chooses a random perk
 */
@@ -473,6 +479,9 @@ chooseRandomPerk(perkkind)
 			continue;
 
 		if (!self isItemUnlocked(perk))
+			continue;
+
+		if (rank < getUnlockLevel(perk))
 			continue;
 
 		if (RandomFloatRange(0, 1) < ((rank / level.maxRank) + 0.1))
@@ -520,6 +529,7 @@ chooseRandomPrimary()
 	primaries = getPrimaries();
 	allowOp = (getDvarInt("bots_loadout_allow_op") >= 1);
 	reasonable = getDvarInt("bots_loadout_reasonable");
+	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData("experience") );
 
 	while (true)
 	{
@@ -540,6 +550,9 @@ chooseRandomPrimary()
 		if (!self isItemUnlocked(primary))
 			continue;
 
+		if (rank < getUnlockLevel(primary))
+			continue;
+
 		return primary;
 	}
 }
@@ -552,6 +565,7 @@ chooseRandomSecondary()
 	secondaries = getSecondaries();
 	allowOp = (getDvarInt("bots_loadout_allow_op") >= 1);
 	reasonable = getDvarInt("bots_loadout_reasonable");
+	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData("experience") );
 
 	while (true)
 	{
@@ -568,6 +582,9 @@ chooseRandomSecondary()
 		}
 
 		if (!self isItemUnlocked(secondary))
+			continue;
+
+		if (rank < getUnlockLevel(secondary))
 			continue;
 
 		return secondary;
@@ -650,9 +667,9 @@ chooseRandomAttachmentComboForGun(gun)
 chooseRandomTactical()
 {
 	perks = getPerks("equipment");
-	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData("experience") );
 	allowOp = (getDvarInt("bots_loadout_allow_op") >= 1);
 	reasonable = getDvarInt("bots_loadout_reasonable");
+	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData("experience") );
 
 	while (true)
 	{
@@ -675,6 +692,9 @@ chooseRandomTactical()
 		if (!self isItemUnlocked(perk))
 			continue;
 
+		if (rank < getUnlockLevel(perk))
+			continue;
+
 		return perk;
 	}
 }
@@ -685,8 +705,8 @@ chooseRandomTactical()
 chooseRandomGrenade()
 {
 	perks = getPerks("equipment");
-	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData("experience") );
 	allowOp = (getDvarInt("bots_loadout_allow_op") >= 1);
+	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData("experience") );
 	reasonable = getDvarInt("bots_loadout_reasonable");
 
 	while (true)
@@ -713,6 +733,9 @@ chooseRandomGrenade()
 		if (!self isItemUnlocked(perk))
 			continue;
 
+		if (rank < getUnlockLevel(perk))
+			continue;
+
 		return perk;
 	}
 }
@@ -724,7 +747,18 @@ chooseRandomKillstreaks(type, perks)
 {
 	answers = [];
 	allStreaks = getKillstreaks();
+	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData("experience") ) + 1;
+	allowOp = (getDvarInt("bots_loadout_allow_op") >= 1);
+	reasonable = getDvarInt("bots_loadout_reasonable");
 	chooseStreaks = [];
+
+	availUnlocks = 0;
+	if (rank >= 7)
+		availUnlocks++;
+	if (rank >= 10)
+		availUnlocks++;
+	if (rank >= 13)
+		availUnlocks++;
 
 	for (;;)
 	{
@@ -748,6 +782,33 @@ chooseRandomKillstreaks(type, perks)
 		}
 		else
 		{
+			if (availUnlocks <= 0)
+			{
+				for (i = (3 - answers.size - 1); i >= 0; i--)
+				{
+					if (type == "streaktype_support")
+					{
+						if (i == 2)
+							answers[answers.size] = "uav_support";
+						else if (i == 1)
+							answers[answers.size] = "sam_turret";
+						else
+							answers[answers.size] = "triple_uav";
+					}
+					else
+					{
+						if (i == 2)
+							answers[answers.size] = "uav";
+						else if (i == 1)
+							answers[answers.size] = "predator_missile";
+						else
+							answers[answers.size] = "helicopter";
+					}
+				}
+
+				break;
+			}
+
 			if (isSubStr(streak, "specialty_"))
 				continue;
 
@@ -768,6 +829,7 @@ chooseRandomKillstreaks(type, perks)
 
 		answers[answers.size] = streak;
 		chooseStreaks[streak] = true;
+		availUnlocks--;
 
 		if (answers.size > 2)
 			break;
@@ -820,7 +882,7 @@ setClasses()
 
 	if (RandomFloatRange(0, 1) < ((rank / level.maxRank) + 0.1))
 	{
-		// self.pers["bots"]["unlocks"]["ghillie"] = true; // already unlocked in mw3
+		self.pers["bots"]["unlocks"]["ghillie"] = true;
 		self.pers["bots"]["behavior"]["quickscope"] = true;
 	}
 
@@ -1480,6 +1542,21 @@ onDeath()
 		self waittill("death");
 
 		self.wantSafeSpawn = true;
+	}
+}
+
+/*
+	Watches when the bot is given a loadout
+*/
+onGiveLoadout()
+{
+	self endon("disconnect");
+
+	for(;;)
+	{
+		self waittill("giveLoadout");
+
+		self botGiveLoadout(self.team, self.class, false, true);
 	}
 }
 
