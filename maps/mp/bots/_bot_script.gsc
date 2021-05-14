@@ -649,7 +649,34 @@ chooseRandomAttachmentComboForGun(gun)
 */
 chooseRandomTactical()
 {
-	
+	perks = getPerks("equipment");
+	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData("experience") );
+	allowOp = (getDvarInt("bots_loadout_allow_op") >= 1);
+	reasonable = getDvarInt("bots_loadout_reasonable");
+
+	while (true)
+	{
+		perk = random(perks);
+
+		if (!allowOp)
+		{
+		}
+
+		if (reasonable)
+		{
+		}
+
+		if (perk == "specialty_null")
+			continue;
+
+		if (!maps\mp\gametypes\_class::isValidOffhand(perk))
+			continue;
+
+		if (!self isItemUnlocked(perk))
+			continue;
+
+		return perk;
+	}
 }
 
 /*
@@ -657,15 +684,96 @@ chooseRandomTactical()
 */
 chooseRandomGrenade()
 {
+	perks = getPerks("equipment");
+	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData("experience") );
+	allowOp = (getDvarInt("bots_loadout_allow_op") >= 1);
+	reasonable = getDvarInt("bots_loadout_reasonable");
 
+	while (true)
+	{
+		perk = random(perks);
+
+		if (!allowOp)
+		{
+		}
+
+		if (reasonable)
+		{
+		}
+
+		if (perk == "specialty_null")
+			continue;
+
+		if (!maps\mp\gametypes\_class::isValidEquipment(perk))
+			continue;
+
+		if (perk == "specialty_portable_radar")
+			continue;
+
+		if (!self isItemUnlocked(perk))
+			continue;
+
+		return perk;
+	}
 }
 
 /*
 	Choose a random killstreak set
 */
-chooseRandomKillstreaks(type)
+chooseRandomKillstreaks(type, perks)
 {
+	answers = [];
+	allStreaks = getKillstreaks();
+	chooseStreaks = [];
 
+	for (;;)
+	{
+		streak = random(allStreaks);
+
+		if (isDefined(chooseStreaks[streak]))
+			continue;
+
+		if (type == "streaktype_specialist")
+		{
+			if (!isSubStr(streak, "specialty_"))
+				continue;
+
+			perk = strTok(streak, "_ks")[0];
+
+			if (!self isItemUnlocked(perk))
+				continue;
+
+			if (isDefined(perks[perk]))
+				continue;
+		}
+		else
+		{
+			if (isSubStr(streak, "specialty_"))
+				continue;
+
+			if (isColidingKillstreak(answers, streak))
+				continue;
+
+			if (type == "streaktype_support")
+			{
+				if (!maps\mp\killstreaks\_killstreaks::isSupportKillstreak(streak))
+					continue;
+			}
+			else
+			{
+				if (!maps\mp\killstreaks\_killstreaks::isAssaultKillstreak(streak))
+					continue;
+			}
+		}
+
+		answers[answers.size] = streak;
+		chooseStreaks[streak] = true;
+
+		if (answers.size > 2)
+			break;
+	}
+
+	return answers;
 }
 
 /*
@@ -697,84 +805,6 @@ isColidingKillstreak(killstreaks, killstreak)
 	}
 
 	return false;
-}
-
-/*
-	bots set their killstreaks
-*/
-setKillstreaks()
-{
-	rankId = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData( "experience" ) ) + 1;
-
-	allStreaks = getKillstreaks();
-
-	killstreaks = [];
-	killstreaks[0] = "";
-	killstreaks[1] = "";
-	killstreaks[2] = "";
-
-	chooseableStreaks = 0;
-	if (rankId >= 10)
-		chooseableStreaks++;
-	if (rankId >= 15)
-		chooseableStreaks++;
-	if (rankId >= 22)
-		chooseableStreaks++;
-
-	reasonable = getDvarInt("bots_loadout_reasonable");
-	op = getDvarInt("bots_loadout_allow_op");
-
-	i = 0;
-	while (i < chooseableStreaks)
-	{
-		slot = randomInt(3);
-
-		if (killstreaks[slot] != "")
-			continue;
-
-		streak = random(allStreaks);
-
-		if (isColidingKillstreak(killstreaks, streak))
-			continue;
-
-		if (reasonable)
-		{
-			if (streak == "stealth_airstrike")
-				continue;
-			if (streak == "airdrop_mega")
-				continue;
-			if (streak == "emp")
-				continue;
-			if (streak == "airdrop_sentry_minigun")
-				continue;
-			if (streak == "airdrop")
-				continue;
-			if (streak == "precision_airstrike")
-				continue;
-			if (streak == "helicopter")
-				continue;
-		}
-
-		if (op)
-		{
-			if (streak == "nuke")
-				continue;
-		}
-
-		killstreaks[slot] = streak;
-		i++;
-	}
-
-	if (killstreaks[0] == "")
-		killstreaks[0] = "uav";
-	if (killstreaks[1] == "")
-		killstreaks[1] = "airdrop";
-	if (killstreaks[2] == "")
-		killstreaks[2] = "predator_missile";
-
-	self setPlayerData("killstreaks", 0, killstreaks[0]);
-	self setPlayerData("killstreaks", 1, killstreaks[1]);
-	self setPlayerData("killstreaks", 2, killstreaks[2]);
 }
 
 /*
@@ -821,14 +851,31 @@ setClasses()
 		secondaryReticle = chooseRandomReticle();
 		secondaryCamo = chooseRandomCamo();
 
+		if (perk2 != "specialty_twoprimaries")
+		{
+			secondaryReticle = "none";
+			secondaryCamo = "none";
+			secondaryAtts[1] = "none";
+		}
+		else if (!isDefined(self.pers["bots"]["unlocks"]["upgraded_specialty_twoprimaries"]))
+		{
+			secondaryAtts[0] = "none";
+			secondaryAtts[1] = "none";
+		}
+
 		perk1 = chooseRandomPerk("perk1");
 		perk3 = chooseRandomPerk("perk3");
 		deathstreak = chooseRandomPerk("perk4");
 		equipment = chooseRandomGrenade();
 		tactical = chooseRandomTactical();
 
+		perks = [];
+		perks[perk1] = true;
+		perks[perk2] = true;
+		perks[perk3] = true;
+
 		ksType = chooseRandomPerk("perk5");
-		killstreaks = chooseRandomKillstreaks(ksType);
+		killstreaks = chooseRandomKillstreaks(ksType, perks);
 
 		self setPlayerData(whereToSave, i, "weaponSetups", 0, "weapon", primary);
 		self setPlayerData(whereToSave, i, "weaponSetups", 0, "attachment", 0, primaryAtts[0]);
@@ -844,12 +891,12 @@ setClasses()
 		self setPlayerData(whereToSave, i, "weaponSetups", 1, "reticle", secondaryReticle);
 		self setPlayerData(whereToSave, i, "weaponSetups", 1, "buff", secondaryBuff);
 
-		//self setPlayerData(whereToSave, i, "perks", 0, equipment);
+		self setPlayerData(whereToSave, i, "perks", 0, equipment);
 		self setPlayerData(whereToSave, i, "perks", 1, perk1);
 		self setPlayerData(whereToSave, i, "perks", 2, perk2);
 		self setPlayerData(whereToSave, i, "perks", 3, perk3);
 		self setPlayerData(whereToSave, i, "perks", 4, deathstreak);
-		//self setPlayerData(whereToSave, i, "perks", 6, tactical);
+		self setPlayerData(whereToSave, i, "perks", 6, tactical);
 
 		self setPlayerData(whereToSave, i, "perks", 5, ksType);
 
@@ -867,9 +914,9 @@ setClasses()
 			break;
 		}
 
-		//self setPlayerData(whereToSave, i, playerData, 0, killstreaks[0]);
-		//self setPlayerData(whereToSave, i, playerData, 1, killstreaks[1]);
-		//self setPlayerData(whereToSave, i, playerData, 2, killstreaks[2]);
+		self setPlayerData(whereToSave, i, playerData, 0, killstreaks[0]);
+		self setPlayerData(whereToSave, i, playerData, 1, killstreaks[1]);
+		self setPlayerData(whereToSave, i, playerData, 2, killstreaks[2]);
 	}
 }
 
