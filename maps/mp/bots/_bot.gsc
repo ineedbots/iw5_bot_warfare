@@ -148,7 +148,7 @@ init()
 	level.bots_fullautoguns["sa80"] = true;
 	level.bots_fullautoguns["mg36"] = true;
 	
-	level.bots_fullautoguns["ak47u"] = true;
+	level.bots_fullautoguns["ak74u"] = true;
 	
 	level thread fixGamemodes();
 	
