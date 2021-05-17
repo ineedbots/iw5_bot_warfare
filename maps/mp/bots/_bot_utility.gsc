@@ -95,6 +95,14 @@ BotPressSmoke(time)
 }
 
 /*
+	Bot presses the use button for time.
+*/
+BotPressUse(time)
+{
+	self maps\mp\bots\_bot_internal::use(time);
+}
+
+/*
 	Bot will press the ads button for the time
 */
 BotPressADS(time)
@@ -2182,8 +2190,6 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 		loadoutOffhand = maps\mp\gametypes\_class::table_getOffhand( level.classTableName, class_num );
 		loadoutDeathStreak = maps\mp\gametypes\_class::table_getDeathstreak( level.classTableName, class_num );
 	}
-
-	print(self.name + " " + loadoutPerk1 + " " + loadoutPrimary);
 
 	self maps\mp\gametypes\_class::loadoutFakePerks( loadoutStreakType );
 	isCustomClass = issubstr( class, "custom" );

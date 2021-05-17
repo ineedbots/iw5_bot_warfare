@@ -2231,6 +2231,27 @@ pressADS(time)
 }
 
 /*
+	Bot will press use for a time.
+*/
+use(time)
+{
+	self endon("death");
+	self endon("disconnect");
+	self notify("bot_use");
+	self endon("bot_use");
+
+	if(!isDefined(time))
+		time = 0.05;
+	
+	self botAction("+use");
+	
+	if(time)
+		wait time;
+	
+	self botAction("-use");
+}
+
+/*
 	Bot will jump.
 */
 jump()
@@ -2297,7 +2318,7 @@ changeToWeap(weap)
 {
 	if (maps\mp\gametypes\_weapons::isAltModeWeapon(weap))
 	{
-		self botWeapon("");
+		self botWeapon(weap);
 		self setSpawnWeapon(weap);
 		return;
 	}
@@ -2374,6 +2395,9 @@ botAction(act)
 
 		level.bot_buttons["+ads"] = (524288) | (2048);
 		level.bot_buttons["-ads"] = (524288) | (2048);
+
+		level.bot_buttons["+use"] = 8;
+		level.bot_buttons["-use"] = 8;
 
 		level.bot_buttons["+fire"] = 1;
 		level.bot_buttons["-fire"] = 1;

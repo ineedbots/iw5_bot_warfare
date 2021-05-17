@@ -154,6 +154,7 @@ init()
 	
 	level thread onPlayerConnect();
 	level thread addNotifyOnAirdrops();
+	level thread watchScrabler();
 	
 	level thread handleBots();
 	
@@ -300,6 +301,53 @@ fixKoth()
 		
 		while(isDefined(level.radioObject) && level.radio.gameobject == level.radioObject)
 			wait 0.05;
+	}
+}
+
+/*
+	Watches scrambler
+*/
+watchScrabler()
+{
+	for (;;)
+	{
+		wait 1;
+
+		for ( i = level.players.size - 1; i >= 0; i-- )
+		{
+			player = level.players[i];
+			player.bot_isScrambled = false;
+		}
+
+		for (i = level.scramblers.size - 1; i >= 0; i--)
+		{
+			scrambler = level.scramblers[i];
+
+			if ( !isDefined( scrambler ) )
+				continue;
+
+			for ( h = level.players.size - 1; h >= 0; h-- )
+			{
+				player = level.players[h];
+
+				if (!isReallyAlive(player))
+					continue;
+
+				if (isDefined(scrambler.owner) && scrambler.owner == player)
+					continue;
+
+				if(level.teamBased && scrambler.team == player.team)
+					continue;
+
+				if (player _hasPerk("specialty_coldblooded"))
+					continue;
+
+				if (DistanceSquared(player.origin, scrambler.origin) > 256*256)
+					continue;
+
+				player.bot_isScrambled = true;
+			}
+		}
 	}
 }
 

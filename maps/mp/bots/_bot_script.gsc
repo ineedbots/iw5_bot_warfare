@@ -1618,8 +1618,8 @@ start_bot_threads()
 	//if (getDvarInt("bots_play_killstreak"))
 	//	self thread bot_killstreak_think();
 
-	//self thread bot_weapon_think();
-	//self thread doReloadCancel();
+	self thread bot_weapon_think();
+	self thread doReloadCancel();
 
 	// script targeting
 	if (getDvarInt("bots_play_target_other"))
@@ -1632,15 +1632,15 @@ start_bot_threads()
 	// airdrop
 	if (getDvarInt("bots_play_take_carepackages"))
 	{
-		//self thread bot_watch_stuck_on_crate();
-		//self thread bot_crate_think();
+		self thread bot_watch_stuck_on_crate();
+		self thread bot_crate_think();
 	}
 
 	// awareness
-	//self thread bot_revenge_think();
-	//self thread bot_uav_think();
-	//self thread bot_listen_to_steps();
-	//self thread follow_target();
+	self thread bot_revenge_think();
+	self thread bot_uav_think();
+	self thread bot_listen_to_steps();
+	self thread follow_target();
 
 	// camp and follow
 	if (getDvarInt("bots_play_camp"))
@@ -1909,118 +1909,6 @@ bot_go_defuse(plant)
 		self notify("bad_path");
 	else
 		self notify("goal");
-}
-
-/*
-	Creates a bomb use thread and waits for an output
-*/
-bot_use_bomb_thread(bomb)
-{
-	self thread bot_use_bomb(bomb);
-	self waittill_any("bot_try_use_fail", "bot_try_use_success");
-}
-
-/*
-	Waits for the time to call bot_try_use_success or fail
-*/
-bot_bomb_use_time(wait_time)
-{
-	level endon("game_ended");
-	self endon("death");
-	self endon("disconnect");
-	self endon("bot_try_use_fail");
-	self endon("bot_try_use_success");
-	
-	self waittill("bot_try_use_weapon");
-	
-	wait 0.05;
-	elapsed = 0;
-	while(wait_time > elapsed)
-	{
-		wait 0.05;//wait first so waittill can setup
-		elapsed += 0.05;
-		
-		if(self InLastStand())
-		{
-			self notify("bot_try_use_fail");
-			return;//needed?
-		}
-	}
-	
-	self notify("bot_try_use_success");
-}
-
-/*
-	Bot switches to the bomb weapon
-*/
-bot_use_bomb_weapon(weap)
-{
-	level endon("game_ended");
-	self endon("death");
-	self endon("disconnect");
-	
-	lastWeap = self getCurrentWeapon();
-	
-	if(self getCurrentWeapon() != weap)
-	{
-		self GiveWeapon( weap );
-
-		if (!self ChangeToWeapon(weap))
-		{
-			self notify("bot_try_use_fail");
-			return;
-		}
-	}
-	else
-	{
-		wait 0.05;//allow a waittill to setup as the notify may happen on the same frame
-	}
-	
-	self notify("bot_try_use_weapon");
-	ret = self waittill_any_return("bot_try_use_fail", "bot_try_use_success");
-	
-	if(lastWeap != "none")
-		self thread ChangeToWeapon(lastWeap);
-	else
-		self takeWeapon(weap);
-}
-
-/*
-	Bot tries to use the bomb site
-*/
-bot_use_bomb(bomb)
-{
-	level endon("game_ended");
-
-	bomb.inUse = true;
-	
-	myteam = self.team;
-	
-	self BotFreezeControls(true);
-	
-	bomb [[bomb.onBeginUse]](self);
-	
-	self clientClaimTrigger( bomb.trigger );
-	self.claimTrigger = bomb.trigger;
-	
-	self thread bot_bomb_use_time(bomb.useTime / 1000);
-	self thread bot_use_bomb_weapon(bomb.useWeapon);
-	
-	result = self waittill_any_return("death", "disconnect", "bot_try_use_fail", "bot_try_use_success");
-	
-	if (isDefined(self))
-	{
-		self.claimTrigger = undefined;
-		self BotFreezeControls(false);
-	}
-
-	bomb [[bomb.onEndUse]](myteam, self, (result == "bot_try_use_success"));
-	bomb.trigger releaseClaimedTrigger();
-	
-	if(result == "bot_try_use_success")
-		bomb [[bomb.onUse]](self);
-
-	bomb.inUse = false;
 }
 
 /*
@@ -3227,7 +3115,7 @@ bot_listen_to_steps()
 			break;
 		}
 
-		hasHeartbeat = (isSubStr(self GetCurrentWeapon(), "_heartbeat") && !self IsEMPed());
+		hasHeartbeat = (isSubStr(self GetCurrentWeapon(), "_heartbeat") && !self IsEMPed() && !self isNuked());
 		heartbeatDist = 350*350;
 
 		if(!IsDefined(heard) && hasHeartbeat)
@@ -3293,10 +3181,7 @@ bot_uav_think()
 		if(self.pers["bots"]["skill"]["base"] <= 1)
 			continue;
 			
-		if (self isEMPed() || self.bot_isScrambled)
-			continue;
-
-		if (self _hasPerk("_specialty_blastshield"))
+		if (self isEMPed() || self.bot_isScrambled || self isNuked())
 			continue;
 
 		if ((level.teamBased && level.activeCounterUAVs[level.otherTeam[self.team]]) || (!level.teamBased && self.isRadarBlocked))
@@ -3332,7 +3217,7 @@ bot_uav_think()
 			if(distFromPlayer > dist)
 				continue;
 			
-			if((!isSubStr(player getCurrentWeapon(), "_silencer_") && player.bots_firing) || (hasRadar && !player _hasPerk("specialty_coldblooded")))
+			if((!isSubStr(player getCurrentWeapon(), "_silencer") && player.bots_firing) || (hasRadar && !player _hasPerk("specialty_coldblooded")) || player maps\mp\perks\_perkfunctions::isPainted())
 			{
 				distSq = self.pers["bots"]["skill"]["help_dist"] * self.pers["bots"]["skill"]["help_dist"];
 				if (distFromPlayer < distSq && bulletTracePassed(self getEye(), player getTagOrigin( "j_spineupper" ), false, player))
@@ -3697,24 +3582,16 @@ bot_crate_think()
 				continue;
 		}
 
-		self _DisableWeapon();
 		self BotFreezeControls(true);
 
-		waitTime = 3;
+		waitTime = 3.25;
 		if (isDefined(crate.owner) && crate.owner == self)
-			waitTime = 0.5;
-		
-		crate waittill_notify_or_timeout("captured", waitTime);
+			waitTime = 0.75;
 
-		self _EnableWeapon();
+		self thread BotPressUse(waitTime);
+		wait waitTime;
+
 		self BotFreezeControls(false);
-
-		self notify("bot_force_check_switch");
-
-		if (!isDefined(crate))
-			continue;
-
-		crate notify ( "captured", self );
 	}
 }
 
@@ -5130,7 +5007,7 @@ bot_sab()
 			
 			self SetScriptGoal( self.origin, 64 );
 			
-			self bot_use_bomb_thread(site);
+			//self bot_use_bomb_thread(site);
 			wait 1;
 			
 			self ClearScriptGoal();
@@ -5243,7 +5120,7 @@ bot_sab()
 			
 			self SetScriptGoal( self.origin, 64 );
 			
-			self bot_use_bomb_thread(site);
+			//self bot_use_bomb_thread(site);
 			wait 1;
 			self ClearScriptGoal();
 			
@@ -5432,7 +5309,7 @@ bot_sd_defenders()
 		
 		self SetScriptGoal( self.origin, 64 );
 		
-		self bot_use_bomb_thread(defuse);
+		//self bot_use_bomb_thread(defuse);
 		wait 1;
 		self ClearScriptGoal();
 		self.bot_lock_goal = false;
@@ -5623,7 +5500,7 @@ bot_sd_attackers()
 		
 		self SetScriptGoal( self.origin, 64 );
 		
-		self bot_use_bomb_thread(plant);
+		//self bot_use_bomb_thread(plant);
 		wait 1;
 		
 		self ClearScriptGoal();
@@ -5889,7 +5766,7 @@ bot_dem_attackers()
 		
 		self SetScriptGoal( self.origin, 64 );
 		
-		self bot_use_bomb_thread(plant);
+		//self bot_use_bomb_thread(plant);
 		wait 1;
 		
 		self ClearScriptGoal();
@@ -6105,7 +5982,7 @@ bot_dem_defenders()
 		
 		self SetScriptGoal( self.origin, 64 );
 		
-		self bot_use_bomb_thread(defuse);
+		//self bot_use_bomb_thread(defuse);
 		wait 1;
 		
 		self ClearScriptGoal();
