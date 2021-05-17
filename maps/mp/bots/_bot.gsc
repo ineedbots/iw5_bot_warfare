@@ -348,7 +348,7 @@ watchRadar()
 				if (player _hasPerk("specialty_coldblooded"))
 					continue;
 
-				if (DistanceSquared(player.origin, scrambler.origin) > 256*256)
+				if (DistanceSquared(player.origin, grenade.origin) > 256*256)
 					continue;
 
 				player.bot_isInRadar = true;

@@ -2317,12 +2317,11 @@ prone()
 changeToWeap(weap)
 {
 	if (maps\mp\gametypes\_weapons::isAltModeWeapon(weap))
-	{
-		self botWeapon(weap);
-		self setSpawnWeapon(weap);
-		return;
-	}
+		self botAction("+alt");
+	else
+		self botAction("-alt");
 
+	
 	self botWeapon(weap);
 }
 
@@ -2428,6 +2427,9 @@ botAction(act)
 
 		level.bot_buttons["+goprone"] = 256;
 		level.bot_buttons["-goprone"] = 256;
+
+		level.bot_buttons["+alt"] = 4194304;
+		level.bot_buttons["-alt"] = 4194304;
 	}
 
   buttons = level.bot_buttons[act];
