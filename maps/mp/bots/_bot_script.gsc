@@ -1625,7 +1625,7 @@ start_bot_threads()
 	if (getDvarInt("bots_play_target_other"))
 	{
 		//self thread bot_target_vehicle();
-		//self thread bot_equipment_kill_think();
+		self thread bot_equipment_kill_think();
 		//self thread bot_turret_think();
 	}
 
@@ -2958,7 +2958,7 @@ bot_equipment_kill_think()
 			if ( IsDefined( item.owner ) && ((level.teamBased && item.owner.team == self.team) || item.owner == self) )
 				continue;
 			
-			if (item.name != "c4_mp" && item.name != "claymore_mp")
+			if (item.name != "c4_mp" && item.name != "claymore_mp" && item.name != "bouncingbetty_mp" && item.name != "portable_radar_mp" && item.name != "trophy_mp" && item.name != "scrambler_mp")
 				continue;
 				
 			if(!hasSitrep && !bulletTracePassed(myEye, item.origin, false, item))
@@ -3037,8 +3037,7 @@ bot_equipment_kill_think()
 				self CampAtSpot(target.origin, target.origin + (0, 0, 42));
 			}
 			
-			if (isDefined(target))
-				target.enemyTrigger notify("trigger", self);
+			self thread BotPressUse();
 			
 			continue;
 		}
