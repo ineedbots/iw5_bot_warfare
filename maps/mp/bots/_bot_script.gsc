@@ -2945,6 +2945,7 @@ bot_equipment_kill_think()
 		dist = 512*512;
 		target = undefined;
 
+		// check legacy nades
 		for ( i = 0; i < grenades.size; i++ )
 		{
 			item = grenades[i];
@@ -2958,7 +2959,7 @@ bot_equipment_kill_think()
 			if ( IsDefined( item.owner ) && ((level.teamBased && item.owner.team == self.team) || item.owner == self) )
 				continue;
 			
-			if (item.name != "c4_mp" && item.name != "claymore_mp" && item.name != "bouncingbetty_mp" && item.name != "portable_radar_mp" && item.name != "trophy_mp" && item.name != "scrambler_mp")
+			if (item.name != "c4_mp" && item.name != "claymore_mp")
 				continue;
 				
 			if(!hasSitrep && !bulletTracePassed(myEye, item.origin, false, item))
@@ -2974,6 +2975,7 @@ bot_equipment_kill_think()
 			}
 		}
 		
+		// check for TIs
 		if ( !IsDefined( target ) )
 		{
 			for ( i = 0; i < level.players.size; i++ )
@@ -3008,6 +3010,38 @@ bot_equipment_kill_think()
 				if ( DistanceSquared( ti.origin, self.origin ) < dist )
 				{
 					target = ti;
+					break;
+				}
+			}
+		}
+
+		//check for iw5 nades
+		if (!isDefined(target))
+		{
+			ents = GetEntArray("script_model", "classname");
+
+			for ( i = 0; i < ents.size; i++ )
+			{
+				item = ents[i];
+
+				if (!isDefined(item))
+					continue;
+
+				if (item.model != "weapon_radar" && item.model != "mp_trophy_system" && item.model != "weapon_jammer" && item.model != "projectile_bouncing_betty_grenade")
+					continue;
+
+				if ( IsDefined( item.owner ) && ((level.teamBased && item.owner.team == self.team) || item.owner == self) )
+					continue;
+					
+				if(!hasSitrep && !bulletTracePassed(myEye, item.origin, false, item))
+					continue;
+					
+				if(getConeDot(item.origin, self.origin, myAngles) < 0.6)
+					continue;
+				
+				if ( DistanceSquared( item.origin, self.origin ) < dist )
+				{
+					target = item;
 					break;
 				}
 			}
