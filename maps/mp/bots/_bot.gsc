@@ -320,7 +320,7 @@ watchRadar()
 			player.bot_isInRadar = false;
 		}
 
-		grenades = getEntArray( "grenade", "classname" );
+		grenades = GetEntArray("script_model", "classname");
 
 		for (i = grenades.size - 1; i >= 0; i--)
 		{
@@ -329,7 +329,7 @@ watchRadar()
 			if ( !isDefined( grenade ) )
 				continue;
 
-			if (!isDefined(grenade.name) || grenade.name != "portable_radar_mp")
+			if (grenade.model != "weapon_radar")
 				continue;
 
 			for ( h = level.players.size - 1; h >= 0; h-- )
