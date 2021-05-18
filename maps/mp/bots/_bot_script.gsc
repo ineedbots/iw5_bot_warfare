@@ -960,7 +960,7 @@ setClasses()
 		self setPlayerData(whereToSave, i, "perks", 1, perk1);
 		self setPlayerData(whereToSave, i, "perks", 2, perk2);
 		self setPlayerData(whereToSave, i, "perks", 3, perk3);
-		self setPlayerData(whereToSave, i, "perks", 4, deathstreak);
+		self setPlayerData(whereToSave, i, "deathstreak", deathstreak);
 		self setPlayerData(whereToSave, i, "perks", 6, tactical);
 
 		self setPlayerData(whereToSave, i, "perks", 5, ksType);
