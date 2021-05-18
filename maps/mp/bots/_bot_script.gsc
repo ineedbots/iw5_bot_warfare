@@ -3146,6 +3146,12 @@ bot_listen_to_steps()
 				break;
 			}
 		}
+
+		if (!isDefined(heard))
+		{
+			if (self _hasPerk("specialty_revenge") && isDefined(self.lastKilledBy))
+				heard = self.lastKilledBy;
+		}
 		
 		if(!IsDefined(heard))
 			continue;
