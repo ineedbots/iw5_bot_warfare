@@ -450,6 +450,9 @@ onPlayerConnect()
 	for(;;)
 	{
 		level waittill("connected", player);
+
+		player.bot_isScrambled = false;
+		player.bot_isInRadar = false;
 		
 		player thread onGrenadeFire();
 		player thread onWeaponFired();
@@ -862,6 +865,10 @@ onGrenadeFire()
 	for(;;)
 	{
 		self waittill ( "grenade_fire", grenade, weaponName );
+
+		if (!isDefined(grenade))
+			continue;
+
 		grenade.name = weaponName;
 
 		if(weaponName == "smoke_grenade_mp")
