@@ -3030,9 +3030,9 @@ bot_equipment_kill_think()
 				if (item.model != "weapon_radar" && item.model != "mp_trophy_system" && item.model != "weapon_jammer" && item.model != "projectile_bouncing_betty_grenade")
 					continue;
 
-				if (isDefined(equ.damageTaken) && isDefined(equ.maxHealth))
+				if (isDefined(item.damageTaken) && isDefined(item.maxHealth))
 				{
-					if (equ.damageTaken >= equ.maxHealth)
+					if (item.damageTaken >= item.maxHealth)
 						continue;
 				}
 
