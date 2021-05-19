@@ -2370,7 +2370,7 @@ bot_lookat(pos, time, vel)
 	if (steps < 1)
 		steps = 1;
 
-	myEye = self GetEyePos(); // get our eye pos
+	myEye = self GetEye(); // get our eye pos
 	myEye += (self getVelocity() * 0.05) * (steps - 1); // account for our velocity
 
 	pos += (vel * 0.05) * (steps - 1); // add the velocity vector
