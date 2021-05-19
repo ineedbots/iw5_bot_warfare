@@ -1563,7 +1563,7 @@ canFire(curweap)
 	if (curweap == "riotshield_mp")
 		return false;
 
-	if (self IsUsingRemote())
+	if (self IsUsingRemote() || curweap == "c4death_mp")
 		return true;
 		
 	return self GetWeaponammoclip(curweap);
@@ -1577,7 +1577,7 @@ canAds(dist, curweap)
 	if (self IsUsingRemote())
 		return false;
 
-	if(curweap == "none")
+	if(curweap == "none" || curweap == "c4death_mp")
 		return false;
 
 	if (!getDvarInt("bots_play_ads"))
@@ -1616,7 +1616,7 @@ isInRange(dist, curweap)
 	if (self IsUsingRemote())
 		return true;
 	
-	if((weapclass == "spread" || self.bot.is_cur_akimbo) && dist > level.bots_maxShotgunDistance)
+	if((weapclass == "spread" || self.bot.is_cur_akimbo || curweap == "c4death_mp") && dist > level.bots_maxShotgunDistance)
 		return false;
 
 	if (curweap == "riotshield_mp" && dist > level.bots_maxKnifeDistance)
