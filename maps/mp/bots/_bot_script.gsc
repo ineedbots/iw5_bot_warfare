@@ -3030,6 +3030,12 @@ bot_equipment_kill_think()
 				if (item.model != "weapon_radar" && item.model != "mp_trophy_system" && item.model != "weapon_jammer" && item.model != "projectile_bouncing_betty_grenade")
 					continue;
 
+				if (isDefined(equ.damageTaken) && isDefined(equ.maxHealth))
+				{
+					if (equ.damageTaken >= equ.maxHealth)
+						continue;
+				}
+
 				if ( IsDefined( item.owner ) && ((level.teamBased && item.owner.team == self.team) || item.owner == self) )
 					continue;
 					
@@ -3096,6 +3102,12 @@ bot_equipment_attack(equ)
 		if ( !IsDefined( equ ) )
 		{
 			return;
+		}
+
+		if (isDefined(equ.damageTaken) && isDefined(equ.maxHealth))
+		{
+			if (equ.damageTaken >= equ.maxHealth)
+				return;
 		}
 	}
 }
