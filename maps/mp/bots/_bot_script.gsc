@@ -3030,7 +3030,7 @@ bot_equipment_kill_think()
 				if (!isDefined(item))
 					continue;
 
-				if (item.model != "weapon_radar" && item.model != "mp_trophy_system" && item.model != "weapon_jammer" && item.model != "projectile_bouncing_betty_grenade" && item.model != "com_deploy_ballistic_vest_friend_world")
+				if (item.model != "weapon_radar" && item.model != "mp_trophy_system" && item.model != "weapon_jammer" && item.model != "projectile_bouncing_betty_grenade" && item.model != "com_deploy_ballistic_vest_friend_world" && item.model != "ims_scorpion_body")
 					continue;
 
 				if (isDefined(item.damageTaken) && isDefined(item.maxHealth))
@@ -3539,7 +3539,7 @@ bot_box_think()
 					continue;
 			}
 
-			if ( !IsDefined( item.owner ) || (level.teamBased && item.owner.team != self.team) || (!level.teamBased && item.owner != self))
+			if ( !IsDefined( item.owner ) || (level.teamBased && item.owner.team != myteam) || (!level.teamBased && item.owner != self))
 				continue;
 			
 			if ( DistanceSquared( item.origin, self.origin ) < dist )
