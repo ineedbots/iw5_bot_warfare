@@ -3454,7 +3454,7 @@ bot_turret_think()
 			facing = false;
 		if(self _hasPerk("specialty_blindeye"))
 			facing = false;
-		if (turret.sentryType == "sam_turret")
+		if (!isDefined(turret.sentryType) || turret.sentryType == "sam_turret")
 			facing = false;
 
 		if ( facing && !BulletTracePassed( myEye, turret.origin + ( 0, 0, 15 ), false, turret ) )
