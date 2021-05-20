@@ -3513,6 +3513,18 @@ bot_watch_stuck_on_crate()
 			if (!isDefined(tempCrate))
 				continue;
 
+			if (isDefined(tempCrate.owner) && isDefined(tempCrate.bomb))
+			{
+				if (tempCrate.owner == self)
+					continue;
+
+				if (level.teamBased && tempCrate.owner.team == self.team)
+					continue;
+
+				if (self _hasPerk("specialty_detectexplosive"))
+					continue;
+			}
+
 			if (!isDefined(tempCrate.doingPhysics) || tempCrate.doingPhysics)
 				continue;
 
@@ -3587,6 +3599,18 @@ bot_crate_think()
 
 				if (!isDefined(tempCrate))
 					continue;
+
+				if (isDefined(tempCrate.owner) && isDefined(tempCrate.bomb))
+				{
+					if (tempCrate.owner == self)
+						continue;
+
+					if (level.teamBased && tempCrate.owner.team == self.team)
+						continue;
+
+					if (self _hasPerk("specialty_detectexplosive"))
+						continue;
+				}
 
 				if (!isDefined(tempCrate.doingPhysics) || tempCrate.doingPhysics)
 					continue;
