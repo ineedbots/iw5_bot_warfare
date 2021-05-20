@@ -1615,8 +1615,11 @@ start_bot_threads()
 	gameFlagWait("prematch_done");
 
 	// inventory usage
-	//if (getDvarInt("bots_play_killstreak"))
+	if (getDvarInt("bots_play_killstreak"))
+	{
 	//	self thread bot_killstreak_think();
+		self thread bot_box_think();
+	}
 
 	self thread bot_weapon_think();
 	self thread doReloadCancel();
@@ -3482,6 +3485,98 @@ bot_turret_think()
 		self SetScriptEnemy( turret, (0, 0, 25) );
 		self bot_turret_attack(turret);
 		self ClearScriptEnemy();
+	}
+}
+
+/*
+	Bots think to use boxes
+*/
+bot_box_think()
+{
+	self endon( "death" );
+	self endon( "disconnect" );
+	level endon("game_ended");
+	
+	myteam = self.pers[ "team" ];
+	
+	for ( ;; )
+	{
+		wait( randomintrange( 3, 5 ) );
+
+		if ( RandomInt( 100 ) < 20 )
+			continue;
+		
+		if ( self HasScriptGoal() || self.bot_lock_goal )
+			continue;
+
+		if(self isDefusing() || self isPlanting())
+			continue;
+
+		if(self IsUsingRemote() || self BotIsFrozen())
+			continue;
+
+		if (self inLastStand())
+			continue;
+
+		box = undefined;
+
+		dist = 2048*2048;
+		ents = GetEntArray("script_model", "classname");
+
+		for ( i = 0; i < ents.size; i++ )
+		{
+			item = ents[i];
+
+			if (!isDefined(item))
+				continue;
+
+			if (item.model != "com_deploy_ballistic_vest_friend_world")
+				continue;
+
+			if (isDefined(item.damageTaken) && isDefined(item.maxHealth))
+			{
+				if (item.damageTaken >= item.maxHealth)
+					continue;
+			}
+
+			if ( !IsDefined( item.owner ) || (level.teamBased && item.owner.team != self.team) || (!level.teamBased && item.owner != self))
+				continue;
+			
+			if ( DistanceSquared( item.origin, self.origin ) < dist )
+			{
+				box = item;
+				break;
+			}
+		}
+
+		if (!isDefined(box))
+			continue;
+
+		self.bot_lock_goal = true;
+
+		radius = GetDvarFloat( "player_useRadius" );
+		self SetScriptGoal(box.origin, radius);
+		self thread bot_inc_bots(box, true);
+		self thread bots_watch_touch_obj(box);
+
+		path = self waittill_any_return("bad_path", "goal", "new_goal");
+
+		self.bot_lock_goal = false;
+
+		if (path != "new_goal")
+			self ClearScriptGoal();
+
+		if (path != "goal" || !isDefined(box) || DistanceSquared(self.origin, box.origin) > radius*radius)
+			continue;
+
+		self BotFreezeControls(true);
+
+		waitTime = 2.25;
+
+		self thread BotPressUse(waitTime);
+		wait waitTime;
+
+		self BotFreezeControls(false);
 	}
 }
 
