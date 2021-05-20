@@ -934,7 +934,10 @@ load_waypoints()
 		level.waypoints[i].childCount = level.waypoints[i].children.size;
 	}
 	
-	level.waypointsKDTree = WaypointsToKDTree();
+	if (!level.bots_lowmem)
+	{
+		level.waypointsKDTree = WaypointsToKDTree();
+	}
 	
 	level.waypointsCamp = [];
 	level.waypointsTube = [];
@@ -1493,6 +1496,27 @@ GetNearestWaypointWithSight(pos)
 }
 
 /*
+	Will linearly search for the nearest waypoint
+*/
+GetNearestWaypoint(pos)
+{
+	candidate = undefined;
+	dist = 2147483647;
+	
+	for(i = 0; i < level.waypointCount; i++)
+	{
+		curdis = DistanceSquared(level.waypoints[i].origin, pos);
+		if(curdis > dist)
+			continue;
+			
+		dist = curdis;
+		candidate = level.waypoints[i];
+	}
+	
+	return candidate;
+}
+
+/*
 	Modified Pezbot astar search.
 	This makes use of sets for quick look up and a heap for a priority queue instead of simple lists which require to linearly search for elements everytime.
 	Also makes use of the KD tree to search for the nearest node to the goal. We only use the closest node from the KD tree if it has a direct line of sight, else we will have to linearly search for one that we have a line of sight on.
@@ -1505,7 +1529,11 @@ AStarSearch(start, goal, team, greedy_path)
 	
 	closed = [];//set for quick lookup
 	
-	startwp = level.waypointsKDTree KDTreeNearest(start);//balanced kdtree, for nns
+	startwp = undefined;
+	if (level.bots_lowmem)
+		startwp = getNearestWaypoint(start);
+	else
+		startwp = level.waypointsKDTree KDTreeNearest(start);//balanced kdtree, for nns
 	if(!isDefined(startwp))
 		return [];
 	_startwp = undefined;
@@ -1515,7 +1543,11 @@ AStarSearch(start, goal, team, greedy_path)
 		startwp = _startwp;
 	startwp = startwp.index;
 	
-	goalwp = level.waypointsKDTree KDTreeNearest(goal);
+	goalwp = undefined;
+	if (level.bots_lowmem)
+		goalwp = getNearestWaypoint(goal);
+	else
+		goalwp = level.waypointsKDTree KDTreeNearest(goal);
 	if(!isDefined(goalwp))
 		return [];
 	_goalwp = undefined;
