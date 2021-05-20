@@ -1626,7 +1626,7 @@ start_bot_threads()
 	{
 		//self thread bot_target_vehicle();
 		self thread bot_equipment_kill_think();
-		//self thread bot_turret_think();
+		self thread bot_turret_think();
 	}
 
 	// airdrop
@@ -3027,7 +3027,7 @@ bot_equipment_kill_think()
 				if (!isDefined(item))
 					continue;
 
-				if (item.model != "weapon_radar" && item.model != "mp_trophy_system" && item.model != "weapon_jammer" && item.model != "projectile_bouncing_betty_grenade")
+				if (item.model != "weapon_radar" && item.model != "mp_trophy_system" && item.model != "weapon_jammer" && item.model != "projectile_bouncing_betty_grenade" && item.model != "com_deploy_ballistic_vest_friend_world")
 					continue;
 
 				if (isDefined(item.damageTaken) && isDefined(item.maxHealth))
@@ -3349,7 +3349,7 @@ turret_death_monitor(turret)
 		if (!isDefined(turret))
 			break;
 
-		if (turret.health <= 20000)
+		if(turret.damageTaken >= turret.maxHealth)
 			break;
 
 		if (isDefined(turret.carriedBy))
@@ -3373,7 +3373,7 @@ bot_turret_attack( enemy )
 		if ( !IsDefined( enemy ) )
 			return;
 		
-		if(enemy.health <= 20000)
+		if(enemy.damageTaken >= enemy.maxHealth)
 			return;
 
 		if (isDefined(enemy.carriedBy))
@@ -3422,7 +3422,7 @@ bot_turret_think()
 			if (!isDefined(tempTurret))
 				continue;
 
-			if(tempTurret.health <= 20000)
+			if(tempTurret.damageTaken >= tempTurret.maxHealth)
 				continue;
 			if (isDefined(tempTurret.carriedBy))
 				continue;
@@ -3452,7 +3452,9 @@ bot_turret_think()
 			facing = false;
 		if ( turret isStunned() )
 			facing = false;
-		if(self _hasPerk("specialty_coldblooded"))
+		if(self _hasPerk("specialty_blindeye"))
+			facing = false;
+		if (turret.sentryType == "sam_turret")
 			facing = false;
 
 		if ( facing && !BulletTracePassed( myEye, turret.origin + ( 0, 0, 15 ), false, turret ) )
