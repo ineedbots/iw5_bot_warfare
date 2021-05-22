@@ -490,7 +490,7 @@ isWeaponPrimary(weap)
 */
 entIsVehicle(ent)
 {
-	return (ent.classname == "script_vehicle" || ent.model == "vehicle_uav_static_mp" || ent.model == "vehicle_ac130_coop");
+	return (!isPlayer(ent) && (ent.classname == "script_vehicle" || ent.model == "vehicle_uav_static_mp" || ent.model == "vehicle_ac130_coop" || ent.model == "vehicle_predator_b" || ent.model == "vehicle_phantom_ray"));
 }
 
 /*

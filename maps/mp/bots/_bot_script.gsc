@@ -599,7 +599,7 @@ chooseRandomSecondary()
 */
 chooseRandomBuff(weap)
 {
-	buffs = getWeaponProfs(tableLookup( "mp/statstable.csv", 4, weap, 2 ));
+	buffs = getWeaponProfs(getWeaponClass(weap));
 	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData("experience") );
 	allowOp = (getDvarInt("bots_loadout_allow_op") >= 1);
 	reasonable = getDvarInt("bots_loadout_reasonable");
@@ -1627,7 +1627,7 @@ start_bot_threads()
 	// script targeting
 	if (getDvarInt("bots_play_target_other"))
 	{
-		//self thread bot_target_vehicle();
+		self thread bot_target_vehicle();
 		self thread bot_equipment_kill_think();
 		self thread bot_turret_think();
 	}
@@ -3554,7 +3554,7 @@ bot_box_think()
 
 		self.bot_lock_goal = true;
 
-		radius = GetDvarFloat( "player_useRadius" );
+		radius = GetDvarFloat( "player_useRadius" ) / 2;
 		self SetScriptGoal(box.origin, radius);
 		self thread bot_inc_bots(box, true);
 		self thread bots_watch_touch_obj(box);
@@ -3738,7 +3738,7 @@ bot_crate_think()
 
 			self.bot_lock_goal = true;
 
-			radius = GetDvarFloat( "player_useRadius" );
+			radius = GetDvarFloat( "player_useRadius" ) - 16;
 			self SetScriptGoal(crate.origin, radius);
 			self thread bot_inc_bots(crate, true);
 			self thread bots_watch_touch_obj(crate);
@@ -3955,8 +3955,6 @@ bot_target_vehicle()
 			continue;
 
 		rocketAmmo = self getRocketAmmo();
-		if(!isDefined(rocketAmmo) && self BotGetRandom() < 90)
-			continue;
 
 		if (isDefined(rocketAmmo) && rocketAmmo == "javelin_mp" && self isEMPed())
 			continue;
@@ -3973,6 +3971,9 @@ bot_target_vehicle()
 		{
 			tempTarget = targets[i];
 
+			if (isPlayer(tempTarget))
+				continue;
+
 			if (isDefined(tempTarget.owner) && tempTarget.owner == self)
 				continue;
 
@@ -3982,6 +3983,12 @@ bot_target_vehicle()
 			if (tempTarget.health <= 0)
 				continue;
 
+			if (isDefined(tempTarget.damageTaken) && isDefined(tempTarget.maxHealth))
+			{
+				if (tempTarget.damageTaken >= tempTarget.maxHealth)
+					continue;
+			}
+
 			if (tempTarget.classname != "script_vehicle" && !isDefined(lockOnAmmo))
 				continue;
 
@@ -3990,6 +3997,12 @@ bot_target_vehicle()
 
 		if (!isDefined(target))
 			continue;
+
+		if (target.model != "vehicle_ugv_talon_mp")
+		{
+			if(!isDefined(rocketAmmo) && self BotGetRandom() < 90)
+				continue;
+		}
 
 		self SetScriptEnemy( target, (0, 0, 0) );
 		self bot_attack_vehicle( target );
