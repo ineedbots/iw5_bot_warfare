@@ -1617,7 +1617,7 @@ start_bot_threads()
 	// inventory usage
 	if (getDvarInt("bots_play_killstreak"))
 	{
-	//	self thread bot_killstreak_think();
+		self thread bot_killstreak_think();
 		self thread bot_box_think();
 	}
 
@@ -3163,7 +3163,7 @@ bot_listen_to_steps()
 			break;
 		}
 
-		hasHeartbeat = (isSubStr(self GetCurrentWeapon(), "_heartbeat") && !self IsEMPed() && !self isNuked());
+		hasHeartbeat = (isSubStr(self GetCurrentWeapon(), "_heartbeat") && ((!self IsEMPed() && !self isNuked()) || self _hasPerk("specialty_spygame")));
 		heartbeatDist = 350*350;
 
 		if(!IsDefined(heard) && hasHeartbeat)
@@ -4057,7 +4057,7 @@ getKillstreakTargetLocation()
 			continue;
 		if(!isReallyAlive(player))
 			continue;
-		if(player _hasPerk("specialty_coldblooded"))
+		if(player _hasPerk("specialty_blindeye"))
 			continue;
 		if(!bulletTracePassed(player.origin, player.origin+(0,0,2048), false, player) && self.pers["bots"]["skill"]["base"] > 3)
 			continue;
@@ -4093,33 +4093,6 @@ clear_remote_on_death(isac130)
 }
 
 /*
-	Returns if any harriers exists that is an enemy
-*/
-isAnyEnemyPlanes()
-{
-	if (!isDefined(level.harriers))
-		return false;
-
-	for (i = 0; i < level.harriers.size; i++)
-	{
-		plane = level.harriers[i];
-
-		if (!isDefined(plane))
-			continue;
-
-		if (level.teamBased && plane.team == self.team)
-			continue;
-
-		if (isDefined(plane.owner) && plane.owner == self)
-			continue;
-
-		return true;
-	}
-
-	return false;
-}
-
-/*
 	Bots think to use killstreaks
 */
 bot_killstreak_think()
@@ -4128,19 +4101,14 @@ bot_killstreak_think()
 	self endon("death");
 	level endon("game_ended");
 
-	doFastContinue = false;
+	doFastContinue = undefined;
 
 	for (;;)
 	{
-		if (doFastContinue)
-			doFastContinue = false;
-		else
+		if (!isDefined(doFastContinue))
 		{
 			wait randomIntRange(1, 3);
 		}
-
-		if ( !isDefined( self.pers["killstreaks"][0] ) )
-			continue;
 
 		if(self BotIsFrozen())
 			continue;
@@ -4151,7 +4119,7 @@ bot_killstreak_think()
 		if(self isDefusing() || self isPlanting())
 			continue;
 
-		if (self isEMPed())
+		if (self isEMPed() || self isNuked())
 			continue;
 
 		if (self IsUsingRemote())
@@ -4160,7 +4128,33 @@ bot_killstreak_think()
 		if (self InLastStand() && !self InFinalStand())
 			continue;
 
-		streakName = self.pers["killstreaks"][0].streakName;
+		useableStreaks = [];
+
+		if (!isDefined(doFastContinue))
+		{
+			if (self.pers["killstreaks"][0].available)
+				useableStreaks[useableStreaks.size] = 0;
+
+			if (self.pers["killstreaks"][1].available && self.streakType != "specialist")
+				useableStreaks[useableStreaks.size] = 1;
+
+			if (self.pers["killstreaks"][2].available && self.streakType != "specialist")
+				useableStreaks[useableStreaks.size] = 2;
+
+			if (self.pers["killstreaks"][3].available && self.streakType != "specialist")
+				useableStreaks[useableStreaks.size] = 3;
+		}
+		else
+		{
+			useableStreaks[0] = doFastContinue;
+			doFastContinue = undefined;
+		}
+
+		if (!useableStreaks.size)
+			continue;
+
+		self.killstreakIndexWeapon = random(useableStreaks);
+		streakName = self.pers["killstreaks"][self.killstreakIndexWeapon].streakName;
 
 		if (level.inGracePeriod && maps\mp\killstreaks\_killstreaks::deadlyKillstreak(streakName))
 			continue;
@@ -4175,12 +4169,11 @@ bot_killstreak_think()
 		if (!isDefined(lifeId))
 			lifeId = -1;
 
-		if (isStrStart(streakName, "helicopter_") && self isAnyEnemyPlanes() && self.pers["bots"]["skill"]["base"] > 3)
-			continue;
+		print (self.name + " " + streakName);
 
 		if (maps\mp\killstreaks\_killstreaks::isRideKillstreak(streakName) || maps\mp\killstreaks\_killstreaks::isCarryKillstreak(streakName))
 		{
-			if (self inLastStand())
+			if (self inLastStand() || true)
 				continue;
 
 			if (lifeId == self.deaths && !self HasScriptGoal() && !self.bot_lock_goal && streakName != "sentry" && !self nearAnyOfWaypoints(128, level.waypointsCamp))
@@ -4325,7 +4318,7 @@ bot_killstreak_think()
 		{
 			if (streakName == "airdrop_mega" || streakName == "airdrop_sentry_minigun" || streakName == "airdrop")
 			{
-				if (self HasScriptAimPos())
+				if (self HasScriptAimPos() || true)
 					continue;
 
 				if (streakName != "airdrop_mega" && level.littleBirds > 2)
@@ -4377,26 +4370,39 @@ bot_killstreak_think()
 			}
 			else
 			{
-				if (streakName == "harrier_airstrike" && level.planes > 1)
-					continue;
-
 				if (streakName == "nuke" && isDefined( level.nukeIncoming ))
 					continue;
 
 				if (streakName == "counter_uav" && self.pers["bots"]["skill"]["base"] > 3 && ((level.teamBased && level.activeCounterUAVs[self.team]) || (!level.teamBased && level.activeCounterUAVs[self.guid])))
 					continue;
 
-				if (streakName == "uav" && self.pers["bots"]["skill"]["base"] > 3 && ((level.teamBased && (level.activeUAVs[self.team] || level.activeCounterUAVs[level.otherTeam[self.team]])) || (!level.teamBased && (level.activeUAVs[self.guid] || self.isRadarBlocked))))
+				if ((streakName == "uav" || streakName == "uav_support" || streakName == "triple_uav") && self.pers["bots"]["skill"]["base"] > 3 && ((level.teamBased && (level.activeUAVs[self.team] || level.activeCounterUAVs[level.otherTeam[self.team]])) || (!level.teamBased && (level.activeUAVs[self.guid] || self.isRadarBlocked))))
 					continue;
 
 				if (streakName == "emp" && self.pers["bots"]["skill"]["base"] > 3 && ((level.teamBased && level.teamEMPed[level.otherTeam[self.team]]) || (!level.teamBased && isDefined( level.empPlayer ))))
 					continue;
 
+				if (streakName == "littlebird_flock" || streakName == "helicopter" || streakName == "helicopter_flares" || streakName == "littlebird_support")
+				{
+					numIncomingVehicles = 1;
+					if (streakName == "littlebird_flock")
+						numIncomingVehicles = 5;
+					
+					if (currentActiveVehicleCount() >= maxVehiclesAllowed() || level.fauxVehicleCount + numIncomingVehicles >= maxVehiclesAllowed())
+						continue;
+
+					if (streakName == "helicopter" && isDefined( level.chopper ))
+						continue;
+
+					if (streakName == "littlebird_support" && (isDefined( level.littlebirdGuard ) || maps\mp\killstreaks\_helicopter::exceededMaxLittlebirds( "littlebird_support" )))
+						continue;
+				}
+
 				location = undefined;
 				directionYaw = undefined;
 				switch (streakName)
 				{
-					case "harrier_airstrike":
+					case "littlebird_flock":
 					case "stealth_airstrike":
 					case "precision_airstrike":
 						location = self getKillstreakTargetLocation();
@@ -4406,9 +4412,12 @@ bot_killstreak_think()
 							continue;
 					case "helicopter":
 					case "helicopter_flares":
+					case "littlebird_support":
 					case "uav":
-					case "nuke":
+					case "uav_support":
 					case "counter_uav":
+					case "triple_uav":
+					case "nuke":
 					case "emp":
 						self BotStopMoving(true);
 						
