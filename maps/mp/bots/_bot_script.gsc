@@ -3234,12 +3234,16 @@ bot_uav_think()
 		
 		if(self.pers["bots"]["skill"]["base"] <= 1)
 			continue;
-			
-		if (self isEMPed() || self.bot_isScrambled || self isNuked())
-			continue;
 
-		if ((level.teamBased && level.activeCounterUAVs[level.otherTeam[self.team]]) || (!level.teamBased && self.isRadarBlocked))
-			continue;
+		hasAssPro = self _hasPerk("specialty_spygame");
+		if (!hasAssPro)
+		{
+			if (self isEMPed() || self.bot_isScrambled || self isNuked())
+				continue;
+
+			if ((level.teamBased && level.activeCounterUAVs[level.otherTeam[self.team]]) || (!level.teamBased && self.isRadarBlocked))
+				continue;
+		}
 		
 		hasRadar = ((level.teamBased && level.activeUAVs[self.team]) || (!level.teamBased && level.activeUAVs[self.guid]));
 		if( level.hardcoreMode && !hasRadar )
