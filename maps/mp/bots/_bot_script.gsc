@@ -1666,7 +1666,7 @@ start_bot_threads()
 	// obj
 	if (getDvarInt("bots_play_obj"))
 	{
-		/*self thread bot_dom_def_think();
+		self thread bot_dom_def_think();
 		self thread bot_dom_spawn_kill_think();
 
 		self thread bot_hq();
@@ -1680,14 +1680,7 @@ start_bot_threads()
 
 		self thread bot_dem_attackers();
 		self thread bot_dem_defenders();
-
-		self thread bot_gtnw();
-		self thread bot_oneflag();
-		self thread bot_arena();
-		self thread bot_vip();*/
 	}
-
-	self thread bot_think_revive();
 }
 
 /*
@@ -4316,12 +4309,18 @@ bot_killstreak_think()
 		}
 		else
 		{
-			if (streakName == "airdrop_mega" || streakName == "airdrop_sentry_minigun" || streakName == "airdrop")
+			if (streakName == "escort_airdrop" || streakName == "airdrop_juggernaut_recon" || streakName == "airdrop_trap" || streakName == "airdrop_juggernaut" || streakName == "airdrop_remote_tank" || streakName == "airdrop_sentry_minigun" || streakName == "airdrop_assault")
 			{
-				if (self HasScriptAimPos() || true)
+				if (self HasScriptAimPos())
 					continue;
 
-				if (streakName != "airdrop_mega" && level.littleBirds > 2)
+				if( ( level.littleBirds.size >= 4 || level.fauxVehicleCount >= 4 ) && !isSubStr( toLower( streakName ), "juggernaut" ) )
+					continue;
+
+				if( currentActiveVehicleCount() >= maxVehiclesAllowed() || level.fauxVehicleCount + 1 >= maxVehiclesAllowed() )
+					continue;
+
+				if( IsSubStr( toLower( streakName ), "escort_airdrop" ) && isDefined( level.chopper ) )
 					continue;
 
 				if(!bulletTracePassed(self.origin, self.origin+(0,0,2048), false, self) && self.pers["bots"]["skill"]["base"] > 3)

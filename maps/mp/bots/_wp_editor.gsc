@@ -57,6 +57,7 @@ init()
 
 	level.waypoints = [];
 	level.waypointCount = 0;
+	level.bots_lowmem = false;
   
 	level waittill( "connected", player);
 	player thread onPlayerSpawned();
@@ -134,6 +135,9 @@ watchAstarCommand()
 	for (;;)
 	{
 		self waittill("astar");
+
+		if (1)
+			continue;
 
 		self iprintln("Start AStar");
 		self.astar = undefined;
