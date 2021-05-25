@@ -4164,12 +4164,12 @@ bot_killstreak_think()
 
 		print (self.name + " " + streakName);
 
-		if (maps\mp\killstreaks\_killstreaks::isRideKillstreak(streakName) || maps\mp\killstreaks\_killstreaks::isCarryKillstreak(streakName))
+		if (maps\mp\killstreaks\_killstreaks::isRideKillstreak(streakName) || maps\mp\killstreaks\_killstreaks::isCarryKillstreak(streakName) || streakName == "sam_turret" || streakName == "remote_mg_turret")
 		{
-			if (self inLastStand() || true)
+			if (self inLastStand())
 				continue;
 
-			if (lifeId == self.deaths && !self HasScriptGoal() && !self.bot_lock_goal && streakName != "sentry" && !self nearAnyOfWaypoints(128, level.waypointsCamp))
+			if (lifeId == self.deaths && !self HasScriptGoal() && !self.bot_lock_goal && maps\mp\killstreaks\_killstreaks::isRideKillstreak(streakName) && !self nearAnyOfWaypoints(128, level.waypointsCamp))
 			{
 				campSpots = [];
 				distSq = 1024*1024;
@@ -4189,12 +4189,12 @@ bot_killstreak_think()
 					if (self waittill_any_return("new_goal", "goal", "bad_path") != "new_goal")
 						self ClearScriptGoal();
 
-					doFastContinue = true;
+					doFastContinue = self.killstreakIndexWeapon;
 					continue;
 				}
 			}
 				
-			if (streakName == "sentry")
+			if (streakName == "sentry" || streakName == "sam_turret" || streakName == "remote_mg_turret" || streakName == "ims")
 			{
 				if (self HasScriptAimPos())
 					continue;
@@ -4203,8 +4203,27 @@ bot_killstreak_think()
 				angles = self GetPlayerAngles();
 
 				forwardTrace = bulletTrace(myEye, myEye + AnglesToForward(angles)*1024, false, self);
+				placeNot = "place_sentry";
+				cancelNot = "cancel_sentry";
+				distCheck = 1000*1000;
+				switch (streakName)
+				{
+					case "sam_turret":
+						forwardTrace = bulletTrace(myEye, myEye + (0, 0, 1024), false, self);
+						break;
+					case "remote_mg_turret":
+						placeNot = "place_turret";
+						cancelNot = "cancel_turret";
+						break;
+					case "ims":
+						forwardTrace = bulletTrace(myEye, myEye + AnglesToForward(angles)*128, false, self);
+						placeNot = "place_ims";
+						cancelNot = "cancel_ims";
+						distCheck = 100*100;
+						break;
+				}
 
-				if (DistanceSquared(self.origin, forwardTrace["position"]) < 1000*1000 && self.pers["bots"]["skill"]["base"] > 3)
+				if (DistanceSquared(self.origin, forwardTrace["position"]) < distCheck && self.pers["bots"]["skill"]["base"] > 3)
 					continue;
 
 				self BotStopMoving(true);
@@ -4218,9 +4237,9 @@ bot_killstreak_think()
 				}
 
 				wait 1;
-				self notify("place_sentry");
+				self notify(placeNot);
 				wait 0.05;
-				self notify("cancel_sentry");
+				self notify(cancelNot);
 				wait 0.5;
 
 				self thread changeToWeapon(curWeap);
@@ -4228,7 +4247,7 @@ bot_killstreak_think()
 				self BotStopMoving(false);
 				self ClearScriptAimPos();
 			}
-			else if (streakName == "predator_missile")
+			else if (streakName == "predator_missile" && false)
 			{
 				location = self getKillstreakTargetLocation();
 
@@ -4278,7 +4297,7 @@ bot_killstreak_think()
 				self BotFreezeControls(false);
 				self thread changeToWeapon(curWeap);
 			}
-			else if (streakName == "ac130")
+			else if (streakName == "ac130" && false)
 			{
 				if ( isDefined( level.ac130player ) || level.ac130InUse )
 					continue;
@@ -4290,20 +4309,6 @@ bot_killstreak_think()
 				wait 3;
 
 				if ( !isDefined( level.ac130player ) || level.ac130player != self )
-					self thread changeToWeapon(curWeap);
-			}
-			else if (streakName == "helicopter_minigun")
-			{
-				if (isDefined( level.chopper ))
-					continue;
-
-				self BotStopMoving(true);
-				self changeToWeapon(ksWeap);
-				self BotStopMoving(false);
-
-				wait 3;
-
-				if ( !isDefined( level.chopper ) || !isDefined( level.chopper.gunner ) || level.chopper.gunner != self )
 					self thread changeToWeapon(curWeap);
 			}
 		}

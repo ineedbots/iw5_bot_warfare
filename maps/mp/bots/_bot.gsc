@@ -325,11 +325,9 @@ watchRadar()
 			player.bot_isInRadar = false;
 		}
 
-		grenades = GetEntArray("script_model", "classname");
-
-		for (i = grenades.size - 1; i >= 0; i--)
+		for ( i = level.players.size - 1; i >= 0; i-- )
 		{
-			grenade = grenades[i];
+			grenade = level.players[i].deployedPortableRadar;
 
 			if ( !isDefined( grenade ) )
 				continue;
@@ -397,7 +395,7 @@ watchScrabler()
 				if(level.teamBased && scrambler.team == player.team)
 					continue;
 
-				if (player _hasPerk("specialty_coldblooded"))
+				if (player _hasPerk("specialty_spygame"))
 					continue;
 
 				if (DistanceSquared(player.origin, scrambler.origin) > 256*256)
