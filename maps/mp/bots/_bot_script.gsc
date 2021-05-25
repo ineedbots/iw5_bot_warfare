@@ -2941,7 +2941,7 @@ bot_equipment_kill_think()
 		dist = 512*512;
 		target = undefined;
 
-		// check legacy nades
+		// check legacy nades, c4 and claymores
 		for ( i = 0; i < grenades.size; i++ )
 		{
 			item = grenades[i];
@@ -2952,10 +2952,10 @@ bot_equipment_kill_think()
 			if ( !IsDefined( item.name ) )
 				continue;
 
-			if ( IsDefined( item.owner ) && ((level.teamBased && item.owner.team == self.team) || item.owner == self) )
-				continue;
-			
 			if (item.name != "c4_mp" && item.name != "claymore_mp")
+				continue;
+
+			if ( IsDefined( item.owner ) && ((level.teamBased && item.owner.team == self.team) || item.owner == self) )
 				continue;
 				
 			if(!hasSitrep && !bulletTracePassed(myEye, item.origin, false, item))
@@ -2970,8 +2970,10 @@ bot_equipment_kill_think()
 				break;
 			}
 		}
+
+		grenades = undefined; // clean up, reduces child1 vars
 		
-		// check for TIs
+		// check for player stuff, tis and throphys and radars
 		if ( !IsDefined( target ) )
 		{
 			for ( i = 0; i < level.players.size; i++ )
@@ -2987,43 +2989,228 @@ bot_equipment_kill_think()
 				if ( level.teamBased && player.team == myteam )
 					continue;
 
-				ti = player.setSpawnPoint;
-				if(!isDefined(ti))
-					continue;
-				
-				if(!isDefined(ti.bots))
-					ti.bots = 0;
-				
-				if(ti.bots >= 2)
-					continue;
-				
-				if(!hasSitrep && !bulletTracePassed(myEye, ti.origin, false, ti))
-					continue;
-				
-				if(getConeDot(ti.origin, self.origin, myAngles) < 0.6)
+				// check for thorphys
+				if (isDefined(player.trophyArray))
+				{
+					for (h = 0; h < player.trophyArray.size; h++)
+					{
+						item = player.trophyArray[h];
+
+						if (!isDefined(item))
+							continue;
+
+						if (isDefined(item.damageTaken) && isDefined(item.maxHealth))
+						{
+							if (item.damageTaken >= item.maxHealth)
+								continue;
+						}
+
+						if (!isDefined(item.bots))
+							item.bots = 0;
+
+						if (item.bots >= 2)
+							continue;
+
+						if(!hasSitrep && !bulletTracePassed(myEye, item.origin, false, item))
+							continue;
+					
+						if(getConeDot(item.origin, self.origin, myAngles) < 0.6)
+							continue;
+
+						if ( DistanceSquared( item.origin, self.origin ) < dist )
+						{
+							target = item;
+							break;
+						}
+					}
+				}
+
+				// check for ti
+				if (!isDefined(target))
+				{
+					for (h = 0; h < 1; h++)
+					{
+						item = player.setSpawnPoint;
+						if(!isDefined(item))
+							continue;
+
+						if (isDefined(item.damageTaken) && isDefined(item.maxHealth))
+						{
+							if (item.damageTaken >= item.maxHealth)
+								continue;
+						}
+						
+						if(!isDefined(item.bots))
+							item.bots = 0;
+						
+						if(item.bots >= 2)
+							continue;
+						
+						if(!hasSitrep && !bulletTracePassed(myEye, item.origin, false, item))
+							continue;
+						
+						if(getConeDot(item.origin, self.origin, myAngles) < 0.6)
+							continue;
+
+						if ( DistanceSquared( item.origin, self.origin ) < dist )
+						{
+							target = item;
+							break;
+						}
+					}
+				}
+
+				// check for radar
+				if (!isDefined(target))
+				{
+					for (h = 0; h < 1; h++)
+					{
+						item = player.deployedPortableRadar;
+						if(!isDefined(item))
+							continue;
+
+						if (isDefined(item.damageTaken) && isDefined(item.maxHealth))
+						{
+							if (item.damageTaken >= item.maxHealth)
+								continue;
+						}
+						
+						if(!isDefined(item.bots))
+							item.bots = 0;
+						
+						if(item.bots >= 2)
+							continue;
+						
+						if(!hasSitrep && !bulletTracePassed(myEye, item.origin, false, item))
+							continue;
+						
+						if(getConeDot(item.origin, self.origin, myAngles) < 0.6)
+							continue;
+
+						if ( DistanceSquared( item.origin, self.origin ) < dist )
+						{
+							target = item;
+							break;
+						}
+					}
+				}
+
+				if (isDefined(target))
+					break;
+			}
+		}
+
+		// check for ims
+		if ( !IsDefined( target ) )
+		{
+			imsKeys = getArrayKeys(level.ims);
+
+			for (i = 0; i < imsKeys.size; i++)
+			{
+				item = level.ims[imsKeys[i]];
+
+				if (!isDefined(item))
 					continue;
 
-				if ( DistanceSquared( ti.origin, self.origin ) < dist )
+				if (isDefined(item.damageTaken) && isDefined(item.maxHealth))
 				{
-					target = ti;
+					if (item.damageTaken >= item.maxHealth)
+						continue;
+				}
+
+				if ( IsDefined( item.owner ) && ((level.teamBased && item.owner.team == self.team) || item.owner == self) )
+					continue;
+					
+				if(!hasSitrep && !bulletTracePassed(myEye, item.origin, false, item))
+					continue;
+					
+				if(getConeDot(item.origin, self.origin, myAngles) < 0.6)
+					continue;
+				
+				if ( DistanceSquared( item.origin, self.origin ) < dist )
+				{
+					target = item;
+					break;
+				}
+			}
+
+			imsKeys = undefined;
+		}
+
+		// check for vest
+		if ( !IsDefined( target ) )
+		{
+			for (i = 0; i < level.vest_boxes.size; i++)
+			{
+				item = level.vest_boxes[i];
+
+				if (!isDefined(item))
+					continue;
+
+				if (isDefined(item.damageTaken) && isDefined(item.maxHealth))
+				{
+					if (item.damageTaken >= item.maxHealth)
+						continue;
+				}
+
+				if ( IsDefined( item.owner ) && ((level.teamBased && item.owner.team == self.team) || item.owner == self) )
+					continue;
+					
+				if(!hasSitrep && !bulletTracePassed(myEye, item.origin, false, item))
+					continue;
+					
+				if(getConeDot(item.origin, self.origin, myAngles) < 0.6)
+					continue;
+				
+				if ( DistanceSquared( item.origin, self.origin ) < dist )
+				{
+					target = item;
 					break;
 				}
 			}
 		}
 
-		//check for iw5 nades
-		if (!isDefined(target))
+		// check for jammers
+		if ( !IsDefined( target ) )
 		{
-			ents = GetEntArray("script_model", "classname");
-
-			for ( i = 0; i < ents.size; i++ )
+			for (i = 0; i < level.scramblers.size; i++)
 			{
-				item = ents[i];
+				item = level.scramblers[i];
 
 				if (!isDefined(item))
 					continue;
 
-				if (item.model != "weapon_radar" && item.model != "mp_trophy_system" && item.model != "weapon_jammer" && item.model != "projectile_bouncing_betty_grenade" && item.model != "com_deploy_ballistic_vest_friend_world" && item.model != "ims_scorpion_body")
+				if (isDefined(item.damageTaken) && isDefined(item.maxHealth))
+				{
+					if (item.damageTaken >= item.maxHealth)
+						continue;
+				}
+
+				if ( IsDefined( item.owner ) && ((level.teamBased && item.owner.team == self.team) || item.owner == self) )
+					continue;
+					
+				if(!hasSitrep && !bulletTracePassed(myEye, item.origin, false, item))
+					continue;
+					
+				if(getConeDot(item.origin, self.origin, myAngles) < 0.6)
+					continue;
+				
+				if ( DistanceSquared( item.origin, self.origin ) < dist )
+				{
+					target = item;
+					break;
+				}
+			}
+		}
+
+		// check for mines
+		if ( !IsDefined( target ) )
+		{
+			for (i = 0; i < level.mines.size; i++)
+			{
+				item = level.mines[i];
+
+				if (!isDefined(item))
 					continue;
 
 				if (isDefined(item.damageTaken) && isDefined(item.maxHealth))
@@ -3052,6 +3239,7 @@ bot_equipment_kill_think()
 		if ( !IsDefined( target ) )
 			continue;
 
+		// must be ti
 		if (isDefined(target.enemyTrigger) && !self HasScriptGoal() && !self.bot_lock_goal)
 		{
 			self SetScriptGoal(target.origin, 64);
@@ -3399,8 +3587,7 @@ bot_turret_think()
 	{
 		wait( 1 );
 
-		turrets = level.turrets;
-		turretsKeys = getArrayKeys(turrets);
+		turretsKeys = getArrayKeys(level.turrets);
 		if ( turretsKeys.size == 0 )
 		{
 			wait( randomintrange( 3, 5 ) );
@@ -3417,7 +3604,7 @@ bot_turret_think()
 		turret = undefined;
 		for (i = turretsKeys.size - 1; i >= 0; i--)
 		{
-			tempTurret = turrets[turretsKeys[i]];
+			tempTurret = level.turrets[turretsKeys[i]];
 			
 			if (!isDefined(tempTurret))
 				continue;
@@ -3435,6 +3622,7 @@ bot_turret_think()
 
 			turret = tempTurret;
 		}
+		turretsKeys = undefined;
 
 		if (!isDefined(turret))
 			continue;
@@ -3518,16 +3706,12 @@ bot_box_think()
 		box = undefined;
 
 		dist = 2048*2048;
-		ents = GetEntArray("script_model", "classname");
 
-		for ( i = 0; i < ents.size; i++ )
+		for ( i = 0; i < level.vest_boxes.size; i++ )
 		{
-			item = ents[i];
+			item = level.vest_boxes[i];
 
 			if (!isDefined(item))
-				continue;
-
-			if (item.model != "com_deploy_ballistic_vest_friend_world")
 				continue;
 
 			if (isDefined(item.damageTaken) && isDefined(item.maxHealth))
@@ -3729,6 +3913,8 @@ bot_crate_think()
 
 				crate = tempCrate;
 			}
+
+			crates = undefined;
 
 			if (!isDefined(crate))
 				continue;
@@ -3991,6 +4177,7 @@ bot_target_vehicle()
 
 			target = tempTarget;
 		}
+		targets = undefined;
 
 		if (!isDefined(target))
 			continue;

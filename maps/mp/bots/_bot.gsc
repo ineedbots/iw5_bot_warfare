@@ -15,7 +15,7 @@
 */
 init()
 {
-	level.bw_VERSION = "1.0.0";
+	level.bw_VERSION = "2.0.1";
 
 	if(getDvar("bots_main") == "")
 		setDvar("bots_main", true);
@@ -161,6 +161,7 @@ init()
 	level thread addNotifyOnAirdrops();
 	level thread watchScrabler();
 	level thread watchRadar();
+	level thread auditModels();
 	
 	level thread handleBots();
 	
@@ -307,6 +308,40 @@ fixKoth()
 		
 		while(isDefined(level.radioObject) && level.radio.gameobject == level.radioObject)
 			wait 0.05;
+	}
+}
+
+/*
+	Audits all the important models cause iw5 script is kek
+*/
+auditModels()
+{
+	level.vest_boxes = [];
+
+	for (;;)
+	{
+		wait 0.05;
+
+		level.vest_boxes = array_removeUndefined(level.vest_boxes);
+
+		s_models = getEntArray("script_model", "classname");
+
+		for (i = s_models.size - 1; i >= 0; i--)
+		{
+			model = s_models[i];
+
+			if (!isDefined(model))
+				continue;
+
+			if (isDefined(model.bot_audit_model))
+				continue;
+
+			if (model.model == "com_deploy_ballistic_vest_friend_world")
+			{
+				model.bot_audit_model = true;
+				level.vest_boxes[level.vest_boxes.size] = model;
+			}
+		}
 	}
 }
 
