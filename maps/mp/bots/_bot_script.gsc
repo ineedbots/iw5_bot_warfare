@@ -5287,7 +5287,7 @@ bot_sab_loop()
 		
 		self SetScriptGoal( self.origin, 64 );
 		
-		self bot_use_bomb_thread(site);
+		//self bot_use_bomb_thread(site);
 		wait 1;
 		
 		self ClearScriptGoal();
@@ -5400,7 +5400,7 @@ bot_sab_loop()
 		
 		self SetScriptGoal( self.origin, 64 );
 		
-		self bot_use_bomb_thread(site);
+		//self bot_use_bomb_thread(site);
 		wait 1;
 		self ClearScriptGoal();
 		
@@ -5598,7 +5598,7 @@ bot_sd_defenders_loop(data)
 	
 	self SetScriptGoal( self.origin, 64 );
 	
-	self bot_use_bomb_thread(defuse);
+	//self bot_use_bomb_thread(defuse);
 	wait 1;
 	self ClearScriptGoal();
 	self.bot_lock_goal = false;
@@ -5806,7 +5806,7 @@ bot_sd_attackers_loop(data)
 	
 	self SetScriptGoal( self.origin, 64 );
 	
-	self bot_use_bomb_thread(plant);
+	//self bot_use_bomb_thread(plant);
 	wait 1;
 	
 	self ClearScriptGoal();
@@ -6252,7 +6252,7 @@ bot_dem_attackers_loop()
 	
 	self SetScriptGoal( self.origin, 64 );
 	
-	self bot_use_bomb_thread(plant);
+	//self bot_use_bomb_thread(plant);
 	wait 1;
 	
 	self ClearScriptGoal();
@@ -6476,7 +6476,7 @@ bot_dem_defenders_loop()
 	
 	self SetScriptGoal( self.origin, 64 );
 	
-	self bot_use_bomb_thread(defuse);
+	//self bot_use_bomb_thread(defuse);
 	wait 1;
 	
 	self ClearScriptGoal();
