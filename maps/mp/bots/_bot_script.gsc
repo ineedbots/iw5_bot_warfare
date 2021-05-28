@@ -3437,7 +3437,7 @@ bot_uav_think_loop()
 		if(distFromPlayer > dist)
 			continue;
 		
-		if((!isSubStr(player getCurrentWeapon(), "_silencer") && player.bots_firing) || (hasRadar && !player _hasPerk("specialty_coldblooded")) || player maps\mp\perks\_perkfunctions::isPainted() || player.bot_isInRadar)
+		if((!isSubStr(player getCurrentWeapon(), "_silencer") && player.bots_firing) || (hasRadar && !player _hasPerk("specialty_coldblooded")) || player maps\mp\perks\_perkfunctions::isPainted() || player.bot_isInRadar || player isJuggernaut())
 		{
 			distSq = self.pers["bots"]["skill"]["help_dist"] * self.pers["bots"]["skill"]["help_dist"];
 			if (distFromPlayer < distSq && bulletTracePassed(self getEye(), player getTagOrigin( "j_spineupper" ), false, player))
