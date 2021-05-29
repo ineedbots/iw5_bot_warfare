@@ -389,6 +389,37 @@ watchRadar_loop()
 			player.bot_isInRadar = true;
 		}
 	}
+
+	for ( i = level.players.size - 1; i >= 0; i-- )
+	{
+		if ( !isDefined( level.players[i].personalRadar ) )
+			continue;
+
+		if (!isReallyAlive(level.players[i]))
+			continue;
+
+		for ( h = level.players.size - 1; h >= 0; h-- )
+		{
+			player = level.players[h];
+
+			if (!isReallyAlive(player))
+				continue;
+
+			if (level.players[i] == player)
+				continue;
+
+			if(level.teamBased && level.players[i].team == player.team)
+				continue;
+
+			if (player _hasPerk("specialty_coldblooded"))
+				continue;
+
+			if (DistanceSquared(player.origin, level.players[i].origin) > 256*256)
+				continue;
+
+			player.bot_isInRadar = true;
+		}
+	}
 }
 
 /*
