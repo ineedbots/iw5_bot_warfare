@@ -1891,10 +1891,10 @@ changeToWeapon(weap)
 	if (!self HasWeapon(weap))
 		return false;
 
+	self BotChangeToWeapon(weap);
+
 	if (self GetCurrentWeapon() == weap)
 		return true;
-
-	self BotChangeToWeapon(weap);
 
 	self waittill_any_timeout(5, "weapon_change");
 
@@ -2649,7 +2649,7 @@ bot_watch_think_mw2_loop()
 	if (randomInt(100) > self.pers["bots"]["behavior"]["nade"])
 		return;
 
-	self ChangeToWeapon(tube);
+	self thread ChangeToWeapon(tube);
 }
 
 /*
@@ -2736,7 +2736,7 @@ bot_watch_riot_weapons_loop()
 		if(weap == "")
 			return;
 		
-		self ChangeToWeapon(weap);
+		self thread ChangeToWeapon(weap);
 	}
 }
 
@@ -4053,9 +4053,9 @@ doReloadCancel_loop()
 
 	// do the cancel
 	wait 0.1;
-	self BotChangeToWeapon(weap);
+	self thread ChangeToWeapon(weap);
 	wait 0.25;
-	self BotChangeToWeapon(curWeap);
+	self thread ChangeToWeapon(curWeap);
 	wait 2;
 }
 
@@ -4437,6 +4437,15 @@ bot_killstreak_think_loop(data)
 			if (self HasScriptAimPos())
 				return;
 
+			if (streakName == "remote_uav" || streakName == "remote_tank")
+			{
+				if ( (isDefined( level.remote_uav[self.team] ) || level.littleBirds.size >= 4) && streakName == "remote_uav" )
+					return;
+
+				if( currentActiveVehicleCount() >= maxVehiclesAllowed() || level.fauxVehicleCount + 1 >= maxVehiclesAllowed() )
+					return;
+			}
+
 			myEye = self GetEye();
 			angles = self GetPlayerAngles();
 
@@ -4492,8 +4501,6 @@ bot_killstreak_think_loop(data)
 			self notify(cancelNot);
 			wait 0.5;
 
-			self thread changeToWeapon(curWeap);
-
 			self BotStopMoving(false);
 			self ClearScriptAimPos();
 		}
@@ -4517,13 +4524,13 @@ bot_killstreak_think_loop(data)
 			}
 
 			wait 0.05;
-			self BotChangeToWeapon(ksWeap);
+			self thread ChangeToWeapon(ksWeap); // prevent script from changing back
 
 			wait 1;
 			self notify("bot_clear_remote_on_death");
 			self BotStopMoving(false);
 
-			if (self isEMPed())
+			if (self isEMPed() || self isNuked())
 			{
 				self ClearUsingRemote();
 				self thread changeToWeapon(curWeap);
@@ -4547,21 +4554,55 @@ bot_killstreak_think_loop(data)
 
 			wait 1;
 			self BotFreezeControls(false);
-			self thread changeToWeapon(curWeap);
 		}
-		else if (streakName == "ac130") // remote_mortar  osprey_gunner  deployable_vest
+		else if (streakName == "ac130" || streakName == "remote_mortar" || streakName == "osprey_gunner")
 		{
-			if ( isDefined( level.ac130player ) || level.ac130InUse )
-				return;
+			if (streakName == "ac130")
+			{
+				if ( isDefined( level.ac130player ) || level.ac130InUse )
+					return;
+			}
+
+			if (streakName == "remote_mortar")
+			{
+				if (isDefined( level.remote_mortar ))
+					return;
+			}
+
+			location = undefined;
+			directionYaw = undefined;
+			if (streakName == "osprey_gunner")
+			{
+				if ( isDefined( level.chopper ) )
+					return;
+				if( currentActiveVehicleCount() >= maxVehiclesAllowed() || level.fauxVehicleCount + 1 >= maxVehiclesAllowed() )
+					return;
+
+				location = self getKillstreakTargetLocation();
+				directionYaw = randomInt(360);
+
+				if (!isDefined(location))
+					return;
+			}
 
 			self BotStopMoving(true);
-			self changeToWeapon(ksWeap);
+
+			if (self changeToWeapon(ksWeap))
+			{
+				wait 1;
+
+				if (isDefined(location))
+				{
+					self notify( "confirm_location", location, directionYaw );
+				}
+			}
+
+			wait 2;
 			self BotStopMoving(false);
+		}
+		else if (streakName == "deployable_vest")
+		{
 
-			wait 3;
-
-			if ( !isDefined( level.ac130player ) || level.ac130player != self )
-				self thread changeToWeapon(curWeap);
 		}
 	}
 	else
@@ -4609,7 +4650,6 @@ bot_killstreak_think_loop(data)
 			ret = self waittill_any_timeout( 5, "grenade_fire" );
 
 			self notify("stop_firing_weapon");
-			self thread changeToWeapon(curWeap);
 
 			if (ret == "timeout")
 			{
@@ -4690,8 +4730,6 @@ bot_killstreak_think_loop(data)
 
 							self BotFreezeControls(false);
 						}
-
-						self thread changeToWeapon(curWeap);
 					}
 
 					self BotStopMoving(false);
@@ -4712,6 +4750,13 @@ bot_killstreak_think()
 
 	data = spawnStruct();
 	data.doFastContinue = undefined;
+
+	if (randomInt(2))
+		self maps\mp\killstreaks\_killstreaks::giveKillstreak("ac130");
+	else if (randomInt(2))
+		self maps\mp\killstreaks\_killstreaks::giveKillstreak("osprey_gunner");
+	else
+		self maps\mp\killstreaks\_killstreaks::giveKillstreak("remote_mortar");
 
 	for (;;)
 	{

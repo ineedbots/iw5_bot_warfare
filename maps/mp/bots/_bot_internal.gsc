@@ -319,25 +319,41 @@ watchUsingRemote()
 		if (isDefined(level.chopper) && isDefined(level.chopper.gunner) && level.chopper.gunner == self)
 		{
 			self watchUsingMinigun();
-
-			if (isReallyAlive(self))
-			{
-				self changeToWeap(self getLastWeapon());
-				self.bot.targets = [];
-			}
 		}
 
 		if (isDefined(level.ac130Player) && level.ac130player == self)
 		{
 			self thread watchAc130Weapon();
 			self watchUsingAc130();
-
-			if (isReallyAlive(self))
-			{
-				self changeToWeap(self getLastWeapon());
-				self.bot.targets = [];
-			}
 		}
+
+		if (isDefined(level.remote_mortar) && isDefined(level.remote_mortar.owner) && level.remote_mortar.owner == self)
+		{
+			self watchUsingMortar();
+		}
+
+		self.bot.targets = [];
+	}
+}
+
+/*
+	Uses mortar
+*/
+watchUsingMortar()
+{
+	level.remote_mortar endon("remote_done");
+
+	while (isDefined(level.remote_mortar) && isDefined(level.remote_mortar.owner) && level.remote_mortar.owner == self)
+	{
+		if (self getCurrentWeapon() != "mortar_remote_mp")
+		{
+			self changeToWeap("mortar_remote_mp");
+		}
+
+		if (isDefined(self.bot.target))
+			self thread pressFire();
+
+		wait 0.05;
 	}
 }
 
