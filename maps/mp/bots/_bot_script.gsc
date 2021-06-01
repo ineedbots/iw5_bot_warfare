@@ -4626,9 +4626,11 @@ bot_killstreak_think_loop(data)
 
 			self notify("stop_firing_weapon");
 
-			self notify("bot_check_box_think");
 			self BotStopMoving(false);
 			self ClearScriptAimPos();
+
+			wait 2.5;
+			self notify("bot_check_box_think");
 		}
 	}
 	else
