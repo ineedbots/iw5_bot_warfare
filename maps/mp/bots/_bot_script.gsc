@@ -4602,7 +4602,33 @@ bot_killstreak_think_loop(data)
 		}
 		else if (streakName == "deployable_vest")
 		{
+			myEye = self GetEye();
+			angles = self GetPlayerAngles();
 
+			forwardTrace = bulletTrace(myEye, myEye + AnglesToForward(angles)*128, false, self);
+
+			if (DistanceSquared(self.origin, forwardTrace["position"]) < 96*96 && self.pers["bots"]["skill"]["base"] > 3)
+				return;
+
+			self BotStopMoving(true);
+			self SetScriptAimPos(forwardTrace["position"]);
+			
+			if (!self changeToWeapon(ksWeap))
+			{
+				self BotStopMoving(false);
+				self ClearScriptAimPos();
+				return;
+			}
+
+			self thread fire_current_weapon();
+
+			self waittill_any_timeout( 5, "grenade_fire" );
+
+			self notify("stop_firing_weapon");
+
+			self notify("bot_check_box_think");
+			self BotStopMoving(false);
+			self ClearScriptAimPos();
 		}
 	}
 	else
@@ -4750,13 +4776,6 @@ bot_killstreak_think()
 
 	data = spawnStruct();
 	data.doFastContinue = undefined;
-
-	if (randomInt(2))
-		self maps\mp\killstreaks\_killstreaks::giveKillstreak("ac130");
-	else if (randomInt(2))
-		self maps\mp\killstreaks\_killstreaks::giveKillstreak("osprey_gunner");
-	else
-		self maps\mp\killstreaks\_killstreaks::giveKillstreak("remote_mortar");
 
 	for (;;)
 	{
