@@ -20,7 +20,28 @@ onConnected()
 		level waittill("connected", player);
 
 		player thread test();
+		player thread onSpawn();
 	}
+}
+
+onSpawn()
+{
+	self endon("disconnect");
+
+	for (;;)
+	{
+		self waittill("spawned_player");
+
+		self thread spawned();
+	}
+}
+
+spawned()
+{
+	self endon("disconnect");
+	self endon("death");
+
+	wait 0.5;
 }
 
 test()

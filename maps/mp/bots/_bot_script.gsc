@@ -3716,7 +3716,7 @@ bot_box_think_loop(data)
 
 	box = undefined;
 	myteam = self.pers[ "team" ];
-	
+
 	dist = 2048*2048;
 
 	for ( i = 0; i < level.vest_boxes.size; i++ )
@@ -4411,8 +4411,6 @@ bot_killstreak_think_loop(data)
 	if (!isDefined(lifeId))
 		lifeId = -1;
 
-	print (self.name + " " + streakName);
-
 	if (maps\mp\killstreaks\_killstreaks::isRideKillstreak(streakName) || maps\mp\killstreaks\_killstreaks::isCarryKillstreak(streakName) || streakName == "sam_turret" || streakName == "remote_mg_turret")
 	{
 		if (self inLastStand())
@@ -4434,7 +4432,7 @@ bot_killstreak_think_loop(data)
 			}
 		}
 			
-		if (streakName == "sentry" || streakName == "sam_turret" || streakName == "remote_mg_turret" || streakName == "ims")
+		if (streakName == "sentry" || streakName == "sam_turret" || streakName == "remote_mg_turret" || streakName == "ims" || streakName == "remote_uav" || streakName == "remote_tank")
 		{
 			if (self HasScriptAimPos())
 				return;
@@ -4459,6 +4457,18 @@ bot_killstreak_think_loop(data)
 					forwardTrace = bulletTrace(myEye, myEye + AnglesToForward(angles)*128, false, self);
 					placeNot = "place_ims";
 					cancelNot = "cancel_ims";
+					distCheck = 100*100;
+					break;
+				case "remote_uav":
+					forwardTrace = bulletTrace(myEye, myEye + AnglesToForward(angles)*128, false, self);
+					placeNot = "place_carryRemoteUAV";
+					cancelNot = "cancel_carryRemoteUAV";
+					distCheck = 100*100;
+					break;
+				case "remote_tank":
+					forwardTrace = bulletTrace(myEye, myEye + AnglesToForward(angles)*128, false, self);
+					placeNot = "place_tank";
+					cancelNot = "cancel_tank";
 					distCheck = 100*100;
 					break;
 			}
@@ -4487,7 +4497,7 @@ bot_killstreak_think_loop(data)
 			self BotStopMoving(false);
 			self ClearScriptAimPos();
 		}
-		else if (streakName == "predator_missile" && false)
+		else if (streakName == "predator_missile")
 		{
 			location = self getKillstreakTargetLocation();
 
@@ -4506,6 +4516,9 @@ bot_killstreak_think_loop(data)
 				return;
 			}
 
+			wait 0.05;
+			self BotChangeToWeapon(ksWeap);
+
 			wait 1;
 			self notify("bot_clear_remote_on_death");
 			self BotStopMoving(false);
@@ -4519,16 +4532,15 @@ bot_killstreak_think_loop(data)
 
 			self BotFreezeControls(true);
 			
-			self maps\mp\killstreaks\_killstreaks::usedKillstreak( "predator_missile", true );
-			//self maps\mp\killstreaks\_killstreaks::shuffleKillStreaksFILO( "predator_missile" );
-			self maps\mp\killstreaks\_killstreaks::giveOwnedKillstreakItem();
+			self thread maps\mp\killstreaks\_killstreaks::updateKillstreaks();
+			self maps\mp\killstreaks\_killstreaks::usedKillstreak( streakName, true );
 
 			rocket = MagicBullet( "remotemissile_projectile_mp", self.origin + (0.0,0.0,7000.0 - (self.pers["bots"]["skill"]["base"] * 400)), location, self );
 			rocket.lifeId = lifeId;
 			rocket.type = "remote";
 				
 			rocket thread maps\mp\gametypes\_weapons::AddMissileToSightTraces( self.pers["team"] );
-			//rocket thread maps\mp\killstreaks\_remotemissile::handleDamage();
+			rocket thread maps\mp\killstreaks\_remotemissile::handleDamage();
 			thread maps\mp\killstreaks\_remotemissile::MissileEyes( self, rocket );
 
 			self waittill( "stopped_using_remote" );
@@ -4537,7 +4549,7 @@ bot_killstreak_think_loop(data)
 			self BotFreezeControls(false);
 			self thread changeToWeapon(curWeap);
 		}
-		else if (streakName == "ac130" && false)
+		else if (streakName == "ac130") // remote_mortar  osprey_gunner  deployable_vest
 		{
 			if ( isDefined( level.ac130player ) || level.ac130InUse )
 				return;
