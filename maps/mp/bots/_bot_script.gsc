@@ -4228,7 +4228,7 @@ bot_target_vehicle_loop()
 	if (!isDefined(target))
 		return;
 
-	if (target.model != "vehicle_ugv_talon_mp")
+	if (target.model != "vehicle_ugv_talon_mp" && target.model != "vehicle_remote_uav")
 	{
 		if(!isDefined(rocketAmmo) && self BotGetRandom() < 90)
 			return;
