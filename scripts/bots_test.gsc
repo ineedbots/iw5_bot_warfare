@@ -11,6 +11,17 @@ init()
 		return;
 
 	level thread onConnected();
+	level thread onframe();
+}
+
+onframe()
+{
+	for(;;)
+	{
+		wait 0.05;
+
+		if(getDvarInt("developer")) print("time:" + getTime() + "  child0:" + getVarUsage(0) + "  child1:" + getVarUsage(1) + "  notifycount:" + getVarUsage(2));
+	}
 }
 
 onConnected()
