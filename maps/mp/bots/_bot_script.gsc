@@ -3682,11 +3682,41 @@ bot_turret_think()
 /*
 	Loops
 */
-bot_box_think_loop()
+bot_box_think_loop(data)
 {
+	ret = "bot_check_box_think";
+	if(data.first)
+		data.first = false;
+	else
+		ret = self waittill_any_timeout( randomintrange( 3, 5 ), "bot_check_box_think" );
+
+	if ( RandomInt( 100 ) < 20 && ret != "bot_check_box_think" )
+		return;
+
+	if ( self HasScriptGoal() || self.bot_lock_goal )
+		return;
+
+	if (self HasThreat())
+		return;
+
+	if(self isDefusing() || self isPlanting())
+		return;
+
+	if(self IsUsingRemote() || self BotIsFrozen())
+		return;
+
+	if (self inLastStand())
+		return;
+
+	if (isDefined(self.hasLightArmor) && self.hasLightArmor)
+		return;
+
+	if (self isJuggernaut())
+		return;
+
 	box = undefined;
 	myteam = self.pers[ "team" ];
-
+	
 	dist = 2048*2048;
 
 	for ( i = 0; i < level.vest_boxes.size; i++ )
@@ -3750,27 +3780,13 @@ bot_box_think()
 	self endon( "death" );
 	self endon( "disconnect" );
 	level endon("game_ended");
+
+	data = spawnStruct();
+	data.first = true;
 	
 	for ( ;; )
 	{
-		wait( randomintrange( 3, 5 ) );
-
-		if ( RandomInt( 100 ) < 20 )
-			continue;
-		
-		if ( self HasScriptGoal() || self.bot_lock_goal )
-			continue;
-
-		if(self isDefusing() || self isPlanting())
-			continue;
-
-		if(self IsUsingRemote() || self BotIsFrozen())
-			continue;
-
-		if (self inLastStand())
-			continue;
-
-		self bot_box_think_loop();
+		self bot_box_think_loop(data);
 	}
 }
 
