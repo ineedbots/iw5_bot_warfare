@@ -2282,12 +2282,12 @@ use(time)
 	if(!isDefined(time))
 		time = 0.05;
 	
-	self botAction("+use");
+	self botAction("+activate");
 	
 	if(time)
 		wait time;
 	
-	self botAction("-use");
+	self botAction("-activate");
 }
 
 /*
@@ -2355,12 +2355,6 @@ prone()
 */
 changeToWeap(weap)
 {
-	if (maps\mp\gametypes\_weapons::isAltModeWeapon(weap))
-		self botAction("+alt");
-	else
-		self botAction("-alt");
-
-	
 	self botWeapon(weap);
 }
 
@@ -2434,69 +2428,4 @@ bot_lookat(pos, time, vel)
 botWeapon(weap)
 {
   self switchToWeapon(weap);
-}
-
-botAction(act)
-{
-	if (!isDefined(level.bot_buttons))
-	{
-		level.bot_buttons = [];
-
-		level.bot_buttons["+ads"] = (524288) | (2048);
-		level.bot_buttons["-ads"] = (524288) | (2048);
-
-		level.bot_buttons["+use"] = 8;
-		level.bot_buttons["-use"] = 8;
-
-		level.bot_buttons["+fire"] = 1;
-		level.bot_buttons["-fire"] = 1;
-
-		level.bot_buttons["+sprint"] = 2;
-		level.bot_buttons["-sprint"] = 2;
-
-		level.bot_buttons["+melee"] = 4;
-		level.bot_buttons["-melee"] = 4;
-
-		level.bot_buttons["+frag"] = 16384;
-		level.bot_buttons["-frag"] = 16384;
-
-		level.bot_buttons["+reload"] = 16;
-		level.bot_buttons["-reload"] = 16;
-
-		level.bot_buttons["+smoke"] = 32768;
-		level.bot_buttons["-smoke"] = 32768;
-
-		level.bot_buttons["+holdbreath"] = 8192;
-		level.bot_buttons["-holdbreath"] = 8192;
-
-		level.bot_buttons["+gostand"] = 1024;
-		level.bot_buttons["-gostand"] = 1024;
-
-		level.bot_buttons["+gocrouch"] = 512;
-		level.bot_buttons["-gocrouch"] = 512;
-
-		level.bot_buttons["+goprone"] = 256;
-		level.bot_buttons["-goprone"] = 256;
-
-		level.bot_buttons["+alt"] = 4194304;
-		level.bot_buttons["-alt"] = 4194304;
-	}
-
-  buttons = level.bot_buttons[act];
-
-  if (act[0] == "+")
-    setDvar("bot" + self getEntityNumber() + "_buttons", getDvarInt("bot" + self getEntityNumber() + "_buttons") | buttons);
-  else
-    setDvar("bot" + self getEntityNumber() + "_buttons", getDvarInt("bot" + self getEntityNumber() + "_buttons") & ~buttons);
-}
-
-botMovement(forward, right)
-{
-  setDvar("bot" + self getEntityNumber() + "_movement", forward + " " + right);
-}
-
-botStop()
-{
-  setDvar("bot" + self getEntityNumber() + "_movement", "0 0");
-  setDvar("bot" + self getEntityNumber() + "_buttons", 0);
 }
