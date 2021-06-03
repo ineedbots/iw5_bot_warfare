@@ -89,7 +89,7 @@ Your `games_mp.log` can be located at the `C:\Users\<LOGINNAME>\AppData\Plutoniu
 
 The editor will generate some GSC code for the waypoints.<br>
 ![games_mp.log](/raw/bw-assets/wp-editor-gamesmp.png)<br>
-This is the GSC function that will generate the waypoints for the map. If you have trouble beyond this point, simply create a Issue and provide the output from here, I can do the rest from there.
+This is the GSC function that will generate the waypoints for the map. If you have trouble beyond this point, simply create an Issue and provide the output from here, I can do the rest from there.
 
 You can create/replace the map's waypoints GSC file with the function in `games_mp.log`. Just copy and paste the function into the `maps\mp\bots\waypoints\<MAPNAME>.gsc` file.<br>
 ![GSC waypoints](/raw/bw-assets/wp-editor-wps.png)
