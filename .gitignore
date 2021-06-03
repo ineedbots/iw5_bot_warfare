@@ -14,6 +14,7 @@
 !/raw/maps/mp/
 /raw/maps/mp/*
 !/raw/maps/mp/bots/
+!/raw/bw_assets
 
 
 *.zip
