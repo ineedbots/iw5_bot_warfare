@@ -340,8 +340,39 @@ watchUsingRemote()
 			self watchUsingUav();
 		}
 
+		if (isDefined(self.using_remote_turret) && self.using_remote_turret)
+		{
+			self watchUsingTurret();
+		}
+
 		self.bot.targets = [];
 		self notify("kill_goal");
+	}
+}
+
+/*
+	watchUsingTurret
+*/
+watchUsingTurret()
+{
+	if(!isDefined(self.remoteTurretList) || !isDefined(self.remoteTurretList[0]))
+		return;
+
+	turret = self.remoteTurretList[0];
+
+	turret endon("death");
+
+	while (isDefined(self.using_remote_turret) && self.using_remote_turret)
+	{
+		if (self getCurrentWeapon() != "killstreak_remote_turret_remote_mp")
+		{
+			self changeToWeap("killstreak_remote_turret_remote_mp");
+		}
+
+		if (isDefined(self.bot.target))
+			self thread pressFire();
+
+		wait 0.05;
 	}
 }
 

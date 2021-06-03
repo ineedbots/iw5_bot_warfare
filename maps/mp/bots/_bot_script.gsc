@@ -1616,6 +1616,7 @@ start_bot_threads()
 	{
 		self thread bot_killstreak_think();
 		self thread bot_box_think();
+		self thread bot_watch_use_remote_turret();
 	}
 
 	self thread bot_weapon_think();
@@ -4287,6 +4288,41 @@ bot_attack_vehicle( target )
 		{
 			return;
 		}
+	}
+}
+
+/*
+	Bot watch to use remote turret
+*/
+bot_watch_use_remote_turret()
+{
+	self endon("death");
+	self endon("disconnect");
+
+	for (;;)
+	{
+		wait 5;
+
+		if(self BotIsFrozen())
+			continue;
+			
+		if(self HasThreat() || self HasBotJavelinLocation())
+			continue;
+		
+		if(self isDefusing() || self isPlanting())
+			continue;
+
+		if (self IsUsingRemote())
+			continue;
+
+		if (self InLastStand() && !self InFinalStand())
+			continue;
+
+		if(!isDefined(self.remoteTurretList) || !isDefined(self.remoteTurretList[0]))
+			continue;
+
+		self thread BotPressUse(3);
+		wait 3;
 	}
 }
 
