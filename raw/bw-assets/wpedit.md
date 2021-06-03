@@ -83,8 +83,15 @@ Now go and waypoint the whole map out. This may take awhile and can be pretty te
 
 Once you feel like you are done, press the Save button. This will output the waypoints to your `games_mp.log` file.
 
+Your `games_mp.log` can be located at the `C:\Users\<LOGINNAME>\AppData\Plutonium\storage\iw5` folder.
 ![games_mp.log location](/raw/bw-assets/wp-editor-gamesmp_loc.png)
 
 The editor will generate some GSC code for the waypoints.
 
 ![games_mp.log](/raw/bw-assets/wp-editor-gamesmp.png)
+
+This is the GSC function that will generate the waypoints for the map.
+
+![GSC loading the waypoints](/raw/bw-assets/wp-editor-loadwps.png)
+
+![GSC waypoints](/raw/bw-assets/wp-editor-wps.png)
