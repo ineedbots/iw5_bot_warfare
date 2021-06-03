@@ -12,16 +12,16 @@ Now if you want to modify existing or create new waypoints for PlutoniumIW5 maps
 ## Setting up the Waypoint Editor
 The Bot Warfare mod comes with the Waypoint Editor out of the box, so its just a matter of telling the mod you want to use it. Its a matter of setting the 'bots_main_debug' DVAR to '1'.
 
-Start your game, and load up the Bot Warfare mod. Now open your console with tilde(~).
+Start your game, and load up the Bot Warfare mod. Now open your console with tilde(~).<br>
 ![How tilde](/raw/bw-assets/how-tilde.png)
 
-In the console, type in ```set bots_main_debug 1```
+In the console, type in ```set bots_main_debug 1```<br>
 ![Setting the dvar](/raw/bw-assets/wp-editor-debug-dvar.png)
 
 Now start a match with the map you want to edit.
 
 ## The Editor
-![The editor](/raw/bw-assets/wp-editor-0.png)
+![The editor](/raw/bw-assets/wp-editor-0.png)<br>
 This is the Waypoint Editor. You can view, edit and create the waypoint graph.
 - Each death icons you see are waypoints.
 - Each line of knives show the links between the waypoints, a link defines that a bot can walk from A to B.
@@ -58,10 +58,10 @@ Pressing any of these buttons will initiate a command to the Waypoint Editor.
 
 Okay, now that you know how to control the Editor, lets now goahead and create some waypoints.
 
-Here I added a waypoint.
+Here I added a waypoint.<br>
 ![Adding a waypoint](/raw/bw-assets/wp-editor-added.png)
 
-And I added a second waypoint.
+And I added a second waypoint.<br>
 ![Adding another waypoint](/raw/bw-assets/wp-editor-added2.png)
 
 There are several types of waypoints, holding a modifier button before pressing the add waypoint button will create a special type of waypoint.
@@ -74,7 +74,7 @@ There are several types of waypoints, holding a modifier button before pressing 
   - climb - bots will look at the angles you were looking at when you made the waypoint and climb (use this for ladders and mantles)
   - javelin - bots will use the javelin and lockon at the target location
 
-Here I linked the two waypoints together.
+Here I linked the two waypoints together.<br>
 ![Linking waypoints](/raw/bw-assets/wp-editor-linked.png)
 
 Linking waypoints are very important, it tells the bots that they can reach waypoint 1 from waypoint 0, and vice versa.
@@ -83,19 +83,19 @@ Now go and waypoint the whole map out. This may take awhile and can be pretty te
 
 Once you feel like you are done, press the Save button. This will output the waypoints to your `games_mp.log` file.
 
-Your `games_mp.log` can be located at the `C:\Users\<LOGINNAME>\AppData\Plutonium\storage\iw5` folder.
+Your `games_mp.log` can be located at the `C:\Users\<LOGINNAME>\AppData\Plutonium\storage\iw5` folder.<br>
 ![games_mp.log location](/raw/bw-assets/wp-editor-gamesmp_loc.png)
 
 
-The editor will generate some GSC code for the waypoints.
+The editor will generate some GSC code for the waypoints.<br>
 ![games_mp.log](/raw/bw-assets/wp-editor-gamesmp.png)<br>
 This is the GSC function that will generate the waypoints for the map. If you have trouble beyond this point, simply create a Issue and provide the output from here, I can do the rest from there.
 
-You can create/replace the map's waypoints GSC file with the function in `games_mp.log`. Just copy and paste the function into the `maps\mp\bots\waypoints\<MAPNAME>.gsc` file.
+You can create/replace the map's waypoints GSC file with the function in `games_mp.log`. Just copy and paste the function into the `maps\mp\bots\waypoints\<MAPNAME>.gsc` file.<br>
 ![GSC waypoints](/raw/bw-assets/wp-editor-wps.png)
 
 
-The waypoints are loaded in the `maps\mp\bots\_bot_utility::load_waypoints()` function. Make changes accordingly to have Bot Warfare load your waypoints.
+The waypoints are loaded in the `maps\mp\bots\_bot_utility::load_waypoints()` function. Make changes accordingly to have Bot Warfare load your waypoints.<br>
 ![GSC loading the waypoints](/raw/bw-assets/wp-editor-loadwps.png)
 
 
