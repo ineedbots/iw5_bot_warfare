@@ -149,6 +149,11 @@ init()
 	level.bots_fullautoguns["mg36"] = true;
 	
 	level.bots_fullautoguns["ak74u"] = true;
+
+	level.bots_fullautoguns["25mm"] = true;
+	level.bots_fullautoguns["40mm"] = true;
+	level.bots_fullautoguns["105mm"] = true;
+	level.bots_fullautoguns["remote"] = true;
 	
 	level thread fixGamemodes();
 	

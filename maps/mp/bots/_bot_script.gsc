@@ -1541,6 +1541,7 @@ onDeath()
 		self waittill("death");
 
 		self.wantSafeSpawn = true;
+		self ClearScriptGoal();
 	}
 }
 
@@ -4230,6 +4231,9 @@ bot_target_vehicle_loop()
 
 	if (target.model != "vehicle_ugv_talon_mp" && target.model != "vehicle_remote_uav")
 	{
+		if (isDefined(self.remoteTank))
+			return;
+
 		if(!isDefined(rocketAmmo) && self BotGetRandom() < 90)
 			return;
 	}
@@ -4258,7 +4262,7 @@ bot_target_vehicle()
 		if(self HasScriptEnemy())
 			continue;
 
-		if (self IsUsingRemote())
+		if (self IsUsingRemote() && !isDefined(self.remoteTank))
 			continue;
 
 		self bot_target_vehicle_loop();
