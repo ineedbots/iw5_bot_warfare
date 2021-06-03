@@ -15,6 +15,7 @@
 /raw/maps/mp/*
 !/raw/maps/mp/bots/
 !/raw/bw_assets
+!/raw/bots.txt
 
 !/admin
 /admin/*
