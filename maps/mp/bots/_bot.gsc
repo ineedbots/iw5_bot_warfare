@@ -480,6 +480,39 @@ watchScrabler_loop()
 			player.bot_isScrambled = true;
 		}
 	}
+
+	drones = [];
+	if (isDefined(level.remote_uav["axis"]))
+		drones[drones.size] = level.remote_uav["axis"];
+	if (isDefined(level.remote_uav["allies"]))
+		drones[drones.size] = level.remote_uav["allies"];
+
+	for (i = drones.size - 1; i >= 0; i--)
+	{
+		drone = drones[i];
+
+		for ( h = level.players.size - 1; h >= 0; h-- )
+		{
+			player = level.players[h];
+
+			if (!isReallyAlive(player))
+				continue;
+
+			if (isDefined(drone.owner) && drone.owner == player)
+				continue;
+
+			if(level.teamBased && drone.team == player.team)
+				continue;
+
+			if (player _hasPerk("specialty_spygame"))
+				continue;
+
+			if (DistanceSquared(player.origin, drone.origin) > 256*256)
+				continue;
+
+			player.bot_isScrambled = true;
+		}
+	}
 }
 
 /*
