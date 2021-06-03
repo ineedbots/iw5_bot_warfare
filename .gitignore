@@ -16,6 +16,20 @@
 !/raw/maps/mp/bots/
 !/raw/bw_assets
 
+!/admin
+/admin/*
+!/admin/bot_test.cfg
+!/admin/bot_test.dsr
+!/admin/server.cfg
+
+!/z_client_staging_client.bat
+!/z_client_staging_local.bat
+!/z_client_staging_server.bat
+!/z_server_prod.bat
+!/z_server_staging.bat
+!/z_server_staging_bot_test.bat
+!/z_client_prod_client.bat
+
 
 *.zip
 *.log

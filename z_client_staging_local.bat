@@ -1,0 +1,2 @@
+pushd "%LOCALAPPDATA%\Plutonium-staging"
+start "" "%LOCALAPPDATA%\Plutonium-staging\bin\plutonium-bootstrapper-win32.exe" iw5mp "%PLUTONIUM_IW5_PATH%" -lan +set name "kekmen" +set developer "1" +set developer_script "1" +set r_mode "1024x768" +set r_displayMode "2" +set cg_drawfps "4" +set sv_cheats "1" +map mp_dome
