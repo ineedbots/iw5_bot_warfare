@@ -30,6 +30,8 @@
 !/z_server_staging_bot_test.bat
 !/z_client_prod_client.bat
 
+!/README.md
+
 
 *.zip
 *.log
