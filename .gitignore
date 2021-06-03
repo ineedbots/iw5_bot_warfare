@@ -5,13 +5,15 @@
 !/.gitignore
 
 # Folder to not ignore
-!/scripts
+!/raw
+/raw/*
+!/raw/scripts
 
-!/maps
-/maps/*
-!/maps/mp/
-/maps/mp/*
-!/maps/mp/bots/
+!/raw/maps
+/raw/maps/*
+!/raw/maps/mp/
+/raw/maps/mp/*
+!/raw/maps/mp/bots/
 
 
 *.zip
