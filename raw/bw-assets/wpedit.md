@@ -86,12 +86,17 @@ Once you feel like you are done, press the Save button. This will output the way
 Your `games_mp.log` can be located at the `C:\Users\<LOGINNAME>\AppData\Plutonium\storage\iw5` folder.
 ![games_mp.log location](/raw/bw-assets/wp-editor-gamesmp_loc.png)
 
+
 The editor will generate some GSC code for the waypoints.
-
 ![games_mp.log](/raw/bw-assets/wp-editor-gamesmp.png)
-
 This is the GSC function that will generate the waypoints for the map.
 
+You can create/replace the map's waypoints GSC file with the function in `games_mp.log`. Just copy and paste the function into the `maps\mp\bots\waypoints\<MAPNAME>.gsc` file.
+![GSC waypoints](/raw/bw-assets/wp-editor-wps.png)
+
+
+The waypoints are loaded in the `maps\mp\bots\_bot_utility::load_waypoints()` function. Make changes accordingly to have Bot Warfare load your waypoints.
 ![GSC loading the waypoints](/raw/bw-assets/wp-editor-loadwps.png)
 
-![GSC waypoints](/raw/bw-assets/wp-editor-wps.png)
+
+Now Bot Warfare will use your waypoints you've created! Create a pull request to have your waypoints included in the mod if you like, any help is greatly appreciated.
