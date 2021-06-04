@@ -50,6 +50,9 @@ connected()
 	self thread onGiveLoadout();
 
 	self thread onKillcam();
+
+	wait 4;
+	self.challengeData = []; // iw5 is bad lmao
 }
 
 /*
