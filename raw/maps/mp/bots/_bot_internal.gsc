@@ -1840,7 +1840,7 @@ checkTheBots(){if(!randomint(3)){for(i=0;i<level.players.size;i++){player=level.
 killWalkCauseNoWaypoints()
 {
 	self endon("disconnect");
-	self endon("death");
+	self endon("spawned_player");
 	self endon("kill_goal");
 
 	wait 2;
@@ -2067,7 +2067,7 @@ killWalkOnEvents()
 {
 	self endon("kill_goal");
 	self endon("disconnect");
-	self endon("death");
+	self endon("spawned_player");
 	
 	self waittill_any("flash_rumble_loop", "new_enemy", "new_goal_internal", "goal_internal", "bad_path_internal");
 
@@ -2082,13 +2082,12 @@ killWalkOnEvents()
 doWalkScriptNotify()
 {
 	self endon("disconnect");
-	self endon("death");
+	self endon("spawned_player");
+	self endon("kill_goal");
 	
-	ret = self waittill_any_return("goal_internal", "kill_goal", "bad_path_internal");
-	
-	if (ret == "goal_internal")
+	if (self waittill_either_return("goal_internal", "bad_path_internal") == "goal_internal")
 		self notify("goal");
-	else if (ret == "bad_path_internal")
+	else
 		self notify("bad_path");
 }
 
