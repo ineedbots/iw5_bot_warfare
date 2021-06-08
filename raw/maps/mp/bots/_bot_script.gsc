@@ -4009,7 +4009,7 @@ bot_crate_think()
 */
 doReloadCancel_loop()
 {
-	ret = self waittill_any_return("reload", "weapon_change");
+	ret = self waittill_either_return("reload", "weapon_change");
 
 	if(self BotIsFrozen())
 		return;
@@ -4025,7 +4025,10 @@ doReloadCancel_loop()
 
 	curWeap = self GetCurrentWeapon();
 
-	if (!maps\mp\gametypes\_weapons::isPrimaryWeapon(curWeap) || isStrStart(curWeap, "alt_"))
+	if (getDvar("sv_enableDoubleTaps") == "0")
+		return;
+
+	if (!maps\mp\gametypes\_weapons::isPrimaryWeapon(curWeap))
 		return;
 
 	if (ret == "reload")
