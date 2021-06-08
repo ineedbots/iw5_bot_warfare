@@ -397,7 +397,7 @@ watchRadar_loop()
 
 	for ( i = level.players.size - 1; i >= 0; i-- )
 	{
-		if ( !isDefined( level.players[i].personalRadar ) )
+		if ( !isDefined( level.players[i].personalRadar ) && !(isDefined(level.players[i].carryFlag) && isDefined(level.players[i].carryFlag.portable_radar)) )
 			continue;
 
 		if (!isReallyAlive(level.players[i]))
