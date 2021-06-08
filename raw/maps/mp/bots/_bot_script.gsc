@@ -4021,7 +4021,7 @@ doReloadCancel_loop()
 
 	curWeap = self GetCurrentWeapon();
 
-	if (!maps\mp\gametypes\_weapons::isPrimaryWeapon(curWeap))
+	if (!maps\mp\gametypes\_weapons::isPrimaryWeapon(curWeap) || isStrStart(curWeap, "alt_"))
 		return;
 
 	if (ret == "reload")
