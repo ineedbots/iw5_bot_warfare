@@ -171,5 +171,9 @@ You can find the ModDB release post [here](https://www.moddb.com/mods/bot-warfar
 - Ability
 - Salvation
 
+### Waypoint Creators
+- FragsAreUs - https://github.com/FragsAreUs
+- Aesirix - https://github.com/Aesirix
+
 Feel free to use code, host on other sites, host on servers, mod it and merge mods with it, just give credit where credit is due!
 	-INeedGames/INeedBot(s) @ ineedbots@outlook.com
