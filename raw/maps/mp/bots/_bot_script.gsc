@@ -1539,15 +1539,12 @@ onDeath()
 {
 	self endon("disconnect");
 
-	self thread onGiveLoadout();
 	for(;;)
 	{
 		self waittill("death");
 
 		self.wantSafeSpawn = true;
 		self ClearScriptGoal();
-
-		self thread onGiveLoadout();
 	}
 }
 
@@ -1557,11 +1554,13 @@ onDeath()
 onGiveLoadout()
 {
 	self endon("disconnect");
-	self endon("death");
 
-	self waittill("giveLoadout");
+	for (;;)
+	{
+		self waittill("giveLoadout", team, class, allowCopycat, setPrimarySpawnWeapon);
 
-	self botGiveLoadout(self.team, self.class, false, true);
+		self botGiveLoadout(team, class, allowCopycat, setPrimarySpawnWeapon);
+	}
 }
 
 /*
@@ -1582,9 +1581,6 @@ onSpawned()
 		self.help_time = undefined;
 		self.bot_was_follow_script_update = undefined;
 		self.bot_stuck_on_carepackage = undefined;
-
-		// prevent bot changing class after spawning
-		self.hasDoneCombat = true;
 
 		if (getDvarInt("bots_play_obj"))
 			self thread bot_dom_cap_think();
