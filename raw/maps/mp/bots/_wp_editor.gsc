@@ -635,6 +635,8 @@ checkForWarnings()
 		if (astar.size <= 0)
 			self iprintln("WARNING: waypoint "+wpIdx+" has no path to waypoint " + i);
 	}
+
+	self iprintln("Waypoint warnings check completed.");
 }
 
 UnLinkWaypoint(nwp)
