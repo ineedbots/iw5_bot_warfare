@@ -928,6 +928,9 @@ load_waypoints()
 			case "mp_mogadishu":
 				level.waypoints = maps\mp\bots\waypoints\bakaara::Bakaara();
 			break;
+			case "mp_hardhat":
+				level.waypoints = maps\mp\bots\waypoints\hardhat::Hardhat();
+			break;
 			case "mp_paris":
 				level.waypoints = maps\mp\bots\waypoints\resistance::Resistance();
 			break;
