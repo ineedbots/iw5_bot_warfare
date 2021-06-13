@@ -943,6 +943,12 @@ load_waypoints()
 			case "mp_carbon":
 				level.waypoints = maps\mp\bots\waypoints\carbon::Carbon();
 			break;
+			case "mp_rust":
+				level.waypoints = maps\mp\bots\waypoints\rust::Rust();
+			break;
+			case "mp_test":
+				level.waypoints = maps\mp\bots\waypoints\testmap::TestMap();
+			break;
 			default:
 				maps\mp\bots\waypoints\_custom_map::main(mapname);
 			break;
