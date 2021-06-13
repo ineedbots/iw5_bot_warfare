@@ -1,4 +1,4 @@
-Highrise()
+hardhat()
 {
 	waypoints = [];
 waypoints[0] = spawnstruct();
