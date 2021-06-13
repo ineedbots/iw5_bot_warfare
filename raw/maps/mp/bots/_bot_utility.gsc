@@ -922,6 +922,12 @@ load_waypoints()
 			case "mp_seatown":
 				level.waypoints = maps\mp\bots\waypoints\seatown::Seatown();
 			break;
+			case "mp_hardhat":
+				level.waypoints = maps\mp\bots\waypoints\hardhat::Hardhat();
+			break;
+			case "mp_paris":
+				level.waypoints = maps\mp\bots\waypoints\resistance::Resistance();
+			break;
 			default:
 				maps\mp\bots\waypoints\_custom_map::main(mapname);
 			break;
