@@ -928,6 +928,9 @@ load_waypoints()
 			case "mp_mogadishu":
 				level.waypoints = maps\mp\bots\waypoints\bakaara::Bakaara();
 			break;
+			case "mp_highrise":
+				level.waypoints = maps\mp\bots\waypoints\highrise::Highrise();
+			break;
 			case "mp_paris":
 				level.waypoints = maps\mp\bots\waypoints\resistance::Resistance();
 			break;
@@ -940,14 +943,20 @@ load_waypoints()
 			case "mp_carbon":
 				level.waypoints = maps\mp\bots\waypoints\carbon::Carbon();
 			break;
+			case "mp_rust":
+				level.waypoints = maps\mp\bots\waypoints\rust::Rust();
+			break;
 			case "mp_hardhat":
 				level.waypoints = maps\mp\bots\waypoints\hardhat::Hardhat();
 			break;
-			case "mp_alpha":
+			case "mp_lockdown":
 				level.waypoints = maps\mp\bots\waypoints\lockdown::Lockdown();
 			break;
 			case "mp_village":
 				level.waypoints = maps\mp\bots\waypoints\village::Village();
+			break;
+			case "mp_test":
+				level.waypoints = maps\mp\bots\waypoints\testmap::TestMap();
 			break;
 			default:
 				maps\mp\bots\waypoints\_custom_map::main(mapname);
