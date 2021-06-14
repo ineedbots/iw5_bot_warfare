@@ -885,7 +885,7 @@ stance_loop()
 	if(self.bot.sprintendtime != -1 && time - self.bot.sprintendtime < 2000)
 		return;
 		
-	if(!isDefined(self.bot.towards_goal) || DistanceSquared(self.origin, self.bot.towards_goal) < level.bots_minSprintDistance || getConeDot(self.bot.towards_goal, self.origin, self GetPlayerAngles()) < 0.75)
+	if(!isDefined(self.bot.towards_goal) || DistanceSquared(self.origin, physicsTrace(self getEye(), self getEye() + anglesToForward(self getPlayerAngles()) * 1024, false, undefined)) < level.bots_minSprintDistance || getConeDot(self.bot.towards_goal, self.origin, self GetPlayerAngles()) < 0.75)
 		return;
 		
 	self thread sprint();
@@ -1200,13 +1200,13 @@ target_loop()
 				targetAnkleLeft = player getTagOrigin( "j_ankle_le" );
 				targetAnkleRight = player getTagOrigin( "j_ankle_ri" );
 
-				canTargetPlayer = ((distanceSquared(BulletTrace(myEye, targetHead, false, self)["position"], targetHead) < 0.05 ||
-									distanceSquared(BulletTrace(myEye, targetAnkleLeft, false, self)["position"], targetAnkleLeft) < 0.05 ||
-									distanceSquared(BulletTrace(myEye, targetAnkleRight, false, self)["position"], targetAnkleRight) < 0.05)
+				canTargetPlayer = ((bulletTracePassed(myEye, targetHead, false, undefined) ||
+									bulletTracePassed(myEye, targetAnkleLeft, false, undefined) ||
+									bulletTracePassed(myEye, targetAnkleRight, false, undefined))
 
-								&& (distanceSquared(PhysicsTrace( myEye, targetHead, false, self ), targetHead) < 0.05 ||
-									distanceSquared(PhysicsTrace( myEye, targetAnkleLeft, false, self ), targetAnkleLeft) < 0.05 ||
-									distanceSquared(PhysicsTrace( myEye, targetAnkleRight, false, self ), targetAnkleRight) < 0.05)
+								&& (sightTracePassed(myEye, targetHead, false, undefined) ||
+									sightTracePassed(myEye, targetAnkleLeft, false, undefined) ||
+									sightTracePassed(myEye, targetAnkleRight, false, undefined))
 
 								&& (ignoreSmoke ||
 									SmokeTrace(myEye, player.origin, level.smokeRadius) ||

@@ -922,6 +922,33 @@ load_waypoints()
 			case "mp_seatown":
 				level.waypoints = maps\mp\bots\waypoints\seatown::Seatown();
 			break;
+			case "mp_plaza2":
+				level.waypoints = maps\mp\bots\waypoints\arkaden::Arkaden();
+			break;
+			case "mp_mogadishu":
+				level.waypoints = maps\mp\bots\waypoints\bakaara::Bakaara();
+			break;
+			case "mp_highrise":
+				level.waypoints = maps\mp\bots\waypoints\highrise::Highrise();
+			break;
+			case "mp_paris":
+				level.waypoints = maps\mp\bots\waypoints\resistance::Resistance();
+			break;
+			case "mp_bootleg":
+				level.waypoints = maps\mp\bots\waypoints\bootleg::Bootleg();
+			break;
+			case "mp_exchange":
+				level.waypoints = maps\mp\bots\waypoints\downturn::Downturn();
+			break;
+			case "mp_carbon":
+				level.waypoints = maps\mp\bots\waypoints\carbon::Carbon();
+			break;
+			case "mp_rust":
+				level.waypoints = maps\mp\bots\waypoints\rust::Rust();
+			break;
+			case "mp_test":
+				level.waypoints = maps\mp\bots\waypoints\testmap::TestMap();
+			break;
 			default:
 				maps\mp\bots\waypoints\_custom_map::main(mapname);
 			break;
