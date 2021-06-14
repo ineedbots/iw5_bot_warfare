@@ -1166,7 +1166,7 @@ classWatch()
 
 	for(;;)
 	{
-		while(!isdefined(self.pers["team"]))
+		while(!isdefined(self.pers["team"]) || !allowClassChoice())
 			wait .05;
 			
 		wait 0.5;
@@ -1230,7 +1230,7 @@ teamWatch()
 
 	for(;;)
 	{
-		while(!isdefined(self.pers["team"]))
+		while(!isdefined(self.pers["team"]) || !allowTeamChoice())
 			wait .05;
 			
 		wait 0.05;
