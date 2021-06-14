@@ -955,6 +955,15 @@ load_waypoints()
 			case "mp_rust":
 				level.waypoints = maps\mp\bots\waypoints\rust::Rust();
 			break;
+			case "mp_hardhat":
+				level.waypoints = maps\mp\bots\waypoints\hardhat::Hardhat();
+			break;
+			case "mp_alpha":
+				level.waypoints = maps\mp\bots\waypoints\lockdown::Lockdown();
+			break;
+			case "mp_village":
+				level.waypoints = maps\mp\bots\waypoints\village::Village();
+			break;
 			case "mp_test":
 				level.waypoints = maps\mp\bots\waypoints\testmap::TestMap();
 			break;
