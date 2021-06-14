@@ -964,6 +964,9 @@ load_waypoints()
 			case "mp_village":
 				level.waypoints = maps\mp\bots\waypoints\village::Village();
 			break;
+			case "mp_six_ss":
+				level.waypoints = maps\mp\bots\waypoints\vortex::Vortex();
+			break;
 			case "mp_interchange":
 				level.waypoints = maps\mp\bots\waypoints\interchange::Interchange();
 			break;
