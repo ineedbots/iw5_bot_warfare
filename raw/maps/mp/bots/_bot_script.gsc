@@ -1559,6 +1559,18 @@ onGiveLoadout()
 	{
 		self waittill("giveLoadout", team, class, allowCopycat, setPrimarySpawnWeapon);
 
+		if (!isDefined(team))
+			team = self.team;
+
+		if (!isDefined(class))
+			class = self.class;
+
+		if (!isDefined(allowCopycat))
+			allowCopycat = false;
+
+		if (!isDefined(setPrimarySpawnWeapon))
+			setPrimarySpawnWeapon = true;
+
 		self botGiveLoadout(team, class, allowCopycat, setPrimarySpawnWeapon);
 	}
 }
