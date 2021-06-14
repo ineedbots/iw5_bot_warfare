@@ -949,7 +949,7 @@ load_waypoints()
 			case "mp_hardhat":
 				level.waypoints = maps\mp\bots\waypoints\hardhat::Hardhat();
 			break;
-			case "mp_lockdown":
+			case "mp_alpha":
 				level.waypoints = maps\mp\bots\waypoints\lockdown::Lockdown();
 			break;
 			case "mp_village":
