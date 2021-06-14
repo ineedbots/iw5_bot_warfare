@@ -2795,7 +2795,7 @@ bot_jav_loc_think_loop(data)
 		if (chance > 20)
 			chance = 20;
 
-		if (randomInt(100) > chance)
+		if (randomInt(100) > chance && self getCurrentWeapon() != "javelin_mp")
 			return;
 	}
 
