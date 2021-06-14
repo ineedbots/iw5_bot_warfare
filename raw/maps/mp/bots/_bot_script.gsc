@@ -4416,6 +4416,21 @@ bot_killstreak_think_loop(data)
 	if (self InLastStand() && !self InFinalStand())
 		return;
 
+
+	if (isDefined(self.isCarrying) && self.isCarrying)
+	{
+		self notify("place_sentry");
+		self notify("place_turret");
+		self notify("place_ims");
+		self notify("place_carryRemoteUAV");
+		self notify("place_tank");
+	}
+
+	curWeap = self GetCurrentWeapon();
+	if (isSubStr(curWeap, "airdrop_"))
+		self thread BotPressAttack(0.05);
+
+
 	useableStreaks = [];
 
 	if (!isDefined(data.doFastContinue))
@@ -4448,7 +4463,6 @@ bot_killstreak_think_loop(data)
 		return;
 
 	ksWeap = maps\mp\killstreaks\_killstreaks::getKillstreakWeapon( streakName );
-	curWeap = self GetCurrentWeapon();
 
 	if (curWeap == "none" || !isWeaponPrimary(curWeap))
 		curWeap = self GetLastWeapon();
