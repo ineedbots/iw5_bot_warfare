@@ -4427,7 +4427,7 @@ bot_killstreak_think_loop(data)
 	}
 
 	curWeap = self GetCurrentWeapon();
-	if (isSubStr(curWeap, "airdrop_"))
+	if (isSubStr(curWeap, "airdrop_") || isSubStr(curWeap, "deployable_"))
 		self thread BotPressAttack(0.05);
 
 
