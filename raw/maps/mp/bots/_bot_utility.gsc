@@ -943,6 +943,12 @@ load_waypoints()
 			case "mp_carbon":
 				level.waypoints = maps\mp\bots\waypoints\carbon::Carbon();
 			break;
+			case "mp_underground":
+				level.waypoints = maps\mp\bots\waypoints\underground::Underground();
+			break;
+			case "mp_bravo":
+				level.waypoints = maps\mp\bots\waypoints\mission::Mission();
+			break;
 			case "mp_rust":
 				level.waypoints = maps\mp\bots\waypoints\rust::Rust();
 			break;
