@@ -934,6 +934,9 @@ load_waypoints()
 			case "mp_paris":
 				level.waypoints = maps\mp\bots\waypoints\resistance::Resistance();
 			break;
+			case "mp_hardhat":
+				level.waypoints = maps\mp\bots\waypoints\hardhat::Hardhat();
+			break;
 			case "mp_bootleg":
 				level.waypoints = maps\mp\bots\waypoints\bootleg::Bootleg();
 			break;
