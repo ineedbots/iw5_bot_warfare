@@ -9,6 +9,11 @@
 /raw/*
 !/raw/scripts
 
+!/.astylerc
+!/deploy.js
+!/deploy.bat
+!/z_deploy.bat
+
 !/raw/maps
 /raw/maps/*
 !/raw/maps/mp/
