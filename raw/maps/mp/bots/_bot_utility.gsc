@@ -14,7 +14,7 @@
 */
 is_host()
 {
-	return (isDefined(self.pers["bot_host"]) && self.pers["bot_host"]);
+	return ( isDefined( self.pers["bot_host"] ) && self.pers["bot_host"] );
 }
 
 /*
@@ -24,36 +24,38 @@ doHostCheck()
 {
 	self.pers["bot_host"] = false;
 
-	if (self is_bot())
+	if ( self is_bot() )
 		return;
 
 	result = false;
-	if (getDvar("bots_main_firstIsHost") != "0")
-	{
-		printLn("WARNING: bots_main_firstIsHost is enabled");
 
-		if (getDvar("bots_main_firstIsHost") == "1")
+	if ( getDvar( "bots_main_firstIsHost" ) != "0" )
+	{
+		printLn( "WARNING: bots_main_firstIsHost is enabled" );
+
+		if ( getDvar( "bots_main_firstIsHost" ) == "1" )
 		{
-			setDvar("bots_main_firstIsHost", self getguid());
+			setDvar( "bots_main_firstIsHost", self getguid() );
 		}
 
-		if (getDvar("bots_main_firstIsHost") == self getguid()+"")
+		if ( getDvar( "bots_main_firstIsHost" ) == self getguid() + "" )
 			result = true;
 	}
 
-	DvarGUID = getDvar("bots_main_GUIDs");
-	if (DvarGUID != "")
-	{
-		guids = strtok(DvarGUID, ",");
+	DvarGUID = getDvar( "bots_main_GUIDs" );
 
-		for (i = 0; i < guids.size; i++)
+	if ( DvarGUID != "" )
+	{
+		guids = strtok( DvarGUID, "," );
+
+		for ( i = 0; i < guids.size; i++ )
 		{
-			if(self getguid()+"" == guids[i])
+			if ( self getguid() + "" == guids[i] )
 				result = true;
 		}
 	}
-	
-	if (!self isHost() && !result)
+
+	if ( !self isHost() && !result )
 		return;
 
 	self.pers["bot_host"] = true;
@@ -64,58 +66,58 @@ doHostCheck()
 */
 is_bot()
 {
-	assert(isDefined(self));
-	assert(isPlayer(self));
+	assert( isDefined( self ) );
+	assert( isPlayer( self ) );
 
-	return ((isDefined(self.pers["isBot"]) && self.pers["isBot"]) || (isDefined(self.pers["isBotWarfare"]) && self.pers["isBotWarfare"]) || isSubStr( self getguid()+"", "bot" ));
+	return ( ( isDefined( self.pers["isBot"] ) && self.pers["isBot"] ) || ( isDefined( self.pers["isBotWarfare"] ) && self.pers["isBotWarfare"] ) || isSubStr( self getguid() + "", "bot" ) );
 }
 
 /*
 	Bot changes to the weap
 */
-BotChangeToWeapon(weap)
+BotChangeToWeapon( weap )
 {
-	self maps\mp\bots\_bot_internal::changeToWeap(weap);
+	self maps\mp\bots\_bot_internal::changeToWeap( weap );
 }
 
 /*
 	Bot presses the frag button for time.
 */
-BotPressFrag(time)
+BotPressFrag( time )
 {
-	self maps\mp\bots\_bot_internal::frag(time);
+	self maps\mp\bots\_bot_internal::frag( time );
 }
 
 /*
 	Bot presses the smoke button for time.
 */
-BotPressSmoke(time)
+BotPressSmoke( time )
 {
-	self maps\mp\bots\_bot_internal::smoke(time);
+	self maps\mp\bots\_bot_internal::smoke( time );
 }
 
 /*
 	Bot presses the use button for time.
 */
-BotPressUse(time)
+BotPressUse( time )
 {
-	self maps\mp\bots\_bot_internal::use(time);
+	self maps\mp\bots\_bot_internal::use( time );
 }
 
 /*
 	Bot will press the ads button for the time
 */
-BotPressADS(time)
+BotPressADS( time )
 {
-	self maps\mp\bots\_bot_internal::pressAds(time);
+	self maps\mp\bots\_bot_internal::pressAds( time );
 }
 
 /*
 	Bots will press the attack button for a time
 */
-BotPressAttack(time)
+BotPressAttack( time )
 {
-	self maps\mp\bots\_bot_internal::pressFire(time);
+	self maps\mp\bots\_bot_internal::pressFire( time );
 }
 
 /*
@@ -123,7 +125,7 @@ BotPressAttack(time)
 */
 BotGetTargetRandom()
 {
-	if (!isDefined(self.bot.target))
+	if ( !isDefined( self.bot.target ) )
 		return undefined;
 
 	return self.bot.target.rand;
@@ -180,11 +182,12 @@ IsBotKnifing()
 /*
 	Freezes the bot's controls.
 */
-BotFreezeControls(what)
+BotFreezeControls( what )
 {
 	self.bot.isfrozen = what;
-	if(what)
-		self notify("kill_goal");
+
+	if ( what )
+		self notify( "kill_goal" );
 }
 
 /*
@@ -198,12 +201,12 @@ BotIsFrozen()
 /*
 	Bot will stop moving
 */
-BotStopMoving(what)
+BotStopMoving( what )
 {
 	self.bot.stop_move = what;
 
-	if(what)
-		self notify("kill_goal");
+	if ( what )
+		self notify( "kill_goal" );
 }
 
 /*
@@ -212,21 +215,22 @@ BotStopMoving(what)
 */
 HasScriptGoal()
 {
-	return (isDefined(self GetScriptGoal()));
+	return ( isDefined( self GetScriptGoal() ) );
 }
 
 /*
 	Sets the bot's goal, will acheive it when dist away from it.
 */
-SetScriptGoal(goal, dist)
+SetScriptGoal( goal, dist )
 {
-	if (!isDefined(dist))
+	if ( !isDefined( dist ) )
 		dist = 16;
+
 	self.bot.script_goal = goal;
 	self.bot.script_goal_dist = dist;
 	waittillframeend;
-	self notify("new_goal_internal");
-	self notify("new_goal");
+	self notify( "new_goal_internal" );
+	self notify( "new_goal" );
 }
 
 /*
@@ -242,7 +246,7 @@ GetScriptGoal()
 */
 ClearScriptGoal()
 {
-	self SetScriptGoal(undefined, 0);
+	self SetScriptGoal( undefined, 0 );
 }
 
 /*
@@ -250,13 +254,13 @@ ClearScriptGoal()
 */
 HasBotJavelinLocation()
 {
-	return isDefined(self.bot.jav_loc);
+	return isDefined( self.bot.jav_loc );
 }
 
 /*
 	Sets the aim position of the bot
 */
-SetScriptAimPos(pos)
+SetScriptAimPos( pos )
 {
 	self.bot.script_aimpos = pos;
 }
@@ -266,7 +270,7 @@ SetScriptAimPos(pos)
 */
 ClearScriptAimPos()
 {
-	self SetScriptAimPos(undefined);
+	self SetScriptAimPos( undefined );
 }
 
 /*
@@ -282,16 +286,16 @@ GetScriptAimPos()
 */
 HasScriptAimPos()
 {
-	return isDefined(self GetScriptAimPos());
+	return isDefined( self GetScriptAimPos() );
 }
 
 /*
 	Sets the bot's javelin target location
 */
-SetBotJavelinLocation(loc)
+SetBotJavelinLocation( loc )
 {
 	self.bot.jav_loc = loc;
-	self notify("new_enemy");
+	self notify( "new_enemy" );
 }
 
 /*
@@ -299,13 +303,13 @@ SetBotJavelinLocation(loc)
 */
 ClearBotJavelinLocation()
 {
-	self SetBotJavelinLocation(undefined);
+	self SetBotJavelinLocation( undefined );
 }
 
 /*
 	Sets the bot's target to be this ent.
 */
-SetAttacker(att)
+SetAttacker( att )
 {
 	self.bot.target_this_frame = att;
 }
@@ -313,7 +317,7 @@ SetAttacker(att)
 /*
 	Sets the script enemy for a bot.
 */
-SetScriptEnemy(enemy, offset)
+SetScriptEnemy( enemy, offset )
 {
 	self.bot.script_target = enemy;
 	self.bot.script_target_offset = offset;
@@ -324,7 +328,7 @@ SetScriptEnemy(enemy, offset)
 */
 ClearScriptEnemy()
 {
-	self SetScriptEnemy(undefined, undefined);
+	self SetScriptEnemy( undefined, undefined );
 }
 
 /*
@@ -332,9 +336,9 @@ ClearScriptEnemy()
 */
 GetThreat()
 {
-	if(!isdefined(self.bot.target))
+	if ( !isdefined( self.bot.target ) )
 		return undefined;
-		
+
 	return self.bot.target.entity;
 }
 
@@ -343,7 +347,7 @@ GetThreat()
 */
 HasScriptEnemy()
 {
-	return (isDefined(self.bot.script_target));
+	return ( isDefined( self.bot.script_target ) );
 }
 
 /*
@@ -351,7 +355,7 @@ HasScriptEnemy()
 */
 HasThreat()
 {
-	return (isDefined(self GetThreat()));
+	return ( isDefined( self GetThreat() ) );
 }
 
 /*
@@ -359,7 +363,7 @@ HasThreat()
 */
 IsDefusing()
 {
-	return (isDefined(self.isDefusing) && self.isDefusing);
+	return ( isDefined( self.isDefusing ) && self.isDefusing );
 }
 
 /*
@@ -367,7 +371,7 @@ IsDefusing()
 */
 isPlanting()
 {
-	return (isDefined(self.isPlanting) && self.isPlanting);
+	return ( isDefined( self.isPlanting ) && self.isPlanting );
 }
 
 /*
@@ -375,7 +379,7 @@ isPlanting()
 */
 isBombCarrier()
 {
-	return (isDefined(self.isBombCarrier) && self.isBombCarrier);
+	return ( isDefined( self.isBombCarrier ) && self.isBombCarrier );
 }
 
 /*
@@ -383,7 +387,7 @@ isBombCarrier()
 */
 isInUse()
 {
-	return (isDefined(self.inUse) && self.inUse);
+	return ( isDefined( self.inUse ) && self.inUse );
 }
 
 /*
@@ -391,7 +395,7 @@ isInUse()
 */
 inLastStand()
 {
-	return (isDefined(self.lastStand) && self.lastStand);
+	return ( isDefined( self.lastStand ) && self.lastStand );
 }
 
 /*
@@ -399,7 +403,7 @@ inLastStand()
 */
 inFinalStand()
 {
-	return (isDefined(self.inFinalStand) && self.inFinalStand);
+	return ( isDefined( self.inFinalStand ) && self.inFinalStand );
 }
 
 /*
@@ -407,7 +411,7 @@ inFinalStand()
 */
 isFlagCarrier()
 {
-	return (isDefined(self.carryFlag) && self.carryFlag);
+	return ( isDefined( self.carryFlag ) && self.carryFlag );
 }
 
 /*
@@ -415,15 +419,15 @@ isFlagCarrier()
 */
 IsStunned()
 {
-	return (isdefined(self.concussionEndTime) && self.concussionEndTime > gettime());
+	return ( isdefined( self.concussionEndTime ) && self.concussionEndTime > gettime() );
 }
 
 /*
-	Returns if we are beingArtilleryShellshocked 
+	Returns if we are beingArtilleryShellshocked
 */
 isArtShocked()
 {
-	return (isDefined(self.beingArtilleryShellshocked) && self.beingArtilleryShellshocked);
+	return ( isDefined( self.beingArtilleryShellshocked ) && self.beingArtilleryShellshocked );
 }
 
 /*
@@ -433,14 +437,14 @@ getValidTube()
 {
 	weaps = self getweaponslistall();
 
-	for (i = 0; i < weaps.size; i++)
+	for ( i = 0; i < weaps.size; i++ )
 	{
 		weap = weaps[i];
 
-		if(!self getAmmoCount(weap))
+		if ( !self getAmmoCount( weap ) )
 			continue;
 
-		if ((isSubStr(weap, "alt_") && (isSubStr(weap, "_m320") || isSubStr(weap, "_gl") || isSubStr(weap, "_gp25"))) || weap == "m320_mp")
+		if ( ( isSubStr( weap, "alt_" ) && ( isSubStr( weap, "_m320" ) || isSubStr( weap, "_gl" ) || isSubStr( weap, "_gp25" ) ) ) || weap == "m320_mp" )
 			return weap;
 	}
 
@@ -450,19 +454,19 @@ getValidTube()
 /*
 	helper
 */
-waittill_either_return_(str1, str2)
+waittill_either_return_( str1, str2 )
 {
-	self endon(str1);
-	self waittill(str2);
+	self endon( str1 );
+	self waittill( str2 );
 	return true;
 }
 
 /*
 	Returns which string gets notified first
 */
-waittill_either_return(str1, str2)
+waittill_either_return( str1, str2 )
 {
-	if (!isDefined(self waittill_either_return_(str1, str2)))
+	if ( !isDefined( self waittill_either_return_( str1, str2 ) ) )
 		return str1;
 
 	return str2;
@@ -481,66 +485,66 @@ getValidGrenade()
 	grenadeTypes[grenadeTypes.size] = "semtex_mp";
 	grenadeTypes[grenadeTypes.size] = "throwingknife_mp";
 	grenadeTypes[grenadeTypes.size] = "emp_grenade_mp";
-	
+
 	possibles = [];
-	
-	for(i = 0; i < grenadeTypes.size; i++)
+
+	for ( i = 0; i < grenadeTypes.size; i++ )
 	{
 		if ( !self hasWeapon( grenadeTypes[i] ) )
 			continue;
-			
+
 		if ( !self getAmmoCount( grenadeTypes[i] ) )
 			continue;
-			
+
 		possibles[possibles.size] = grenadeTypes[i];
 	}
-	
-	return random(possibles);
+
+	return random( possibles );
 }
 
 /*
 	If the weapon is not a script weapon (bomb, killstreak, etc, grenades)
 */
-isWeaponPrimary(weap)
+isWeaponPrimary( weap )
 {
-	return (maps\mp\gametypes\_weapons::isPrimaryWeapon(weap) || maps\mp\gametypes\_weapons::isAltModeWeapon(weap));
+	return ( maps\mp\gametypes\_weapons::isPrimaryWeapon( weap ) || maps\mp\gametypes\_weapons::isAltModeWeapon( weap ) );
 }
 
 /*
 	If the ent is a vehicle
 */
-entIsVehicle(ent)
+entIsVehicle( ent )
 {
-	return (!isPlayer(ent) && (ent.classname == "script_vehicle" || ent.model == "vehicle_uav_static_mp" || ent.model == "vehicle_ac130_coop" || ent.model == "vehicle_predator_b" || ent.model == "vehicle_phantom_ray"));
+	return ( !isPlayer( ent ) && ( ent.classname == "script_vehicle" || ent.model == "vehicle_uav_static_mp" || ent.model == "vehicle_ac130_coop" || ent.model == "vehicle_predator_b" || ent.model == "vehicle_phantom_ray" ) );
 }
 
 /*
 	Returns if the given weapon is full auto.
 */
-WeaponIsFullAuto(weap)
+WeaponIsFullAuto( weap )
 {
-	weaptoks = strtok(weap, "_");
+	weaptoks = strtok( weap, "_" );
 
-	if (weaptoks.size < 2)
+	if ( weaptoks.size < 2 )
 		return false;
-	
-	return isDefined(level.bots_fullautoguns[weaptoks[1]]);
+
+	return isDefined( level.bots_fullautoguns[weaptoks[1]] );
 }
 
 /*
 	If weap is a secondary gnade
 */
-isSecondaryGrenade(gnade)
+isSecondaryGrenade( gnade )
 {
-	return (gnade == "concussion_grenade_mp" || gnade == "flash_grenade_mp" || gnade == "smoke_grenade_mp" || gnade == "trophy_mp" || gnade == "emp_grenade_mp" || gnade == "flare_mp" || gnade == "scrambler_mp" || gnade == "portable_radar_mp");
+	return ( gnade == "concussion_grenade_mp" || gnade == "flash_grenade_mp" || gnade == "smoke_grenade_mp" || gnade == "trophy_mp" || gnade == "emp_grenade_mp" || gnade == "flare_mp" || gnade == "scrambler_mp" || gnade == "portable_radar_mp" );
 }
 
 /*
 	If the weapon  is allowed to be dropped
 */
-isWeaponDroppable(weap)
+isWeaponDroppable( weap )
 {
-	return (maps\mp\gametypes\_weapons::mayDropWeapon(weap));
+	return ( maps\mp\gametypes\_weapons::mayDropWeapon( weap ) );
 }
 
 /*
@@ -556,10 +560,10 @@ getEyeHeight()
 /*
 	Does a notify after a delay
 */
-notifyAfterDelay(delay, not)
+notifyAfterDelay( delay, not )
 {
 	wait delay;
-	self notify(not);
+	self notify( not );
 }
 
 /*
@@ -567,11 +571,11 @@ notifyAfterDelay(delay, not)
 */
 GetHostPlayer()
 {
-	for (i = 0; i < level.players.size; i++)
+	for ( i = 0; i < level.players.size; i++ )
 	{
 		player = level.players[i];
 
-		if (!player is_host())
+		if ( !player is_host() )
 			continue;
 
 		return player;
@@ -581,44 +585,44 @@ GetHostPlayer()
 }
 
 /*
-  Waits for a host player
+    Waits for a host player
 */
 bot_wait_for_host()
 {
 	host = undefined;
 
-	while (!isDefined(level) || !isDefined(level.players))
+	while ( !isDefined( level ) || !isDefined( level.players ) )
 		wait 0.05;
-	
-	for(i = getDvarFloat("bots_main_waitForHostTime"); i > 0; i -= 0.05)
+
+	for ( i = getDvarFloat( "bots_main_waitForHostTime" ); i > 0; i -= 0.05 )
 	{
 		host = GetHostPlayer();
-		
-		if(isDefined(host))
+
+		if ( isDefined( host ) )
 			break;
-		
-		wait 0.05;
-	}
-	
-	if(!isDefined(host))
-		return;
-	
-	for(i = getDvarFloat("bots_main_waitForHostTime"); i > 0; i -= 0.05)
-	{
-		if(IsDefined( host.pers[ "team" ] ))
-			break;
-		
+
 		wait 0.05;
 	}
 
-	if(!IsDefined( host.pers[ "team" ] ))
+	if ( !isDefined( host ) )
 		return;
-	
-	for(i = getDvarFloat("bots_main_waitForHostTime"); i > 0; i -= 0.05)
+
+	for ( i = getDvarFloat( "bots_main_waitForHostTime" ); i > 0; i -= 0.05 )
 	{
-		if(host.pers[ "team" ] == "allies" || host.pers[ "team" ] == "axis")
+		if ( IsDefined( host.pers[ "team" ] ) )
 			break;
-		
+
+		wait 0.05;
+	}
+
+	if ( !IsDefined( host.pers[ "team" ] ) )
+		return;
+
+	for ( i = getDvarFloat( "bots_main_waitForHostTime" ); i > 0; i -= 0.05 )
+	{
+		if ( host.pers[ "team" ] == "allies" || host.pers[ "team" ] == "axis" )
+			break;
+
 		wait 0.05;
 	}
 }
@@ -627,46 +631,47 @@ bot_wait_for_host()
 	Pezbot's line sphere intersection.
 	http://paulbourke.net/geometry/circlesphere/raysphere.c
 */
-RaySphereIntersect(start, end, spherePos, radius)
+RaySphereIntersect( start, end, spherePos, radius )
 {
 	// check if the start or end points are in the sphere
 	r2 = radius * radius;
-	if (DistanceSquared(start, spherePos) < r2)
+
+	if ( DistanceSquared( start, spherePos ) < r2 )
 		return true;
 
-	if (DistanceSquared(end, spherePos) < r2)
+	if ( DistanceSquared( end, spherePos ) < r2 )
 		return true;
 
 	// check if the line made by start and end intersect the sphere
 	dp = end - start;
 	a = dp[0] * dp[0] + dp[1] * dp[1] + dp[2] * dp[2];
-	b = 2 * (dp[0] * (start[0] - spherePos[0]) + dp[1] * (start[1] - spherePos[1]) + dp[2] * (start[2] - spherePos[2]));
+	b = 2 * ( dp[0] * ( start[0] - spherePos[0] ) + dp[1] * ( start[1] - spherePos[1] ) + dp[2] * ( start[2] - spherePos[2] ) );
 	c = spherePos[0] * spherePos[0] + spherePos[1] * spherePos[1] + spherePos[2] * spherePos[2];
 	c += start[0] * start[0] + start[1] * start[1] + start[2] * start[2];
-	c -= 2.0 * (spherePos[0] * start[0] + spherePos[1] * start[1] + spherePos[2] * start[2]);
+	c -= 2.0 * ( spherePos[0] * start[0] + spherePos[1] * start[1] + spherePos[2] * start[2] );
 	c -= radius * radius;
 	bb4ac = b * b - 4.0 * a * c;
 
-	if (abs(a) < 0.0001 || bb4ac < 0)
+	if ( abs( a ) < 0.0001 || bb4ac < 0 )
 		return false;
 
-	mu1 = (0-b + sqrt(bb4ac)) / (2 * a);
+	mu1 = ( 0 - b + sqrt( bb4ac ) ) / ( 2 * a );
 	//mu2 = (0-b - sqrt(bb4ac)) / (2 * a);
 
 	// intersection points of the sphere
 	ip1 = start + mu1 * dp;
 	//ip2 = start + mu2 * dp;
 
-	myDist = DistanceSquared(start, end);
+	myDist = DistanceSquared( start, end );
 
 	// check if both intersection points far
-	if (DistanceSquared(start, ip1) > myDist/* && DistanceSquared(start, ip2) > myDist*/)
+	if ( DistanceSquared( start, ip1 ) > myDist/* && DistanceSquared(start, ip2) > myDist*/ )
 		return false;
 
-	dpAngles = VectorToAngles(dp);
+	dpAngles = VectorToAngles( dp );
 
 	// check if the point is behind us
-	if (getConeDot(ip1, start, dpAngles) < 0/* || getConeDot(ip2, start, dpAngles) < 0*/)
+	if ( getConeDot( ip1, start, dpAngles ) < 0/* || getConeDot(ip2, start, dpAngles) < 0*/ )
 		return false;
 
 	return true;
@@ -675,55 +680,55 @@ RaySphereIntersect(start, end, spherePos, radius)
 /*
 	Returns if a smoke grenade would intersect start to end line.
 */
-SmokeTrace(start, end, rad)
+SmokeTrace( start, end, rad )
 {
-	for(i = level.bots_smokeList.count - 1; i >= 0; i--)
+	for ( i = level.bots_smokeList.count - 1; i >= 0; i-- )
 	{
 		nade = level.bots_smokeList.data[i];
-		
-		if(nade.state != "smoking")
+
+		if ( nade.state != "smoking" )
 			continue;
-			
-		if(!RaySphereIntersect(start, end, nade.origin, rad))
+
+		if ( !RaySphereIntersect( start, end, nade.origin, rad ) )
 			continue;
-		
+
 		return false;
 	}
-	
+
 	return true;
 }
 
 /*
 	Returns the cone dot (like fov, or distance from the center of our screen).
 */
-getConeDot(to, from, dir)
+getConeDot( to, from, dir )
 {
-	dirToTarget = VectorNormalize(to-from);
-	forward = AnglesToForward(dir);
-	return vectordot(dirToTarget, forward);
+	dirToTarget = VectorNormalize( to - from );
+	forward = AnglesToForward( dir );
+	return vectordot( dirToTarget, forward );
 }
 
 /*
 	Returns the distance squared in a 2d space
 */
-DistanceSquared2D(to, from)
+DistanceSquared2D( to, from )
 {
-	to = (to[0], to[1], 0);
-	from = (from[0], from[1], 0);
-	
-	return DistanceSquared(to, from);
+	to = ( to[0], to[1], 0 );
+	from = ( from[0], from[1], 0 );
+
+	return DistanceSquared( to, from );
 }
 
 /*
 	Rounds to the nearest whole number.
 */
-Round(x)
+Round( x )
 {
-	y = int(x);
-	
-	if(abs(x) - abs(y) > 0.5)
+	y = int( x );
+
+	if ( abs( x ) - abs( y ) > 0.5 )
 	{
-		if(x < 0)
+		if ( x < 0 )
 			return y - 1;
 		else
 			return y + 1;
@@ -738,6 +743,7 @@ Round(x)
 RoundUp( floatVal )
 {
 	i = int( floatVal );
+
 	if ( i != floatVal )
 		return i + 1;
 	else
@@ -747,26 +753,27 @@ RoundUp( floatVal )
 /*
 	converts a string into a float
 */
-float(num)
+float( num )
 {
-	setdvar("temp_dvar_bot_util", num);
+	setdvar( "temp_dvar_bot_util", num );
 
-	return GetDvarFloat("temp_dvar_bot_util");
+	return GetDvarFloat( "temp_dvar_bot_util" );
 }
 
 /*
 	Tokenizes a string (strtok has limits...) (only one char tok)
 */
-tokenizeLine(line, tok)
+tokenizeLine( line, tok )
 {
 	tokens = [];
 
 	token = "";
-	for (i = 0; i < line.size; i++)
+
+	for ( i = 0; i < line.size; i++ )
 	{
 		c = line[i];
 
-		if (c == tok)
+		if ( c == tok )
 		{
 			tokens[tokens.size] = token;
 			token = "";
@@ -775,6 +782,7 @@ tokenizeLine(line, tok)
 
 		token += c;
 	}
+
 	tokens[tokens.size] = token;
 
 	return tokens;
@@ -791,35 +799,38 @@ isStrStart( string1, subStr )
 /*
 	Parses tokens into a waypoint obj
 */
-parseTokensIntoWaypoint(tokens)
+parseTokensIntoWaypoint( tokens )
 {
 	waypoint = spawnStruct();
 
 	orgStr = tokens[0];
-	orgToks = strtok(orgStr, " ");
-	waypoint.origin = (float(orgToks[0]), float(orgToks[1]), float(orgToks[2]));
+	orgToks = strtok( orgStr, " " );
+	waypoint.origin = ( float( orgToks[0] ), float( orgToks[1] ), float( orgToks[2] ) );
 
 	childStr = tokens[1];
-	childToks = strtok(childStr, " ");
+	childToks = strtok( childStr, " " );
 	waypoint.children = [];
-	for( j=0; j<childToks.size; j++ )
-		waypoint.children[j] = int(childToks[j]);
+
+	for ( j = 0; j < childToks.size; j++ )
+		waypoint.children[j] = int( childToks[j] );
 
 	type = tokens[2];
 	waypoint.type = type;
 
 	anglesStr = tokens[3];
-	if (isDefined(anglesStr) && anglesStr != "")
+
+	if ( isDefined( anglesStr ) && anglesStr != "" )
 	{
-		anglesToks = strtok(anglesStr, " ");
-		waypoint.angles = (float(anglesToks[0]), float(anglesToks[1]), float(anglesToks[2]));
+		anglesToks = strtok( anglesStr, " " );
+		waypoint.angles = ( float( anglesToks[0] ), float( anglesToks[1] ), float( anglesToks[2] ) );
 	}
 
 	javStr = tokens[4];
-	if (isDefined(javStr) && javStr != "")
+
+	if ( isDefined( javStr ) && javStr != "" )
 	{
-		javToks = strtok(javStr, " ");
-		waypoint.jav_point = (float(javToks[0]), float(javToks[1]), float(javToks[2]));
+		javToks = strtok( javStr, " " );
+		waypoint.jav_point = ( float( javToks[0] ), float( javToks[1] ), float( javToks[2] ) );
 	}
 
 	return waypoint;
@@ -828,21 +839,21 @@ parseTokensIntoWaypoint(tokens)
 /*
 	Returns an array of each line
 */
-getWaypointLinesFromFile(filename)
+getWaypointLinesFromFile( filename )
 {
-	/*result = spawnStruct();
-	result.lines = [];
+	/*  result = spawnStruct();
+	    result.lines = [];
 
-	waypointStr = fileRead(filename);
+	    waypointStr = fileRead(filename);
 
-	if (!isDefined(waypointStr))
+	    if (!isDefined(waypointStr))
 		return result;
 
-	line = "";
-	for (i=0;i<waypointStr.size;i++)
-	{
+	    line = "";
+	    for (i=0;i<waypointStr.size;i++)
+	    {
 		c = waypointStr[i];
-		
+
 		if (c == "\n")
 		{
 			result.lines[result.lines.size] = line;
@@ -852,42 +863,42 @@ getWaypointLinesFromFile(filename)
 		}
 
 		line += c;
-	}
-	result.lines[result.lines.size] = line;
+	    }
+	    result.lines[result.lines.size] = line;
 
-	return result;*/
+	    return result;*/
 }
 
 /*
 	Loads waypoints from file
 */
-readWpsFromFile(mapname)
+readWpsFromFile( mapname )
 {
-	/*waypoints = [];
-	filename = "waypoints/" + mapname + "_wp.csv";
+	/*  waypoints = [];
+	    filename = "waypoints/" + mapname + "_wp.csv";
 
-	if (!fileExists(filename))
+	    if (!fileExists(filename))
 		return waypoints;
 
-	res = getWaypointLinesFromFile(filename);
+	    res = getWaypointLinesFromFile(filename);
 
-	if (!res.lines.size)
+	    if (!res.lines.size)
 		return waypoints;
 
-	printLn("Attempting to read waypoints from " + filename);
+	    printLn("Attempting to read waypoints from " + filename);
 
-	waypointCount = int(res.lines[0]);
+	    waypointCount = int(res.lines[0]);
 
-	for (i = 1; i <= waypointCount; i++)
-	{
+	    for (i = 1; i <= waypointCount; i++)
+	    {
 		tokens = tokenizeLine(res.lines[i], ",");
-	
+
 		waypoint = parseTokensIntoWaypoint(tokens);
 
 		waypoints[i-1] = waypoint;
-	}
+	    }
 
-	return waypoints;*/
+	    return waypoints;*/
 
 	return [];
 }
@@ -903,101 +914,120 @@ load_waypoints()
 	level.waypointUsage["allies"] = [];
 	level.waypointUsage["axis"] = [];
 
-	mapname = getDvar("mapname");
+	mapname = getDvar( "mapname" );
 
-	wps = readWpsFromFile(mapname);
-	
-	if (wps.size)
+	wps = readWpsFromFile( mapname );
+
+	if ( wps.size )
 	{
 		level.waypoints = wps;
-		printLn("Loaded " + wps.size + " waypoints from csv.");
+		printLn( "Loaded " + wps.size + " waypoints from csv." );
 	}
 	else
 	{
-		switch(mapname)
+		switch ( mapname )
 		{
 			case "mp_dome":
 				level.waypoints = maps\mp\bots\waypoints\dome::Dome();
-			break;
+				break;
+
 			case "mp_seatown":
 				level.waypoints = maps\mp\bots\waypoints\seatown::Seatown();
-			break;
+				break;
+
 			case "mp_plaza2":
 				level.waypoints = maps\mp\bots\waypoints\arkaden::Arkaden();
-			break;
+				break;
+
 			case "mp_mogadishu":
 				level.waypoints = maps\mp\bots\waypoints\bakaara::Bakaara();
-			break;
+				break;
+
 			case "mp_highrise":
 				level.waypoints = maps\mp\bots\waypoints\highrise::Highrise();
-			break;
+				break;
+
 			case "mp_paris":
 				level.waypoints = maps\mp\bots\waypoints\resistance::Resistance();
-			break;
+				break;
+
 			case "mp_hardhat":
 				level.waypoints = maps\mp\bots\waypoints\hardhat::Hardhat();
-			break;
+				break;
+
 			case "mp_bootleg":
 				level.waypoints = maps\mp\bots\waypoints\bootleg::Bootleg();
-			break;
+				break;
+
 			case "mp_exchange":
 				level.waypoints = maps\mp\bots\waypoints\downturn::Downturn();
-			break;
+				break;
+
 			case "mp_carbon":
 				level.waypoints = maps\mp\bots\waypoints\carbon::Carbon();
-			break;
+				break;
+
 			case "mp_underground":
 				level.waypoints = maps\mp\bots\waypoints\underground::Underground();
-			break;
+				break;
+
 			case "mp_bravo":
 				level.waypoints = maps\mp\bots\waypoints\mission::Mission();
-			break;
+				break;
+
 			case "mp_rust":
 				level.waypoints = maps\mp\bots\waypoints\rust::Rust();
-			break;
+				break;
+
 			case "mp_hardhat":
 				level.waypoints = maps\mp\bots\waypoints\hardhat::Hardhat();
-			break;
+				break;
+
 			case "mp_alpha":
 				level.waypoints = maps\mp\bots\waypoints\lockdown::Lockdown();
-			break;
+				break;
+
 			case "mp_village":
 				level.waypoints = maps\mp\bots\waypoints\village::Village();
-			break;
+				break;
+
 			case "mp_six_ss":
 				level.waypoints = maps\mp\bots\waypoints\vortex::Vortex();
-			break;
+				break;
+
 			case "mp_interchange":
 				level.waypoints = maps\mp\bots\waypoints\interchange::Interchange();
-			break;
+				break;
+
 			case "mp_test":
 				level.waypoints = maps\mp\bots\waypoints\testmap::TestMap();
-			break;
+				break;
+
 			default:
-				maps\mp\bots\waypoints\_custom_map::main(mapname);
-			break;
+				maps\mp\bots\waypoints\_custom_map::main( mapname );
+				break;
 		}
 
-		if (level.waypoints.size)
-			printLn("Loaded " + level.waypoints.size + " waypoints from script.");
+		if ( level.waypoints.size )
+			printLn( "Loaded " + level.waypoints.size + " waypoints from script." );
 	}
 
-	if (!level.waypoints.size)
+	if ( !level.waypoints.size )
 	{
 		//maps\mp\bots\_bot_http::getRemoteWaypoints(mapname);
 	}
 
 	level.waypointCount = level.waypoints.size;
-	
-	for(i = 0; i < level.waypointCount; i++)
+
+	for ( i = 0; i < level.waypointCount; i++ )
 	{
-		if (!isDefined(level.waypoints[i].children) || !isDefined(level.waypoints[i].children.size))
+		if ( !isDefined( level.waypoints[i].children ) || !isDefined( level.waypoints[i].children.size ) )
 			level.waypoints[i].children = [];
 
-		if (!isDefined(level.waypoints[i].origin))
-			level.waypoints[i].origin = (0, 0, 0);
+		if ( !isDefined( level.waypoints[i].origin ) )
+			level.waypoints[i].origin = ( 0, 0, 0 );
 
-		if (!isDefined(level.waypoints[i].type))
+		if ( !isDefined( level.waypoints[i].type ) )
 			level.waypoints[i].type = "crouch";
 	}
 }
@@ -1005,14 +1035,15 @@ load_waypoints()
 /*
 	Is bot near any of the given waypoints
 */
-nearAnyOfWaypoints(dist, waypoints)
+nearAnyOfWaypoints( dist, waypoints )
 {
 	dist *= dist;
-	for (i = 0; i < waypoints.size; i++)
+
+	for ( i = 0; i < waypoints.size; i++ )
 	{
 		waypoint = level.waypoints[waypoints[i]];
 
-		if (DistanceSquared(waypoint.origin, self.origin) > dist)
+		if ( DistanceSquared( waypoint.origin, self.origin ) > dist )
 			continue;
 
 		return true;
@@ -1024,17 +1055,17 @@ nearAnyOfWaypoints(dist, waypoints)
 /*
 	Returns the waypoints that are near
 */
-waypointsNear(waypoints, dist)
+waypointsNear( waypoints, dist )
 {
 	dist *= dist;
 
 	answer = [];
 
-	for (i = 0; i < waypoints.size; i++)
+	for ( i = 0; i < waypoints.size; i++ )
 	{
 		wp = level.waypoints[waypoints[i]];
 
-		if (DistanceSquared(wp.origin, self.origin) > dist)
+		if ( DistanceSquared( wp.origin, self.origin ) > dist )
 			continue;
 
 		answer[answer.size] = waypoints[i];
@@ -1046,16 +1077,17 @@ waypointsNear(waypoints, dist)
 /*
 	Returns nearest waypoint of waypoints
 */
-getNearestWaypointOfWaypoints(waypoints)
+getNearestWaypointOfWaypoints( waypoints )
 {
 	answer = undefined;
 	closestDist = 2147483647;
-	for (i = 0; i < waypoints.size; i++)
+
+	for ( i = 0; i < waypoints.size; i++ )
 	{
 		waypoint = level.waypoints[waypoints[i]];
-		thisDist = DistanceSquared(self.origin, waypoint.origin);
+		thisDist = DistanceSquared( self.origin, waypoint.origin );
 
-		if (isDefined(answer) && thisDist > closestDist)
+		if ( isDefined( answer ) && thisDist > closestDist )
 			continue;
 
 		answer = waypoints[i];
@@ -1068,35 +1100,37 @@ getNearestWaypointOfWaypoints(waypoints)
 /*
 	Returns all waypoints of type
 */
-getWaypointsOfType(type)
+getWaypointsOfType( type )
 {
 	answer = [];
-	for(i = 0; i < level.waypointCount; i++)
+
+	for ( i = 0; i < level.waypointCount; i++ )
 	{
 		wp = level.waypoints[i];
-		
-		if (type == "camp")
+
+		if ( type == "camp" )
 		{
-			if (wp.type != "crouch")
+			if ( wp.type != "crouch" )
 				continue;
 
-			if (wp.children.size != 1)
+			if ( wp.children.size != 1 )
 				continue;
 		}
-		else if (type != wp.type)
+		else if ( type != wp.type )
 			continue;
 
 		answer[answer.size] = i;
 	}
+
 	return answer;
 }
 
 /*
 	Returns the waypoint for index
 */
-getWaypointForIndex(i)
+getWaypointForIndex( i )
 {
-	if (!isDefined(i))
+	if ( !isDefined( i ) )
 		return undefined;
 
 	return level.waypoints[i];
@@ -1105,12 +1139,13 @@ getWaypointForIndex(i)
 /*
 	Returns the friendly user name for a given map's codename
 */
-getMapName(mapname)
+getMapName( mapname )
 {
-  switch(mapname)
+	switch ( mapname )
 	{
 		case "mp_dome":
 			return "Dome";
+
 		default:
 			return mapname;
 	}
@@ -1121,13 +1156,14 @@ getMapName(mapname)
 */
 getGoodMapAmount()
 {
-	switch(getdvar("mapname"))
+	switch ( getdvar( "mapname" ) )
 	{
 		case "mp_dome":
-			if (level.teambased)
+			if ( level.teambased )
 				return 8;
 			else
 				return 5;
+
 		default:
 			return 2;
 	}
@@ -1136,40 +1172,125 @@ getGoodMapAmount()
 /*
 	Matches a num to a char
 */
-keyCodeToString(a)
+keyCodeToString( a )
 {
-	b="";
-	switch(a)
+	b = "";
+
+	switch ( a )
 	{
-		case 0: b= "a"; break;
-		case 1: b= "b"; break;
-		case 2: b= "c"; break;
-		case 3: b= "d"; break;
-		case 4: b= "e"; break;
-		case 5: b= "f"; break;
-		case 6: b= "g"; break;
-		case 7: b= "h"; break;
-		case 8: b= "i"; break;
-		case 9: b= "j"; break;
-		case 10: b= "k"; break;
-		case 11: b= "l"; break;
-		case 12: b= "m"; break;
-		case 13: b= "n"; break;
-		case 14: b= "o"; break;
-		case 15: b= "p"; break;
-		case 16: b= "q"; break;
-		case 17: b= "r"; break;
-		case 18: b= "s"; break;
-		case 19: b= "t"; break;
-		case 20: b= "u"; break;
-		case 21: b= "v"; break;
-		case 22: b= "w"; break;
-		case 23: b= "x"; break;
-		case 24: b= "y"; break;
-		case 25: b= "z"; break;
-		case 26: b= "."; break;
-		case 27: b= " "; break;
+		case 0:
+			b = "a";
+			break;
+
+		case 1:
+			b = "b";
+			break;
+
+		case 2:
+			b = "c";
+			break;
+
+		case 3:
+			b = "d";
+			break;
+
+		case 4:
+			b = "e";
+			break;
+
+		case 5:
+			b = "f";
+			break;
+
+		case 6:
+			b = "g";
+			break;
+
+		case 7:
+			b = "h";
+			break;
+
+		case 8:
+			b = "i";
+			break;
+
+		case 9:
+			b = "j";
+			break;
+
+		case 10:
+			b = "k";
+			break;
+
+		case 11:
+			b = "l";
+			break;
+
+		case 12:
+			b = "m";
+			break;
+
+		case 13:
+			b = "n";
+			break;
+
+		case 14:
+			b = "o";
+			break;
+
+		case 15:
+			b = "p";
+			break;
+
+		case 16:
+			b = "q";
+			break;
+
+		case 17:
+			b = "r";
+			break;
+
+		case 18:
+			b = "s";
+			break;
+
+		case 19:
+			b = "t";
+			break;
+
+		case 20:
+			b = "u";
+			break;
+
+		case 21:
+			b = "v";
+			break;
+
+		case 22:
+			b = "w";
+			break;
+
+		case 23:
+			b = "x";
+			break;
+
+		case 24:
+			b = "y";
+			break;
+
+		case 25:
+			b = "z";
+			break;
+
+		case 26:
+			b = ".";
+			break;
+
+		case 27:
+			b = " ";
+			break;
 	}
+
 	return b;
 }
 
@@ -1180,16 +1301,17 @@ getBotArray()
 {
 	result = [];
 	playercount = level.players.size;
-	for(i = 0; i < playercount; i++)
+
+	for ( i = 0; i < playercount; i++ )
 	{
 		player = level.players[i];
-		
-		if(!player is_bot())
+
+		if ( !player is_bot() )
 			continue;
-			
+
 		result[result.size] = player;
 	}
-	
+
 	return result;
 }
 
@@ -1199,64 +1321,68 @@ getBotArray()
 WaypointsToKDTree()
 {
 	kdTree = KDTree();
-	
-	kdTree _WaypointsToKDTree(level.waypoints, 0);
-	
+
+	kdTree _WaypointsToKDTree( level.waypoints, 0 );
+
 	return kdTree;
 }
 
 /*
 	Recurive function. We construct a balanced KD tree by sorting the waypoints using heap sort.
 */
-_WaypointsToKDTree(waypoints, dem)
+_WaypointsToKDTree( waypoints, dem )
 {
-	if(!waypoints.size)
+	if ( !waypoints.size )
 		return;
 
 	callbacksort = undefined;
 
-	switch(dem)
+	switch ( dem )
 	{
 		case 0:
 			callbacksort = ::HeapSortCoordX;
-		break;
+			break;
+
 		case 1:
 			callbacksort = ::HeapSortCoordY;
-		break;
+			break;
+
 		case 2:
 			callbacksort = ::HeapSortCoordZ;
-		break;
+			break;
 	}
-	
-	heap = NewHeap(callbacksort);
-	
-	for(i = 0; i < waypoints.size; i++)
+
+	heap = NewHeap( callbacksort );
+
+	for ( i = 0; i < waypoints.size; i++ )
 	{
-		heap HeapInsert(waypoints[i]);
+		heap HeapInsert( waypoints[i] );
 	}
-	
+
 	sorted = [];
-	while(heap.data.size)
+
+	while ( heap.data.size )
 	{
 		sorted[sorted.size] = heap.data[0];
 		heap HeapRemove();
 	}
-	
-	median = int(sorted.size/2);//use divide and conq
-	
+
+	median = int( sorted.size / 2 ); //use divide and conq
+
 	left = [];
 	right = [];
-	for(i = 0; i < sorted.size; i++)
-		if(i < median)
+
+	for ( i = 0; i < sorted.size; i++ )
+		if ( i < median )
 			right[right.size] = sorted[i];
-		else if(i > median)
+		else if ( i > median )
 			left[left.size] = sorted[i];
-	
-	self KDTreeInsert(sorted[median]);
-	
-	_WaypointsToKDTree(left, (dem+1)%3);
-	
-	_WaypointsToKDTree(right, (dem+1)%3);
+
+	self KDTreeInsert( sorted[median] );
+
+	_WaypointsToKDTree( left, ( dem + 1 ) % 3 );
+
+	_WaypointsToKDTree( right, ( dem + 1 ) % 3 );
 }
 
 /*
@@ -1267,26 +1393,26 @@ List()
 	list = spawnStruct();
 	list.count = 0;
 	list.data = [];
-	
+
 	return list;
 }
 
 /*
 	Adds a new thing to the list.
 */
-ListAdd(thing)
+ListAdd( thing )
 {
 	self.data[self.count] = thing;
-	
+
 	self.count++;
 }
 
 /*
 	Adds to the start of the list.
 */
-ListAddFirst(thing)
+ListAddFirst( thing )
 {
-	for (i = self.count - 1; i >= 0; i--)
+	for ( i = self.count - 1; i >= 0; i-- )
 	{
 		self.data[i + 1] = self.data[i];
 	}
@@ -1298,18 +1424,18 @@ ListAddFirst(thing)
 /*
 	Removes the thing from the list.
 */
-ListRemove(thing)
+ListRemove( thing )
 {
 	for ( i = 0; i < self.count; i++ )
 	{
 		if ( self.data[i] == thing )
 		{
-			while ( i < self.count-1 )
+			while ( i < self.count - 1 )
 			{
-				self.data[i] = self.data[i+1];
+				self.data[i] = self.data[i + 1];
 				i++;
 			}
-			
+
 			self.data[i] = undefined;
 			self.count--;
 			break;
@@ -1325,24 +1451,24 @@ KDTree()
 	kdTree = spawnStruct();
 	kdTree.root = undefined;
 	kdTree.count = 0;
-	
+
 	return kdTree;
 }
 
 /*
 	Called on a KDTree. Will insert the object into the KDTree.
 */
-KDTreeInsert(data)//as long as what you insert has a .origin attru, it will work.
+KDTreeInsert( data ) //as long as what you insert has a .origin attru, it will work.
 {
-	self.root = self _KDTreeInsert(self.root, data, 0, -2147483647, -2147483647, -2147483647, 2147483647, 2147483647, 2147483647);
+	self.root = self _KDTreeInsert( self.root, data, 0, -2147483647, -2147483647, -2147483647, 2147483647, 2147483647, 2147483647 );
 }
 
 /*
 	Recurive function that insert the object into the KDTree.
 */
-_KDTreeInsert(node, data, dem, x0, y0, z0, x1, y1, z1)
+_KDTreeInsert( node, data, dem, x0, y0, z0, x1, y1, z1 )
 {
-	if(!isDefined(node))
+	if ( !isDefined( node ) )
 	{
 		r = spawnStruct();
 		r.data = data;
@@ -1354,110 +1480,116 @@ _KDTreeInsert(node, data, dem, x0, y0, z0, x1, y1, z1)
 		r.y1 = y1;
 		r.z0 = z0;
 		r.z1 = z1;
-		
+
 		self.count++;
-		
+
 		return r;
 	}
-	
-	switch(dem)
+
+	switch ( dem )
 	{
 		case 0:
-			if(data.origin[0] < node.data.origin[0])
-				node.left = self _KDTreeInsert(node.left, data, 1, x0, y0, z0, node.data.origin[0], y1, z1);
+			if ( data.origin[0] < node.data.origin[0] )
+				node.left = self _KDTreeInsert( node.left, data, 1, x0, y0, z0, node.data.origin[0], y1, z1 );
 			else
-				node.right = self _KDTreeInsert(node.right, data, 1, node.data.origin[0], y0, z0, x1, y1, z1);
-		break;
+				node.right = self _KDTreeInsert( node.right, data, 1, node.data.origin[0], y0, z0, x1, y1, z1 );
+
+			break;
+
 		case 1:
-			if(data.origin[1] < node.data.origin[1])
-				node.left = self _KDTreeInsert(node.left, data, 2, x0, y0, z0, x1, node.data.origin[1], z1);
+			if ( data.origin[1] < node.data.origin[1] )
+				node.left = self _KDTreeInsert( node.left, data, 2, x0, y0, z0, x1, node.data.origin[1], z1 );
 			else
-				node.right = self _KDTreeInsert(node.right, data, 2, x0, node.data.origin[1], z0, x1, y1, z1);
-		break;
+				node.right = self _KDTreeInsert( node.right, data, 2, x0, node.data.origin[1], z0, x1, y1, z1 );
+
+			break;
+
 		case 2:
-			if(data.origin[2] < node.data.origin[2])
-				node.left = self _KDTreeInsert(node.left, data, 0, x0, y0, z0, x1, y1, node.data.origin[2]);
+			if ( data.origin[2] < node.data.origin[2] )
+				node.left = self _KDTreeInsert( node.left, data, 0, x0, y0, z0, x1, y1, node.data.origin[2] );
 			else
-				node.right = self _KDTreeInsert(node.right, data, 0, x0, y0, node.data.origin[2], x1, y1, z1);
-		break;
+				node.right = self _KDTreeInsert( node.right, data, 0, x0, y0, node.data.origin[2], x1, y1, z1 );
+
+			break;
 	}
-	
+
 	return node;
 }
 
 /*
 	Called on a KDTree, will return the nearest object to the given origin.
 */
-KDTreeNearest(origin)
+KDTreeNearest( origin )
 {
-	if(!isDefined(self.root))
+	if ( !isDefined( self.root ) )
 		return undefined;
-	
-	return self _KDTreeNearest(self.root, origin, self.root.data, DistanceSquared(self.root.data.origin, origin), 0);
+
+	return self _KDTreeNearest( self.root, origin, self.root.data, DistanceSquared( self.root.data.origin, origin ), 0 );
 }
 
 /*
 	Recurive function that will retrieve the closest object to the query.
 */
-_KDTreeNearest(node, point, closest, closestdist, dem)
+_KDTreeNearest( node, point, closest, closestdist, dem )
 {
-	if(!isDefined(node))
+	if ( !isDefined( node ) )
 	{
 		return closest;
 	}
-	
-	thisDis = DistanceSquared(node.data.origin, point);
-	
-	if(thisDis < closestdist)
+
+	thisDis = DistanceSquared( node.data.origin, point );
+
+	if ( thisDis < closestdist )
 	{
 		closestdist = thisDis;
 		closest = node.data;
 	}
-	
-	if(node RectDistanceSquared(point) < closestdist)
+
+	if ( node RectDistanceSquared( point ) < closestdist )
 	{
 		near = node.left;
 		far = node.right;
-		if(point[dem] > node.data.origin[dem])
+
+		if ( point[dem] > node.data.origin[dem] )
 		{
 			near = node.right;
 			far = node.left;
 		}
-		
-		closest = self _KDTreeNearest(near, point, closest, closestdist, (dem+1)%3);
-		
-		closest = self _KDTreeNearest(far, point, closest, DistanceSquared(closest.origin, point), (dem+1)%3);
+
+		closest = self _KDTreeNearest( near, point, closest, closestdist, ( dem + 1 ) % 3 );
+
+		closest = self _KDTreeNearest( far, point, closest, DistanceSquared( closest.origin, point ), ( dem + 1 ) % 3 );
 	}
-	
+
 	return closest;
 }
 
 /*
 	Called on a rectangle, returns the distance from origin to the rectangle.
 */
-RectDistanceSquared(origin)
+RectDistanceSquared( origin )
 {
 	dx = 0;
 	dy = 0;
 	dz = 0;
-	
-	if(origin[0] < self.x0)
+
+	if ( origin[0] < self.x0 )
 		dx = origin[0] - self.x0;
-	else if(origin[0] > self.x1)
+	else if ( origin[0] > self.x1 )
 		dx = origin[0] - self.x1;
-		
-	if(origin[1] < self.y0)
+
+	if ( origin[1] < self.y0 )
 		dy = origin[1] - self.y0;
-	else if(origin[1] > self.y1)
+	else if ( origin[1] > self.y1 )
 		dy = origin[1] - self.y1;
 
-		
-	if(origin[2] < self.z0)
+
+	if ( origin[2] < self.z0 )
 		dz = origin[2] - self.z0;
-	else if(origin[2] > self.z1)
+	else if ( origin[2] > self.z1 )
 		dz = origin[2] - self.z1;
-		
-	return dx*dx + dy*dy + dz*dz;
+
+	return dx * dx + dy * dy + dz * dz;
 }
 
 /*
@@ -1471,7 +1603,7 @@ doExtraCheck()
 /*
 	A heap invarient comparitor, used for objects, objects with a higher X coord will be first in the heap.
 */
-HeapSortCoordX(item, item2)
+HeapSortCoordX( item, item2 )
 {
 	return item.origin[0] > item2.origin[0];
 }
@@ -1479,7 +1611,7 @@ HeapSortCoordX(item, item2)
 /*
 	A heap invarient comparitor, used for objects, objects with a higher Y coord will be first in the heap.
 */
-HeapSortCoordY(item, item2)
+HeapSortCoordY( item, item2 )
 {
 	return item.origin[1] > item2.origin[1];
 }
@@ -1487,7 +1619,7 @@ HeapSortCoordY(item, item2)
 /*
 	A heap invarient comparitor, used for objects, objects with a higher Z coord will be first in the heap.
 */
-HeapSortCoordZ(item, item2)
+HeapSortCoordZ( item, item2 )
 {
 	return item.origin[2] > item2.origin[2];
 }
@@ -1495,7 +1627,7 @@ HeapSortCoordZ(item, item2)
 /*
 	A heap invarient comparitor, used for numbers, numbers with the highest number will be first in the heap.
 */
-Heap(item, item2)
+Heap( item, item2 )
 {
 	return item > item2;
 }
@@ -1503,7 +1635,7 @@ Heap(item, item2)
 /*
 	A heap invarient comparitor, used for numbers, numbers with the lowest number will be first in the heap.
 */
-ReverseHeap(item, item2)
+ReverseHeap( item, item2 )
 {
 	return item < item2;
 }
@@ -1511,7 +1643,7 @@ ReverseHeap(item, item2)
 /*
 	A heap invarient comparitor, used for traces. Wanting the trace with the largest length first in the heap.
 */
-HeapTraceFraction(item, item2)
+HeapTraceFraction( item, item2 )
 {
 	return item["fraction"] > item2["fraction"];
 }
@@ -1519,53 +1651,53 @@ HeapTraceFraction(item, item2)
 /*
 	Returns a new heap.
 */
-NewHeap(compare)
+NewHeap( compare )
 {
 	heap_node = spawnStruct();
 	heap_node.data = [];
 	heap_node.compare = compare;
-	
+
 	return heap_node;
 }
 
 /*
 	Inserts the item into the heap. Called on a heap.
 */
-HeapInsert(item)
+HeapInsert( item )
 {
 	insert = self.data.size;
 	self.data[insert] = item;
-	
-	current = insert+1;
-	
-	while(current > 1)
+
+	current = insert + 1;
+
+	while ( current > 1 )
 	{
 		last = current;
-		current = int(current/2);
-		
-		if(![[self.compare]](item, self.data[current-1]))
+		current = int( current / 2 );
+
+		if ( ![[self.compare]]( item, self.data[current - 1] ) )
 			break;
-			
-		self.data[last-1] = self.data[current-1];
-		self.data[current-1] = item;
+
+		self.data[last - 1] = self.data[current - 1];
+		self.data[current - 1] = item;
 	}
 }
 
 /*
 	Helper function to determine what is the next child of the bst.
 */
-_HeapNextChild(node, hsize)
+_HeapNextChild( node, hsize )
 {
 	left = node * 2;
 	right = left + 1;
-	
-	if(left > hsize)
+
+	if ( left > hsize )
 		return -1;
-		
-	if(right > hsize)
+
+	if ( right > hsize )
 		return left;
-		
-	if([[self.compare]](self.data[left-1], self.data[right-1]))
+
+	if ( [[self.compare]]( self.data[left - 1], self.data[right - 1] ) )
 		return left;
 	else
 		return right;
@@ -1577,40 +1709,40 @@ _HeapNextChild(node, hsize)
 HeapRemove()
 {
 	remove = self.data.size;
-	
-	if(!remove)
+
+	if ( !remove )
 		return remove;
-	
-	move = self.data[remove-1];
+
+	move = self.data[remove - 1];
 	self.data[0] = move;
-	self.data[remove-1] = undefined;
+	self.data[remove - 1] = undefined;
 	remove--;
-	
-	if(!remove)
+
+	if ( !remove )
 		return remove;
-	
+
 	last = 1;
-	next = self _HeapNextChild(1, remove);
-	
-	while(next != -1)
+	next = self _HeapNextChild( 1, remove );
+
+	while ( next != -1 )
 	{
-		if([[self.compare]](move, self.data[next-1]))
+		if ( [[self.compare]]( move, self.data[next - 1] ) )
 			break;
-			
-		self.data[last-1] = self.data[next-1];
-		self.data[next-1] = move;
-		
+
+		self.data[last - 1] = self.data[next - 1];
+		self.data[next - 1] = move;
+
 		last = next;
-		next = self _HeapNextChild(next, remove);
+		next = self _HeapNextChild( next, remove );
 	}
-	
+
 	return remove;
 }
 
 /*
 	A heap invarient comparitor, used for the astar's nodes, wanting the node with the lowest f to be first in the heap.
 */
-ReverseHeapAStar(item, item2)
+ReverseHeapAStar( item, item2 )
 {
 	return item.f < item2.f;
 }
@@ -1618,62 +1750,64 @@ ReverseHeapAStar(item, item2)
 /*
 	Removes the waypoint usage
 */
-RemoveWaypointUsage(wp, team)
+RemoveWaypointUsage( wp, team )
 {
-	if (!isDefined(level.waypointUsage))
-		return;
-	
-	if (!isDefined(level.waypointUsage[team][wp+""]))
+	if ( !isDefined( level.waypointUsage ) )
 		return;
 
-	level.waypointUsage[team][wp+""]--;
+	if ( !isDefined( level.waypointUsage[team][wp + ""] ) )
+		return;
 
-	if (level.waypointUsage[team][wp+""] <= 0)
-		level.waypointUsage[team][wp+""] = undefined;
+	level.waypointUsage[team][wp + ""]--;
+
+	if ( level.waypointUsage[team][wp + ""] <= 0 )
+		level.waypointUsage[team][wp + ""] = undefined;
 }
 
 /*
 	Will linearly search for the nearest waypoint to pos that has a direct line of sight.
 */
-GetNearestWaypointWithSight(pos)
+GetNearestWaypointWithSight( pos )
 {
 	candidate = undefined;
 	dist = 2147483647;
-	
-	for(i = 0; i < level.waypointCount; i++)
+
+	for ( i = 0; i < level.waypointCount; i++ )
 	{
-		if(!bulletTracePassed(pos + (0, 0, 15), level.waypoints[i].origin + (0, 0, 15), false, undefined))
+		if ( !bulletTracePassed( pos + ( 0, 0, 15 ), level.waypoints[i].origin + ( 0, 0, 15 ), false, undefined ) )
 			continue;
-		
-		curdis = DistanceSquared(level.waypoints[i].origin, pos);
-		if(curdis > dist)
+
+		curdis = DistanceSquared( level.waypoints[i].origin, pos );
+
+		if ( curdis > dist )
 			continue;
-			
+
 		dist = curdis;
 		candidate = i;
 	}
-	
+
 	return candidate;
 }
 
 /*
 	Will linearly search for the nearest waypoint
 */
-GetNearestWaypoint(pos)
+GetNearestWaypoint( pos )
 {
 	candidate = undefined;
 	dist = 2147483647;
-	
-	for(i = 0; i < level.waypointCount; i++)
+
+	for ( i = 0; i < level.waypointCount; i++ )
 	{
-		curdis = DistanceSquared(level.waypoints[i].origin, pos);
-		if(curdis > dist)
+		curdis = DistanceSquared( level.waypoints[i].origin, pos );
+
+		if ( curdis > dist )
 			continue;
-			
+
 		dist = curdis;
 		candidate = i;
 	}
-	
+
 	return candidate;
 }
 
@@ -1682,75 +1816,79 @@ GetNearestWaypoint(pos)
 	This makes use of sets for quick look up and a heap for a priority queue instead of simple lists which require to linearly search for elements everytime.
 	It is also modified to make paths with bots already on more expensive and will try a less congested path first. Thus spliting up the bots onto more paths instead of just one (the smallest).
 */
-AStarSearch(start, goal, team, greedy_path)
+AStarSearch( start, goal, team, greedy_path )
 {
-	open = NewHeap(::ReverseHeapAStar);//heap
+	open = NewHeap( ::ReverseHeapAStar ); //heap
 	openset = [];//set for quick lookup
 	closed = [];//set for quick lookup
-	
 
-	startWp = getNearestWaypoint(start);
-	if(!isDefined(startWp))
+
+	startWp = getNearestWaypoint( start );
+
+	if ( !isDefined( startWp ) )
 		return [];
-	
-	_startwp = undefined;
-	if(!bulletTracePassed(start + (0, 0, 15), level.waypoints[startWp].origin + (0, 0, 15), false, undefined))
-		_startwp = GetNearestWaypointWithSight(start);
 
-	if(isDefined(_startwp))
+	_startwp = undefined;
+
+	if ( !bulletTracePassed( start + ( 0, 0, 15 ), level.waypoints[startWp].origin + ( 0, 0, 15 ), false, undefined ) )
+		_startwp = GetNearestWaypointWithSight( start );
+
+	if ( isDefined( _startwp ) )
 		startWp = _startwp;
 
-	
-	goalWp = getNearestWaypoint(goal);
-	if(!isDefined(goalWp))
+
+	goalWp = getNearestWaypoint( goal );
+
+	if ( !isDefined( goalWp ) )
 		return [];
 
 	_goalWp = undefined;
-	if(!bulletTracePassed(goal + (0, 0, 15), level.waypoints[goalWp].origin + (0, 0, 15), false, undefined))
-		_goalwp = GetNearestWaypointWithSight(goal);
-		
-	if(isDefined(_goalwp))
+
+	if ( !bulletTracePassed( goal + ( 0, 0, 15 ), level.waypoints[goalWp].origin + ( 0, 0, 15 ), false, undefined ) )
+		_goalwp = GetNearestWaypointWithSight( goal );
+
+	if ( isDefined( _goalwp ) )
 		goalWp = _goalwp;
 
-	
+
 	node = spawnStruct();
 	node.g = 0; //path dist so far
-	node.h = DistanceSquared(level.waypoints[startWp].origin, level.waypoints[goalWp].origin); //herustic, distance to goal for path finding
+	node.h = DistanceSquared( level.waypoints[startWp].origin, level.waypoints[goalWp].origin ); //herustic, distance to goal for path finding
 	node.f = node.h + node.g; // combine path dist and heru, use reverse heap to sort the priority queue by this attru
 	node.index = startWp;
 	node.parent = undefined; //we are start, so we have no parent
-	
+
 	//push node onto queue
-	openset[node.index+""] = node;
-	open HeapInsert(node);
-	
+	openset[node.index + ""] = node;
+	open HeapInsert( node );
+
 	//while the queue is not empty
-	while(open.data.size)
+	while ( open.data.size )
 	{
 		//pop bestnode from queue
 		bestNode = open.data[0];
 		open HeapRemove();
-		openset[bestNode.index+""] = undefined;
+		openset[bestNode.index + ""] = undefined;
 		wp = level.waypoints[bestNode.index];
-		
+
 		//check if we made it to the goal
-		if(bestNode.index == goalWp)
+		if ( bestNode.index == goalWp )
 		{
 			path = [];
-		
-			while(isDefined(bestNode))
-			{
-				if(isdefined(team) && isDefined(level.waypointUsage))
-				{
-					if (!isDefined(level.waypointUsage[team][bestNode.index+""]))
-						level.waypointUsage[team][bestNode.index+""] = 0;
 
-					level.waypointUsage[team][bestNode.index+""]++;
+			while ( isDefined( bestNode ) )
+			{
+				if ( isdefined( team ) && isDefined( level.waypointUsage ) )
+				{
+					if ( !isDefined( level.waypointUsage[team][bestNode.index + ""] ) )
+						level.waypointUsage[team][bestNode.index + ""] = 0;
+
+					level.waypointUsage[team][bestNode.index + ""]++;
 				}
-					
+
 				//construct path
 				path[path.size] = bestNode.index;
-				
+
 				bestNode = bestNode.parent;
 			}
 
@@ -1758,68 +1896,73 @@ AStarSearch(start, goal, team, greedy_path)
 		}
 
 		//for each child of bestnode
-		for(i = wp.children.size - 1; i >= 0; i--)
+		for ( i = wp.children.size - 1; i >= 0; i-- )
 		{
 			child = wp.children[i];
 			childWp = level.waypoints[child];
-			
+
 			penalty = 1;
-			if(!greedy_path && isdefined(team) && isDefined(level.waypointUsage))
+
+			if ( !greedy_path && isdefined( team ) && isDefined( level.waypointUsage ) )
 			{
 				temppen = 1;
-				if (isDefined(level.waypointUsage[team][child+""]))
-					temppen = level.waypointUsage[team][child+""];//consider how many bots are taking this path
-				
-				if(temppen > 1)
+
+				if ( isDefined( level.waypointUsage[team][child + ""] ) )
+					temppen = level.waypointUsage[team][child + ""]; //consider how many bots are taking this path
+
+				if ( temppen > 1 )
 					penalty = temppen;
 			}
 
 			// have certain types of nodes more expensive
-			if (childWp.type == "climb" || childWp.type == "prone")
+			if ( childWp.type == "climb" || childWp.type == "prone" )
 				penalty += 4;
-			
+
 			//calc the total path we have took
-			newg = bestNode.g + DistanceSquared(wp.origin, childWp.origin)*penalty;//bots on same team's path are more expensive
-			
+			newg = bestNode.g + DistanceSquared( wp.origin, childWp.origin ) * penalty; //bots on same team's path are more expensive
+
 			//check if this child is in open or close with a g value less than newg
-			inopen = isDefined(openset[child+""]);
-			if(inopen && openset[child+""].g <= newg)
+			inopen = isDefined( openset[child + ""] );
+
+			if ( inopen && openset[child + ""].g <= newg )
 				continue;
-			
-			inclosed = isDefined(closed[child+""]);
-			if(inclosed && closed[child+""].g <= newg)
+
+			inclosed = isDefined( closed[child + ""] );
+
+			if ( inclosed && closed[child + ""].g <= newg )
 				continue;
-			
+
 			node = undefined;
-			if(inopen)
-				node = openset[child+""];
-			else if(inclosed)
-				node = closed[child+""];
+
+			if ( inopen )
+				node = openset[child + ""];
+			else if ( inclosed )
+				node = closed[child + ""];
 			else
 				node = spawnStruct();
-				
+
 			node.parent = bestNode;
 			node.g = newg;
-			node.h = DistanceSquared(childWp.origin, level.waypoints[goalWp].origin);
+			node.h = DistanceSquared( childWp.origin, level.waypoints[goalWp].origin );
 			node.f = node.g + node.h;
 			node.index = child;
-			
+
 			//check if in closed, remove it
-			if(inclosed)
-				closed[child+""] = undefined;
-			
+			if ( inclosed )
+				closed[child + ""] = undefined;
+
 			//check if not in open, add it
-			if(!inopen)
+			if ( !inopen )
 			{
-				open HeapInsert(node);
-				openset[child+""] = node;
+				open HeapInsert( node );
+				openset[child + ""] = node;
 			}
 		}
-		
+
 		//done with children, push onto closed
-		closed[bestNode.index+""] = bestNode;
+		closed[bestNode.index + ""] = bestNode;
 	}
-	
+
 	return [];
 }
 
@@ -1831,10 +1974,12 @@ array_average( array )
 {
 	assert( array.size > 0 );
 	total = 0;
+
 	for ( i = 0; i < array.size; i++ )
 	{
 		total += array[i];
 	}
+
 	return ( total / array.size );
 }
 
@@ -1846,15 +1991,19 @@ array_std_deviation( array, mean )
 {
 	assert( array.size > 0 );
 	tmp = [];
+
 	for ( i = 0; i < array.size; i++ )
 	{
 		tmp[i] = ( array[i] - mean ) * ( array[i] - mean );
 	}
+
 	total = 0;
+
 	for ( i = 0; i < tmp.size; i++ )
 	{
 		total = total + tmp[i];
 	}
+
 	return Sqrt( total / array.size );
 }
 
@@ -1868,25 +2017,29 @@ random_normal_distribution( mean, std_deviation, lower_bound, upper_bound )
 	x2 = 0;
 	w = 1;
 	y1 = 0;
+
 	while ( w >= 1 )
 	{
 		x1 = 2 * RandomFloatRange( 0, 1 ) - 1;
 		x2 = 2 * RandomFloatRange( 0, 1 ) - 1;
 		w = x1 * x1 + x2 * x2;
 	}
+
 	w = Sqrt( ( -2.0 * Log( w ) ) / w );
 	y1 = x1 * w;
 	number = mean + y1 * std_deviation;
+
 	if ( IsDefined( lower_bound ) && number < lower_bound )
 	{
 		number = lower_bound;
 	}
+
 	if ( IsDefined( upper_bound ) && number > upper_bound )
 	{
 		number = upper_bound;
 	}
-	
-	return( number );
+
+	return ( number );
 }
 
 /*
@@ -2032,7 +2185,7 @@ bombPlantedFix( var_0, var_1 )
 */
 botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimarySpawnWeapon only when called during spawn
 {
-	self endon("death");
+	self endon( "death" );
 
 	self takeallweapons();
 	self.changingWeapon = undefined;
@@ -2108,7 +2261,7 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 		loadoutSecondaryCamo = getmatchrulesdata( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 1, "camo" );
 		loadoutSecondaryReticle = getmatchrulesdata( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 1, "reticle" );
 
-		if ( (loadoutPrimary == "throwingknife" || loadoutPrimary == "none") && loadoutSecondary != "none" )
+		if ( ( loadoutPrimary == "throwingknife" || loadoutPrimary == "none" ) && loadoutSecondary != "none" )
 		{
 			loadoutPrimary = loadoutSecondary;
 			loadoutPrimaryAttachment = loadoutSecondaryAttachment;
@@ -2123,7 +2276,7 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 			loadoutSecondaryCamo = "none";
 			loadoutSecondaryReticle = "none";
 		}
-		else if ( (loadoutPrimary == "throwingknife" || loadoutPrimary == "none") && loadoutSecondary == "none" )
+		else if ( ( loadoutPrimary == "throwingknife" || loadoutPrimary == "none" ) && loadoutSecondary == "none" )
 		{
 			var_7 = 1;
 			loadoutPrimary = "iw5_usp45";
@@ -2220,7 +2373,7 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 		loadoutSecondaryCamo = gamemodeLoadout["loadoutSecondaryCamo"];
 		loadoutSecondaryReticle = gamemodeLoadout["loadoutSecondaryReticle"];
 
-		if ( (loadoutPrimary == "throwingknife" || loadoutPrimary == "none") && loadoutSecondary != "none" )
+		if ( ( loadoutPrimary == "throwingknife" || loadoutPrimary == "none" ) && loadoutSecondary != "none" )
 		{
 			loadoutPrimary = loadoutSecondary;
 			loadoutPrimaryAttachment = loadoutSecondaryAttachment;
@@ -2235,7 +2388,7 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 			loadoutSecondaryCamo = "none";
 			loadoutSecondaryReticle = "none";
 		}
-		else if ( (loadoutPrimary == "throwingknife" || loadoutPrimary == "none") && loadoutSecondary == "none" )
+		else if ( ( loadoutPrimary == "throwingknife" || loadoutPrimary == "none" ) && loadoutSecondary == "none" )
 		{
 			var_7 = 1;
 			loadoutPrimary = "iw5_usp45";
@@ -2367,9 +2520,9 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 	self maps\mp\gametypes\_class::loadoutFakePerks( loadoutStreakType );
 	isCustomClass = issubstr( class, "custom" );
 	isRecipeClass = issubstr( class, "recipe" );
-	isGameModeClass = (class == "gamemode");
+	isGameModeClass = ( class == "gamemode" );
 
-	if ( !isGameModeClass && !isRecipeClass && !(isdefined( self.pers["copyCatLoadout"] ) && self.pers["copyCatLoadout"]["inUse"] && allowCopycat) )
+	if ( !isGameModeClass && !isRecipeClass && !( isdefined( self.pers["copyCatLoadout"] ) && self.pers["copyCatLoadout"]["inUse"] && allowCopycat ) )
 	{
 		if ( !maps\mp\gametypes\_class::isValidPrimary( loadoutPrimary ) )
 			loadoutPrimary = maps\mp\gametypes\_class::table_getWeapon( level.classTableName, 10, 0 );
@@ -2438,7 +2591,7 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 		if ( loadoutSecondaryBuff != "specialty_null" && loadoutPerk2 != "specialty_twoprimaries" )
 			loadoutSecondaryBuff = "specialty_null";
 
-		if ( loadoutSecondaryAttachment2 != "none" && (loadoutSecondaryBuff != "specialty_bling" || loadoutPerk2 != "specialty_twoprimaries") )
+		if ( loadoutSecondaryAttachment2 != "none" && ( loadoutSecondaryBuff != "specialty_bling" || loadoutPerk2 != "specialty_twoprimaries" ) )
 			loadoutSecondaryAttachment2 = "none";
 	}
 
@@ -2563,12 +2716,14 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 					defaultKillstreak3 = maps\mp\gametypes\_class::table_getKillstreak( level.classTableName, 2, 3 );
 					playerData = "defenseStreaks";
 					break;
+
 				case "specialist":
 					defaultKillstreak1 = maps\mp\gametypes\_class::table_getKillstreak( level.classTableName, 1, 1 );
 					defaultKillstreak2 = maps\mp\gametypes\_class::table_getKillstreak( level.classTableName, 1, 2 );
 					defaultKillstreak3 = maps\mp\gametypes\_class::table_getKillstreak( level.classTableName, 1, 3 );
 					playerData = "specialistStreaks";
 					break;
+
 				default:
 					defaultKillstreak1 = maps\mp\gametypes\_class::table_getKillstreak( level.classTableName, 0, 1 );
 					defaultKillstreak2 = maps\mp\gametypes\_class::table_getKillstreak( level.classTableName, 0, 2 );
@@ -2760,12 +2915,14 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 	{
 		case "none":
 			break;
+
 		case "trophy_mp":
 		case "specialty_portable_radar":
 		case "specialty_scrambler":
 		case "specialty_tacticalinsertion":
 			self givePerk( offhandSecondaryWeapon, 0 );
 			break;
+
 		default:
 			self giveweapon( offhandSecondaryWeapon );
 
@@ -2790,7 +2947,7 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 	}
 
 	self playerModelForWeapon( self.pers["primaryWeapon"], getBaseWeaponName( secondaryName ) );
-	self.isSniper = (weaponclass( self.primaryWeapon ) == "sniper");
+	self.isSniper = ( weaponclass( self.primaryWeapon ) == "sniper" );
 	self maps\mp\gametypes\_weapons::updateMoveSpeedScale();
 	self maps\mp\perks\_perks::cac_selector();
 	self notify( "changed_kit" );
@@ -2803,13 +2960,13 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 getPerkUpgrade( perkName )
 {
 	perkUpgrade = tablelookup( "mp/perktable.csv", 1, perkName, 8 );
-	
+
 	if ( perkUpgrade == "" || perkUpgrade == "specialty_null" )
 		return "specialty_null";
-		
-	if ( !isDefined(self.pers["bots"]["unlocks"]["upgraded_"+perkName]) || !self.pers["bots"]["unlocks"]["upgraded_"+perkName] )
+
+	if ( !isDefined( self.pers["bots"]["unlocks"]["upgraded_" + perkName] ) || !self.pers["bots"]["unlocks"]["upgraded_" + perkName] )
 		return "specialty_null";
-		
+
 	return ( perkUpgrade );
 }
 
@@ -2824,7 +2981,8 @@ loadoutAllPerks( loadoutEquipment, loadoutPerk1, loadoutPerk2, loadoutPerk3, loa
 	loadoutPerk3 = maps\mp\perks\_perks::validatePerk( 3, loadoutPerk3 );
 
 	loadoutPrimaryBuff = maps\mp\perks\_perks::validatePerk( undefined, loadoutPrimaryBuff );
-	if( loadoutPerk2 == "specialty_twoprimaries" )
+
+	if ( loadoutPerk2 == "specialty_twoprimaries" )
 		loadoutSecondaryBuff = maps\mp\perks\_perks::validatePerk( undefined, loadoutSecondaryBuff );
 
 	self.loadoutPerk1 = loadoutPerk1;
@@ -2832,19 +2990,23 @@ loadoutAllPerks( loadoutEquipment, loadoutPerk1, loadoutPerk2, loadoutPerk3, loa
 	self.loadoutPerk3 = loadoutPerk3;
 	self.loadoutPerkEquipment = loadoutEquipment;
 	self.loadoutPrimaryBuff = loadoutPrimaryBuff;
-	if( loadoutPerk2 == "specialty_twoprimaries" )
+
+	if ( loadoutPerk2 == "specialty_twoprimaries" )
 		self.loadoutSecondaryBuff = loadoutSecondaryBuff;
 
-	if( loadoutEquipment != "specialty_null" )
+	if ( loadoutEquipment != "specialty_null" )
 		self givePerk( loadoutEquipment, true );
-	if( loadoutPerk1 != "specialty_null" )
+
+	if ( loadoutPerk1 != "specialty_null" )
 		self givePerk( loadoutPerk1, true );
-	if( loadoutPerk2 != "specialty_null" )
+
+	if ( loadoutPerk2 != "specialty_null" )
 		self givePerk( loadoutPerk2, true );
-	if( loadoutPerk3 != "specialty_null" )
+
+	if ( loadoutPerk3 != "specialty_null" )
 		self givePerk( loadoutPerk3, true );
-	
-	if( loadoutPrimaryBuff != "specialty_null" )
+
+	if ( loadoutPrimaryBuff != "specialty_null" )
 		self givePerk( loadoutPrimaryBuff, true );
 
 	perkUpgrd[0] = tablelookup( "mp/perktable.csv", 1, loadoutPerk1, 8 );
@@ -2854,22 +3016,22 @@ loadoutAllPerks( loadoutEquipment, loadoutPerk1, loadoutPerk2, loadoutPerk3, loa
 	perks[0] = loadoutPerk1;
 	perks[1] = loadoutPerk2;
 	perks[2] = loadoutPerk3;
-	
-	for (i = 0; i < perkUpgrd.size; i++)
+
+	for ( i = 0; i < perkUpgrd.size; i++ )
 	{
 		upgrade = perkUpgrd[i];
 		perk = perks[i];
 
 		if ( upgrade == "" || upgrade == "specialty_null" )
 			continue;
-			
-		if ( isDefined(self.pers["bots"]["unlocks"]["upgraded_"+perk]) && self.pers["bots"]["unlocks"]["upgraded_"+perk] )
+
+		if ( isDefined( self.pers["bots"]["unlocks"]["upgraded_" + perk] ) && self.pers["bots"]["unlocks"]["upgraded_" + perk] )
 		{
 			self givePerk( upgrade, true );
 		}
 	}
 
-	if( !self _hasPerk( "specialty_assists" ) )
+	if ( !self _hasPerk( "specialty_assists" ) )
 		self.pers["assistsToKill"] = 0;
 }
 
@@ -2893,25 +3055,31 @@ playerModelForWeapon( weapon, secondary )
 		case "weapon_smg":
 			[[ game[team + "_model"]["SMG"] ]]();
 			break;
+
 		case "weapon_assault":
 			[[ game[team + "_model"]["ASSAULT"] ]]();
 			break;
+
 		case "weapon_sniper":
-			if ( level.environment != "" && game[team] != "opforce_africa" && isDefined(self.pers["bots"]["unlocks"]["ghillie"]) && self.pers["bots"]["unlocks"]["ghillie"] )
+			if ( level.environment != "" && game[team] != "opforce_africa" && isDefined( self.pers["bots"]["unlocks"]["ghillie"] ) && self.pers["bots"]["unlocks"]["ghillie"] )
 				[[ game[team + "_model"]["GHILLIE"] ]]();
 			else
 				[[ game[team + "_model"]["SNIPER"] ]]();
 
 			break;
+
 		case "weapon_lmg":
 			[[ game[team + "_model"]["LMG"] ]]();
 			break;
+
 		case "weapon_riot":
 			[[ game[team + "_model"]["RIOT"] ]]();
 			break;
+
 		case "weapon_shotgun":
 			[[ game[team + "_model"]["SHOTGUN"] ]]();
 			break;
+
 		default:
 			[[ game[team + "_model"]["ASSAULT"] ]]();
 			break;
