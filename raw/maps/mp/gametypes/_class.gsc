@@ -79,7 +79,9 @@ logClassChoice( var_0, var_1, var_2, var_3 )
 
 cac_getCustomClassLoc()
 {
-    if ( getdvarint( "xblive_privatematch" ) )
+    if ( getdvarint( "xblive_privatematch" ) || getdvarint( "xblive_competitionmatch" ) && getdvarint( "systemlink" ) )
+        return "privateMatchCustomClasses";
+    else if ( getdvarint( "xblive_competitionmatch" ) && ( !level.console && ( getdvar( "dedicated" ) == "dedicated LAN server" || getdvar( "dedicated" ) == "dedicated internet server" ) ) )
         return "privateMatchCustomClasses";
     else
         return "customClasses";
@@ -514,7 +516,7 @@ giveLoadout( var_0, var_1, var_2, var_3 )
         var_22 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "weaponSetups", 1, "camo" );
         var_23 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "weaponSetups", 1, "reticle" );
 
-        if ( var_12 == "throwingknife" && var_18 != "none" )
+        if ( ( var_12 == "throwingknife" || var_12 == "none" ) && var_18 != "none" )
         {
             var_12 = var_18;
             var_13 = var_19;
@@ -529,7 +531,7 @@ giveLoadout( var_0, var_1, var_2, var_3 )
             var_22 = "none";
             var_23 = "none";
         }
-        else if ( var_12 == "throwingknife" && var_18 == "none" )
+        else if ( ( var_12 == "throwingknife" || var_12 == "none" ) && var_18 == "none" )
         {
             var_7 = 1;
             var_12 = "iw5_usp45";
@@ -542,12 +544,30 @@ giveLoadout( var_0, var_1, var_2, var_3 )
         var_27 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "perks", 3 );
 
         if ( var_18 != "none" && !isValidSecondary( var_18, var_26, var_27, 0 ) )
+        {
             var_18 = table_getWeapon( level.classTableName, 10, 1 );
+            var_19 = "none";
+            var_20 = "none";
+            var_21 = "specialty_null";
+            var_22 = "none";
+            var_23 = "none";
+        }
 
         var_28 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "perks", 5 );
-        var_8 = recipe_getKillstreak( var_4, var_32, var_28, 0 );
-        var_9 = recipe_getKillstreak( var_4, var_32, var_28, 1 );
-        var_10 = recipe_getKillstreak( var_4, var_32, var_28, 2 );
+
+        if ( var_28 == "specialty_null" )
+        {
+            var_8 = "none";
+            var_9 = "none";
+            var_10 = "none";
+        }
+        else
+        {
+            var_8 = recipe_getKillstreak( var_4, var_32, var_28, 0 );
+            var_9 = recipe_getKillstreak( var_4, var_32, var_28, 1 );
+            var_10 = recipe_getKillstreak( var_4, var_32, var_28, 2 );
+        }
+
         var_29 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "perks", 6 );
 
         if ( var_29 == "specialty_null" )
@@ -557,8 +577,15 @@ giveLoadout( var_0, var_1, var_2, var_3 )
 
         if ( getmatchrulesdata( "defaultClasses", var_4, var_32, "juggernaut" ) )
         {
+            thread maps\mp\_utility::recipeClassApplyJuggernaut( maps\mp\_utility::isJuggernaut() );
             self.isJuggernaut = 1;
-            thread maps\mp\_utility::recipeClassApplyJuggernaut();
+            self.juggmovespeedscaler = 0.7;
+        }
+        else if ( maps\mp\_utility::isJuggernaut() )
+        {
+            self notify( "lost_juggernaut" );
+            self.isJuggernaut = 0;
+            self.moveSpeedScaler = 1;
         }
     }
     else if ( issubstr( var_1, "custom" ) )
@@ -601,7 +628,7 @@ giveLoadout( var_0, var_1, var_2, var_3 )
         var_22 = var_34["loadoutSecondaryCamo"];
         var_23 = var_34["loadoutSecondaryReticle"];
 
-        if ( var_12 == "throwingknife" && var_18 != "none" )
+        if ( ( var_12 == "throwingknife" || var_12 == "none" ) && var_18 != "none" )
         {
             var_12 = var_18;
             var_13 = var_19;
@@ -616,7 +643,7 @@ giveLoadout( var_0, var_1, var_2, var_3 )
             var_22 = "none";
             var_23 = "none";
         }
-        else if ( var_12 == "throwingknife" && var_18 == "none" )
+        else if ( ( var_12 == "throwingknife" || var_12 == "none" ) && var_18 == "none" )
         {
             var_7 = 1;
             var_12 = "iw5_usp45";
@@ -634,7 +661,14 @@ giveLoadout( var_0, var_1, var_2, var_3 )
         var_27 = var_34["loadoutPerk3"];
 
         if ( var_18 != "none" && !isValidSecondary( var_18, var_26, var_27, 0 ) )
+        {
             var_18 = table_getWeapon( level.classTableName, 10, 1 );
+            var_19 = "none";
+            var_20 = "none";
+            var_21 = "specialty_null";
+            var_22 = "none";
+            var_23 = "none";
+        }
 
         if ( level.killstreakRewards && isdefined( var_34["loadoutStreakType"] ) && var_34["loadoutStreakType"] != "specialty_null" )
         {
@@ -655,10 +689,18 @@ giveLoadout( var_0, var_1, var_2, var_3 )
 
         var_30 = var_34["loadoutDeathstreak"];
 
-        if ( !maps\mp\_utility::isJuggernaut() && var_34["loadoutJuggernaut"] )
+        if ( var_34["loadoutJuggernaut"] )
         {
+            self.health = self.maxHealth;
+            thread maps\mp\_utility::recipeClassApplyJuggernaut( maps\mp\_utility::isJuggernaut() );
             self.isJuggernaut = 1;
-            thread maps\mp\_utility::recipeClassApplyJuggernaut();
+            self.juggmovespeedscaler = 0.7;
+        }
+        else if ( maps\mp\_utility::isJuggernaut() )
+        {
+            self notify( "lost_juggernaut" );
+            self.isJuggernaut = 0;
+            self.moveSpeedScaler = 1;
         }
     }
     else if ( var_1 == "juggernaut" )
@@ -746,7 +788,7 @@ giveLoadout( var_0, var_1, var_2, var_3 )
         if ( !isValidAttachment( var_14 ) || level.rankedmatch && var_35 && !isAttachmentUnlocked( var_12, var_14 ) )
             var_14 = table_getWeaponAttachment( level.classTableName, 10, 0, 1 );
 
-        if ( !isValidWeaponBuff( var_15 ) || level.rankedmatch && var_35 && !isWeaponBuffUnlocked( var_12, var_15 ) )
+        if ( !isValidWeaponBuff( var_15, var_12 ) || level.rankedmatch && var_35 && !isWeaponBuffUnlocked( var_12, var_15 ) )
             var_15 = table_getWeaponBuff( level.classTableName, 10, 0 );
 
         if ( !isValidCamo( var_16 ) || level.rankedmatch && var_35 && !isCamoUnlocked( var_12, var_16 ) )
@@ -756,7 +798,14 @@ giveLoadout( var_0, var_1, var_2, var_3 )
             var_17 = table_getWeaponReticle( level.classTableNum, 10, 0 );
 
         if ( !isValidSecondary( var_18, var_26, var_27 ) || level.rankedmatch && level.rankedmatch && var_35 && !self isitemunlocked( var_18 ) )
+        {
             var_18 = table_getWeapon( level.classTableName, 10, 1 );
+            var_19 = "none";
+            var_20 = "none";
+            var_21 = "specialty_null";
+            var_22 = "none";
+            var_23 = "none";
+        }
 
         if ( !isValidAttachment( var_19 ) || level.rankedmatch && var_35 && !isAttachmentUnlocked( var_18, var_19 ) )
             var_19 = table_getWeaponAttachment( level.classTableName, 10, 1, 0 );
@@ -764,7 +813,7 @@ giveLoadout( var_0, var_1, var_2, var_3 )
         if ( !isValidAttachment( var_20 ) || level.rankedmatch && var_35 && !isAttachmentUnlocked( var_18, var_20 ) )
             var_20 = table_getWeaponAttachment( level.classTableName, 10, 1, 1 );
 
-        if ( var_26 == "specialty_twoprimaries" && !isValidWeaponBuff( var_21 ) || level.rankedmatch && var_35 && !self isitemunlocked( var_18 + " " + var_21 ) )
+        if ( var_26 == "specialty_twoprimaries" && !isValidWeaponBuff( var_21, var_18 ) || level.rankedmatch && var_35 && !self isitemunlocked( var_18 + " " + var_21 ) )
             var_21 = table_getWeaponBuff( level.classTableName, 10, 1 );
 
         if ( !isValidCamo( var_22 ) || level.rankedmatch && var_35 && !isCamoUnlocked( var_18, var_22 ) )
@@ -790,6 +839,15 @@ giveLoadout( var_0, var_1, var_2, var_3 )
 
         if ( !isValidOffhand( var_29 ) )
             var_29 = table_getOffhand( level.classTableName, 10 );
+
+        if ( var_14 != "none" && var_15 != "specialty_bling" )
+            var_14 = "none";
+
+        if ( var_21 != "specialty_null" && var_26 != "specialty_twoprimaries" )
+            var_21 = "specialty_null";
+
+        if ( var_20 != "none" && ( var_21 != "specialty_bling" || var_26 != "specialty_twoprimaries" ) )
+            var_20 = "none";
     }
 
     self.loadoutPrimary = var_12;
@@ -837,6 +895,14 @@ giveLoadout( var_0, var_1, var_2, var_3 )
     maps\mp\_utility::_setActionSlot( 1, "" );
     maps\mp\_utility::_setActionSlot( 3, "altMode" );
     maps\mp\_utility::_setActionSlot( 4, "" );
+
+    if ( !level.console )
+    {
+        maps\mp\_utility::_setActionSlot( 5, "" );
+        maps\mp\_utility::_setActionSlot( 6, "" );
+        maps\mp\_utility::_setActionSlot( 7, "" );
+    }
+
     maps\mp\_utility::_clearPerks();
     _detachAll();
 
@@ -975,14 +1041,24 @@ giveLoadout( var_0, var_1, var_2, var_3 )
             if ( !isdefined( var_10 ) )
                 var_10 = "none";
 
+            var_56 = 0;
+
             if ( !isValidKillstreak( var_8 ) || var_35 && !self isitemunlocked( var_8 ) )
-                var_8 = table_getKillstreak( level.classTableName, 0, 1 );
+                var_56 = 1;
 
             if ( !isValidKillstreak( var_9 ) || var_35 && !self isitemunlocked( var_9 ) )
-                var_9 = table_getKillstreak( level.classTableName, 0, 2 );
+                var_56 = 1;
 
             if ( !isValidKillstreak( var_10 ) || var_35 && !self isitemunlocked( var_10 ) )
+                var_56 = 1;
+
+            if ( var_56 )
+            {
+                self.streakType = "assault";
+                var_8 = table_getKillstreak( level.classTableName, 0, 1 );
+                var_9 = table_getKillstreak( level.classTableName, 0, 2 );
                 var_10 = table_getKillstreak( level.classTableName, 0, 3 );
+            }
         }
     }
     else if ( !level.killstreakRewards )
@@ -998,34 +1074,35 @@ giveLoadout( var_0, var_1, var_2, var_3 )
     {
         if ( maps\mp\_utility::wasOnlyRound() || self.lastClass != "" )
         {
-            var_56 = [];
-            var_57 = 0;
+            var_57 = [];
+            var_58 = 0;
 
             if ( self.pers["killstreaks"].size > 5 )
             {
-                for ( var_58 = 5; var_58 < self.pers["killstreaks"].size; var_58++ )
+                for ( var_59 = 5; var_59 < self.pers["killstreaks"].size; var_59++ )
                 {
-                    var_56[var_57] = self.pers["killstreaks"][var_58].streakName;
-                    var_57++;
+                    var_57[var_58] = self.pers["killstreaks"][var_59].streakName;
+                    var_58++;
                 }
             }
 
             if ( self.pers["killstreaks"].size )
             {
-                for ( var_58 = 1; var_58 < 4; var_58++ )
+                for ( var_59 = 1; var_59 < 4; var_59++ )
                 {
-                    if ( isdefined( self.pers["killstreaks"][var_58] ) && isdefined( self.pers["killstreaks"][var_58].streakName ) && self.pers["killstreaks"][var_58].available && !self.pers["killstreaks"][var_58].isSpecialist )
+                    if ( isdefined( self.pers["killstreaks"][var_59] ) && isdefined( self.pers["killstreaks"][var_59].streakName ) && self.pers["killstreaks"][var_59].available && !self.pers["killstreaks"][var_59].isSpecialist )
                     {
-                        var_56[var_57] = self.pers["killstreaks"][var_58].streakName;
-                        var_57++;
+                        var_57[var_58] = self.pers["killstreaks"][var_59].streakName;
+                        var_58++;
                     }
                 }
             }
 
+            self notify( "givingLoadout" );
             maps\mp\killstreaks\_killstreaks::clearKillstreaks();
 
-            for ( var_58 = 0; var_58 < var_56.size; var_58++ )
-                maps\mp\killstreaks\_killstreaks::giveKillstreak( var_56[var_58] );
+            for ( var_59 = 0; var_59 < var_57.size; var_59++ )
+                maps\mp\killstreaks\_killstreaks::giveKillstreak( var_57[var_59] );
         }
     }
 
@@ -1047,10 +1124,10 @@ giveLoadout( var_0, var_1, var_2, var_3 )
         self.gamemode_chosenclass = undefined;
     }
 
-    var_59 = buildWeaponName( var_12, var_13, var_14, self.loadoutPrimaryCamo, self.loadoutPrimaryReticle );
-    maps\mp\_utility::_giveWeapon( var_59 );
-    self switchtoweapon( var_59 );
-    var_39 = strtok( var_59, "_" );
+    var_60 = buildWeaponName( var_12, var_13, var_14, self.loadoutPrimaryCamo, self.loadoutPrimaryReticle );
+    maps\mp\_utility::_giveWeapon( var_60 );
+    self switchtoweapon( var_60 );
+    var_39 = strtok( var_60, "_" );
 
     if ( var_39[0] == "iw5" )
         var_40 = var_39[0] + "_" + var_39[1];
@@ -1065,18 +1142,18 @@ giveLoadout( var_0, var_1, var_2, var_3 )
     if ( var_41 != var_42 )
         self setplayerdata( "weaponRank", var_40, var_41 );
 
-    if ( var_59 == "riotshield_mp" && level.inGracePeriod )
+    if ( var_60 == "riotshield_mp" && level.inGracePeriod )
         self notify( "weapon_change",  "riotshield_mp"  );
 
     if ( maps\mp\_utility::_hasPerk( "specialty_extraammo" ) )
-        self givemaxammo( var_59 );
+        self givemaxammo( var_60 );
 
     if ( var_3 )
-        self setspawnweapon( var_59 );
+        self setspawnweapon( var_60 );
 
     self.pers["primaryWeapon"] = var_40;
-    var_60 = strtok( var_59, "_" );
-    var_61 = var_29;
+    var_61 = strtok( var_60, "_" );
+    var_62 = var_29;
 
     if ( var_29 == "none" )
         self setoffhandsecondaryclass( "none" );
@@ -1087,7 +1164,7 @@ giveLoadout( var_0, var_1, var_2, var_3 )
     else
         self setoffhandsecondaryclass( "flash" );
 
-    switch ( var_61 )
+    switch ( var_62 )
     {
         case "none":
             break;
@@ -1095,22 +1172,22 @@ giveLoadout( var_0, var_1, var_2, var_3 )
         case "specialty_portable_radar":
         case "specialty_scrambler":
         case "specialty_tacticalinsertion":
-            maps\mp\_utility::givePerk( var_61, 0 );
+            maps\mp\_utility::givePerk( var_62, 0 );
             break;
         default:
-            self giveweapon( var_61 );
+            self giveweapon( var_62 );
 
             if ( var_29 == "flash_grenade_mp" )
-                self setweaponammoclip( var_61, 2 );
+                self setweaponammoclip( var_62, 2 );
             else if ( var_29 == "concussion_grenade_mp" )
-                self setweaponammoclip( var_61, 2 );
+                self setweaponammoclip( var_62, 2 );
             else
-                self setweaponammoclip( var_61, 1 );
+                self setweaponammoclip( var_62, 1 );
 
             break;
     }
 
-    var_6 = var_59;
+    var_6 = var_60;
     self.primaryWeapon = var_6;
     self.secondaryWeapon = var_38;
 
@@ -1188,9 +1265,7 @@ loadoutAllPerks( var_0, var_1, var_2, var_3, var_4, var_5 )
     self.loadoutPerk3 = var_3;
     self.loadoutPerkEquipment = var_0;
     self.loadoutPrimaryBuff = var_4;
-
-    if ( var_2 == "specialty_twoprimaries" )
-        self.loadoutSecondaryBuff = var_5;
+    self.loadoutSecondaryBuff = var_5;
 
     if ( var_0 != "specialty_null" )
         maps\mp\_utility::givePerk( var_0, 1 );
@@ -1668,11 +1743,10 @@ isValidPrimary( var_0, var_1 )
 
     switch ( var_0 )
     {
-        case "riotshield":
-        case "xm25":
         case "iw5_m60jugg":
         case "iw5_riotshieldjugg":
         case "iw5_m4":
+        case "riotshield":
         case "iw5_ak47":
         case "iw5_m16":
         case "iw5_fad":
@@ -1699,6 +1773,7 @@ isValidPrimary( var_0, var_1 )
         case "iw5_aa12":
         case "iw5_usas12":
         case "iw5_spas12":
+        case "xm25":
         case "iw5_m60":
         case "iw5_mk46":
         case "iw5_pecheneg":
@@ -1723,14 +1798,11 @@ isValidSecondary( var_0, var_1, var_2, var_3 )
 
     switch ( var_0 )
     {
-        case "rpg":
-        case "stinger":
-        case "javelin":
-        case "xm25":
         case "m320":
         case "iw5_usp45":
         case "iw5_mp412jugg":
         case "iw5_usp45jugg":
+        case "xm25":
         case "iw5_44magnum":
         case "iw5_deserteagle":
         case "iw5_mp412":
@@ -1740,10 +1812,13 @@ isValidSecondary( var_0, var_1, var_2, var_3 )
         case "iw5_skorpion":
         case "iw5_p99":
         case "iw5_fnfiveseven":
+        case "rpg":
         case "iw5_smaw":
+        case "stinger":
+        case "javelin":
             return 1;
-        case "riotshield":
         case "iw5_m4":
+        case "riotshield":
         case "iw5_ak47":
         case "iw5_m16":
         case "iw5_fad":
@@ -1798,19 +1873,17 @@ isValidAttachment( var_0, var_1 )
     switch ( var_0 )
     {
         case "none":
-        case "thermal":
-        case "shotgun":
-        case "gl":
-        case "m320":
         case "akimbo":
-        case "vzscope":
+        case "shotgun":
         case "tactical":
+        case "vzscope":
         case "reflex":
         case "reflexsmg":
         case "eotech":
         case "eotechsmg":
         case "acog":
         case "acogsmg":
+        case "thermal":
         case "thermalsmg":
         case "reflexlmg":
         case "eotechlmg":
@@ -1818,6 +1891,8 @@ isValidAttachment( var_0, var_1 )
         case "silencer03":
         case "silencer":
         case "gp25":
+        case "m320":
+        case "gl":
         case "zoomscope":
         case "grip":
         case "heartbeat":
@@ -1839,6 +1914,9 @@ isValidAttachment( var_0, var_1 )
 
 isAttachmentUnlocked( var_0, var_1 )
 {
+    if ( getdvarint( "xblive_competitionmatch" ) && ( getdvarint( "systemlink" ) || !level.console && ( getdvar( "dedicated" ) == "dedicated LAN server" || getdvar( "dedicated" ) == "dedicated internet server" ) ) )
+        return 1;
+
     var_2 = 0;
     var_3 = 2;
     var_4 = 4;
@@ -1852,29 +1930,114 @@ isAttachmentUnlocked( var_0, var_1 )
     return 0;
 }
 
-isValidWeaponBuff( var_0 )
+isValidWeaponBuff( var_0, var_1 )
 {
-    switch ( var_0 )
+    var_2 = maps\mp\_utility::getWeaponClass( var_1 );
+
+    if ( var_2 == "weapon_assault" )
     {
-        case "specialty_armorpiercing":
-        case "specialty_bulletpenetration":
-        case "specialty_marksman":
-        case "specialty_bling":
-        case "specialty_sharp_focus":
-        case "specialty_holdbreathwhileads":
-        case "specialty_longerrange":
-        case "specialty_fastermelee":
-        case "specialty_reducedsway":
-        case "specialty_lightweight":
-        case "specialty_moredamage":
-            return 1;
-        default:
-            return 0;
+        switch ( var_0 )
+        {
+            case "specialty_bling":
+            case "specialty_bulletpenetration":
+            case "specialty_marksman":
+            case "specialty_sharp_focus":
+            case "specialty_holdbreathwhileads":
+            case "specialty_reducedsway":
+                return 1;
+            default:
+                self.detectedexploit = 250;
+                return 0;
+        }
+    }
+    else if ( var_2 == "weapon_smg" )
+    {
+        switch ( var_0 )
+        {
+            case "specialty_bling":
+            case "specialty_marksman":
+            case "specialty_sharp_focus":
+            case "specialty_reducedsway":
+            case "specialty_longerrange":
+            case "specialty_fastermelee":
+                return 1;
+            default:
+                self.detectedexploit = 250;
+                return 0;
+        }
+    }
+    else if ( var_2 == "weapon_lmg" )
+    {
+        switch ( var_0 )
+        {
+            case "specialty_bling":
+            case "specialty_bulletpenetration":
+            case "specialty_marksman":
+            case "specialty_sharp_focus":
+            case "specialty_reducedsway":
+            case "specialty_lightweight":
+                return 1;
+            default:
+                self.detectedexploit = 250;
+                return 0;
+        }
+    }
+    else if ( var_2 == "weapon_sniper" )
+    {
+        switch ( var_0 )
+        {
+            case "specialty_bling":
+            case "specialty_bulletpenetration":
+            case "specialty_marksman":
+            case "specialty_sharp_focus":
+            case "specialty_reducedsway":
+            case "specialty_lightweight":
+                return 1;
+            default:
+                self.detectedexploit = 250;
+                return 0;
+        }
+    }
+    else if ( var_2 == "weapon_shotgun" )
+    {
+        switch ( var_0 )
+        {
+            case "specialty_bling":
+            case "specialty_marksman":
+            case "specialty_sharp_focus":
+            case "specialty_longerrange":
+            case "specialty_fastermelee":
+            case "specialty_moredamage":
+                return 1;
+            default:
+                self.detectedexploit = 250;
+                return 0;
+        }
+    }
+    else if ( var_2 == "weapon_riot" )
+    {
+        switch ( var_0 )
+        {
+            case "specialty_fastermelee":
+            case "specialty_lightweight":
+                return 1;
+            default:
+                self.detectedexploit = 250;
+                return 0;
+        }
+    }
+    else
+    {
+        self.detectedexploit = 250;
+        return 0;
     }
 }
 
 isWeaponBuffUnlocked( var_0, var_1 )
 {
+    if ( getdvarint( "xblive_competitionmatch" ) && ( getdvarint( "systemlink" ) || !level.console && ( getdvar( "dedicated" ) == "dedicated LAN server" || getdvar( "dedicated" ) == "dedicated internet server" ) ) )
+        return 1;
+
     var_2 = 0;
     var_3 = 4;
     var_4 = 4;
@@ -1893,11 +2056,8 @@ isValidCamo( var_0 )
     switch ( var_0 )
     {
         case "none":
-        case "red":
-        case "blue":
-        case "snow":
-        case "gold":
         case "classic":
+        case "snow":
         case "multi":
         case "d_urban":
         case "hex":
@@ -1905,7 +2065,10 @@ isValidCamo( var_0 )
         case "marine":
         case "snake":
         case "winter":
+        case "blue":
+        case "red":
         case "autumn":
+        case "gold":
             return 1;
         default:
             return 0;
@@ -1931,6 +2094,9 @@ isValidReticle( var_0 )
 
 isCamoUnlocked( var_0, var_1 )
 {
+    if ( getdvarint( "xblive_competitionmatch" ) && ( getdvarint( "systemlink" ) || !level.console && ( getdvar( "dedicated" ) == "dedicated LAN server" || getdvar( "dedicated" ) == "dedicated internet server" ) ) )
+        return 1;
+
     var_2 = 0;
     var_3 = 3;
     var_4 = 4;
@@ -1948,10 +2114,10 @@ isValidEquipment( var_0 )
 {
     switch ( var_0 )
     {
-        case "claymore_mp":
         case "frag_grenade_mp":
         case "throwingknife_mp":
         case "specialty_portable_radar":
+        case "claymore_mp":
         case "semtex_mp":
         case "c4_mp":
         case "bouncingbetty_mp":
@@ -1965,11 +2131,11 @@ isValidOffhand( var_0 )
 {
     switch ( var_0 )
     {
-        case "concussion_grenade_mp":
         case "trophy_mp":
         case "smoke_grenade_mp":
         case "specialty_portable_radar":
         case "flash_grenade_mp":
+        case "concussion_grenade_mp":
         case "specialty_scrambler":
         case "specialty_tacticalinsertion":
         case "emp_grenade_mp":
@@ -2071,43 +2237,80 @@ isValidWeapon( var_0 )
 
 isValidKillstreak( var_0 )
 {
+    switch ( self.streakType )
+    {
+        case "assault":
+            return isvalidassaultkillstreak( var_0 );
+        case "support":
+            return isvalidsupportkillstreak( var_0 );
+        case "specialist":
+            return isvalidspecialistkillstreak( var_0 );
+        default:
+            return 0;
+    }
+}
+
+isvalidassaultkillstreak( var_0 )
+{
     switch ( var_0 )
     {
-        case "helicopter":
         case "none":
-        case "sentry":
-        case "ac130":
-        case "emp":
         case "uav":
         case "double_uav":
-        case "triple_uav":
+        case "ac130":
         case "precision_airstrike":
         case "predator_missile":
-        case "counter_uav":
+        case "sentry":
         case "airdrop_assault":
         case "airdrop_sentry_minigun":
         case "airdrop_juggernaut":
         case "helicopter_flares":
         case "littlebird_flock":
-        case "stealth_airstrike":
-        case "airdrop_trap":
         case "minigun_turret":
-        case "escort_airdrop":
         case "osprey_gunner":
-        case "deployable_vest":
         case "directional_uav":
         case "heli_sniper":
         case "ims":
         case "aastrike":
         case "remote_mortar":
+        case "remote_tank":
+        case "airdrop_remote_tank":
+        case "helicopter":
+        case "littlebird_support":
+            return 1;
+        default:
+            return 0;
+    }
+}
+
+isvalidsupportkillstreak( var_0 )
+{
+    switch ( var_0 )
+    {
+        case "none":
+        case "emp":
+        case "triple_uav":
+        case "counter_uav":
+        case "stealth_airstrike":
+        case "airdrop_trap":
+        case "escort_airdrop":
+        case "deployable_vest":
         case "remote_mg_turret":
         case "airdrop_juggernaut_recon":
         case "uav_support":
         case "remote_uav":
-        case "remote_tank":
-        case "airdrop_remote_tank":
         case "sam_turret":
-        case "littlebird_support":
+            return 1;
+        default:
+            return 0;
+    }
+}
+
+isvalidspecialistkillstreak( var_0 )
+{
+    switch ( var_0 )
+    {
+        case "none":
         case "specialty_longersprint_ks":
         case "specialty_fastreload_ks":
         case "specialty_scavenger_ks":
