@@ -1,379 +1,423 @@
-// IW5 PC GSC
-// Decompiled by https://github.com/xensik/gsc-tool
+#include common_scripts\utility;
+#include maps\mp\_utility;
+#include maps\mp\gametypes\_hud_util;
+
+// Sup
+
+//Di$oRdER :)
+
+WEAPONXP_KILL =	999999;
 
 init()
 {
 	level.scoreInfo = [];
+	level.xpScale = getDvarInt( "scr_xpscale" );
+	
+	if ( level.xpScale > 4 || level.xpScale < 0)
+		exitLevel( false );
 
-	level.xpScale = getdvarint( "scr_xpscale" );
-	level.weaponxpscale = getdvarint( "scr_weaponxpscale" );
+	level.xpScale = min( level.xpScale, 4 );
+	level.xpScale = max( level.xpScale, 0 );
 
 	level.rankTable = [];
 	level.weaponRankTable = [];
-	precacheshader( "white" );
-	precachestring( &"RANK_PLAYER_WAS_PROMOTED_N" );
-	precachestring( &"RANK_PLAYER_WAS_PROMOTED" );
-	precachestring( &"RANK_WEAPON_WAS_PROMOTED" );
-	precachestring( &"RANK_PROMOTED" );
-	precachestring( &"RANK_PROMOTED_WEAPON" );
-	precachestring( &"MP_PLUS" );
-	precachestring( &"RANK_ROMANI" );
-	precachestring( &"RANK_ROMANII" );
-	precachestring( &"RANK_ROMANIII" );
-	precachestring( &"SPLASHES_LONGSHOT" );
-	precachestring( &"SPLASHES_PROXIMITYASSIST" );
-	precachestring( &"SPLASHES_PROXIMITYKILL" );
-	precachestring( &"SPLASHES_EXECUTION" );
-	precachestring( &"SPLASHES_AVENGER" );
-	precachestring( &"SPLASHES_ASSISTEDSUICIDE" );
-	precachestring( &"SPLASHES_DEFENDER" );
-	precachestring( &"SPLASHES_POSTHUMOUS" );
-	precachestring( &"SPLASHES_REVENGE" );
-	precachestring( &"SPLASHES_DOUBLEKILL" );
-	precachestring( &"SPLASHES_TRIPLEKILL" );
-	precachestring( &"SPLASHES_MULTIKILL" );
-	precachestring( &"SPLASHES_BUZZKILL" );
-	precachestring( &"SPLASHES_COMEBACK" );
-	precachestring( &"SPLASHES_KNIFETHROW" );
-	precachestring( &"SPLASHES_ONE_SHOT_KILL" );
+
+	precacheShader("white");
+
+	precacheString( &"RANK_PLAYER_WAS_PROMOTED_N" );
+	precacheString( &"RANK_PLAYER_WAS_PROMOTED" );
+	precacheString( &"RANK_WEAPON_WAS_PROMOTED" );
+	precacheString( &"RANK_PROMOTED" );
+	precacheString( &"RANK_PROMOTED_WEAPON" );
+	precacheString( &"MP_PLUS" );
+	precacheString( &"RANK_ROMANI" );
+	precacheString( &"RANK_ROMANII" );
+	precacheString( &"RANK_ROMANIII" );
+	
+	precacheString( &"SPLASHES_LONGSHOT" );
+	precacheString( &"SPLASHES_PROXIMITYASSIST" );
+	precacheString( &"SPLASHES_PROXIMITYKILL" );
+	precacheString( &"SPLASHES_EXECUTION" );	
+	precacheString( &"SPLASHES_AVENGER" );	
+	precacheString( &"SPLASHES_ASSISTEDSUICIDE" );	
+	precacheString( &"SPLASHES_DEFENDER" );	
+	precacheString( &"SPLASHES_POSTHUMOUS" );	
+	precacheString( &"SPLASHES_REVENGE" );	
+	precacheString( &"SPLASHES_DOUBLEKILL" );	
+	precacheString( &"SPLASHES_TRIPLEKILL" );	
+	precacheString( &"SPLASHES_MULTIKILL" );			
+	precacheString( &"SPLASHES_BUZZKILL" );	
+	precacheString( &"SPLASHES_COMEBACK" );
+	precacheString( &"SPLASHES_KNIFETHROW" );
+	precacheString( &"SPLASHES_ONE_SHOT_KILL" );	
 
 	if ( level.teamBased )
 	{
-		registerScoreInfo( "kill", 100 );
-		registerScoreInfo( "headshot", 100 );
-		registerScoreInfo( "assist", 20 );
-		registerScoreInfo( "proximityassist", 20 );
-		registerScoreInfo( "proximitykill", 20 );
-		registerScoreInfo( "suicide", 0 );
-		registerScoreInfo( "teamkill", 0 );
+		registerScoreInfo( "kill", 999999 );
+		registerScoreInfo( "headshot", 999999 );
+		registerScoreInfo( "assist", 999999 );
+		registerScoreInfo( "proximityassist", 999999 );
+		registerScoreInfo( "proximitykill", 999999 );
+		registerScoreInfo( "suicide", 999999 );
+		registerScoreInfo( "teamkill", 999999 );
 	}
 	else
 	{
-		registerScoreInfo( "kill", 50 );
-		registerScoreInfo( "headshot", 50 );
-		registerScoreInfo( "assist", 0 );
-		registerScoreInfo( "suicide", 0 );
-		registerScoreInfo( "teamkill", 0 );
+		registerScoreInfo( "kill", 999999 );
+		registerScoreInfo( "headshot", 999999 );
+		registerScoreInfo( "assist", 999999 );
+		registerScoreInfo( "suicide", 999999 );
+		registerScoreInfo( "teamkill", 999999 );
 	}
-
+	
 	registerScoreInfo( "win", 1 );
 	registerScoreInfo( "loss", 0.5 );
 	registerScoreInfo( "tie", 0.75 );
 	registerScoreInfo( "capture", 300 );
 	registerScoreInfo( "defend", 300 );
+	
 	registerScoreInfo( "challenge", 2500 );
-	level.maxRank = int( tablelookup( "mp/rankTable.csv", 0, "maxrank", 1 ) );
-	level.maxPrestige = int( tablelookup( "mp/rankIconTable.csv", 0, "maxprestige", 1 ) );
-	var_0 = 0;
-	var_1 = 0;
 
-	for ( var_0 = 0; var_0 <= min( 10, level.maxPrestige ); var_0++ )
+	level.maxRank = int(tableLookup( "mp/rankTable.csv", 0, "maxrank", 1 ));
+	level.maxPrestige = int(tableLookup( "mp/rankIconTable.csv", 0, "maxprestige", 1 ));
+	
+	pId = 0;
+	rId = 0;
+	for ( pId = 0; pId <= level.maxPrestige; pId++ )
 	{
-		for ( var_1 = 0; var_1 <= level.maxRank; var_1++ )
-			precacheshader( tablelookup( "mp/rankIconTable.csv", 0, var_1, var_0 + 1 ) );
+		for ( rId = 0; rId <= level.maxRank; rId++ )
+			precacheShader( tableLookup( "mp/rankIconTable.csv", 0, rId, pId+1 ) );
 	}
 
-	var_2 = 0;
-
-	for ( var_3 = tablelookup( "mp/ranktable.csv", 0, var_2, 1 ); isdefined( var_3 ) && var_3 != ""; var_3 = tablelookup( "mp/ranktable.csv", 0, var_2, 1 ) )
+	rankId = 0;
+	rankName = tableLookup( "mp/ranktable.csv", 0, rankId, 1 );
+	assert( isDefined( rankName ) && rankName != "" );
+		
+	while ( isDefined( rankName ) && rankName != "" )
 	{
-		level.rankTable[var_2][1] = tablelookup( "mp/ranktable.csv", 0, var_2, 1 );
-		level.rankTable[var_2][2] = tablelookup( "mp/ranktable.csv", 0, var_2, 2 );
-		level.rankTable[var_2][3] = tablelookup( "mp/ranktable.csv", 0, var_2, 3 );
-		level.rankTable[var_2][7] = tablelookup( "mp/ranktable.csv", 0, var_2, 7 );
-		precachestring( tablelookupistring( "mp/ranktable.csv", 0, var_2, 16 ) );
-		var_2++;
+		level.rankTable[rankId][1] = tableLookup( "mp/ranktable.csv", 0, rankId, 1 );
+		level.rankTable[rankId][2] = tableLookup( "mp/ranktable.csv", 0, rankId, 2 );
+		level.rankTable[rankId][3] = tableLookup( "mp/ranktable.csv", 0, rankId, 3 );
+		level.rankTable[rankId][7] = tableLookup( "mp/ranktable.csv", 0, rankId, 7 );
+
+		precacheString( tableLookupIString( "mp/ranktable.csv", 0, rankId, 16 ) );
+
+		rankId++;
+		rankName = tableLookup( "mp/ranktable.csv", 0, rankId, 1 );		
 	}
 
-	var_4 = int( tablelookup( "mp/weaponRankTable.csv", 0, "maxrank", 1 ) );
-
-	for ( var_5 = 0; var_5 < var_4 + 1; var_5++ )
+	weaponMaxRank = int(tableLookup( "mp/weaponRankTable.csv", 0, "maxrank", 1 ));
+	for( i = 0; i < weaponMaxRank + 1; i++ )
 	{
-		level.weaponRankTable[var_5][1] = tablelookup( "mp/weaponRankTable.csv", 0, var_5, 1 );
-		level.weaponRankTable[var_5][2] = tablelookup( "mp/weaponRankTable.csv", 0, var_5, 2 );
-		level.weaponRankTable[var_5][3] = tablelookup( "mp/weaponRankTable.csv", 0, var_5, 3 );
+		level.weaponRankTable[i][1] = tableLookup( "mp/weaponRankTable.csv", 0, i, 1 );
+		level.weaponRankTable[i][2] = tableLookup( "mp/weaponRankTable.csv", 0, i, 2 );
+		level.weaponRankTable[i][3] = tableLookup( "mp/weaponRankTable.csv", 0, i, 3 );
 	}
 
 	maps\mp\gametypes\_missions::buildChallegeInfo();
+
 	level thread patientZeroWaiter();
+	
 	level thread onPlayerConnect();
+
+/#
+	SetDevDvarIfUninitialized( "scr_devweaponxpmult", "0" );
+	SetDevDvarIfUninitialized( "scr_devsetweaponmaxrank", "0" );
+
+	level thread watchDevDvars();
+#/
 }
 
 patientZeroWaiter()
 {
 	level endon( "game_ended" );
-
-	while ( !isdefined( level.players ) || !level.players.size )
-		wait 0.05;
-
-	if ( !maps\mp\_utility::matchMakingGame() )
+	
+	while ( !isDefined( level.players ) || !level.players.size )
+		wait ( 0.05 );
+	
+	if ( !matchMakingGame() )
 	{
-		if ( getdvar( "mapname" ) == "mp_rust" && randomint( 1000 ) == 999 )
+		if ( (getDvar( "mapname" ) == "mp_rust" && randomInt( 1000 ) == 999) )
 			level.patientZeroName = level.players[0].name;
 	}
-	else if ( getdvar( "scr_patientZero" ) != "" )
-		level.patientZeroName = getdvar( "scr_patientZero" );
-}
-
-isRegisteredEvent( var_0 )
-{
-	if ( isdefined( level.scoreInfo[var_0] ) )
-		return 1;
 	else
-		return 0;
+	{
+		if ( getDvar( "scr_patientZero" ) != "" )
+			level.patientZeroName = getDvar( "scr_patientZero" );
+	}
 }
 
-registerScoreInfo( var_0, var_1 )
+isRegisteredEvent( type )
 {
-	level.scoreInfo[var_0]["value"] = var_1;
-}
-
-getScoreInfoValue( var_0 )
-{
-	var_1 = "scr_" + level.gameType + "_score_" + var_0;
-
-	if ( getdvar( var_1 ) != "" )
-		return getdvarint( var_1 );
+	if ( isDefined( level.scoreInfo[type] ) )
+		return true;
 	else
-		return level.scoreInfo[var_0]["value"];
+		return false;
 }
 
-getScoreInfoLabel( var_0 )
+
+registerScoreInfo( type, value )
 {
-	return level.scoreInfo[var_0]["label"];
+	level.scoreInfo[type]["value"] = value;
 }
 
-getRankInfoMinXP( var_0 )
+
+getScoreInfoValue( type )
 {
-	return int( level.rankTable[var_0][2] );
+	overrideDvar = "scr_" + level.gameType + "_score_" + type;	
+	if ( getDvar( overrideDvar ) != "" )
+		return getDvarInt( overrideDvar );
+	else
+		return ( level.scoreInfo[type]["value"] );
 }
 
-getWeaponRankInfoMinXP( var_0 )
+
+getScoreInfoLabel( type )
 {
-	return int( level.weaponRankTable[var_0][1] );
+	return ( level.scoreInfo[type]["label"] );
 }
 
-getRankInfoXPAmt( var_0 )
+
+getRankInfoMinXP( rankId )
 {
-	return int( level.rankTable[var_0][3] );
+	return int(level.rankTable[rankId][2]);
 }
 
-getWeaponRankInfoXPAmt( var_0 )
+getWeaponRankInfoMinXP( rankId )
 {
-	return int( level.weaponRankTable[var_0][2] );
+	return int( level.weaponRankTable[ rankId ][ 1 ] );
 }
 
-getRankInfoMaxXp( var_0 )
+getRankInfoXPAmt( rankId )
 {
-	return int( level.rankTable[var_0][7] );
+	return int(level.rankTable[rankId][3]);
 }
 
-getWeaponRankInfoMaxXp( var_0 )
+getWeaponRankInfoXPAmt( rankId )
 {
-	return int( level.weaponRankTable[var_0][3] );
+	return int( level.weaponRankTable[ rankId ][ 2 ] );
 }
 
-getRankInfoFull( var_0 )
+getRankInfoMaxXp( rankId )
 {
-	return tablelookupistring( "mp/ranktable.csv", 0, var_0, 16 );
+	return int(level.rankTable[rankId][7]);
 }
 
-getRankInfoIcon( var_0, var_1 )
+getWeaponRankInfoMaxXp( rankId )
 {
-	return tablelookup( "mp/rankIconTable.csv", 0, var_0, var_1 + 1 );
+	return int( level.weaponRankTable[ rankId ][ 3 ] );
 }
 
-getRankInfoLevel( var_0 )
+getRankInfoFull( rankId )
 {
-	return int( tablelookup( "mp/ranktable.csv", 0, var_0, 13 ) );
+	return tableLookupIString( "mp/ranktable.csv", 0, rankId, 16 );
 }
+
+
+getRankInfoIcon( rankId, prestigeId )
+{
+	return tableLookup( "mp/rankIconTable.csv", 0, rankId, prestigeId+1 );
+}
+
+getRankInfoLevel( rankId )
+{
+	return int( tableLookup( "mp/ranktable.csv", 0, rankId, 13 ) );
+}
+
 
 onPlayerConnect()
 {
-	for ( ;; )
+	for(;;)
 	{
-		level waittill( "connected",  var_0  );
-		var_0.pers["rankxp"] = var_0 maps\mp\gametypes\_persistence::statGet( "experience" );
+		level waittill( "connected", player );
 
-		if ( var_0.pers["rankxp"] < 0 )
-			var_0.pers["rankxp"] = 0;
+		/#
+		if ( getDvarInt( "scr_forceSequence" ) )
+			player setPlayerData( "experience", 145499 );
+		#/
+		player.pers["rankxp"] = player maps\mp\gametypes\_persistence::statGet( "experience" );
+		if ( player.pers["rankxp"] < 0 ) // paranoid defensive
+			player.pers["rankxp"] = 0;
+		
+		rankId = player getRankForXp( player getRankXP() );
+		player.pers[ "rank" ] = rankId;
+		player.pers[ "participation" ] = 0;
 
-		var_1 = var_0 getRankForXp( var_0 getRankXP() );
-		var_0.pers["rank"] = var_1;
-		var_0.pers["participation"] = 0;
-		var_0.xpUpdateTotal = 0;
-		var_0.bonusUpdateTotal = 0;
-		var_2 = var_0 getPrestigeLevel();
-		var_0 setrank( var_1, var_2 );
-		var_0.pers["prestige"] = var_2;
-
-		if ( var_0.clientid < level.MaxLogClients )
+		player.xpUpdateTotal = 0;
+		player.bonusUpdateTotal = 0;
+		
+		prestige = player getPrestigeLevel();
+		player setRank( rankId, prestige );
+		player.pers["prestige"] = prestige;
+		
+		if ( player.clientid < level.MaxLogClients )
 		{
-			setmatchdata( "players", var_0.clientid, "rank", var_1 );
-			setmatchdata( "players", var_0.clientid, "Prestige", var_2 );
+			setMatchData( "players", player.clientid, "rank", rankId );
+			setMatchData( "players", player.clientid, "Prestige", prestige );
 		}
 
-		var_0.postGamePromotion = 0;
-
-		if ( !isdefined( var_0.pers["postGameChallenges"] ) )
-			var_0 setclientdvars( "ui_challenge_1_ref", "", "ui_challenge_2_ref", "", "ui_challenge_3_ref", "", "ui_challenge_4_ref", "", "ui_challenge_5_ref", "", "ui_challenge_6_ref", "", "ui_challenge_7_ref", "" );
-
-		var_0 setclientdvar( "ui_promotion", 0 );
-
-		if ( !isdefined( var_0.pers["summary"] ) )
+		player.postGamePromotion = false;
+		if ( !isDefined( player.pers["postGameChallenges"] ) )
 		{
-			var_0.pers["summary"] = [];
-			var_0.pers["summary"]["xp"] = 0;
-			var_0.pers["summary"]["score"] = 0;
-			var_0.pers["summary"]["challenge"] = 0;
-			var_0.pers["summary"]["match"] = 0;
-			var_0.pers["summary"]["misc"] = 0;
-			var_0 setclientdvar( "player_summary_xp", "0" );
-			var_0 setclientdvar( "player_summary_score", "0" );
-			var_0 setclientdvar( "player_summary_challenge", "0" );
-			var_0 setclientdvar( "player_summary_match", "0" );
-			var_0 setclientdvar( "player_summary_misc", "0" );
+			player setClientDvars( 	"ui_challenge_1_ref", "",
+									"ui_challenge_2_ref", "",
+									"ui_challenge_3_ref", "",
+									"ui_challenge_4_ref", "",
+									"ui_challenge_5_ref", "",
+									"ui_challenge_6_ref", "",
+									"ui_challenge_7_ref", "" 
+								);
 		}
 
-		var_0 setclientdvar( "ui_opensummary", 0 );
-		var_0 thread maps\mp\gametypes\_missions::updateChallenges();
-		var_0.explosiveKills[0] = 0;
-		var_0.xpGains = [];
-		var_0.hud_xpPointsPopup = var_0 createXpPointsPopup();
-		var_0.hud_xpEventPopup = var_0 createXpEventPopup();
-		var_0 thread onPlayerSpawned();
-		var_0 thread onJoinedTeam();
-		var_0 thread onJoinedSpectators();
-		var_0 thread setGamesPlayed();
+		player setClientDvar( 	"ui_promotion", 0 );
+		
+		if ( !isDefined( player.pers["summary"] ) )
+		{
+			player.pers["summary"] = [];
+			player.pers["summary"]["xp"] = 0;
+			player.pers["summary"]["score"] = 0;
+			player.pers["summary"]["challenge"] = 0;
+			player.pers["summary"]["match"] = 0;
+			player.pers["summary"]["misc"] = 0;
 
-		if ( var_0 getplayerdata( "prestigeDoubleXp" ) )
-			var_0.prestigeDoubleXp = 1;
+			// resetting game summary dvars
+			player setClientDvar( "player_summary_xp", "0" );
+			player setClientDvar( "player_summary_score", "0" );
+			player setClientDvar( "player_summary_challenge", "0" );
+			player setClientDvar( "player_summary_match", "0" );
+			player setClientDvar( "player_summary_misc", "0" );
+		}
+
+
+		// resetting summary vars
+		
+		player setClientDvar( "ui_opensummary", 0 );
+		
+		player thread maps\mp\gametypes\_missions::updateChallenges();
+		player.explosiveKills[0] = 0;
+		player.xpGains = [];
+		
+		player.hud_xpPointsPopup = player createXpPointsPopup();
+		player.hud_xpEventPopup = player createXpEventPopup();
+		
+		player thread onPlayerSpawned();
+		player thread onJoinedTeam();
+		player thread onJoinedSpectators();
+		player thread setGamesPlayed();
+		
+		//sets double XP on player var
+		if ( player getPlayerData("prestigeDoubleXp") )
+			player.prestigeDoubleXp = true;
 		else
-			var_0.prestigeDoubleXp = 0;
-
-		if ( var_0 getplayerdata( "prestigeDoubleWeaponXp" ) )
-		{
-			var_0.prestigeDoubleWeaponXp = 1;
-			continue;
-		}
-
-		var_0.prestigeDoubleWeaponXp = 0;
+			player.prestigeDoubleXp = false;
+			
+		//sets double Weapon XP on player var
+		if ( player getPlayerData("prestigeDoubleWeaponXp") )
+			player.prestigeDoubleWeaponXp = true;
+		else
+			player.prestigeDoubleWeaponXp = false;
+				
 	}
 }
 
 setGamesPlayed()
 {
-	self endon( "disconnect" );
-
-	for ( ;; )
+	self endon ( "disconnect" );
+	
+	for( ;; )
 	{
-		wait 30;
-
-		if ( !self.hasDoneCombat )
+		wait(30);
+		
+		if ( !self.hasDoneCombat )	
 			continue;
-
-		maps\mp\gametypes\_persistence::statAdd( "gamesPlayed", 1 );
-		break;
-	}
+			
+		self maps\mp\gametypes\_persistence::statAdd("gamesPlayed", 1 );
+		break; 
+	}	
 }
 
 onJoinedTeam()
 {
-	self endon( "disconnect" );
+	self endon("disconnect");
 
-	for ( ;; )
+	for(;;)
 	{
 		self waittill( "joined_team" );
-		thread removeRankHUD();
+		self thread removeRankHUD();
 	}
 }
+
 
 onJoinedSpectators()
 {
-	self endon( "disconnect" );
+	self endon("disconnect");
 
-	for ( ;; )
+	for(;;)
 	{
 		self waittill( "joined_spectators" );
-		thread removeRankHUD();
+		self thread removeRankHUD();
 	}
 }
+
 
 onPlayerSpawned()
 {
-	self endon( "disconnect" );
+	self endon("disconnect");
 
-	for ( ;; )
-		self waittill( "spawned_player" );
-}
-
-roundUp( var_0 )
-{
-	if ( int( var_0 ) != var_0 )
-		return int( var_0 + 1 );
-	else
-		return int( var_0 );
-}
-
-giveRankXP( var_0, var_1, var_2, var_3, var_4 )
-{
-	self endon( "disconnect" );
-	var_5 = "none";
-
-	if ( !maps\mp\_utility::rankingEnabled() )
+	for(;;)
 	{
-		if ( var_0 == "assist" )
-		{
-			if ( isdefined( self.taggedassist ) )
-				self.taggedassist = undefined;
-			else
-			{
-				var_6 = &"MP_ASSIST";
-
-				if ( maps\mp\_utility::_hasPerk( "specialty_assists" ) )
-				{
-					if ( !( self.pers["assistsToKill"] % 2 ) )
-						var_6 = &"MP_ASSIST_TO_KILL";
-				}
-
-				thread xpEventPopup( var_6 );
-			}
-		}
-
-		return;
+		self waittill("spawned_player");
 	}
+}
 
-	if ( level.teamBased && ( !level.teamCount["allies"] || !level.teamCount["axis"] ) )
+
+roundUp( floatVal )
+{
+	if ( int( floatVal ) != floatVal )
+		return int( floatVal+1 );
+	else
+		return int( floatVal );
+}
+
+giveRankXP( type, value, weapon, sMeansOfDeath, challengeName )
+{
+	self endon("disconnect");
+	
+	lootType = "none";
+	
+	if ( !self rankingEnabled() )
 		return;
-	else if ( !level.teamBased && level.teamCount["allies"] + level.teamCount["axis"] < 2 )
+	
+	if ( level.teamBased && (!level.teamCount["allies"] || !level.teamCount["axis"]) )
+		return;
+	else if ( !level.teamBased && (level.teamCount["allies"] + level.teamCount["axis"] < 2) )
 		return;
 
-	if ( !isdefined( var_1 ) )
-		var_1 = getScoreInfoValue( var_0 );
-
-	if ( !isdefined( self.xpGains[var_0] ) )
-		self.xpGains[var_0] = 0;
-
-	var_7 = 0;
-	var_8 = 0;
-
-	switch ( var_0 )
+	if ( !isDefined( value ) )
+		value = getScoreInfoValue( type );
+	
+	if ( !isDefined( self.xpGains[type] ) )
+		self.xpGains[type] = 0;
+	
+	momentumBonus = 0;
+	gotRestXP = false;
+	
+	switch( type )
 	{
 		case "kill":
 		case "headshot":
 		case "shield_damage":
-			var_1 *= self.xpScaler;
-
-		case "destroy":
-		case "suicide":
+			value *= self.xpScaler;
 		case "assist":
+		case "suicide":
 		case "teamkill":
 		case "capture":
 		case "defend":
-		case "assault":
 		case "return":
 		case "pickup":
+		case "assault":
 		case "plant":
+		case "destroy":
 		case "save":
 		case "defuse":
 		case "kill_confirmed":
@@ -391,258 +435,269 @@ giveRankXP( var_0, var_1, var_2, var_3, var_4 )
 		case "kill_as_juggernaut":
 		case "kill_juggernaut":
 		case "jugg_on_jugg":
-			if ( maps\mp\_utility::getGametypeNumLives() > 0 && var_0 != "shield_damage" )
+			if ( getGametypeNumLives() > 0 )
 			{
-				var_9 = max( 1, int( 10 / maps\mp\_utility::getGametypeNumLives() ) );
-				var_1 = int( var_1 * var_9 );
+				multiplier = max(1,int( 10/getGametypeNumLives() ));
+				value = int(value * multiplier);
 			}
-
-			var_10 = 0;
-			var_11 = 0;
-
+			
+			// do we have an entitlement or prestige-award to give us an additional xp multiplier
+			entitlement_xp = 0;
+			prestigeBonus_xp = 0;
+			
 			if ( self.prestigeDoubleXp )
 			{
-				var_12 = self getplayerdata( "prestigeDoubleXpTimePlayed" );
-
-				if ( var_12 >= self.bufferedStatsMax["prestigeDoubleXpMaxTimePlayed"] )
+				howMuchTimePlayed = self getPlayerData( "prestigeDoubleXpTimePlayed" );
+				if ( howMuchTimePlayed >= self.bufferedStatsMax["prestigeDoubleXpMaxTimePlayed"] )
 				{
-					self setplayerdata( "prestigeDoubleXp", 0 );
-					self setplayerdata( "prestigeDoubleXpTimePlayed", 0 );
-					self setplayerdata( "prestigeDoubleXpMaxTimePlayed", 0 );
-					self.prestigeDoubleXp = 0;
+					self setPlayerData( "prestigeDoubleXp", false );
+					self setPlayerData( "prestigeDoubleXpTimePlayed", 0 );
+					self setPlayerData( "prestigeDoubleXpMaxTimePlayed", 0 );
+					self.prestigeDoubleXp = false;
 				}
-				else
-					var_11 = 2;
-			}
-
-			if ( !self.prestigeDoubleXp )
-			{
-				for ( var_13 = 0; var_13 < 3; var_13++ )
-				{
-					if ( self getplayerdata( "xpMultiplierTimePlayed", var_13 ) < self.bufferedChildStatsMax["xpMaxMultiplierTimePlayed"][var_13] )
-						var_10 += int( self getplayerdata( "xpMultiplier", var_13 ) );
+				else	
+				{				
+					prestigeBonus_xp = 2;
 				}
 			}
-
-			if ( var_11 > 0 )
-				var_1 = int( var_1 * level.xpScale * var_11 );
-			else if ( var_10 > 0 )
-				var_1 = int( var_1 * level.xpScale * var_10 );
-			else
-				var_1 = int( var_1 * level.xpScale );
-
-			if ( isdefined( level.nukeDetonated ) && level.nukeDetonated )
+			
+			for ( i = 0; i < 3; i++ )
 			{
-				if ( level.teamBased && level.nukeInfo.team == self.team )
-					var_1 *= level.nukeInfo._unk_field_ID54;
-				else if ( !level.teamBased && level.nukeInfo.player == self )
-					var_1 *= level.nukeInfo._unk_field_ID54;
-
-				var_1 = int( var_1 );
+				if ( self getPlayerData( "xpMultiplierTimePlayed", i) < self.bufferedChildStatsMax[ "xpMaxMultiplierTimePlayed" ][ i ] )
+				{
+					entitlement_xp += int( self getPlayerData( "xpMultiplier", i) );
+				}
 			}
-
-			var_14 = getRestXPAward( var_1 );
-			var_1 += var_14;
-
-			if ( var_14 > 0 )
+			
+			if ( entitlement_xp > 0 ) //we do have an entitlement xp multiplier
 			{
-				if ( isLastRestXPAward( var_1 ) )
+				//adding prestige bonus to entitlement bonus
+				if ( prestigeBonus_xp > 0 )
+					entitlement_xp += prestigeBonus_xp;
+				
+				value = int( ( value * level.xpScale ) * entitlement_xp );
+			}
+			else if ( prestigeBonus_xp > 0 ) //no entitlement xp multiplier, just prestige bonus
+			{
+				value = int( value * level.xpScale * prestigeBonus_xp );
+			}
+			else //no entitlement xp multiplier, or prestige bonus
+			{
+				value = int( value * level.xpScale );	
+			}
+						
+			restXPAwarded = getRestXPAward( value );
+			value += restXPAwarded;
+			if ( restXPAwarded > 0 )
+			{
+				if ( isLastRestXPAward( value ) )
 					thread maps\mp\gametypes\_hud_message::splashNotify( "rested_done" );
 
-				var_8 = 1;
+				gotRestXP = true;
 			}
-
 			break;
-
 		case "challenge":
-			var_10 = 0;
-
-			if ( self getplayerdata( "challengeXPMultiplierTimePlayed", 0 ) < self.bufferedChildStatsMax["challengeXPMaxMultiplierTimePlayed"][0] )
+			entitlement_xp = 0;
+			if ( self getPlayerData( "challengeXPMultiplierTimePlayed", 0 ) < self.bufferedChildStatsMax[ "challengeXPMaxMultiplierTimePlayed" ][ 0 ] )
 			{
-				var_10 += int( self getplayerdata( "challengeXPMultiplier", 0 ) );
-
-				if ( var_10 > 0 )
-					var_1 = int( var_1 * var_10 );
+				entitlement_xp += int( self getPlayerData( "challengeXPMultiplier", 0 ) );
+				if ( entitlement_xp > 0 )
+					value = int( value * entitlement_xp );
 			}
 
 			break;
 	}
-
-	if ( !var_8 )
+	
+	if ( !gotRestXP )
 	{
-		if ( self getplayerdata( "restXPGoal" ) > getRankXP() )
-			self setplayerdata( "restXPGoal", self getplayerdata( "restXPGoal" ) + var_2 );
+		// if we didn't get rest XP for this type, we push the rest XP goal ahead so we didn't waste it
+		if ( self getPlayerData( "restXPGoal" ) > self getRankXP() )
+			self setPlayerData( "restXPGoal", self getPlayerData( "restXPGoal" ) + value );
 	}
+	
+	oldxp = self getRankXP();
+	self.xpGains[type] += value;
+	
+	self incRankXP( value );
 
-	var_15 = getRankXP();
-	self.xpGains[var_1] = self.xpGains[var_1] + var_2;
-	incRankXP( var_2 );
+	if ( self rankingEnabled() && updateRank( oldxp ) )
+		self thread updateRankAnnounceHUD();
 
-	if ( maps\mp\_utility::rankingEnabled() && updateRank( var_15 ) )
-		thread updateRankAnnounceHUD();
+	// Set the XP stat after any unlocks, so that if the final stat set gets lost the unlocks won't be gone for good.
+	self syncXPStat();
 
-	syncXPStat();
-	var_16 = maps\mp\gametypes\_missions::isWeaponChallenge( var_5 );
+	// if this is a weapon challenge then set the weapon
+	weaponChallenge = maps\mp\gametypes\_missions::isWeaponChallenge( challengeName );
+	if( weaponChallenge )
+		weapon = self GetCurrentWeapon();
 
-	if ( var_16 )
-		var_3 = self getcurrentweapon();
-
-	if ( var_1 == "shield_damage" )
+	// riot shield gives xp for taking shield damage
+	if( type == "shield_damage" )
 	{
-		var_3 = self getcurrentweapon();
-		var_4 = "MOD_MELEE";
+		weapon = self GetCurrentWeapon();
+		sMeansOfDeath = "MOD_MELEE";
 	}
-
-	if ( weaponShouldGetXP( var_3, var_4 ) || var_16 )
+	
+	//////////////////////////////////////////////////////////////
+	// WEAPON SHIT
+	// check for weapon xp gains, they need to have cac unlocked before we start weapon xp gains
+	if( weaponShouldGetXP( weapon, sMeansOfDeath ) || weaponChallenge ) 
 	{
-		var_17 = strtok( var_3, "_" );
-
-		if ( var_17[0] == "iw5" )
-			var_18 = var_17[0] + "_" + var_17[1];
-		else if ( var_17[0] == "alt" )
-			var_18 = var_17[1] + "_" + var_17[2];
+		// we just want the weapon name up to the first underscore
+		weaponTokens = StrTok( weapon, "_" );
+		//curWeapon = self GetCurrentWeapon();
+		
+		if ( weaponTokens[0] == "iw5" )
+			weaponName = weaponTokens[0] + "_" + weaponTokens[1];
+		else if ( weaponTokens[0] == "alt" )
+			weaponName = weaponTokens[1] + "_" + weaponTokens[2];
 		else
-			var_18 = var_17[0];
+			weaponName = weaponTokens[0];
+		
+		if( weaponTokens[0] == "gl" )
+			weaponName = weaponTokens[1];
 
-		if ( var_17[0] == "gl" )
-			var_18 = var_17[1];
-
-		if ( self isitemunlocked( var_18 ) )
+		if( /*IsDefined( curWeapon ) && curWeapon == weapon &&*/ self IsItemUnlocked( weaponName ) )
 		{
-			if ( self.primaryWeapon == var_3 || self.secondaryWeapon == var_3 || weaponaltweaponname( self.primaryWeapon ) == var_3 || isdefined( self.tookWeaponFrom ) && isdefined( self.tookWeaponFrom[var_3] ) )
+			// is the weapon their class loadout weapon or a weapon they picked up?
+			if( self.primaryWeapon == weapon || 
+				self.secondaryWeapon == weapon || 
+				WeaponAltWeaponName( self.primaryWeapon ) == weapon ||
+				( IsDefined( self.tookWeaponFrom ) && IsDefined( self.tookWeaponFrom[ weapon ] ) ) )
 			{
-				var_19 = getWeaponRankXP( var_18 );
-
-				switch ( var_1 )
+				oldWeaponXP = self getWeaponRankXP( weaponName );
+				
+				// we want normalized weapon xp kill points regardless of game mode
+				switch( type )
 				{
-					case "kill":
-						var_20 = 100;
-						break;
-
-					default:
-						var_20 = var_2;
-						break;
+				case "kill":
+					modifiedValue = WEAPONXP_KILL;				
+					break;
+				default:
+					modifiedValue = value;
+					break;
 				}
-
-				var_20 = int( var_20 * level.weaponxpscale );
-
+/#
+				if( GetDvarInt( "scr_devweaponxpmult" ) > 0 )
+					modifiedValue *= GetDvarInt( "scr_devweaponxpmult" );
+#/
+				//IW5 Prestige bonus weapon XP
 				if ( self.prestigeDoubleWeaponXp )
 				{
-					var_21 = self getplayerdata( "prestigeDoubleWeaponXpTimePlayed" );
-
-					if ( var_21 >= self.bufferedStatsMax["prestigeDoubleWeaponXpMaxTimePlayed"] )
+					howMuchWeaponXPTimePlayed = self getPlayerData( "prestigeDoubleWeaponXpTimePlayed" );
+					if ( howMuchWeaponXPTimePlayed >= self.bufferedStatsMax["prestigeDoubleWeaponXpMaxTimePlayed"] )
 					{
-						self setplayerdata( "prestigeDoubleWeaponXp", 0 );
-						self setplayerdata( "prestigeDoubleWeaponXpTimePlayed", 0 );
-						self setplayerdata( "prestigeDoubleWeaponXpMaxTimePlayed", 0 );
-						self.prestigeDoubleWeaponXp = 0;
+						self setPlayerData( "prestigeDoubleWeaponXp", true );
+						self setPlayerData( "prestigeDoubleWeaponXpTimePlayed", 0 );
+						self setPlayerData( "prestigeDoubleWeaponXpMaxTimePlayed", 0 );
+						self.prestigeDoubleWeaponXp = true;
 					}
-					else
-						var_20 *= 2;
+					else	
+					{				
+						modifiedValue *= 2;
+					}
 				}
 
-				if ( self getplayerdata( "weaponXPMultiplierTimePlayed", 0 ) < self.bufferedChildStatsMax["weaponXPMaxMultiplierTimePlayed"][0] )
+				if ( self getPlayerData( "weaponXPMultiplierTimePlayed", 999999 ) < self.bufferedChildStatsMax[ "weaponXPMaxMultiplierTimePlayed" ][ 0 ] )
 				{
-					var_22 = int( self getplayerdata( "weaponXPMultiplier", 0 ) );
-
-					if ( var_22 > 0 )
-						var_20 *= var_22;
+					weaponXPMult = int( self getPlayerData( "weaponXPMultiplier", 999999 ) );
+					if ( weaponXPMult > 0 )
+						modifiedValue *= weaponXPMult;
 				}
+				
+				newWeaponXP = oldWeaponXP + modifiedValue;
 
-				var_23 = var_19 + var_20;
-
-				if ( !isWeaponMaxRank( var_18 ) )
+				if( !isWeaponMaxRank( weaponName ) )
 				{
-					var_24 = getWeaponMaxRankXP( var_18 );
-
-					if ( var_23 > var_24 )
+					// make sure we don't give more than the max.
+					weaponMaxRankXP = getWeaponMaxRankXP( weaponName );
+					if( newWeaponXP > weaponMaxRankXP )
 					{
-						var_23 = var_24;
-						var_20 = var_24 - var_19;
+						newWeaponXP = weaponMaxRankXP;
+						modifiedValue = weaponMaxRankXP - oldWeaponXP;
 					}
-
-					if ( !isdefined( self.weaponsUsed ) )
+					
+					//for tracking weaponXP earned on a weapon per game
+					if ( !isDefined( self.weaponsUsed ) )
 					{
 						self.weaponsUsed = [];
 						self.weaponXpEarned = [];
 					}
-
-					var_25 = 0;
-					var_26 = 999;
-
-					for ( var_13 = 0; var_13 < self.weaponsUsed.size; var_13++ )
+					
+					weaponFound = false;
+					foundIndex = 999;
+					for( i = 0; i < self.weaponsUsed.size; i++ )
 					{
-						if ( self.weaponsUsed[var_13] == var_18 )
+						if ( self.weaponsUsed[i] == weaponName )
 						{
-							var_25 = 1;
-							var_26 = var_13;
+							weaponFound = true;
+							foundIndex = i;
 						}
 					}
-
-					if ( var_25 )
-						self.weaponXpEarned[var_26] = self.weaponXpEarned[var_26] + var_20;
+					
+					if ( weaponFound )
+					{
+						self.weaponXpEarned[foundIndex] += modifiedValue;
+					}
 					else
 					{
-						self.weaponsUsed[self.weaponsUsed.size] = var_18;
-						self.weaponXpEarned[self.weaponXpEarned.size] = var_20;
+						self.weaponsUsed[self.weaponsUsed.size] = weaponName;
+						self.weaponXpEarned[self.weaponXpEarned.size] = modifiedValue;
 					}
 
-					self setplayerdata( "weaponXP", var_18, var_23 );
-					maps\mp\_matchdata::logWeaponStat( var_18, "XP", var_20 );
-					maps\mp\_utility::incPlayerStat( "weaponxpearned", var_20 );
-
-					if ( maps\mp\_utility::rankingEnabled() && updateWeaponRank( var_23, var_18 ) )
-						thread updateWeaponRankAnnounceHUD();
+					self SetPlayerData( "weaponXP", weaponName, newWeaponXP );
+					self maps\mp\_matchdata::logWeaponStat( weaponName, "XP", modifiedValue );
+					self incPlayerStat( "weaponxpearned", modifiedValue );
+					if ( self rankingEnabled() && updateWeaponRank( newWeaponXP, weaponName ) )
+					{
+						self thread updateWeaponRankAnnounceHUD();
+					}
 				}
 			}
 		}
 	}
+	// END.
+	//////////////////////////////////////////////////////////////
 
 	if ( !level.hardcoreMode )
 	{
-		if ( var_1 == "teamkill" )
-			thread xpPointsPopup( 0 - getScoreInfoValue( "kill" ), 0, ( 1, 0, 0 ), 0 );
+		if ( type == "teamkill" )
+		{
+			self thread xpPointsPopup( 0 - getScoreInfoValue( "kill" ), 0, (1,0,0), 0 );
+		}
 		else
 		{
-			var_27 = ( 1, 1, 0.5 );
-
-			if ( var_8 )
-				var_27 = ( 1, 0.65, 0 );
-
-			thread xpPointsPopup( var_2, var_7, var_27, 0 );
-
-			if ( var_1 == "assist" )
+			color = (1,1,0.5);
+			if ( gotRestXP )
+				color = (1,.65,0);
+			self thread xpPointsPopup( value, momentumBonus, color, 0 );
+			if ( type == "assist" )
 			{
-				if ( isdefined( self.taggedassist ) )
-					self.taggedassist = undefined;
-				else
+				assist_string = &"MP_ASSIST";
+				if( self _hasPerk( "specialty_assists" ) )
 				{
-					var_6 = &"MP_ASSIST";
-
-					if ( maps\mp\_utility::_hasPerk( "specialty_assists" ) )
+					if( !( self.pers["assistsToKill"] % 2 ) )
 					{
-						if ( !( self.pers["assistsToKill"] % 2 ) )
-							var_6 = &"MP_ASSIST_TO_KILL";
+						assist_string = &"MP_ASSIST_TO_KILL";
 					}
-
-					thread xpEventPopup( var_6 );
 				}
+				self thread maps\mp\gametypes\_rank::xpEventPopup( assist_string );
 			}
 		}
 	}
 
-	switch ( var_1 )
+	switch( type )
 	{
 		case "kill":
-		case "suicide":
 		case "headshot":
-		case "assist":
+		case "suicide":
 		case "teamkill":
+		case "assist":
 		case "capture":
 		case "defend":
-		case "assault":
 		case "return":
 		case "pickup":
+		case "assault":
 		case "plant":
 		case "defuse":
 		case "kill_confirmed":
@@ -660,276 +715,298 @@ giveRankXP( var_0, var_1, var_2, var_3, var_4 )
 		case "kill_as_juggernaut":
 		case "kill_juggernaut":
 		case "jugg_on_jugg":
-			self.pers["summary"]["score"] = self.pers["summary"]["score"] + var_2;
-			self.pers["summary"]["xp"] = self.pers["summary"]["xp"] + var_2;
+			self.pers["summary"]["score"] += value;
+			self.pers["summary"]["xp"] += value;
 			break;
 
 		case "win":
 		case "loss":
 		case "tie":
-			self.pers["summary"]["match"] = self.pers["summary"]["match"] + var_2;
-			self.pers["summary"]["xp"] = self.pers["summary"]["xp"] + var_2;
+			self.pers["summary"]["match"] += value;
+			self.pers["summary"]["xp"] += value;
 			break;
 
 		case "challenge":
-			self.pers["summary"]["challenge"] = self.pers["summary"]["challenge"] + var_2;
-			self.pers["summary"]["xp"] = self.pers["summary"]["xp"] + var_2;
+			self.pers["summary"]["challenge"] += value;
+			self.pers["summary"]["xp"] += value;
 			break;
-
+			
 		default:
-			self.pers["summary"]["misc"] = self.pers["summary"]["misc"] + var_2;
-			self.pers["summary"]["xp"] = self.pers["summary"]["xp"] + var_2;
+			self.pers["summary"]["misc"] += value;	//keeps track of ungrouped match xp reward
+			self.pers["summary"]["match"] += value;
+			self.pers["summary"]["xp"] += value;
 			break;
 	}
 }
 
-weaponShouldGetXP( var_0, var_1 )
+weaponShouldGetXP( weapon, meansOfDeath )
 {
-	if ( self isitemunlocked( "cac" ) && !maps\mp\_utility::isJuggernaut() && isdefined( var_0 ) && isdefined( var_1 ) && !maps\mp\_utility::isKillstreakWeapon( var_0 ) )
+	if( self IsItemUnlocked( "cac" ) &&
+		!self isJuggernaut() &&
+		IsDefined( weapon ) &&
+		IsDefined( meansOfDeath ) &&
+		!isKillstreakWeapon( weapon ) )
 	{
-		if ( maps\mp\_utility::isBulletDamage( var_1 ) )
-			return 1;
-
-		if ( isexplosivedamagemod( var_1 ) || var_1 == "MOD_IMPACT" )
+		if( isBulletDamage( meansOfDeath ) )
 		{
-			if ( maps\mp\_utility::getWeaponClass( var_0 ) == "weapon_projectile" || maps\mp\_utility::getWeaponClass( var_0 ) == "weapon_assault" )
-				return 1;
+			return true;
 		}
-
-		if ( var_1 == "MOD_MELEE" )
+		if( IsExplosiveDamageMOD( meansOfDeath ) || meansOfDeath == "MOD_IMPACT" )
 		{
-			if ( maps\mp\_utility::getWeaponClass( var_0 ) == "weapon_riot" )
-				return 1;
+			if( getWeaponClass( weapon ) == "weapon_projectile" || getWeaponClass( weapon ) == "weapon_assault" )
+				return true;
+		}
+		if( meansOfDeath == "MOD_MELEE" )
+		{
+			if( getWeaponClass( weapon ) == "weapon_riot" )
+				return true;
 		}
 	}
 
-	return 0;
+	return false;
 }
 
-updateRank( var_0 )
+updateRank( oldxp )
 {
-	var_1 = getRank();
+	newRankId = self getRank();
+	if ( newRankId == self.pers["rank"] )
+		return false;
 
-	if ( var_1 == self.pers["rank"] )
-		return 0;
+	oldRank = self.pers["rank"];
+	self.pers["rank"] = newRankId;
 
-	var_2 = self.pers["rank"];
-	self.pers["rank"] = var_1;
-	self setrank( var_1 );
-	return 1;
+	//self logString( "promoted from " + oldRank + " to " + newRankId + " timeplayed: " + self maps\mp\gametypes\_persistence::statGet( "timePlayedTotal" ) );		
+	println( "promoted " + self.name + " from rank " + oldRank + " to " + newRankId + ". Experience went from " + oldxp + " to " + self getRankXP() + "." );
+	
+	self setRank( newRankId );
+	
+	return true;
 }
 
-updateWeaponRank( var_0, var_1 )
+updateWeaponRank( oldxp, weapon )
 {
-	var_2 = getWeaponRank( var_1 );
+	// NOTE: weapon is already coming in tokenized, so it should be the weapon without attachments and _mp
+	newRankId = self getWeaponRank( weapon );
+	if ( newRankId == self.pers[ "weaponRank" ] )
+		return false;
 
-	if ( var_2 == self getplayerdata( "weaponRank", var_1 ) )
-		return 0;
+	oldRank = self.pers[ "weaponRank" ];
+	self.pers[ "weaponRank" ] = newRankId;
+	self SetPlayerData( "weaponRank", weapon, newRankId );
 
-	self.pers["weaponRank"] = var_2;
-	self setplayerdata( "weaponRank", var_1, var_2 );
-	thread maps\mp\gametypes\_missions::masteryChallengeProcess( var_1 );
-	return 1;
+	//self logString( "promoted from " + oldRank + " to " + newRankId + " timeplayed: " + self maps\mp\gametypes\_persistence::statGet( "timePlayedTotal" ) );		
+	println( "promoted " + self.name + "'s weapon from rank " + oldRank + " to " + newRankId + ". Experience went from " + oldxp + " to " + self getWeaponRankXP( weapon ) + "." );
+
+	// now that we've ranked up, process the mastery challenge
+	self thread maps\mp\gametypes\_missions::masteryChallengeProcess( weapon );
+
+	return true;
 }
 
 updateRankAnnounceHUD()
 {
-	self endon( "disconnect" );
-	self notify( "update_rank" );
-	self endon( "update_rank" );
-	var_0 = self.pers["team"];
+	self endon("disconnect");
 
-	if ( !isdefined( var_0 ) )
-		return;
+	self notify("update_rank");
+	self endon("update_rank");
 
-	if ( !maps\mp\_utility::levelFlag( "game_over" ) )
-		level common_scripts\utility::waittill_notify_or_timeout( "game_over", 0.25 );
+	team = self.pers["team"];
+	if ( !isdefined( team ) )
+		return;	
 
-	var_1 = getRankInfoFull( self.pers["rank"] );
-	var_2 = level.rankTable[self.pers["rank"]][1];
-	var_3 = int( var_2[var_2.size - 1] );
+	// give challenges and other XP a chance to process
+	// also ensure that post game promotions happen asap
+	if ( !levelFlag( "game_over" ) )
+		level waittill_notify_or_timeout( "game_over", 0.25 );
+	
+	
+	newRankName = self getRankInfoFull( self.pers["rank"] );	
+	rank_char = level.rankTable[self.pers["rank"]][1];
+	subRank = int(rank_char[rank_char.size-1]);
+	
 	thread maps\mp\gametypes\_hud_message::promotionSplashNotify();
 
-	if ( var_3 > 1 )
+	if ( subRank > 1 )
 		return;
-
-	for ( var_4 = 0; var_4 < level.players.size; var_4++ )
+	
+	for ( i = 0; i < level.players.size; i++ )
 	{
-		var_5 = level.players[var_4];
-		var_6 = var_5.pers["team"];
-
-		if ( isdefined( var_6 ) && var_5 != self )
+		player = level.players[i];
+		playerteam = player.pers["team"];
+		if ( isdefined( playerteam ) && player != self )
 		{
-			if ( var_6 == var_0 )
-				var_5 iprintln( &"RANK_PLAYER_WAS_PROMOTED", self, var_1 );
+			if ( playerteam == team )
+				player iPrintLn( &"RANK_PLAYER_WAS_PROMOTED", self, newRankName );
 		}
 	}
 }
 
 updateWeaponRankAnnounceHUD()
 {
-	self endon( "disconnect" );
-	self notify( "update_weapon_rank" );
-	self endon( "update_weapon_rank" );
-	var_0 = self.pers["team"];
+	self endon("disconnect");
 
-	if ( !isdefined( var_0 ) )
-		return;
+	self notify("update_weapon_rank");
+	self endon("update_weapon_rank");
 
-	if ( !maps\mp\_utility::levelFlag( "game_over" ) )
-		level common_scripts\utility::waittill_notify_or_timeout( "game_over", 0.25 );
+	team = self.pers["team"];
+	if ( !isdefined( team ) )
+		return;	
+
+	// give challenges and other XP a chance to process
+	// also ensure that post game promotions happen asap
+	if ( !levelFlag( "game_over" ) )
+		level waittill_notify_or_timeout( "game_over", 0.25 );
 
 	thread maps\mp\gametypes\_hud_message::weaponPromotionSplashNotify();
+
+	//for ( i = 0; i < level.players.size; i++ )
+	//{
+	//	player = level.players[i];
+	//	playerteam = player.pers["team"];
+	//	if ( isdefined( playerteam ) && player != self )
+	//	{
+	//		if ( playerteam == team )
+	//			player iPrintLn( &"RANK_WEAPON_WAS_PROMOTED", self );
+	//	}
+	//}
 }
 
 endGameUpdate()
 {
-	var_0 = self;
+	player = self;			
 }
 
 createXpPointsPopup()
 {
-	var_0 = newclienthudelem( self );
-	var_0.horzalign = "center";
-	var_0.vertalign = "middle";
-	var_0.alignx = "center";
-	var_0.aligny = "middle";
-	var_0.x = 30;
-
-	if ( level.splitscreen )
-		var_0.y = -30;
+	hud_xpPointsPopup = newClientHudElem( self );
+	hud_xpPointsPopup.horzAlign = "center";
+	hud_xpPointsPopup.vertAlign = "middle";
+	hud_xpPointsPopup.alignX = "center";
+	hud_xpPointsPopup.alignY = "middle";
+	hud_xpPointsPopup.x = 30;
+	if ( level.splitScreen )
+		hud_xpPointsPopup.y = -30;
 	else
-		var_0.y = -50;
-
-	var_0.font = "hudbig";
-	var_0.fontScale = 0.65;
-	var_0.archived = 0;
-	var_0.color = ( 0.5, 0.5, 0.5 );
-	var_0.sort = 10000;
-	var_0 maps\mp\gametypes\_hud::fontPulseInit( 3.0 );
-	return var_0;
+		hud_xpPointsPopup.y = -50;
+	hud_xpPointsPopup.font = "hudbig";
+	hud_xpPointsPopup.fontscale = 0.65;
+	hud_xpPointsPopup.archived = false;
+	hud_xpPointsPopup.color = (0.5,0.5,0.5);
+	hud_xpPointsPopup.sort = 10000;
+	hud_xpPointsPopup maps\mp\gametypes\_hud::fontPulseInit( 3.0 );	
+	return hud_xpPointsPopup;
 }
 
-xpPointsPopup( var_0, var_1, var_2, var_3 )
+xpPointsPopup( amount, bonus, hudColor, glowAlpha )
 {
 	self endon( "disconnect" );
 	self endon( "joined_team" );
 	self endon( "joined_spectators" );
 
-	if ( var_0 == 0 )
+	if ( amount == 0 )
 		return;
 
 	self notify( "xpPointsPopup" );
 	self endon( "xpPointsPopup" );
-	self.xpUpdateTotal = self.xpUpdateTotal + var_0;
-	self.bonusUpdateTotal = self.bonusUpdateTotal + var_1;
-	wait 0.05;
+
+	self.xpUpdateTotal += amount;
+	self.bonusUpdateTotal += bonus;
+
+	wait ( 0.05 );
 
 	if ( self.xpUpdateTotal < 0 )
 		self.hud_xpPointsPopup.label = &"";
 	else
 		self.hud_xpPointsPopup.label = &"MP_PLUS";
 
-	self.hud_xpPointsPopup.color = var_2;
-	self.hud_xpPointsPopup.glowcolor = var_2;
-	self.hud_xpPointsPopup.glowalpha = var_3;
-	self.hud_xpPointsPopup setvalue( self.xpUpdateTotal );
+	self.hud_xpPointsPopup.color = hudColor;
+	self.hud_xpPointsPopup.glowColor = hudColor;
+	self.hud_xpPointsPopup.glowAlpha = glowAlpha;
+
+	self.hud_xpPointsPopup setValue(self.xpUpdateTotal);
 	self.hud_xpPointsPopup.alpha = 0.85;
 	self.hud_xpPointsPopup thread maps\mp\gametypes\_hud::fontPulse( self );
-	var_4 = max( int( self.bonusUpdateTotal / 20 ), 1 );
 
+	increment = max( int( self.bonusUpdateTotal / 20 ), 1 );
+		
 	if ( self.bonusUpdateTotal )
 	{
 		while ( self.bonusUpdateTotal > 0 )
 		{
-			self.xpUpdateTotal = self.xpUpdateTotal + min( self.bonusUpdateTotal, var_4 );
-			self.bonusUpdateTotal = self.bonusUpdateTotal - min( self.bonusUpdateTotal, var_4 );
-			self.hud_xpPointsPopup setvalue( self.xpUpdateTotal );
-			wait 0.05;
+			self.xpUpdateTotal += min( self.bonusUpdateTotal, increment );
+			self.bonusUpdateTotal -= min( self.bonusUpdateTotal, increment );
+			
+			self.hud_xpPointsPopup setValue( self.xpUpdateTotal );
+			
+			wait ( 0.05 );
 		}
-	}
+	}	
 	else
-		wait 1.0;
+	{
+		wait ( 1.0 );
+	}
 
-	self.hud_xpPointsPopup fadeovertime( 0.75 );
+	self.hud_xpPointsPopup fadeOverTime( 0.75 );
 	self.hud_xpPointsPopup.alpha = 0;
-	self.xpUpdateTotal = 0;
+	
+	self.xpUpdateTotal = 0;		
 }
 
 createXpEventPopup()
 {
-	var_0 = newclienthudelem( self );
-	var_0.children = [];
-	var_0.horzalign = "center";
-	var_0.vertalign = "middle";
-	var_0.alignx = "center";
-	var_0.aligny = "middle";
-	var_0.x = 55;
-
-	if ( level.splitscreen )
-		var_0.y = -20;
+	hud_xpEventPopup = newClientHudElem( self );
+	hud_xpEventPopup.children = [];		
+	hud_xpEventPopup.horzAlign = "center";
+	hud_xpEventPopup.vertAlign = "middle";
+	hud_xpEventPopup.alignX = "center";
+	hud_xpEventPopup.alignY = "middle";
+	hud_xpEventPopup.x = 55;
+	if ( level.splitScreen )
+		hud_xpEventPopup.y = -20;
 	else
-		var_0.y = -35;
-
-	var_0.font = "hudbig";
-	var_0.fontScale = 0.65;
-	var_0.archived = 0;
-	var_0.color = ( 0.5, 0.5, 0.5 );
-	var_0.sort = 10000;
-	var_0.elemType = "msgText";
-	var_0 maps\mp\gametypes\_hud::fontPulseInit( 3.0 );
-	return var_0;
+		hud_xpEventPopup.y = -35;
+	hud_xpEventPopup.font = "hudbig";
+	hud_xpEventPopup.fontscale = 0.65;
+	hud_xpEventPopup.archived = false;
+	hud_xpEventPopup.color = (0.5,0.5,0.5);
+	hud_xpEventPopup.sort = 10000;
+	hud_xpEventPopup.elemType = "msgText";
+	hud_xpEventPopup maps\mp\gametypes\_hud::fontPulseInit( 3.0 );
+	return hud_xpEventPopup;
 }
 
-xpeventpopupfinalize( var_0, var_1, var_2 )
+xpEventPopup( event, hudColor, glowAlpha )
 {
 	self endon( "disconnect" );
 	self endon( "joined_team" );
 	self endon( "joined_spectators" );
+
 	self notify( "xpEventPopup" );
 	self endon( "xpEventPopup" );
 
-	if ( level.hardcoreMode )
-		return;
+	wait ( 0.05 );
 
-	wait 0.05;
+	/*if ( self.spUpdateTotal < 0 )
+		self.hud_xpEventPopup.label = &"";
+	else
+		self.hud_xpEventPopup.label = &"MP_PLUS";*/
+		
+	if ( !isDefined( hudColor ) )
+		hudColor = (1,1,0.5);
+	if ( !isDefined( glowAlpha ) )
+		glowAlpha = 0;
 
-	if ( !isdefined( var_1 ) )
-		var_1 = ( 1, 1, 0.5 );
+	self.hud_xpEventPopup.color = hudColor;
+	self.hud_xpEventPopup.glowColor = hudColor;
+	self.hud_xpEventPopup.glowAlpha = glowAlpha;
 
-	if ( !isdefined( var_2 ) )
-		var_2 = 0;
-
-	if ( !isdefined( self ) )
-		return;
-
-	self.hud_xpEventPopup.color = var_1;
-	self.hud_xpEventPopup.glowcolor = var_1;
-	self.hud_xpEventPopup.glowalpha = var_2;
-	self.hud_xpEventPopup settext( var_0 );
+	self.hud_xpEventPopup setText(event);
 	self.hud_xpEventPopup.alpha = 0.85;
-	wait 1.0;
 
-	if ( !isdefined( self ) )
-		return;
-
-	self.hud_xpEventPopup fadeovertime( 0.75 );
-	self.hud_xpEventPopup.alpha = 0;
-	self notify( "PopComplete" );
-}
-
-xpeventpopupterminate()
-{
-	self endon( "PopComplete" );
-	common_scripts\utility::waittill_any( "joined_team", "joined_spectators" );
-	self.hud_xpEventPopup fadeovertime( 0.05 );
-	self.hud_xpEventPopup.alpha = 0;
-}
-
-xpEventPopup( var_0, var_1, var_2 )
-{
-	thread xpeventpopupfinalize( var_0, var_1, var_2 );
-	thread xpeventpopupterminate();
+	wait ( 1.0 );
+	
+	self.hud_xpEventPopup fadeOverTime( 0.75 );
+	self.hud_xpEventPopup.alpha = 0;	
 }
 
 removeRankHUD()
@@ -938,93 +1015,92 @@ removeRankHUD()
 }
 
 getRank()
-{
-	var_0 = self.pers["rankxp"];
-	var_1 = self.pers["rank"];
-
-	if ( var_0 < getRankInfoMinXP( var_1 ) + getRankInfoXPAmt( var_1 ) )
-		return var_1;
+{	
+	rankXp = self.pers["rankxp"];
+	rankId = self.pers["rank"];
+	
+	if ( rankXp < (getRankInfoMinXP( rankId ) + getRankInfoXPAmt( rankId )) )
+		return rankId;
 	else
-		return getRankForXp( var_0 );
+		return self getRankForXp( rankXp );
 }
 
-getWeaponRank( var_0 )
-{
-	var_1 = self getplayerdata( "weaponXP", var_0 );
-	return getWeaponRankForXp( var_1, var_0 );
+getWeaponRank( weapon )
+{	
+	// NOTE: weapon is already coming in tokenized, so it should be the weapon without attachments and _mp
+	rankXp = self GetPlayerData( "weaponXP", weapon );
+	return self getWeaponRankForXp( rankXp, weapon );
 }
 
-levelForExperience( var_0 )
+levelForExperience( experience )
 {
-	return getRankForXp( var_0 );
+	return getRankForXP( experience );
 }
 
-weaponLevelForExperience( var_0 )
+weaponLevelForExperience( experience )
 {
-	return getWeaponRankForXp( var_0 );
+	return getWeaponRankForXP( experience );
 }
 
 getCurrentWeaponXP()
 {
-	var_0 = self getcurrentweapon();
-
-	if ( isdefined( var_0 ) )
-		return self getplayerdata( "weaponXP", var_0 );
+	weapon = self GetCurrentWeapon();
+	if( IsDefined( weapon ) )
+	{
+		return self GetPlayerData( "weaponXP", weapon );	
+	}
 
 	return 0;
 }
 
-getRankForXp( var_0 )
+getRankForXp( xpVal )
 {
-	var_1 = 0;
-	var_2 = level.rankTable[var_1][1];
-
-	while ( isdefined( var_2 ) && var_2 != "" )
+	rankId = 0;
+	rankName = level.rankTable[rankId][1];
+	assert( isDefined( rankName ) );
+	
+	while ( isDefined( rankName ) && rankName != "" )
 	{
-		if ( var_0 < getRankInfoMinXP( var_1 ) + getRankInfoXPAmt( var_1 ) )
-			return var_1;
+		if ( xpVal < getRankInfoMinXP( rankId ) + getRankInfoXPAmt( rankId ) )
+			return rankId;
 
-		var_1++;
-
-		if ( isdefined( level.rankTable[var_1] ) )
-		{
-			var_2 = level.rankTable[var_1][1];
-			continue;
-		}
-
-		var_2 = undefined;
+		rankId++;
+		if ( isDefined( level.rankTable[rankId] ) )
+			rankName = level.rankTable[rankId][1];
+		else
+			rankName = undefined;
 	}
-
-	var_1--;
-	return var_1;
+	
+	rankId--;
+	return rankId;
 }
 
-getWeaponRankForXp( var_0, var_1 )
+getWeaponRankForXp( xpVal, weapon )
 {
-	if ( !isdefined( var_0 ) )
-		var_0 = 0;
+	// NOTE: weapon is already coming in tokenized, so it should be the weapon without attachments and _mp
+	if( !IsDefined( xpVal ) )
+		xpVal = 0;
 
-	var_2 = tablelookup( "mp/statstable.csv", 4, var_1, 2 );
-	var_3 = int( tablelookup( "mp/weaponRankTable.csv", 0, var_2, 1 ) );
-
-	for ( var_4 = 0; var_4 < var_3 + 1; var_4++ )
+	weaponClass = tablelookup( "mp/statstable.csv", 4, weapon, 2 );
+	weaponMaxRank = int( tableLookup( "mp/weaponRankTable.csv", 0, weaponClass, 1 ) );
+	for( rankId = 0; rankId < weaponMaxRank + 1; rankId++ )
 	{
-		if ( var_0 < getWeaponRankInfoMinXP( var_4 ) + getWeaponRankInfoXPAmt( var_4 ) )
-			return var_4;
+		if ( xpVal < getWeaponRankInfoMinXP( rankId ) + getWeaponRankInfoXPAmt( rankId ) )
+			return rankId;
 	}
 
-	return var_4 - 1;
+	return ( rankId - 1 );
 }
 
 getSPM()
 {
-	var_0 = getRank() + 1;
-	return ( 3 + var_0 * 0.5 ) * 10;
+	rankLevel = self getRank() + 1;
+	return (3 + (rankLevel * 0.5))*10;
 }
 
 getPrestigeLevel()
 {
-	return maps\mp\gametypes\_persistence::statGet( "prestige" );
+	return self maps\mp\gametypes\_persistence::statGet( "prestige" );
 }
 
 getRankXP()
@@ -1032,78 +1108,186 @@ getRankXP()
 	return self.pers["rankxp"];
 }
 
-getWeaponRankXP( var_0 )
+getWeaponRankXP( weapon )
 {
-	return self getplayerdata( "weaponXP", var_0 );
+	return self GetPlayerData( "weaponXP", weapon );
 }
 
-getWeaponMaxRankXP( var_0 )
+getWeaponMaxRankXP( weapon )
 {
-	var_1 = tablelookup( "mp/statstable.csv", 4, var_0, 2 );
-	var_2 = int( tablelookup( "mp/weaponRankTable.csv", 0, var_1, 1 ) );
-	var_3 = getWeaponRankInfoMaxXp( var_2 );
-	return var_3;
+	// NOTE: weapon is already coming in tokenized, so it should be the weapon without attachments and _mp
+	weaponClass = tablelookup( "mp/statstable.csv", 4, weapon, 2 );
+	weaponMaxRank = int( tableLookup( "mp/weaponRankTable.csv", 0, weaponClass, 1 ) );
+	weaponMaxRankXP = getWeaponRankInfoMaxXp( weaponMaxRank );
+
+	return weaponMaxRankXP;
 }
 
-isWeaponMaxRank( var_0 )
-{
-	var_1 = self getplayerdata( "weaponXP", var_0 );
-	var_2 = getWeaponMaxRankXP( var_0 );
-	return var_1 >= var_2;
+isWeaponMaxRank( weapon )
+{	
+	// NOTE: weapon is already coming in tokenized, so it should be the weapon without attachments and _mp
+	weaponRankXP = self GetPlayerData( "weaponXP", weapon );
+	weaponMaxRankXP = getWeaponMaxRankXP( weapon );
+
+	return ( weaponRankXP >= weaponMaxRankXP );
 }
 
-incRankXP( var_0 )
+// TODO: waiting to see how we decide to do this
+//checkWeaponUnlocks( weapon )
+//{
+//	// see if the weapon has unlocked anything new
+//	// NOTE: weapon is already coming in tokenized, so it should be the weapon without attachments and _mp
+//	weaponClass = tablelookup( "mp/statstable.csv", 4, weapon, 2 );
+//	
+//	weaponAttachmentCol = tablelookup( "mp/statstable.csv", 0, weaponClass, 2 );
+//	weaponCamoCol = tablelookup( "mp/statstable.csv", 0, weaponClass, 3 );
+//	weaponBuffCol = tablelookup( "mp/statstable.csv", 0, weaponClass, 4 );
+//	weaponCustomCol = tablelookup( "mp/statstable.csv", 0, weaponClass, 5 );
+//
+//	weaponRank = self getWeaponRank( weapon );
+//
+//	attachment = tablelookup( "mp/statstable.csv", 0, weaponRank, weaponAttachmentCol );
+//	if( attachment != "" )
+//	{
+//		// unlocked a new attachment
+//		self SetPlayerData( "attachmentNew", weapon, attachment, true );
+//	}
+//
+//	// TODO: when we get camos online
+//	//camo = tablelookup( "mp/statstable.csv", 0, weaponRank, weaponCamoCol );
+//	//if( camo != "" )
+//	//{
+//	//	// unlocked a new camo
+//	//	self SetPlayerData( "camoNew", weapon, camo, true );
+//	//}
+//
+//	buff = tablelookup( "mp/statstable.csv", 0, weaponRank, weaponBuffCol );
+//	if( buff != "" )
+//	{
+//		// unlocked a new buff
+//		self SetPlayerData( "perkNew", weapon, buff, true );
+//	}
+//
+//	// TODO: when we get customs online
+//	//custom = tablelookup( "mp/statstable.csv", 0, weaponRank, weaponCustomCol );
+//	//if( custom != "" )
+//	//{
+//	//	// unlocked a new custom
+//	//	self SetPlayerData( "customNew", weapon, custom, true );
+//	//}
+//}
+
+incRankXP( amount )
 {
-	if ( !maps\mp\_utility::rankingEnabled() )
+	if ( !self rankingEnabled() )
 		return;
 
-	if ( isdefined( self.isCheater ) )
+	if ( isDefined( self.isCheater ) )
 		return;
-
-	var_1 = getRankXP();
-	var_2 = int( min( var_1, getRankInfoMaxXp( level.maxRank ) ) ) + var_0;
-
-	if ( self.pers["rank"] == level.maxRank && var_2 >= getRankInfoMaxXp( level.maxRank ) )
-		var_2 = getRankInfoMaxXp( level.maxRank );
-
-	self.pers["rankxp"] = var_2;
+	
+	xp = self getRankXP();
+	newXp = (int( min( xp, getRankInfoMaxXP( level.maxRank ) ) ) + amount);
+	
+	if ( self.pers["rank"] == level.maxRank && newXp >= getRankInfoMaxXP( level.maxRank ) )
+		newXp = getRankInfoMaxXP( level.maxRank );
+	
+	self.pers["rankxp"] = newXp;
 }
 
-getRestXPAward( var_0 )
+getRestXPAward( baseXP )
 {
 	if ( !getdvarint( "scr_restxp_enable" ) )
 		return 0;
-
-	var_1 = getdvarfloat( "scr_restxp_restedAwardScale" );
-	var_2 = int( var_0 * var_1 );
-	var_3 = self getplayerdata( "restXPGoal" ) - getRankXP();
-
-	if ( var_3 <= 0 )
+	
+	restXPAwardRate = getDvarFloat( "scr_restxp_restedAwardScale" ); // as a fraction of base xp
+	
+	wantGiveRestXP = int(baseXP * restXPAwardRate);
+	mayGiveRestXP = self getPlayerData( "restXPGoal" ) - self getRankXP();
+	
+	if ( mayGiveRestXP <= 0 )
 		return 0;
-
-	return var_2;
+	
+	// we don't care about giving more rest XP than we have; we just want it to always be X2
+	//if ( wantGiveRestXP > mayGiveRestXP )
+	//	return mayGiveRestXP;
+	
+	return wantGiveRestXP;
 }
 
-isLastRestXPAward( var_0 )
+
+isLastRestXPAward( baseXP )
 {
 	if ( !getdvarint( "scr_restxp_enable" ) )
-		return 0;
+		return false;
+	
+	restXPAwardRate = getDvarFloat( "scr_restxp_restedAwardScale" ); // as a fraction of base xp
+	
+	wantGiveRestXP = int(baseXP * restXPAwardRate);
+	mayGiveRestXP = self getPlayerData( "restXPGoal" ) - self getRankXP();
 
-	var_1 = getdvarfloat( "scr_restxp_restedAwardScale" );
-	var_2 = int( var_0 * var_1 );
-	var_3 = self getplayerdata( "restXPGoal" ) - getRankXP();
-
-	if ( var_3 <= 0 )
-		return 0;
-
-	if ( var_2 >= var_3 )
-		return 1;
-
-	return 0;
+	if ( mayGiveRestXP <= 0 )
+		return false;
+	
+	if ( wantGiveRestXP >= mayGiveRestXP )
+		return true;
+		
+	return false;
 }
 
 syncXPStat()
 {
-	var_0 = getRankXP();
-	maps\mp\gametypes\_persistence::statSet( "experience", var_0 );
+	if ( level.xpScale > 4 || level.xpScale <= 0)
+		exitLevel( false );
+
+	xp = self getRankXP();
+	
+	/#
+	// Attempt to catch xp resgression
+	oldXp = self getPlayerData( "experience" );
+	assert( xp >= oldXp, "Attempted XP regression in syncXPStat - " + oldXp + " -> " + xp + " for player " + self.name );
+	#/
+	
+	self maps\mp\gametypes\_persistence::statSet( "experience", xp );
 }
+
+/#
+watchDevDvars()
+{
+	level endon( "game_ended" );
+
+	while( true )
+	{
+		if( GetDvarInt( "scr_devsetweaponmaxrank" ) > 0 )
+		{
+			// grab all of the players and max their current weapon rank
+			foreach( player in level.players )
+			{
+				if( IsDefined( player.pers[ "isBot" ] ) && player.pers[ "isBot" ] )
+					continue;
+
+				weapon = player GetCurrentWeapon();
+
+				// we just want the weapon name up to the first underscore
+				weaponTokens = StrTok( weapon, "_" );
+
+				if ( weaponTokens[0] == "iw5" )
+					weaponName = weaponTokens[0] + "_" + weaponTokens[1];
+				else if ( weaponTokens[0] == "alt" )
+					weaponName = weaponTokens[1] + "_" + weaponTokens[2];
+				else
+					weaponName = weaponTokens[0];
+
+				if( weaponTokens[0] == "gl" )
+					weaponName = weaponTokens[1];
+
+				weaponMaxRankXP = getWeaponMaxRankXP( weaponName );
+				player SetPlayerData( "weaponXP", weaponName, weaponMaxRankXP );
+				player updateWeaponRank( weaponMaxRankXP, weaponName );
+			}
+			SetDevDvar( "scr_devsetweaponmaxrank", 0 );
+		}
+
+		wait( 0.05 );
+	}
+}
+#/
