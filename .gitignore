@@ -22,6 +22,11 @@
 !/raw/bw-assets
 !/raw/bots.txt
 
+!/raw/maps/mp/gametypes
+/raw/maps/mp/gametypes/*
+!/raw/maps/mp/gametypes/_rank.gsc
+
+
 !/admin
 /admin/*
 !/admin/bot_test.cfg
