@@ -468,7 +468,7 @@ giveRankXP( var_0, var_1, var_2, var_3, var_4 )
 			break;
 	}
 
-	if ( !var_10 )
+	if ( !var_8 )
 	{
 		if ( self getplayerdata( "restXPGoal" ) > getRankXP() )
 			self setplayerdata( "restXPGoal", self getplayerdata( "restXPGoal" ) + var_2 );
