@@ -42,21 +42,21 @@ init()
 
 	if ( level.teamBased )
 	{
-		registerScoreInfo( "kill", 999999 );
-		registerScoreInfo( "headshot", 999999 );
-		registerScoreInfo( "assist", 999999 );
-		registerScoreInfo( "proximityassist", 999999 );
-		registerScoreInfo( "proximitykill", 999999 );
-		registerScoreInfo( "suicide", 999999 );
-		registerScoreInfo( "teamkill", 999999 );
+		registerScoreInfo( "kill", 100 );
+		registerScoreInfo( "headshot", 100 );
+		registerScoreInfo( "assist", 20 );
+		registerScoreInfo( "proximityassist", 20 );
+		registerScoreInfo( "proximitykill", 20 );
+		registerScoreInfo( "suicide", 0 );
+		registerScoreInfo( "teamkill", 0 );
 	}
 	else
 	{
-		registerScoreInfo( "kill", 999999 );
-		registerScoreInfo( "headshot", 999999 );
-		registerScoreInfo( "assist", 999999 );
-		registerScoreInfo( "suicide", 999999 );
-		registerScoreInfo( "teamkill", 999999 );
+		registerScoreInfo( "kill", 50 );
+		registerScoreInfo( "headshot", 50 );
+		registerScoreInfo( "assist", 0 );
+		registerScoreInfo( "suicide", 0 );
+		registerScoreInfo( "teamkill", 0 );
 	}
 	
 	registerScoreInfo( "win", 1 );
@@ -588,9 +588,9 @@ giveRankXP( type, value, weapon, sMeansOfDeath, challengeName )
 					}
 				}
 
-				if ( self getPlayerData( "weaponXPMultiplierTimePlayed", 999999 ) < self.bufferedChildStatsMax[ "weaponXPMaxMultiplierTimePlayed" ][ 0 ] )
+				if ( self getPlayerData( "weaponXPMultiplierTimePlayed", 0 ) < self.bufferedChildStatsMax[ "weaponXPMaxMultiplierTimePlayed" ][ 0 ] )
 				{
-					weaponXPMult = int( self getPlayerData( "weaponXPMultiplier", 999999 ) );
+					weaponXPMult = int( self getPlayerData( "weaponXPMultiplier", 0 ) );
 					if ( weaponXPMult > 0 )
 						modifiedValue *= weaponXPMult;
 				}
