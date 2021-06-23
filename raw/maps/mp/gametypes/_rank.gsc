@@ -606,10 +606,10 @@ giveRankXP( var_0, var_1, var_2, var_3, var_4 )
 		{
 			var_27 = ( 1, 1, 0.5 );
 
-			if ( var_10 )
+			if ( var_8 )
 				var_27 = ( 1, 0.65, 0 );
 
-			thread xpPointsPopup( var_2, var_8, var_27, 0 );
+			thread xpPointsPopup( var_2, var_7, var_27, 0 );
 
 			if ( var_1 == "assist" )
 			{
