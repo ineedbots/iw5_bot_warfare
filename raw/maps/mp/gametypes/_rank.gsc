@@ -2,22 +2,11 @@
 #include maps\mp\_utility;
 #include maps\mp\gametypes\_hud_util;
 
-// Sup
-
-//Di$oRdER :)
-
-WEAPONXP_KILL =	999999;
-
 init()
 {
 	level.scoreInfo = [];
 	level.xpScale = getDvarInt( "scr_xpscale" );
-	
-	if ( level.xpScale > 4 || level.xpScale < 0)
-		exitLevel( false );
-
-	level.xpScale = min( level.xpScale, 4 );
-	level.xpScale = max( level.xpScale, 0 );
+	level.weaponxpscale = getdvarint( "scr_weaponxpscale" );
 
 	level.rankTable = [];
 	level.weaponRankTable = [];
@@ -83,7 +72,7 @@ init()
 	
 	pId = 0;
 	rId = 0;
-	for ( pId = 0; pId <= level.maxPrestige; pId++ )
+	for ( pId = 0; pId <= min( 10, level.maxPrestige ); pId++ )
 	{
 		for ( rId = 0; rId <= level.maxRank; rId++ )
 			precacheShader( tableLookup( "mp/rankIconTable.csv", 0, rId, pId+1 ) );
@@ -435,7 +424,7 @@ giveRankXP( type, value, weapon, sMeansOfDeath, challengeName )
 		case "kill_as_juggernaut":
 		case "kill_juggernaut":
 		case "jugg_on_jugg":
-			if ( getGametypeNumLives() > 0 )
+			if ( getGametypeNumLives() > 0 && type != "shield_damage" )
 			{
 				multiplier = max(1,int( 10/getGametypeNumLives() ));
 				value = int(value * multiplier);
@@ -571,7 +560,7 @@ giveRankXP( type, value, weapon, sMeansOfDeath, challengeName )
 				switch( type )
 				{
 				case "kill":
-					modifiedValue = WEAPONXP_KILL;				
+					modifiedValue = 100;				
 					break;
 				default:
 					modifiedValue = value;
@@ -582,6 +571,7 @@ giveRankXP( type, value, weapon, sMeansOfDeath, challengeName )
 					modifiedValue *= GetDvarInt( "scr_devweaponxpmult" );
 #/
 				//IW5 Prestige bonus weapon XP
+				modifiedValue = int( modifiedValue * level.weaponxpscale );
 				if ( self.prestigeDoubleWeaponXp )
 				{
 					howMuchWeaponXPTimePlayed = self getPlayerData( "prestigeDoubleWeaponXpTimePlayed" );
@@ -733,7 +723,7 @@ giveRankXP( type, value, weapon, sMeansOfDeath, challengeName )
 			
 		default:
 			self.pers["summary"]["misc"] += value;	//keeps track of ungrouped match xp reward
-			self.pers["summary"]["match"] += value;
+			// self.pers["summary"]["match"] += value;
 			self.pers["summary"]["xp"] += value;
 			break;
 	}
@@ -787,7 +777,7 @@ updateWeaponRank( oldxp, weapon )
 {
 	// NOTE: weapon is already coming in tokenized, so it should be the weapon without attachments and _mp
 	newRankId = self getWeaponRank( weapon );
-	if ( newRankId == self.pers[ "weaponRank" ] )
+	if ( newRankId == self getplayerdata( "weaponRank", weapon ) )
 		return false;
 
 	oldRank = self.pers[ "weaponRank" ];
@@ -1236,8 +1226,8 @@ isLastRestXPAward( baseXP )
 
 syncXPStat()
 {
-	if ( level.xpScale > 4 || level.xpScale <= 0)
-		exitLevel( false );
+	//if ( level.xpScale > 4 || level.xpScale <= 0)
+	//	exitLevel( false );
 
 	xp = self getRankXP();
 	
