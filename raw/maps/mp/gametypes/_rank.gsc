@@ -4,20 +4,10 @@
 init()
 {
     level.scoreInfo = [];
+
     level.xpScale = getdvarint( "scr_xpscale" );
+    level.weaponxpscale = getdvarint( "scr_weaponxpscale" );
 
-    if ( level.xpScale > 4 || level.xpScale < 0 )
-        exitlevel( 0 );
-
-    level.xpScale = min( level.xpScale, 4 );
-    level.xpScale = max( level.xpScale, 0 );
-    level.weaponxpscale = getdvarint( "scr_weaponxpscale", 1 );
-
-    if ( level.weaponxpscale > 4 || level.weaponxpscale < 0 )
-        exitlevel( 0 );
-
-    level.weaponxpscale = min( level.weaponxpscale, 4 );
-    level.weaponxpscale = max( level.weaponxpscale, 0 );
     level.rankTable = [];
     level.weaponRankTable = [];
     precacheshader( "white" );
@@ -1108,9 +1098,6 @@ isLastRestXPAward( var_0 )
 
 syncXPStat()
 {
-    if ( level.xpScale > 4 || level.xpScale <= 0 )
-        exitlevel( 0 );
-
     var_0 = getRankXP();
     maps\mp\gametypes\_persistence::statSet( "experience", var_0 );
 }
