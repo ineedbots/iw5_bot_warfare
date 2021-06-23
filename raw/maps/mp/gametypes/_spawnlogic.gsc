@@ -355,7 +355,7 @@ getAllOtherPlayers()
 
         var_2 = level.players[var_1];
 
-        if ( var_2.sessionstate != "playing" || var_2 == self )
+        if ( var_2.sessionstate == "spectating" || var_2 == self )
             continue;
 
         var_0[var_0.size] = var_2;
@@ -397,6 +397,24 @@ getSpawnpoint_NearTeam( var_0, var_1 )
 
                 var_10 = distance( var_7.origin, level.favorCloseSpawnEnt.origin );
                 var_7.weight = var_7.weight - var_10 * level.favorCloseSpawnScalar;
+            }
+
+            if ( isdefined( level.favorclosespawnentattacker ) )
+            {
+                if ( !isdefined( level.favorclosespawnscalarattacker ) )
+                    level.favorclosespawnscalarattacker = 1;
+
+                var_10 = distance( var_7.origin, level.favorclosespawnentattacker.origin );
+                var_7.weight = var_7.weight - var_10 * level.favorclosespawnscalarattacker;
+            }
+
+            if ( isdefined( level.favorclosespawnentdefender ) )
+            {
+                if ( !isdefined( level.favorclosespawnscalardefender ) )
+                    level.favorclosespawnscalardefender = 1;
+
+                var_10 = distance( var_7.origin, level.favorclosespawnentdefender.origin );
+                var_7.weight = var_7.weight - var_10 * level.favorclosespawnscalardefender;
             }
         }
         else
@@ -503,6 +521,8 @@ getSpawnpoint_SafeSpawn( var_0 )
 
 getSpawnpoint_DM( var_0 )
 {
+    self.bestspawnpoint = undefined;
+
     if ( !isdefined( var_0 ) )
         return undefined;
 
@@ -521,7 +541,10 @@ getSpawnpoint_DM( var_0 )
 
             for ( var_7 = 0; var_7 < var_1.size; var_7++ )
             {
-                var_8 = distance( var_0[var_4].origin, var_1[var_7].origin );
+                if ( var_1[var_7].sessionstate == "dead" && isdefined( var_1[var_7].bestspawnpoint ) )
+                    var_8 = distance( var_0[var_4].origin, var_1[var_7].bestspawnpoint.origin );
+                else
+                    var_8 = distance( var_0[var_4].origin, var_1[var_7].origin );
 
                 if ( var_8 < var_3 )
                     var_6 += ( var_3 - var_8 ) / var_3;
@@ -550,7 +573,23 @@ getSpawnpoint_DM( var_0 )
     avoidSameSpawn();
     avoidWeaponDamage( var_0 );
     avoidVisibleEnemies( var_0, 0 );
-    return getSpawnpoint_Final( var_0 );
+    return getspawnpoint_final_dm( var_0 );
+}
+
+getspawnpoint_final_dm( var_0 )
+{
+    var_1 = undefined;
+
+    if ( !isdefined( var_0 ) || var_0.size == 0 )
+        return undefined;
+
+    var_1 = getBestWeightedSpawnpoint( var_0 );
+
+    if ( !isdefined( var_1 ) )
+        var_1 = var_0[randomint( var_0.size )];
+
+    self.bestspawnpoint = var_1;
+    return var_1;
 }
 
 Spawnlogic_Begin()
@@ -1057,125 +1096,138 @@ spawnPointUpdate( var_0 )
         if ( vectordot( var_1, var_11 ) < 0 && vectordot( var_14, var_11 ) > 0 )
             continue;
 
-        var_15 = spawnsighttrace( var_0, var_0.sightTracePoint, var_10.origin + ( 0, 0, 50 ) );
+        if ( var_10 getstance() == "stand" )
+            var_15 = 72;
+        else if ( var_10 getstance() == "crouch" )
+            var_15 = 54;
+        else
+            var_15 = 32;
+
+        var_16 = spawnsighttrace( var_0, var_0.origin + ( 0, 0, var_15 ), var_10.origin + ( 0, 0, var_15 ) );
         var_0.lastSightTraceTime = gettime();
 
-        if ( var_15 > 0 )
+        if ( var_16 > 0 )
         {
-            var_15 = adjustSightValue( var_15 );
+            var_16 = adjustSightValue( var_16 );
 
             if ( var_8 )
             {
-                var_0.sights[var_7] = var_0.sights[var_7] + var_15;
+                var_0.sights[var_7] = var_0.sights[var_7] + var_16;
                 continue;
             }
 
-            var_0.sights = var_0.sights + var_15;
+            var_0.sights = var_0.sights + var_16;
         }
     }
 
-    var_17 = maps\mp\_utility::getFloatProperty( "scr_spawn_enemyavoiddist", 2000 );
-    var_18 = 2000;
+    var_18 = maps\mp\_utility::getFloatProperty( "scr_spawn_enemyavoiddist", 2000 );
+    var_19 = 2000;
+    var_20 = maps\mp\_utility::getFloatProperty( "scr_spawn_enemyavoiddist_strict", 750 );
+    var_21 = maps\mp\_utility::getIntProperty( "scr_spawn_enemyavoidpenalty_strict", 50000 );
 
-    foreach ( var_7, var_20 in var_4 )
+    foreach ( var_7, var_23 in var_4 )
     {
         if ( var_4[var_7] )
             var_0.weightedDistSum[var_7] = var_0.weightedDistSum[var_7] / var_4[var_7] * var_3[var_7];
 
-        var_21 = 0;
+        var_24 = 0;
+        var_25 = var_0.minDist[var_7];
 
-        if ( var_0.minDist[var_7] < var_17 )
-            var_21 = var_18 * ( 1 - var_0.minDist[var_7] / var_17 );
+        if ( var_25 < var_18 )
+            var_24 = var_19 * ( 1 - var_25 / var_18 );
 
-        var_0.nearbyPenalty[var_7] = var_21;
+        if ( var_25 < var_20 )
+            var_24 += var_21;
+
+        var_0.nearbyPenalty[var_7] = var_24;
     }
 
-    foreach ( var_23 in level.tanks )
+    foreach ( var_27 in level.tanks )
     {
-        var_15 = spawnsighttrace( var_0, var_0.sightTracePoint, var_23.origin + ( 0, 0, 50 ) );
+        var_16 = spawnsighttrace( var_0, var_0.sightTracePoint, var_27.origin + ( 0, 0, 50 ) );
         var_0.lastSightTraceTime = gettime();
 
-        if ( var_15 <= 0 )
+        if ( var_16 <= 0 )
             continue;
 
-        var_15 = adjustSightValue( var_15 );
+        var_16 = adjustSightValue( var_16 );
 
         if ( var_8 )
         {
-            var_0.sights[var_23.team] = var_0.sights[var_23.team] + var_15;
+            var_0.sights[var_27.team] = var_0.sights[var_27.team] + var_16;
             continue;
         }
 
-        var_0.sights = var_0.sights + var_15;
+        var_0.sights = var_0.sights + var_16;
     }
 
-    foreach ( var_26 in level.turrets )
+    foreach ( var_30 in level.turrets )
     {
-        if ( !isdefined( var_26 ) )
+        if ( !isdefined( var_30 ) )
             continue;
 
-        var_15 = spawnsighttrace( var_0, var_0.sightTracePoint, var_26.origin + ( 0, 0, 50 ) );
+        var_16 = spawnsighttrace( var_0, var_0.sightTracePoint, var_30.origin + ( 0, 0, 50 ) );
         var_0.lastSightTraceTime = gettime();
 
-        if ( var_15 <= 0 )
+        if ( var_16 <= 0 )
             continue;
 
-        var_15 = adjustSightValue( var_15 );
+        var_16 = adjustSightValue( var_16 );
 
         if ( var_8 )
         {
-            var_0.sights[var_26.team] = var_0.sights[var_26.team] + var_15;
+            var_0.sights[var_30.team] = var_0.sights[var_30.team] + var_16;
             continue;
         }
 
-        var_0.sights = var_0.sights + var_15;
+        var_0.sights = var_0.sights + var_16;
     }
 
-    foreach ( var_29 in level.ims )
+    foreach ( var_33 in level.ims )
     {
-        if ( !isdefined( var_29 ) )
+        if ( !isdefined( var_33 ) )
             continue;
 
-        if ( !isdefined( var_29.attackHeightPos ) )
+        if ( !isdefined( var_33.attackHeightPos ) )
             continue;
 
-        var_15 = spawnsighttrace( var_0, var_0.sightTracePoint, var_29.attackHeightPos );
+        var_16 = spawnsighttrace( var_0, var_0.sightTracePoint, var_33.attackHeightPos );
         var_0.lastSightTraceTime = gettime();
 
-        if ( var_15 <= 0 )
+        if ( var_16 <= 0 )
             continue;
 
-        var_15 = adjustSightValue( var_15 );
+        var_16 = adjustSightValue( var_16 );
 
         if ( var_8 )
         {
-            var_0.sights[var_29.team] = var_0.sights[var_29.team] + var_15;
+            var_0.sights[var_33.team] = var_0.sights[var_33.team] + var_16;
             continue;
         }
 
-        var_0.sights = var_0.sights + var_15;
+        var_0.sights = var_0.sights + var_16;
     }
 
-    foreach ( var_32 in level.ugvs )
+    foreach ( var_36 in level.ugvs )
     {
-        if ( !isdefined( var_32 ) )
+        if ( !isdefined( var_36 ) )
             continue;
 
-        var_15 = spawnsighttrace( var_0, var_0.sightTracePoint, var_32.origin + ( 0, 0, 50 ) );
+        var_16 = spawnsighttrace( var_0, var_0.sightTracePoint, var_36.origin + ( 0, 0, 50 ) );
         var_0.lastSightTraceTime = gettime();
 
-        if ( var_15 <= 0 )
+        if ( var_16 <= 0 )
             continue;
 
-        var_15 = adjustSightValue( var_15 );
+        var_16 = adjustSightValue( var_16 );
 
         if ( var_8 )
         {
-            var_0.sights[var_32.team] = var_0.sights[var_32.team] + var_15;
+            var_0.sights[var_36.team] = var_0.sights[var_36.team] + var_16;
             continue;
         }
 
-        var_0.sights = var_0.sights + var_15;
+        var_0.sights = var_0.sights + var_16;
     }
 }
 
@@ -1225,23 +1277,37 @@ lastMinuteSightTraces( var_0 )
 
     if ( isdefined( var_1 ) )
     {
-        var_9 = spawnsighttrace( var_0, var_0.sightTracePoint, var_1.origin + ( 0, 0, 50 ) );
+        if ( var_1 getstance() == "stand" )
+            var_9 = 72;
+        else if ( var_1 getstance() == "crouch" )
+            var_9 = 54;
+        else
+            var_9 = 32;
 
-        if ( var_9 > 0 )
+        var_10 = spawnsighttrace( var_0, var_0.origin + ( 0, 0, var_9 ), var_1.origin + ( 0, 0, var_9 ) );
+
+        if ( var_10 > 0 )
         {
-            var_9 = adjustSightValue( var_9 );
-            return var_9;
+            var_10 = adjustSightValue( var_10 );
+            return var_10;
         }
     }
 
     if ( isdefined( var_3 ) )
     {
-        var_9 = spawnsighttrace( var_0, var_0.sightTracePoint, var_3.origin + ( 0, 0, 50 ) );
+        if ( var_3 getstance() == "stand" )
+            var_9 = 72;
+        else if ( var_3 getstance() == "crouch" )
+            var_9 = 54;
+        else
+            var_9 = 32;
 
-        if ( var_9 > 0 )
+        var_10 = spawnsighttrace( var_0, var_0.origin + ( 0, 0, var_9 ), var_3.origin + ( 0, 0, var_9 ) );
+
+        if ( var_10 > 0 )
         {
-            var_9 = adjustSightValue( var_9 );
-            return var_9;
+            var_10 = adjustSightValue( var_10 );
+            return var_10;
         }
     }
 
