@@ -11,6 +11,13 @@ init()
 
     level.xpScale = min( level.xpScale, 4 );
     level.xpScale = max( level.xpScale, 0 );
+    level.weaponxpscale = getdvarint( "scr_weaponxpscale", 1 );
+
+    if ( level.weaponxpscale > 4 || level.weaponxpscale < 0 )
+        exitlevel( 0 );
+
+    level.weaponxpscale = min( level.weaponxpscale, 4 );
+    level.weaponxpscale = max( level.weaponxpscale, 0 );
     level.rankTable = [];
     level.weaponRankTable = [];
     precacheshader( "white" );
@@ -70,7 +77,7 @@ init()
     var_0 = 0;
     var_1 = 0;
 
-    for ( var_0 = 0; var_0 <= level.maxPrestige; var_0++ )
+    for ( var_0 = 0; var_0 <= min( 10, level.maxPrestige ); var_0++ )
     {
         for ( var_1 = 0; var_1 <= level.maxRank; var_1++ )
             precacheshader( tablelookup( "mp/rankIconTable.csv", 0, var_1, var_0 + 1 ) );
@@ -366,17 +373,17 @@ giveRankXP( var_0, var_1, var_2, var_3, var_4 )
         case "headshot":
         case "shield_damage":
             var_1 *= self.xpScaler;
-        case "save":
         case "destroy":
-        case "assist":
         case "suicide":
+        case "assist":
         case "teamkill":
-        case "return":
         case "capture":
         case "defend":
         case "assault":
+        case "return":
         case "pickup":
         case "plant":
+        case "save":
         case "defuse":
         case "kill_confirmed":
         case "kill_denied":
@@ -393,7 +400,7 @@ giveRankXP( var_0, var_1, var_2, var_3, var_4 )
         case "kill_as_juggernaut":
         case "kill_juggernaut":
         case "jugg_on_jugg":
-            if ( maps\mp\_utility::getGametypeNumLives() > 0 )
+            if ( maps\mp\_utility::getGametypeNumLives() > 0 && var_0 != "shield_damage" )
             {
                 var_9 = max( 1, int( 10 / maps\mp\_utility::getGametypeNumLives() ) );
                 var_1 = int( var_1 * var_9 );
@@ -524,6 +531,8 @@ giveRankXP( var_0, var_1, var_2, var_3, var_4 )
                         break;
                 }
 
+                var_20 = int( var_20 * level.weaponxpscale );
+
                 if ( self.prestigeDoubleWeaponXp )
                 {
                     var_21 = self getplayerdata( "prestigeDoubleWeaponXpTimePlayed" );
@@ -632,14 +641,14 @@ giveRankXP( var_0, var_1, var_2, var_3, var_4 )
     switch ( var_1 )
     {
         case "kill":
-        case "assist":
         case "suicide":
-        case "teamkill":
         case "headshot":
-        case "return":
+        case "assist":
+        case "teamkill":
         case "capture":
         case "defend":
         case "assault":
+        case "return":
         case "pickup":
         case "plant":
         case "defuse":
@@ -673,7 +682,6 @@ giveRankXP( var_0, var_1, var_2, var_3, var_4 )
             break;
         default:
             self.pers["summary"]["misc"] = self.pers["summary"]["misc"] + var_2;
-            self.pers["summary"]["match"] = self.pers["summary"]["match"] + var_2;
             self.pers["summary"]["xp"] = self.pers["summary"]["xp"] + var_2;
             break;
     }
@@ -719,10 +727,9 @@ updateWeaponRank( var_0, var_1 )
 {
     var_2 = getWeaponRank( var_1 );
 
-    if ( var_2 == self.pers["weaponRank"] )
+    if ( var_2 == self getplayerdata( "weaponRank", var_1 ) )
         return 0;
 
-    var_3 = self.pers["weaponRank"];
     self.pers["weaponRank"] = var_2;
     self setplayerdata( "weaponRank", var_1, var_2 );
     thread maps\mp\gametypes\_missions::masteryChallengeProcess( var_1 );
