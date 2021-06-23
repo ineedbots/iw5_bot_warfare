@@ -785,7 +785,7 @@ updateWeaponRank( oldxp, weapon )
 	self SetPlayerData( "weaponRank", weapon, newRankId );
 
 	//self logString( "promoted from " + oldRank + " to " + newRankId + " timeplayed: " + self maps\mp\gametypes\_persistence::statGet( "timePlayedTotal" ) );		
-	println( "promoted " + self.name + "'s weapon from rank " + oldRank + " to " + newRankId + ". Experience went from " + oldxp + " to " + self getWeaponRankXP( weapon ) + "." );
+	// println( "promoted " + self.name + "'s weapon from rank " + oldRank + " to " + newRankId + ". Experience went from " + oldxp + " to " + self getWeaponRankXP( weapon ) + "." );
 
 	// now that we've ranked up, process the mastery challenge
 	self thread maps\mp\gametypes\_missions::masteryChallengeProcess( weapon );
