@@ -1,2333 +1,2430 @@
 // IW5 PC GSC
 // Decompiled by https://github.com/xensik/gsc-tool
 
+#include common_scripts\utility;
+#include maps\mp\_utility;
+
 init()
 {
-    level.classMap["class0"] = 0;
-    level.classMap["class1"] = 1;
-    level.classMap["class2"] = 2;
-    level.classMap["class3"] = 3;
-    level.classMap["class4"] = 4;
-    level.classMap["class5"] = 5;
-    level.classMap["class6"] = 6;
-    level.classMap["class7"] = 7;
-    level.classMap["class8"] = 8;
-    level.classMap["class9"] = 9;
-    level.classMap["class10"] = 10;
-    level.classMap["class11"] = 11;
-    level.classMap["class12"] = 12;
-    level.classMap["class13"] = 13;
-    level.classMap["class14"] = 14;
-    level.classMap["custom1"] = 0;
-    level.classMap["custom2"] = 1;
-    level.classMap["custom3"] = 2;
-    level.classMap["custom4"] = 3;
-    level.classMap["custom5"] = 4;
-    level.classMap["custom6"] = 5;
-    level.classMap["custom7"] = 6;
-    level.classMap["custom8"] = 7;
-    level.classMap["custom9"] = 8;
-    level.classMap["custom10"] = 9;
-    level.classMap["custom11"] = 10;
-    level.classMap["custom12"] = 11;
-    level.classMap["custom13"] = 12;
-    level.classMap["custom14"] = 13;
-    level.classMap["custom15"] = 14;
-    level.classMap["axis_recipe1"] = 0;
-    level.classMap["axis_recipe2"] = 1;
-    level.classMap["axis_recipe3"] = 2;
-    level.classMap["axis_recipe4"] = 3;
-    level.classMap["axis_recipe5"] = 4;
-    level.classMap["allies_recipe1"] = 0;
-    level.classMap["allies_recipe2"] = 1;
-    level.classMap["allies_recipe3"] = 2;
-    level.classMap["allies_recipe4"] = 3;
-    level.classMap["allies_recipe5"] = 4;
-    level.classMap["copycat"] = -1;
-    level.defaultClass = "CLASS_ASSAULT";
-    level.classTableName = "mp/classTable.csv";
-    level thread onPlayerConnecting();
+	level.classMap["class0"] = 0;
+	level.classMap["class1"] = 1;
+	level.classMap["class2"] = 2;
+	level.classMap["class3"] = 3;
+	level.classMap["class4"] = 4;
+	level.classMap["class5"] = 5;
+	level.classMap["class6"] = 6;
+	level.classMap["class7"] = 7;
+	level.classMap["class8"] = 8;
+	level.classMap["class9"] = 9;
+	level.classMap["class10"] = 10;
+	level.classMap["class11"] = 11;
+	level.classMap["class12"] = 12;
+	level.classMap["class13"] = 13;
+	level.classMap["class14"] = 14;
+
+	level.classMap["custom1"] = 0;
+	level.classMap["custom2"] = 1;
+	level.classMap["custom3"] = 2;
+	level.classMap["custom4"] = 3;
+	level.classMap["custom5"] = 4;
+	level.classMap["custom6"] = 5;
+	level.classMap["custom7"] = 6;
+	level.classMap["custom8"] = 7;
+	level.classMap["custom9"] = 8;
+	level.classMap["custom10"] = 9;
+	level.classMap["custom11"] = 10;
+	level.classMap["custom12"] = 11;
+	level.classMap["custom13"] = 12;
+	level.classMap["custom14"] = 13;
+	level.classMap["custom15"] = 14;
+
+	level.classMap["axis_recipe1"] = 0;
+	level.classMap["axis_recipe2"] = 1;
+	level.classMap["axis_recipe3"] = 2;
+	level.classMap["axis_recipe4"] = 3;
+	level.classMap["axis_recipe5"] = 4;
+
+	level.classMap["allies_recipe1"] = 0;
+	level.classMap["allies_recipe2"] = 1;
+	level.classMap["allies_recipe3"] = 2;
+	level.classMap["allies_recipe4"] = 3;
+	level.classMap["allies_recipe5"] = 4;
+
+	level.classMap["copycat"] = -1;
+
+	level.defaultClass = "CLASS_ASSAULT";
+
+	level.classTableName = "mp/classTable.csv";
+
+	level thread onPlayerConnecting();
 }
 
-getClassChoice( var_0 )
+getClassChoice( response )
 {
-    return var_0;
+	return response;
 }
 
-getWeaponChoice( var_0 )
+getWeaponChoice( response )
 {
-    var_1 = strtok( var_0, "," );
+	tokens = strtok( response, "," );
 
-    if ( var_1.size > 1 )
-        return int( var_1[1] );
-    else
-        return 0;
+	if ( tokens.size > 1 )
+		return int( tokens[1] );
+	else
+		return 0;
 }
 
-logClassChoice( var_0, var_1, var_2, var_3 )
+logClassChoice( class, primaryWeapon, specialType, perks )
 {
-    if ( var_0 == self.lastClass )
-        return;
+	if ( class == self.lastClass )
+		return;
 
-    self logstring( "choseclass: " + var_0 + " weapon: " + var_1 + " special: " + var_2 );
+	self logstring( "choseclass: " + class + " weapon: " + primaryWeapon + " special: " + specialType );
 
-    for ( var_4 = 0; var_4 < var_3.size; var_4++ )
-        self logstring( "perk" + var_4 + ": " + var_3[var_4] );
+	for ( i = 0; i < perks.size; i++ )
+		self logstring( "perk" + i + ": " + perks[i] );
 
-    self.lastClass = var_0;
+	self.lastClass = class;
 }
 
 cac_getCustomClassLoc()
 {
-    if ( getdvarint( "xblive_privatematch" ) || getdvarint( "xblive_competitionmatch" ) && getdvarint( "systemlink" ) )
-        return "privateMatchCustomClasses";
-    else if ( getdvarint( "xblive_competitionmatch" ) && ( !level.console && ( getdvar( "dedicated" ) == "dedicated LAN server" || getdvar( "dedicated" ) == "dedicated internet server" ) ) )
-        return "privateMatchCustomClasses";
-    else
-        return "customClasses";
+	if ( getdvarint( "xblive_privatematch" ) || getdvarint( "xblive_competitionmatch" ) && getdvarint( "systemlink" ) )
+		return "privateMatchCustomClasses";
+	else if ( getdvarint( "xblive_competitionmatch" ) && ( !level.console && ( getdvar( "dedicated" ) == "dedicated LAN server" || getdvar( "dedicated" ) == "dedicated internet server" ) ) )
+		return "privateMatchCustomClasses";
+	else
+		return "customClasses";
 }
 
-cac_getWeapon( var_0, var_1 )
+cac_getWeapon( classIndex, weaponIndex )
 {
-    var_2 = cac_getCustomClassLoc();
-    return self getplayerdata( var_2, var_0, "weaponSetups", var_1, "weapon" );
+	customClassLoc = cac_getCustomClassLoc();
+	return self getPlayerData( customClassLoc, classIndex, "weaponSetups", weaponIndex, "weapon" );
 }
 
-cac_getWeaponAttachment( var_0, var_1 )
+cac_getWeaponAttachment( classIndex, weaponIndex )
 {
-    var_2 = cac_getCustomClassLoc();
-    return self getplayerdata( var_2, var_0, "weaponSetups", var_1, "attachment", 0 );
+	customClassLoc = cac_getCustomClassLoc();
+	return self getPlayerData( customClassLoc, classIndex, "weaponSetups", weaponIndex, "attachment", 0 );
 }
 
-cac_getWeaponAttachmentTwo( var_0, var_1 )
+cac_getWeaponAttachmentTwo( classIndex, weaponIndex )
 {
-    var_2 = cac_getCustomClassLoc();
-    return self getplayerdata( var_2, var_0, "weaponSetups", var_1, "attachment", 1 );
+	customClassLoc = cac_getCustomClassLoc();
+	return self getPlayerData( customClassLoc, classIndex, "weaponSetups", weaponIndex, "attachment", 1 );
 }
 
-cac_getWeaponBuff( var_0, var_1 )
+cac_getWeaponBuff( classIndex, weaponIndex )
 {
-    var_2 = cac_getCustomClassLoc();
-    return self getplayerdata( var_2, var_0, "weaponSetups", var_1, "buff" );
+	customClassLoc = cac_getCustomClassLoc();
+	return self getPlayerData( customClassLoc, classIndex, "weaponSetups", weaponIndex, "buff" );
 }
 
-cac_getWeaponCamo( var_0, var_1 )
+cac_getWeaponCamo( classIndex, weaponIndex )
 {
-    var_2 = cac_getCustomClassLoc();
-    return self getplayerdata( var_2, var_0, "weaponSetups", var_1, "camo" );
+	customClassLoc = cac_getCustomClassLoc();
+	return self getPlayerData( customClassLoc, classIndex, "weaponSetups", weaponIndex, "camo" );
 }
 
-cac_getWeaponReticle( var_0, var_1 )
+cac_getWeaponReticle( classIndex, weaponIndex )
 {
-    var_2 = cac_getCustomClassLoc();
-    return self getplayerdata( var_2, var_0, "weaponSetups", var_1, "reticle" );
+	customClassLoc = cac_getCustomClassLoc();
+	return self getPlayerData( customClassLoc, classIndex, "weaponSetups", weaponIndex, "reticle" );
 }
 
-cac_getPerk( var_0, var_1 )
+cac_getPerk( classIndex, perkIndex )
 {
-    var_2 = cac_getCustomClassLoc();
-    return self getplayerdata( var_2, var_0, "perks", var_1 );
+	customClassLoc = cac_getCustomClassLoc();
+	return self getPlayerData( customClassLoc, classIndex, "perks", perkIndex );
 }
 
-cac_getKillstreak( var_0, var_1, var_2 )
+cac_getKillstreak( class_num, streakType, streakIndex )
 {
-    var_3 = undefined;
-
-    switch ( var_1 )
-    {
-        case "streaktype_support":
-            var_3 = "defenseStreaks";
-            break;
-        case "streaktype_specialist":
-            var_3 = "specialistStreaks";
-            break;
-        default:
-            var_3 = "assaultStreaks";
-            break;
-    }
-
-    var_4 = cac_getCustomClassLoc();
-    return self getplayerdata( var_4, var_0, var_3, var_2 );
+	playerData = undefined;
+	switch( streakType )
+	{
+	case "streaktype_support":
+		playerData = "defenseStreaks";
+		break;
+	case "streaktype_specialist":
+		playerData = "specialistStreaks";
+		break;
+	default:
+		playerData = "assaultStreaks";
+		break;
+	}
+	customClassLoc = cac_getCustomClassLoc();
+	return self getPlayerData( customClassLoc, class_num, playerData, streakIndex );
 }
 
-cac_getDeathstreak( var_0 )
+cac_getDeathstreak( classIndex )
 {
-    var_1 = cac_getCustomClassLoc();
-    return self getplayerdata( var_1, var_0, "deathstreak" );
+	customClassLoc = cac_getCustomClassLoc();
+	return self getPlayerData( customClassLoc, classIndex, "deathstreak" );
 }
 
-cac_getOffhand( var_0 )
+cac_getOffhand( classIndex )
 {
-    var_1 = cac_getCustomClassLoc();
-    return self getplayerdata( var_1, var_0, "perks", 6 );
+	customClassLoc = cac_getCustomClassLoc();
+	return self getPlayerData( customClassLoc, classIndex, "perks", 6 );
 }
 
-recipe_getKillstreak( var_0, var_1, var_2, var_3 )
+recipe_getKillstreak( teamName, classIndex, streakType, streakIndex )
 {
-    var_4 = undefined;
-
-    switch ( var_2 )
-    {
-        case "streaktype_support":
-            var_4 = "defenseStreaks";
-            break;
-        case "streaktype_specialist":
-            var_4 = "specialistStreaks";
-            break;
-        default:
-            var_4 = "assaultStreaks";
-            break;
-    }
-
-    return getmatchrulesdata( "defaultClasses", var_0, var_1, "class", var_4, var_3 );
+	playerData = undefined;
+	switch( streakType )
+	{
+	case "streaktype_support":
+		playerData = "defenseStreaks";
+		break;
+	case "streaktype_specialist":
+		playerData = "specialistStreaks";
+		break;
+	default:
+		playerData = "assaultStreaks";
+		break;
+	}
+	return getMatchRulesData( "defaultClasses", teamName, classIndex, "class", playerData, streakIndex );
 }
 
-table_getWeapon( var_0, var_1, var_2 )
+
+table_getWeapon( tableName, classIndex, weaponIndex )
 {
-    if ( var_2 == 0 )
-        return tablelookup( var_0, 0, "loadoutPrimary", var_1 + 1 );
-    else
-        return tablelookup( var_0, 0, "loadoutSecondary", var_1 + 1 );
+	if ( weaponIndex == 0 )
+		return tableLookup( tableName, 0, "loadoutPrimary", classIndex + 1 );
+	else
+		return tableLookup( tableName, 0, "loadoutSecondary", classIndex + 1 );
 }
 
-table_getWeaponAttachment( var_0, var_1, var_2, var_3 )
+table_getWeaponAttachment( tableName, classIndex, weaponIndex, attachmentIndex )
 {
-    var_4 = "none";
-
-    if ( var_2 == 0 )
-    {
-        if ( !isdefined( var_3 ) || var_3 == 0 )
-            var_4 = tablelookup( var_0, 0, "loadoutPrimaryAttachment", var_1 + 1 );
-        else
-            var_4 = tablelookup( var_0, 0, "loadoutPrimaryAttachment2", var_1 + 1 );
-    }
-    else if ( !isdefined( var_3 ) || var_3 == 0 )
-        var_4 = tablelookup( var_0, 0, "loadoutSecondaryAttachment", var_1 + 1 );
-    else
-        var_4 = tablelookup( var_0, 0, "loadoutSecondaryAttachment2", var_1 + 1 );
-
-    if ( var_4 == "" || var_4 == "none" )
-        return "none";
-    else
-        return var_4;
+	tempName = "none";
+	
+	if ( weaponIndex == 0 )
+	{
+		if ( !isDefined( attachmentIndex ) || attachmentIndex == 0 )
+			tempName = tableLookup( tableName, 0, "loadoutPrimaryAttachment", classIndex + 1 );
+		else
+			tempName = tableLookup( tableName, 0, "loadoutPrimaryAttachment2", classIndex + 1 );
+	}
+	else
+	{
+		if ( !isDefined( attachmentIndex ) || attachmentIndex == 0 )
+			tempName = tableLookup( tableName, 0, "loadoutSecondaryAttachment", classIndex + 1 );
+		else
+			tempName = tableLookup( tableName, 0, "loadoutSecondaryAttachment2", classIndex + 1 );
+	}
+	
+	if ( tempName == "" || tempName == "none" )
+		return "none";
+	else
+		return tempName;
+	
+	
 }
 
-table_getWeaponBuff( var_0, var_1, var_2 )
+table_getWeaponBuff( tableName, classIndex, weaponIndex )
 {
-    if ( var_2 == 0 )
-        return tablelookup( var_0, 0, "loadoutPrimaryBuff", var_1 + 1 );
-    else
-        return tablelookup( var_0, 0, "loadoutSecondaryBuff", var_1 + 1 );
+	if ( weaponIndex == 0 )
+		return tableLookup( tableName, 0, "loadoutPrimaryBuff", classIndex + 1 );
+	else
+		return tableLookup( tableName, 0, "loadoutSecondaryBuff", classIndex + 1 );
 }
 
-table_getWeaponCamo( var_0, var_1, var_2 )
+table_getWeaponCamo( tableName, classIndex, weaponIndex )
 {
-    if ( var_2 == 0 )
-        return tablelookup( var_0, 0, "loadoutPrimaryCamo", var_1 + 1 );
-    else
-        return tablelookup( var_0, 0, "loadoutSecondaryCamo", var_1 + 1 );
+	if ( weaponIndex == 0 )
+		return tableLookup( tableName, 0, "loadoutPrimaryCamo", classIndex + 1 );
+	else
+		return tableLookup( tableName, 0, "loadoutSecondaryCamo", classIndex + 1 );
 }
 
-table_getWeaponReticle( var_0, var_1, var_2 )
+table_getWeaponReticle( tableName, classIndex, weaponIndex )
 {
-    return "none";
+	return "none";
 }
 
-table_getEquipment( var_0, var_1, var_2 )
+table_getEquipment( tableName, classIndex, perkIndex )
 {
-    return tablelookup( var_0, 0, "loadoutEquipment", var_1 + 1 );
+	return tableLookup( tableName, 0, "loadoutEquipment", classIndex + 1 );
 }
 
-table_getPerk( var_0, var_1, var_2 )
+table_getPerk( tableName, classIndex, perkIndex )
 {
-    return tablelookup( var_0, 0, "loadoutPerk" + var_2, var_1 + 1 );
+	return tablelookup( tableName, 0, "loadoutPerk" + perkIndex, classIndex + 1 );
 }
 
-table_getTeamPerk( var_0, var_1 )
+table_getTeamPerk( tableName, classIndex )
 {
-    return tablelookup( var_0, 0, "loadoutTeamPerk", var_1 + 1 );
+	return tableLookup( tableName, 0, "loadoutTeamPerk", classIndex + 1 );
 }
 
-table_getOffhand( var_0, var_1 )
+table_getOffhand( tableName, classIndex )
 {
-    return tablelookup( var_0, 0, "loadoutOffhand", var_1 + 1 );
+	return tableLookup( tableName, 0, "loadoutOffhand", classIndex + 1 );
 }
 
-table_getKillstreak( var_0, var_1, var_2 )
+table_getKillstreak( tableName, classIndex, streakIndex )
 {
-    return tablelookup( var_0, 0, "loadoutStreak" + var_2, var_1 + 1 );
+	return tableLookup( tableName, 0, "loadoutStreak" + streakIndex, classIndex + 1 );
 }
 
-table_getDeathstreak( var_0, var_1 )
+table_getDeathstreak( tableName, classIndex )
 {
-    return tablelookup( var_0, 0, "loadoutDeathstreak", var_1 + 1 );
+	return tableLookup( tableName, 0, "loadoutDeathstreak", classIndex + 1 );
 }
 
-getClassIndex( var_0 )
+getClassIndex( className )
 {
-    return level.classMap[var_0];
+	return level.classMap[className];
 }
 
 cloneLoadout()
 {
-    var_0 = "none";
-    var_1 = [];
-    var_2 = self.curClass;
+	teamName = "none";
+	
+	clonedLoadout = [];
+	
+	class = self.curClass;
+	
+	if ( class == "copycat" )
+		return ( undefined );
 
-    if ( var_2 == "copycat" )
-        return undefined;
+	if( isSubstr( class, "axis" ) )
+	{
+		teamName = "axis";
+	}
+	else if( isSubstr( class, "allies" ) )
+	{
+		teamName = "allies";
+	}
+	
+	if (teamName != "none")
+	{
+		classIndex = getClassIndex( class );
 
-    if ( issubstr( var_2, "axis" ) )
-        var_0 = "axis";
-    else if ( issubstr( var_2, "allies" ) )
-        var_0 = "allies";
+		loadoutPrimaryAttachment2 = "none";
+		loadoutSecondaryAttachment2 = "none";
 
-    if ( var_0 != "none" )
-    {
-        var_3 = getClassIndex( var_2 );
-        var_4 = "none";
-        var_5 = "none";
-        var_6 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "weaponSetups", 0, "weapon" );
-        var_7 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "weaponSetups", 0, "attachment", 0 );
-        var_4 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "weaponSetups", 0, "attachment", 1 );
-        var_8 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "weaponSetups", 0, "buff" );
-        var_9 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "weaponSetups", 0, "camo" );
-        var_10 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "weaponSetups", 0, "reticle" );
-        var_11 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "weaponSetups", 1, "weapon" );
-        var_12 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "weaponSetups", 1, "attachment", 0 );
-        var_5 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "weaponSetups", 1, "attachment", 1 );
-        var_13 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "weaponSetups", 1, "buff" );
-        var_14 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "weaponSetups", 1, "camo" );
-        var_15 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "weaponSetups", 1, "reticle" );
-        var_16 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "perks", 0 );
-        var_17 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "perks", 1 );
-        var_18 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "perks", 2 );
-        var_19 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "perks", 3 );
-        var_20 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "perks", 5 );
-        var_21 = recipe_getKillstreak( var_0, var_3, var_20, 0 );
-        var_22 = recipe_getKillstreak( var_0, var_3, var_20, 1 );
-        var_23 = recipe_getKillstreak( var_0, var_3, var_20, 2 );
-        var_24 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "perks", 6 );
-        var_25 = getmatchrulesdata( "defaultClasses", var_0, var_3, "class", "deathstreak" );
-    }
-    else if ( issubstr( var_2, "custom" ) )
-    {
-        var_26 = getClassIndex( var_2 );
-        var_4 = "none";
-        var_5 = "none";
-        var_6 = cac_getWeapon( var_26, 0 );
-        var_7 = cac_getWeaponAttachment( var_26, 0 );
-        var_4 = cac_getWeaponAttachmentTwo( var_26, 0 );
-        var_8 = cac_getWeaponBuff( var_26, 0 );
-        var_9 = cac_getWeaponCamo( var_26, 0 );
-        var_10 = cac_getWeaponReticle( var_26, 0 );
-        var_11 = cac_getWeapon( var_26, 1 );
-        var_12 = cac_getWeaponAttachment( var_26, 1 );
-        var_5 = cac_getWeaponAttachmentTwo( var_26, 1 );
-        var_13 = cac_getWeaponBuff( var_26, 1 );
-        var_14 = cac_getWeaponCamo( var_26, 1 );
-        var_15 = cac_getWeaponReticle( var_26, 1 );
-        var_16 = cac_getPerk( var_26, 0 );
-        var_17 = cac_getPerk( var_26, 1 );
-        var_18 = cac_getPerk( var_26, 2 );
-        var_19 = cac_getPerk( var_26, 3 );
-        var_20 = cac_getPerk( var_26, 5 );
-        var_21 = cac_getKillstreak( var_26, var_20, 0 );
-        var_22 = cac_getKillstreak( var_26, var_20, 1 );
-        var_23 = cac_getKillstreak( var_26, var_20, 2 );
-        var_24 = cac_getOffhand( var_26 );
-        var_25 = cac_getDeathstreak( var_26 );
-    }
-    else
-    {
-        var_26 = getClassIndex( var_2 );
-        var_6 = table_getWeapon( level.classTableName, var_26, 0 );
-        var_7 = table_getWeaponAttachment( level.classTableName, var_26, 0, 0 );
-        var_4 = table_getWeaponAttachment( level.classTableName, var_26, 0, 1 );
-        var_8 = table_getWeaponBuff( level.classTableName, var_26, 0 );
-        var_9 = table_getWeaponCamo( level.classTableName, var_26, 0 );
-        var_10 = table_getWeaponReticle( level.classTableName, var_26, 0 );
-        var_11 = table_getWeapon( level.classTableName, var_26, 1 );
-        var_12 = table_getWeaponAttachment( level.classTableName, var_26, 1, 0 );
-        var_5 = table_getWeaponAttachment( level.classTableName, var_26, 1, 1 );
-        var_13 = table_getWeaponBuff( level.classTableName, var_26, 1 );
-        var_14 = table_getWeaponCamo( level.classTableName, var_26, 1 );
-        var_15 = table_getWeaponReticle( level.classTableName, var_26, 1 );
-        var_16 = table_getEquipment( level.classTableName, var_26, 0 );
-        var_17 = table_getPerk( level.classTableName, var_26, 1 );
-        var_18 = table_getPerk( level.classTableName, var_26, 2 );
-        var_19 = table_getPerk( level.classTableName, var_26, 3 );
-        var_20 = table_getPerk( level.classTableName, var_26, 5 );
-        var_24 = table_getOffhand( level.classTableName, var_26 );
-        var_25 = table_getDeathstreak( level.classTableName, var_26 );
+		loadoutPrimary = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 0, "weapon" );
+		loadoutPrimaryAttachment = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 0, "attachment", 0 );
+		loadoutPrimaryAttachment2 = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 0, "attachment", 1 );
+		loadoutPrimaryBuff = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 0, "buff" );
+		loadoutPrimaryCamo = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 0, "camo" );
+		loadoutPrimaryReticle = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 0, "reticle" );
 
-        switch ( var_20 )
-        {
-            case "streaktype_support":
-                var_27 = table_getKillstreak( level.classTableName, 3, 1 );
-                var_28 = table_getKillstreak( level.classTableName, 3, 2 );
-                var_29 = table_getKillstreak( level.classTableName, 3, 3 );
-                break;
-            case "streaktype_specialist":
-                var_27 = table_getKillstreak( level.classTableName, 1, 1 );
-                var_28 = table_getKillstreak( level.classTableName, 1, 2 );
-                var_29 = table_getKillstreak( level.classTableName, 1, 3 );
-                break;
-            default:
-                var_27 = table_getKillstreak( level.classTableName, 0, 1 );
-                var_28 = table_getKillstreak( level.classTableName, 0, 2 );
-                var_29 = table_getKillstreak( level.classTableName, 0, 3 );
-                break;
-        }
+		loadoutSecondary = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 1, "weapon" );
+		loadoutSecondaryAttachment = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 1, "attachment", 0 );
+		loadoutSecondaryAttachment2 = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 1, "attachment", 1 );
+		loadoutSecondaryBuff = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 1, "buff" );
+		loadoutSecondaryCamo = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 1, "camo" );
+		loadoutSecondaryReticle = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 1, "reticle" );
 
-        var_21 = var_27;
-        var_22 = var_28;
-        var_23 = var_29;
-    }
+		loadoutEquipment = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "perks", 0 );
+		loadoutPerk1 = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "perks", 1 );
+		loadoutPerk2 = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "perks", 2 );
+		loadoutPerk3 = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "perks", 3 );
+		loadoutStreakType = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "perks", 5 );
+		loadoutKillstreak1 = recipe_getKillstreak( teamName, classIndex, loadoutStreakType, 0 );
+		loadoutKillstreak2 = recipe_getKillstreak( teamName, classIndex, loadoutStreakType, 1 );
+		loadoutKillstreak3 = recipe_getKillstreak( teamName, classIndex, loadoutStreakType, 2 );
+		loadoutOffhand = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "perks", 6 );
+		loadoutDeathStreak = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "deathstreak" );
+	}
+	else if( isSubstr( class, "custom" ) )
+	{
+		class_num = getClassIndex( class );
 
-    var_1["inUse"] = 0;
-    var_1["loadoutPrimary"] = var_6;
-    var_1["loadoutPrimaryAttachment"] = var_7;
-    var_1["loadoutPrimaryAttachment2"] = var_4;
-    var_1["loadoutPrimaryBuff"] = var_8;
-    var_1["loadoutPrimaryCamo"] = var_9;
-    var_1["loadoutPrimaryReticle"] = var_10;
-    var_1["loadoutSecondary"] = var_11;
-    var_1["loadoutSecondaryAttachment"] = var_12;
-    var_1["loadoutSecondaryAttachment2"] = var_5;
-    var_1["loadoutSecondaryBuff"] = var_13;
-    var_1["loadoutSecondaryCamo"] = var_14;
-    var_1["loadoutSecondaryReticle"] = var_15;
-    var_1["loadoutEquipment"] = var_16;
-    var_1["loadoutPerk1"] = var_17;
-    var_1["loadoutPerk2"] = var_18;
-    var_1["loadoutPerk3"] = var_19;
-    var_1["loadoutStreakType"] = var_20;
-    var_1["loadoutKillstreak1"] = var_21;
-    var_1["loadoutKillstreak2"] = var_22;
-    var_1["loadoutKillstreak3"] = var_23;
-    var_1["loadoutDeathstreak"] = var_25;
-    var_1["loadoutOffhand"] = var_24;
-    return var_1;
+		loadoutPrimaryAttachment2 = "none";
+		loadoutSecondaryAttachment2 = "none";
+
+		loadoutPrimary = cac_getWeapon( class_num, 0 );
+		loadoutPrimaryAttachment = cac_getWeaponAttachment( class_num, 0 );
+		loadoutPrimaryAttachment2 = cac_getWeaponAttachmentTwo( class_num, 0 );
+		loadoutPrimaryBuff = cac_getWeaponBuff( class_num, 0 );
+		loadoutPrimaryCamo = cac_getWeaponCamo( class_num, 0 );
+		loadoutPrimaryReticle = cac_getWeaponReticle( class_num, 0 );
+		loadoutSecondary = cac_getWeapon( class_num, 1 );
+		loadoutSecondaryAttachment = cac_getWeaponAttachment( class_num, 1 );
+		loadoutSecondaryAttachment2 = cac_getWeaponAttachmentTwo( class_num, 1 );
+		loadoutSecondaryBuff = cac_getWeaponBuff( class_num, 1 );
+		loadoutSecondaryCamo = cac_getWeaponCamo( class_num, 1 );
+		loadoutSecondaryReticle = cac_getWeaponReticle( class_num, 1 );
+		loadoutEquipment = cac_getPerk( class_num, 0 );
+		loadoutPerk1 = cac_getPerk( class_num, 1 );
+		loadoutPerk2 = cac_getPerk( class_num, 2 );
+		loadoutPerk3 = cac_getPerk( class_num, 3 );
+		loadoutStreakType = cac_getPerk( class_num, 5 );
+		loadoutKillstreak1 = cac_getKillstreak( class_num, loadoutStreakType, 0 );
+		loadoutKillstreak2 = cac_getKillstreak( class_num, loadoutStreakType, 1 );
+		loadoutKillstreak3 = cac_getKillstreak( class_num, loadoutStreakType, 2 );
+		loadoutOffhand = cac_getOffhand( class_num );
+		loadoutDeathStreak = cac_getDeathstreak( class_num );
+	}
+	else
+	{
+		class_num = getClassIndex( class );
+		
+		loadoutPrimary = table_getWeapon( level.classTableName, class_num, 0 );
+		loadoutPrimaryAttachment = table_getWeaponAttachment( level.classTableName, class_num, 0 , 0);
+		loadoutPrimaryAttachment2 = table_getWeaponAttachment( level.classTableName, class_num, 0, 1 );
+		loadoutPrimaryBuff = table_getWeaponBuff( level.classTableName, class_num, 0 );
+		loadoutPrimaryCamo = table_getWeaponCamo( level.classTableName, class_num, 0 );
+		loadoutPrimaryReticle = table_getWeaponReticle( level.classTableName, class_num, 0 );
+		loadoutSecondary = table_getWeapon( level.classTableName, class_num, 1 );
+		loadoutSecondaryAttachment = table_getWeaponAttachment( level.classTableName, class_num, 1, 0);
+		loadoutSecondaryAttachment2 = table_getWeaponAttachment( level.classTableName, class_num, 1, 1 );
+		loadoutSecondaryBuff = table_getWeaponBuff( level.classTableName, class_num, 1 );
+		loadoutSecondaryCamo = table_getWeaponCamo( level.classTableName, class_num, 1 );
+		loadoutSecondaryReticle = table_getWeaponReticle( level.classTableName, class_num, 1 );
+		loadoutEquipment = table_getEquipment( level.classTableName, class_num, 0 );
+		loadoutPerk1 = table_getPerk( level.classTableName, class_num, 1 );
+		loadoutPerk2 = table_getPerk( level.classTableName, class_num, 2 );
+		loadoutPerk3 = table_getPerk( level.classTableName, class_num, 3 );
+		loadoutStreakType = table_getPerk( level.classTableName, class_num, 5 );
+		loadoutOffhand = table_getOffhand( level.classTableName, class_num );
+		loadoutDeathStreak = table_getDeathstreak( level.classTableName, class_num );
+		
+		switch( loadoutStreakType )
+		{
+		case "streaktype_support":
+			defaultKillstreak1 = table_getKillstreak( level.classTableName, 3, 1 );
+			defaultKillstreak2 = table_getKillstreak( level.classTableName, 3, 2 );
+			defaultKillstreak3 = table_getKillstreak( level.classTableName, 3, 3 );
+			break;
+		case "streaktype_specialist":
+			defaultKillstreak1 = table_getKillstreak( level.classTableName, 1, 1 );
+			defaultKillstreak2 = table_getKillstreak( level.classTableName, 1, 2 );
+			defaultKillstreak3 = table_getKillstreak( level.classTableName, 1, 3 );
+			break;
+		default:
+			defaultKillstreak1 = table_getKillstreak( level.classTableName, 0, 1 );
+			defaultKillstreak2 = table_getKillstreak( level.classTableName, 0, 2 );
+			defaultKillstreak3 = table_getKillstreak( level.classTableName, 0, 3 );
+			break;
+		}
+
+		loadoutKillstreak1 = defaultKillstreak1;
+		loadoutKillstreak2 = defaultKillstreak2;
+		loadoutKillstreak3 = defaultKillstreak3;
+	}
+	
+	clonedLoadout["inUse"] = false;
+	clonedLoadout["loadoutPrimary"] = loadoutPrimary;
+	clonedLoadout["loadoutPrimaryAttachment"] = loadoutPrimaryAttachment;
+	clonedLoadout["loadoutPrimaryAttachment2"] = loadoutPrimaryAttachment2;
+	clonedLoadout["loadoutPrimaryBuff"] = loadoutPrimaryBuff;
+	clonedLoadout["loadoutPrimaryCamo"] = loadoutPrimaryCamo;
+	clonedLoadout["loadoutPrimaryReticle"] = loadoutPrimaryReticle;
+	clonedLoadout["loadoutSecondary"] = loadoutSecondary;
+	clonedLoadout["loadoutSecondaryAttachment"] = loadoutSecondaryAttachment;
+	clonedLoadout["loadoutSecondaryAttachment2"] = loadoutSecondaryAttachment2;
+	clonedLoadout["loadoutSecondaryBuff"] = loadoutSecondaryBuff;
+	clonedLoadout["loadoutSecondaryCamo"] = loadoutSecondaryCamo;
+	clonedLoadout["loadoutSecondaryReticle"] = loadoutSecondaryReticle;
+	clonedLoadout["loadoutEquipment"] = loadoutEquipment;
+	clonedLoadout["loadoutPerk1"] = loadoutPerk1;
+	clonedLoadout["loadoutPerk2"] = loadoutPerk2;
+	clonedLoadout["loadoutPerk3"] = loadoutPerk3;
+	clonedLoadout["loadoutStreakType"] = loadoutStreakType;
+	clonedLoadout["loadoutKillstreak1"] = loadoutKillstreak1;
+	clonedLoadout["loadoutKillstreak2"] = loadoutKillstreak2;
+	clonedLoadout["loadoutKillstreak3"] = loadoutKillstreak3;
+	clonedLoadout["loadoutDeathstreak"] = loadoutDeathstreak;
+	clonedLoadout["loadoutOffhand"] = loadoutOffhand;
+	
+	return ( clonedLoadout );
 }
 
-loadoutFakePerks( var_0, var_1 )
+loadoutFakePerks( loadoutStreakType )
 {
-    switch ( var_0 )
-    {
-        case "streaktype_support":
-            self.streakType = "support";
-            break;
-        case "streaktype_specialist":
-            self.streakType = "specialist";
-            break;
-        default:
-            self.streakType = "assault";
-    }
+	switch ( loadoutStreakType )
+	{
+		case "streaktype_support":
+			self.streakType = "support";
+			break;
+		case "streaktype_specialist":
+			self.streakType = "specialist";
+			break;
+		default:
+			self.streakType = "assault";
+	}
 }
 
-getLoadoutStreakTypeFromStreakType( var_0 )
+getLoadoutStreakTypeFromStreakType( streakType )
 {
-    if ( !isdefined( var_0 ) )
-        return "streaktype_assault";
+	if ( !isdefined( streakType ) )
+		return "streaktype_assault";
 
-    switch ( var_0 )
-    {
-        case "support":
-            return "streaktype_support";
-        case "specialist":
-            return "streaktype_specialist";
-        case "assault":
-            return "streaktype_assault";
-        default:
-            return "streaktype_assault";
-    }
+	switch ( streakType )
+	{
+		case "support":
+			return "streaktype_support";
+		case "specialist":
+			return "streaktype_specialist";
+		case "assault":
+			return "streaktype_assault";
+		default:
+			return "streaktype_assault";
+	}
 }
 
-giveLoadout( var_0, var_1, var_2, var_3 )
+giveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon )
 {
-    self takeallweapons();
-    self.changingWeapon = undefined;
-    var_4 = "none";
-
-    if ( !isdefined( var_3 ) )
-        var_3 = 1;
-
-    var_5 = 0;
-    self.specialty = [];
-
-    if ( !isdefined( var_2 ) )
-        var_2 = 1;
-
-    var_6 = undefined;
-    var_7 = 0;
-    var_8 = undefined;
-    var_9 = undefined;
-    var_10 = undefined;
-
-    if ( issubstr( var_1, "axis" ) )
-        var_4 = "axis";
-    else if ( issubstr( var_1, "allies" ) )
-        var_4 = "allies";
-
-    var_11 = [];
-
-    if ( isdefined( self.pers["copyCatLoadout"] ) && self.pers["copyCatLoadout"]["inUse"] && var_2 )
-    {
-        setClass( "copycat" );
-        self.class_num = getClassIndex( "copycat" );
-        var_11 = self.pers["copyCatLoadout"];
-        var_12 = var_11["loadoutPrimary"];
-        var_13 = var_11["loadoutPrimaryAttachment"];
-        var_14 = var_11["loadoutPrimaryAttachment2"];
-        var_15 = var_11["loadoutPrimaryBuff"];
-        var_16 = var_11["loadoutPrimaryCamo"];
-        var_17 = var_11["loadoutPrimaryReticle"];
-        var_18 = var_11["loadoutSecondary"];
-        var_19 = var_11["loadoutSecondaryAttachment"];
-        var_20 = var_11["loadoutSecondaryAttachment2"];
-        var_21 = var_11["loadoutSecondaryBuff"];
-        var_22 = var_11["loadoutSecondaryCamo"];
-        var_23 = var_11["loadoutSecondaryReticle"];
-        var_24 = var_11["loadoutEquipment"];
-        var_25 = var_11["loadoutPerk1"];
-        var_26 = var_11["loadoutPerk2"];
-        var_27 = var_11["loadoutPerk3"];
-        var_28 = var_11["loadoutStreakType"];
-        var_29 = var_11["loadoutOffhand"];
-        var_30 = var_11["loadoutDeathstreak"];
-        var_31 = var_11["loadoutAmmoType"];
-    }
-    else if ( var_4 != "none" )
-    {
-        var_32 = getClassIndex( var_1 );
-        var_14 = "none";
-        var_20 = "none";
-        var_12 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "weaponSetups", 0, "weapon" );
-        var_13 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "weaponSetups", 0, "attachment", 0 );
-        var_14 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "weaponSetups", 0, "attachment", 1 );
-        var_15 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "weaponSetups", 0, "buff" );
-        var_16 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "weaponSetups", 0, "camo" );
-        var_17 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "weaponSetups", 0, "reticle" );
-        var_18 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "weaponSetups", 1, "weapon" );
-        var_19 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "weaponSetups", 1, "attachment", 0 );
-        var_20 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "weaponSetups", 1, "attachment", 1 );
-        var_21 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "weaponSetups", 1, "buff" );
-        var_22 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "weaponSetups", 1, "camo" );
-        var_23 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "weaponSetups", 1, "reticle" );
-
-        if ( ( var_12 == "throwingknife" || var_12 == "none" ) && var_18 != "none" )
-        {
-            var_12 = var_18;
-            var_13 = var_19;
-            var_14 = var_20;
-            var_15 = var_21;
-            var_16 = var_22;
-            var_17 = var_23;
-            var_18 = "none";
-            var_19 = "none";
-            var_20 = "none";
-            var_21 = "specialty_null";
-            var_22 = "none";
-            var_23 = "none";
-        }
-        else if ( ( var_12 == "throwingknife" || var_12 == "none" ) && var_18 == "none" )
-        {
-            var_7 = 1;
-            var_12 = "iw5_usp45";
-            var_13 = "tactical";
-        }
-
-        var_24 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "perks", 0 );
-        var_25 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "perks", 1 );
-        var_26 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "perks", 2 );
-        var_27 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "perks", 3 );
-
-        if ( var_18 != "none" && !isValidSecondary( var_18, var_26, var_27, 0 ) )
-        {
-            var_18 = table_getWeapon( level.classTableName, 10, 1 );
-            var_19 = "none";
-            var_20 = "none";
-            var_21 = "specialty_null";
-            var_22 = "none";
-            var_23 = "none";
-        }
-
-        var_28 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "perks", 5 );
-
-        if ( var_28 == "specialty_null" )
-        {
-            var_8 = "none";
-            var_9 = "none";
-            var_10 = "none";
-        }
-        else
-        {
-            var_8 = recipe_getKillstreak( var_4, var_32, var_28, 0 );
-            var_9 = recipe_getKillstreak( var_4, var_32, var_28, 1 );
-            var_10 = recipe_getKillstreak( var_4, var_32, var_28, 2 );
-        }
-
-        var_29 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "perks", 6 );
-
-        if ( var_29 == "specialty_null" )
-            var_29 = "none";
-
-        var_30 = getmatchrulesdata( "defaultClasses", var_4, var_32, "class", "deathstreak" );
-
-        if ( getmatchrulesdata( "defaultClasses", var_4, var_32, "juggernaut" ) )
-        {
-            thread maps\mp\_utility::recipeClassApplyJuggernaut( maps\mp\_utility::isJuggernaut() );
-            self.isJuggernaut = 1;
-            self.juggmovespeedscaler = 0.7;
-        }
-        else if ( maps\mp\_utility::isJuggernaut() )
-        {
-            self notify( "lost_juggernaut" );
-            self.isJuggernaut = 0;
-            self.moveSpeedScaler = 1;
-        }
-    }
-    else if ( issubstr( var_1, "custom" ) )
-    {
-        var_33 = getClassIndex( var_1 );
-        self.class_num = var_33;
-        var_12 = cac_getWeapon( var_33, 0 );
-        var_13 = cac_getWeaponAttachment( var_33, 0 );
-        var_14 = cac_getWeaponAttachmentTwo( var_33, 0 );
-        var_15 = cac_getWeaponBuff( var_33, 0 );
-        var_16 = cac_getWeaponCamo( var_33, 0 );
-        var_17 = cac_getWeaponReticle( var_33, 0 );
-        var_18 = cac_getWeapon( var_33, 1 );
-        var_19 = cac_getWeaponAttachment( var_33, 1 );
-        var_20 = cac_getWeaponAttachmentTwo( var_33, 1 );
-        var_21 = cac_getWeaponBuff( var_33, 1 );
-        var_22 = cac_getWeaponCamo( var_33, 1 );
-        var_23 = cac_getWeaponReticle( var_33, 1 );
-        var_24 = cac_getPerk( var_33, 0 );
-        var_25 = cac_getPerk( var_33, 1 );
-        var_26 = cac_getPerk( var_33, 2 );
-        var_27 = cac_getPerk( var_33, 3 );
-        var_28 = cac_getPerk( var_33, 5 );
-        var_29 = cac_getOffhand( var_33 );
-        var_30 = cac_getDeathstreak( var_33 );
-    }
-    else if ( var_1 == "gamemode" )
-    {
-        var_34 = self.pers["gamemodeLoadout"];
-        var_12 = var_34["loadoutPrimary"];
-        var_13 = var_34["loadoutPrimaryAttachment"];
-        var_14 = var_34["loadoutPrimaryAttachment2"];
-        var_15 = var_34["loadoutPrimaryBuff"];
-        var_16 = var_34["loadoutPrimaryCamo"];
-        var_17 = var_34["loadoutPrimaryReticle"];
-        var_18 = var_34["loadoutSecondary"];
-        var_19 = var_34["loadoutSecondaryAttachment"];
-        var_20 = var_34["loadoutSecondaryAttachment2"];
-        var_21 = var_34["loadoutSecondaryBuff"];
-        var_22 = var_34["loadoutSecondaryCamo"];
-        var_23 = var_34["loadoutSecondaryReticle"];
-
-        if ( ( var_12 == "throwingknife" || var_12 == "none" ) && var_18 != "none" )
-        {
-            var_12 = var_18;
-            var_13 = var_19;
-            var_14 = var_20;
-            var_15 = var_21;
-            var_16 = var_22;
-            var_17 = var_23;
-            var_18 = "none";
-            var_19 = "none";
-            var_20 = "none";
-            var_21 = "specialty_null";
-            var_22 = "none";
-            var_23 = "none";
-        }
-        else if ( ( var_12 == "throwingknife" || var_12 == "none" ) && var_18 == "none" )
-        {
-            var_7 = 1;
-            var_12 = "iw5_usp45";
-            var_13 = "tactical";
-        }
-
-        var_24 = var_34["loadoutEquipment"];
-        var_29 = var_34["loadoutOffhand"];
-
-        if ( var_29 == "specialty_null" )
-            var_29 = "none";
-
-        var_25 = var_34["loadoutPerk1"];
-        var_26 = var_34["loadoutPerk2"];
-        var_27 = var_34["loadoutPerk3"];
-
-        if ( var_18 != "none" && !isValidSecondary( var_18, var_26, var_27, 0 ) )
-        {
-            var_18 = table_getWeapon( level.classTableName, 10, 1 );
-            var_19 = "none";
-            var_20 = "none";
-            var_21 = "specialty_null";
-            var_22 = "none";
-            var_23 = "none";
-        }
-
-        if ( level.killstreakRewards && isdefined( var_34["loadoutStreakType"] ) && var_34["loadoutStreakType"] != "specialty_null" )
-        {
-            var_28 = var_34["loadoutStreakType"];
-            var_8 = var_34["loadoutKillstreak1"];
-            var_9 = var_34["loadoutKillstreak2"];
-            var_10 = var_34["loadoutKillstreak3"];
-        }
-        else if ( level.killstreakRewards && isdefined( self.streakType ) )
-            var_28 = getLoadoutStreakTypeFromStreakType( self.streakType );
-        else
-        {
-            var_28 = "streaktype_assault";
-            var_8 = "none";
-            var_9 = "none";
-            var_10 = "none";
-        }
-
-        var_30 = var_34["loadoutDeathstreak"];
-
-        if ( var_34["loadoutJuggernaut"] )
-        {
-            self.health = self.maxHealth;
-            thread maps\mp\_utility::recipeClassApplyJuggernaut( maps\mp\_utility::isJuggernaut() );
-            self.isJuggernaut = 1;
-            self.juggmovespeedscaler = 0.7;
-        }
-        else if ( maps\mp\_utility::isJuggernaut() )
-        {
-            self notify( "lost_juggernaut" );
-            self.isJuggernaut = 0;
-            self.moveSpeedScaler = 1;
-        }
-    }
-    else if ( var_1 == "juggernaut" )
-    {
-        var_12 = "iw5_m60jugg";
-        var_13 = "none";
-        var_14 = "none";
-        var_15 = "specialty_null";
-        var_16 = "none";
-        var_17 = "none";
-        var_18 = "iw5_mp412jugg";
-        var_19 = "none";
-        var_20 = "none";
-        var_21 = "specialty_null";
-        var_22 = "none";
-        var_23 = "none";
-        var_24 = "frag_grenade_mp";
-        var_25 = "specialty_scavenger";
-        var_26 = "specialty_quickdraw";
-        var_27 = "specialty_detectexplosive";
-        var_28 = getLoadoutStreakTypeFromStreakType( self.streakType );
-        var_29 = "smoke_grenade_mp";
-        var_30 = "specialty_null";
-    }
-    else if ( var_1 == "juggernaut_recon" )
-    {
-        var_12 = "iw5_riotshieldjugg";
-        var_13 = "none";
-        var_14 = "none";
-        var_15 = "specialty_null";
-        var_16 = "none";
-        var_17 = "none";
-        var_18 = "iw5_usp45jugg";
-        var_19 = "none";
-        var_20 = "none";
-        var_21 = "specialty_null";
-        var_22 = "none";
-        var_23 = "none";
-        var_24 = "specialty_portable_radar";
-        var_25 = "specialty_scavenger";
-        var_26 = "specialty_coldblooded";
-        var_27 = "specialty_detectexplosive";
-        var_28 = getLoadoutStreakTypeFromStreakType( self.streakType );
-        var_29 = "smoke_grenade_mp";
-        var_30 = "specialty_null";
-    }
-    else
-    {
-        var_33 = getClassIndex( var_1 );
-        self.class_num = var_33;
-        var_12 = table_getWeapon( level.classTableName, var_33, 0 );
-        var_13 = table_getWeaponAttachment( level.classTableName, var_33, 0, 0 );
-        var_14 = table_getWeaponAttachment( level.classTableName, var_33, 0, 1 );
-        var_15 = table_getWeaponBuff( level.classTableName, var_33, 0 );
-        var_16 = table_getWeaponCamo( level.classTableName, var_33, 0 );
-        var_17 = table_getWeaponReticle( level.classTableName, var_33, 0 );
-        var_18 = table_getWeapon( level.classTableName, var_33, 1 );
-        var_19 = table_getWeaponAttachment( level.classTableName, var_33, 1, 0 );
-        var_20 = table_getWeaponAttachment( level.classTableName, var_33, 1, 1 );
-        var_21 = table_getWeaponBuff( level.classTableName, var_33, 1 );
-        var_22 = table_getWeaponCamo( level.classTableName, var_33, 1 );
-        var_23 = table_getWeaponReticle( level.classTableName, var_33, 1 );
-        var_24 = table_getEquipment( level.classTableName, var_33, 0 );
-        var_25 = table_getPerk( level.classTableName, var_33, 1 );
-        var_26 = table_getPerk( level.classTableName, var_33, 2 );
-        var_27 = table_getPerk( level.classTableName, var_33, 3 );
-        var_28 = table_getPerk( level.classTableName, var_33, 5 );
-        var_29 = table_getOffhand( level.classTableName, var_33 );
-        var_30 = table_getDeathstreak( level.classTableName, var_33 );
-    }
-
-    loadoutFakePerks( var_28 );
-    var_35 = issubstr( var_1, "custom" );
-    var_36 = issubstr( var_1, "recipe" );
-    var_37 = var_1 == "gamemode";
-
-    if ( !var_37 && !var_36 && !( isdefined( self.pers["copyCatLoadout"] ) && self.pers["copyCatLoadout"]["inUse"] && var_2 ) )
-    {
-        if ( !isValidPrimary( var_12 ) || level.rankedmatch && var_35 && !self isitemunlocked( var_12 ) )
-            var_12 = table_getWeapon( level.classTableName, 10, 0 );
-
-        if ( !isValidAttachment( var_13 ) || level.rankedmatch && var_35 && !isAttachmentUnlocked( var_12, var_13 ) )
-            var_13 = table_getWeaponAttachment( level.classTableName, 10, 0, 0 );
-
-        if ( !isValidAttachment( var_14 ) || level.rankedmatch && var_35 && !isAttachmentUnlocked( var_12, var_14 ) )
-            var_14 = table_getWeaponAttachment( level.classTableName, 10, 0, 1 );
-
-        if ( !isValidWeaponBuff( var_15, var_12 ) || level.rankedmatch && var_35 && !isWeaponBuffUnlocked( var_12, var_15 ) )
-            var_15 = table_getWeaponBuff( level.classTableName, 10, 0 );
-
-        if ( !isValidCamo( var_16 ) || level.rankedmatch && var_35 && !isCamoUnlocked( var_12, var_16 ) )
-            var_16 = table_getWeaponCamo( level.classTableName, 10, 0 );
-
-        if ( !isValidReticle( var_17 ) )
-            var_17 = table_getWeaponReticle( level.classTableNum, 10, 0 );
-
-        if ( !isValidSecondary( var_18, var_26, var_27 ) || level.rankedmatch && level.rankedmatch && var_35 && !self isitemunlocked( var_18 ) )
-        {
-            var_18 = table_getWeapon( level.classTableName, 10, 1 );
-            var_19 = "none";
-            var_20 = "none";
-            var_21 = "specialty_null";
-            var_22 = "none";
-            var_23 = "none";
-        }
-
-        if ( !isValidAttachment( var_19 ) || level.rankedmatch && var_35 && !isAttachmentUnlocked( var_18, var_19 ) )
-            var_19 = table_getWeaponAttachment( level.classTableName, 10, 1, 0 );
-
-        if ( !isValidAttachment( var_20 ) || level.rankedmatch && var_35 && !isAttachmentUnlocked( var_18, var_20 ) )
-            var_20 = table_getWeaponAttachment( level.classTableName, 10, 1, 1 );
-
-        if ( var_26 == "specialty_twoprimaries" && !isValidWeaponBuff( var_21, var_18 ) || level.rankedmatch && var_35 && !self isitemunlocked( var_18 + " " + var_21 ) )
-            var_21 = table_getWeaponBuff( level.classTableName, 10, 1 );
-
-        if ( !isValidCamo( var_22 ) || level.rankedmatch && var_35 && !isCamoUnlocked( var_18, var_22 ) )
-            var_22 = table_getWeaponCamo( level.classTableName, 10, 1 );
-
-        if ( !isValidReticle( var_23 ) )
-            var_23 = table_getWeaponReticle( level.classTableName, 10, 1 );
-
-        if ( !isValidEquipment( var_24 ) || level.rankedmatch && var_35 && !self isitemunlocked( var_24 ) )
-            var_24 = table_getEquipment( level.classTableName, 10, 0 );
-
-        if ( !isValidPerk1( var_25 ) || level.rankedmatch && var_35 && !self isitemunlocked( var_25 ) )
-            var_25 = table_getPerk( level.classTableName, 10, 1 );
-
-        if ( !isValidPerk2( var_26, var_25 ) || level.rankedmatch && var_35 && !self isitemunlocked( var_26 ) )
-            var_26 = table_getPerk( level.classTableName, 10, 2 );
-
-        if ( !isValidPerk3( var_27, var_25 ) || level.rankedmatch && var_35 && !self isitemunlocked( var_27 ) )
-            var_27 = table_getPerk( level.classTableName, 10, 3 );
-
-        if ( !isValidDeathStreak( var_30 ) || level.rankedmatch && var_35 && !self isitemunlocked( var_30 ) )
-            var_30 = table_getDeathstreak( level.classTableName, 10 );
-
-        if ( !isValidOffhand( var_29 ) )
-            var_29 = table_getOffhand( level.classTableName, 10 );
-
-        if ( var_14 != "none" && var_15 != "specialty_bling" )
-            var_14 = "none";
-
-        if ( var_21 != "specialty_null" && var_26 != "specialty_twoprimaries" )
-            var_21 = "specialty_null";
-
-        if ( var_20 != "none" && ( var_21 != "specialty_bling" || var_26 != "specialty_twoprimaries" ) )
-            var_20 = "none";
-    }
-
-    self.loadoutPrimary = var_12;
-    self.loadoutPrimaryCamo = int( tablelookup( "mp/camoTable.csv", 1, var_16, 0 ) );
-    self.loadoutSecondary = var_18;
-    self.loadoutSecondaryCamo = int( tablelookup( "mp/camoTable.csv", 1, var_22, 0 ) );
-
-    if ( !issubstr( var_12, "iw5" ) )
-        self.loadoutPrimaryCamo = 0;
-
-    if ( !issubstr( var_18, "iw5" ) )
-        self.loadoutSecondaryCamo = 0;
-
-    self.loadoutPrimaryReticle = int( tablelookup( "mp/reticleTable.csv", 1, var_17, 0 ) );
-    self.loadoutSecondaryReticle = int( tablelookup( "mp/reticleTable.csv", 1, var_23, 0 ) );
-
-    if ( !issubstr( var_12, "iw5" ) )
-        self.loadoutPrimaryReticle = 0;
-
-    if ( !issubstr( var_18, "iw5" ) )
-        self.loadoutSecondaryReticle = 0;
-
-    if ( var_18 == "none" )
-        var_38 = "none";
-    else
-    {
-        var_38 = buildWeaponName( var_18, var_19, var_20, self.loadoutSecondaryCamo, self.loadoutSecondaryReticle );
-        maps\mp\_utility::_giveWeapon( var_38 );
-        var_39 = strtok( var_38, "_" );
-
-        if ( var_39[0] == "iw5" )
-            var_39[0] = var_39[0] + "_" + var_39[1];
-        else if ( var_39[0] == "alt" )
-            var_39[0] = var_39[1] + "_" + var_39[2];
-
-        var_40 = var_39[0];
-        var_41 = maps\mp\gametypes\_rank::getWeaponRank( var_40 );
-        var_42 = self getplayerdata( "weaponRank", var_40 );
-
-        if ( var_41 != var_42 )
-            self setplayerdata( "weaponRank", var_40, var_41 );
-    }
-
-    self setoffhandprimaryclass( "other" );
-    maps\mp\_utility::_setActionSlot( 1, "" );
-    maps\mp\_utility::_setActionSlot( 3, "altMode" );
-    maps\mp\_utility::_setActionSlot( 4, "" );
-
-    if ( !level.console )
-    {
-        maps\mp\_utility::_setActionSlot( 5, "" );
-        maps\mp\_utility::_setActionSlot( 6, "" );
-        maps\mp\_utility::_setActionSlot( 7, "" );
-    }
-
-    maps\mp\_utility::_clearPerks();
-    _detachAll();
-
-    if ( level.dieHardMode )
-        maps\mp\_utility::givePerk( "specialty_pistoldeath", 0 );
-
-    loadoutAllPerks( var_24, var_25, var_26, var_27, var_15, var_21 );
-
-    if ( maps\mp\_utility::_hasPerk( "specialty_extraammo" ) && var_38 != "none" && maps\mp\_utility::getWeaponClass( var_38 ) != "weapon_projectile" )
-        self givemaxammo( var_38 );
-
-    self.spawnperk = 0;
-
-    if ( !maps\mp\_utility::_hasPerk( "specialty_blindeye" ) && self.avoidKillstreakOnSpawnTimer > 0 )
-        thread maps\mp\perks\_perks::giveBlindEyeAfterSpawn();
-
-    if ( self.pers["cur_death_streak"] > 0 )
-    {
-        var_43 = [];
-
-        if ( var_30 != "specialty_null" )
-            var_43[var_30] = int( tablelookup( "mp/perkTable.csv", 1, var_30, 6 ) );
-
-        if ( getPerkUpgrade( var_25 ) == "specialty_rollover" || getPerkUpgrade( var_26 ) == "specialty_rollover" || getPerkUpgrade( var_27 ) == "specialty_rollover" )
-        {
-            foreach ( var_46, var_45 in var_43 )
-                var_43[var_46] -= 1;
-        }
-
-        foreach ( var_46, var_45 in var_43 )
-        {
-            if ( self.pers["cur_death_streak"] >= var_45 )
-            {
-                if ( var_46 == "specialty_carepackage" && self.pers["cur_death_streak"] > var_45 )
-                    continue;
-
-                if ( var_46 == "specialty_uav" && self.pers["cur_death_streak"] > var_45 )
-                    continue;
-
-                thread maps\mp\_utility::givePerk( var_46, 1 );
-                thread maps\mp\gametypes\_hud_message::splashNotify( var_46 );
-            }
-        }
-    }
-
-    if ( level.killstreakRewards && !isdefined( var_8 ) && !isdefined( var_9 ) && !isdefined( var_10 ) )
-    {
-        if ( isdefined( self.pers["copyCatLoadout"] ) && self.pers["copyCatLoadout"]["inUse"] && var_2 )
-        {
-            var_8 = var_11["loadoutKillstreak1"];
-            var_9 = var_11["loadoutKillstreak2"];
-            var_10 = var_11["loadoutKillstreak3"];
-        }
-        else
-        {
-            var_48 = undefined;
-            var_49 = undefined;
-            var_50 = undefined;
-            var_51 = undefined;
-
-            switch ( self.streakType )
-            {
-                case "support":
-                    var_48 = table_getKillstreak( level.classTableName, 2, 1 );
-                    var_49 = table_getKillstreak( level.classTableName, 2, 2 );
-                    var_50 = table_getKillstreak( level.classTableName, 2, 3 );
-                    var_51 = "defenseStreaks";
-                    break;
-                case "specialist":
-                    var_48 = table_getKillstreak( level.classTableName, 1, 1 );
-                    var_49 = table_getKillstreak( level.classTableName, 1, 2 );
-                    var_50 = table_getKillstreak( level.classTableName, 1, 3 );
-                    var_51 = "specialistStreaks";
-                    break;
-                default:
-                    var_48 = table_getKillstreak( level.classTableName, 0, 1 );
-                    var_49 = table_getKillstreak( level.classTableName, 0, 2 );
-                    var_50 = table_getKillstreak( level.classTableName, 0, 3 );
-                    var_51 = "assaultStreaks";
-                    break;
-            }
-
-            var_8 = undefined;
-            var_9 = undefined;
-            var_10 = undefined;
-
-            if ( issubstr( var_1, "custom" ) )
-            {
-                var_52 = cac_getCustomClassLoc();
-                var_8 = self getplayerdata( var_52, self.class_num, var_51, 0 );
-                var_9 = self getplayerdata( var_52, self.class_num, var_51, 1 );
-                var_10 = self getplayerdata( var_52, self.class_num, var_51, 2 );
-            }
-
-            if ( issubstr( var_1, "juggernaut" ) || var_37 )
-            {
-                foreach ( var_54 in self.killstreaks )
-                {
-                    if ( !isdefined( var_8 ) )
-                    {
-                        var_8 = var_54;
-                        continue;
-                    }
-
-                    if ( !isdefined( var_9 ) )
-                    {
-                        var_9 = var_54;
-                        continue;
-                    }
-
-                    if ( !isdefined( var_10 ) )
-                        var_10 = var_54;
-                }
-
-                if ( var_37 && self.streakType == "specialist" )
-                {
-                    self.pers["gamemodeLoadout"]["loadoutKillstreak1"] = var_8;
-                    self.pers["gamemodeLoadout"]["loadoutKillstreak2"] = var_9;
-                    self.pers["gamemodeLoadout"]["loadoutKillstreak3"] = var_10;
-                }
-            }
-
-            if ( !issubstr( var_1, "custom" ) && !issubstr( var_1, "juggernaut" ) && !var_37 )
-            {
-                var_8 = var_48;
-                var_9 = var_49;
-                var_10 = var_50;
-            }
-
-            if ( !isdefined( var_8 ) )
-                var_8 = "none";
-
-            if ( !isdefined( var_9 ) )
-                var_9 = "none";
-
-            if ( !isdefined( var_10 ) )
-                var_10 = "none";
-
-            var_56 = 0;
-
-            if ( !isValidKillstreak( var_8 ) || var_35 && !self isitemunlocked( var_8 ) )
-                var_56 = 1;
-
-            if ( !isValidKillstreak( var_9 ) || var_35 && !self isitemunlocked( var_9 ) )
-                var_56 = 1;
-
-            if ( !isValidKillstreak( var_10 ) || var_35 && !self isitemunlocked( var_10 ) )
-                var_56 = 1;
-
-            if ( var_56 )
-            {
-                self.streakType = "assault";
-                var_8 = table_getKillstreak( level.classTableName, 0, 1 );
-                var_9 = table_getKillstreak( level.classTableName, 0, 2 );
-                var_10 = table_getKillstreak( level.classTableName, 0, 3 );
-            }
-        }
-    }
-    else if ( !level.killstreakRewards )
-    {
-        var_8 = "none";
-        var_9 = "none";
-        var_10 = "none";
-    }
-
-    setKillstreaks( var_8, var_9, var_10 );
-
-    if ( isdefined( self.lastClass ) && self.lastClass != self.class && !issubstr( self.class, "juggernaut" ) && !issubstr( self.lastClass, "juggernaut" ) && !issubstr( var_1, "juggernaut" ) )
-    {
-        if ( maps\mp\_utility::wasOnlyRound() || self.lastClass != "" )
-        {
-            var_57 = [];
-            var_58 = 0;
-
-            if ( self.pers["killstreaks"].size > 5 )
-            {
-                for ( var_59 = 5; var_59 < self.pers["killstreaks"].size; var_59++ )
-                {
-                    var_57[var_58] = self.pers["killstreaks"][var_59].streakName;
-                    var_58++;
-                }
-            }
-
-            if ( self.pers["killstreaks"].size )
-            {
-                for ( var_59 = 1; var_59 < 4; var_59++ )
-                {
-                    if ( isdefined( self.pers["killstreaks"][var_59] ) && isdefined( self.pers["killstreaks"][var_59].streakName ) && self.pers["killstreaks"][var_59].available && !self.pers["killstreaks"][var_59].isSpecialist )
-                    {
-                        var_57[var_58] = self.pers["killstreaks"][var_59].streakName;
-                        var_58++;
-                    }
-                }
-            }
-
-            self notify( "givingLoadout" );
-            maps\mp\killstreaks\_killstreaks::clearKillstreaks();
-
-            for ( var_59 = 0; var_59 < var_57.size; var_59++ )
-                maps\mp\killstreaks\_killstreaks::giveKillstreak( var_57[var_59] );
-        }
-    }
-
-    if ( !issubstr( var_1, "juggernaut" ) )
-    {
-        if ( isdefined( self.lastClass ) && self.lastClass != "" && self.lastClass != self.class )
-            maps\mp\_utility::incPlayerStat( "mostclasseschanged", 1 );
-
-        self.pers["lastClass"] = self.class;
-        self.lastClass = self.class;
-    }
-
-    if ( isdefined( self.gamemode_chosenclass ) )
-    {
-        self.pers["class"] = self.gamemode_chosenclass;
-        self.pers["lastClass"] = self.gamemode_chosenclass;
-        self.class = self.gamemode_chosenclass;
-        self.lastClass = self.gamemode_chosenclass;
-        self.gamemode_chosenclass = undefined;
-    }
-
-    var_60 = buildWeaponName( var_12, var_13, var_14, self.loadoutPrimaryCamo, self.loadoutPrimaryReticle );
-    maps\mp\_utility::_giveWeapon( var_60 );
-    self switchtoweapon( var_60 );
-    var_39 = strtok( var_60, "_" );
-
-    if ( var_39[0] == "iw5" )
-        var_40 = var_39[0] + "_" + var_39[1];
-    else if ( var_39[0] == "alt" )
-        var_40 = var_39[1] + "_" + var_39[2];
-    else
-        var_40 = var_39[0];
-
-    var_41 = maps\mp\gametypes\_rank::getWeaponRank( var_40 );
-    var_42 = self getplayerdata( "weaponRank", var_40 );
-
-    if ( var_41 != var_42 )
-        self setplayerdata( "weaponRank", var_40, var_41 );
-
-    if ( var_60 == "riotshield_mp" && level.inGracePeriod )
-        self notify( "weapon_change",  "riotshield_mp"  );
-
-    if ( maps\mp\_utility::_hasPerk( "specialty_extraammo" ) )
-        self givemaxammo( var_60 );
-
-    if ( var_3 )
-        self setspawnweapon( var_60 );
-
-    self.pers["primaryWeapon"] = var_40;
-    var_61 = strtok( var_60, "_" );
-    var_62 = var_29;
-
-    if ( var_29 == "none" )
-        self setoffhandsecondaryclass( "none" );
-    else if ( var_29 == "flash_grenade_mp" )
-        self setoffhandsecondaryclass( "flash" );
-    else if ( var_29 == "smoke_grenade_mp" || var_29 == "concussion_grenade_mp" )
-        self setoffhandsecondaryclass( "smoke" );
-    else
-        self setoffhandsecondaryclass( "flash" );
-
-    switch ( var_62 )
-    {
-        case "none":
-            break;
-        case "trophy_mp":
-        case "specialty_portable_radar":
-        case "specialty_scrambler":
-        case "specialty_tacticalinsertion":
-            maps\mp\_utility::givePerk( var_62, 0 );
-            break;
-        default:
-            self giveweapon( var_62 );
-
-            if ( var_29 == "flash_grenade_mp" )
-                self setweaponammoclip( var_62, 2 );
-            else if ( var_29 == "concussion_grenade_mp" )
-                self setweaponammoclip( var_62, 2 );
-            else
-                self setweaponammoclip( var_62, 1 );
-
-            break;
-    }
-
-    var_6 = var_60;
-    self.primaryWeapon = var_6;
-    self.secondaryWeapon = var_38;
-
-    if ( var_7 )
-    {
-        self setweaponammoclip( self.primaryWeapon, 0 );
-        self setweaponammostock( self.primaryWeapon, 0 );
-    }
-
-    maps\mp\gametypes\_teams::playerModelForWeapon( self.pers["primaryWeapon"], maps\mp\_utility::getBaseWeaponName( var_38 ) );
-    self.isSniper = weaponclass( self.primaryWeapon ) == "sniper";
-    maps\mp\gametypes\_weapons::updateMoveSpeedScale();
-    maps\mp\perks\_perks::cac_selector();
-    self notify( "changed_kit" );
-    self notify( "giveLoadout" );
+	self takeAllWeapons();
+	
+	self.changingWeapon = undefined;
+
+	teamName = "none";
+	if ( !isDefined( setPrimarySpawnWeapon ) )
+		setPrimarySpawnWeapon = true;
+
+	primaryIndex = 0;
+	
+	self.specialty = [];
+
+	if ( !isDefined( allowCopycat ) )
+		allowCopycat = true;
+
+	primaryWeapon = undefined;
+	var_7 = 0;
+	
+	loadoutKillstreak1 = undefined;
+	loadoutKillstreak2 = undefined;
+	loadoutKillstreak3 = undefined;	
+
+	if( isSubstr( class, "axis" ) )
+	{
+		teamName = "axis";
+	}
+	else if( isSubstr( class, "allies" ) )
+	{
+		teamName = "allies";
+	}
+
+	clonedLoadout = [];
+	if ( isDefined( self.pers["copyCatLoadout"] ) && self.pers["copyCatLoadout"]["inUse"] && allowCopycat )
+	{
+		self setClass( "copycat" );
+		self.class_num = getClassIndex( "copycat" );
+
+		clonedLoadout = self.pers["copyCatLoadout"];
+
+		loadoutPrimary = clonedLoadout["loadoutPrimary"];
+		loadoutPrimaryAttachment = clonedLoadout["loadoutPrimaryAttachment"];
+		loadoutPrimaryAttachment2 = clonedLoadout["loadoutPrimaryAttachment2"] ;
+		loadoutPrimaryBuff = clonedLoadout["loadoutPrimaryBuff"];
+		loadoutPrimaryCamo = clonedLoadout["loadoutPrimaryCamo"];
+		loadoutPrimaryReticle = clonedLoadout["loadoutPrimaryReticle"];
+		loadoutSecondary = clonedLoadout["loadoutSecondary"];
+		loadoutSecondaryAttachment = clonedLoadout["loadoutSecondaryAttachment"];
+		loadoutSecondaryAttachment2 = clonedLoadout["loadoutSecondaryAttachment2"];
+		loadoutSecondaryBuff = clonedLoadout["loadoutSecondaryBuff"];
+		loadoutSecondaryCamo = clonedLoadout["loadoutSecondaryCamo"];
+		loadoutSecondaryReticle = clonedLoadout["loadoutSecondaryReticle"];
+		loadoutEquipment = clonedLoadout["loadoutEquipment"];
+		loadoutPerk1 = clonedLoadout["loadoutPerk1"];
+		loadoutPerk2 = clonedLoadout["loadoutPerk2"];
+		loadoutPerk3 = clonedLoadout["loadoutPerk3"];
+		loadoutStreakType = clonedLoadout["loadoutStreakType"];
+		loadoutOffhand = clonedLoadout["loadoutOffhand"];
+		loadoutDeathStreak = clonedLoadout["loadoutDeathstreak"];
+		loadoutAmmoType	 = clonedLoadout["loadoutAmmoType"];
+	}
+	else if ( teamName != "none" )
+	{
+		classIndex = getClassIndex( class );
+
+		loadoutPrimaryAttachment2 = "none";
+		loadoutSecondaryAttachment2 = "none";
+
+		loadoutPrimary = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 0, "weapon" );
+		loadoutPrimaryAttachment = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 0, "attachment", 0 );
+		loadoutPrimaryAttachment2 = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 0, "attachment", 1 );
+		loadoutPrimaryBuff = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 0, "buff" );
+		loadoutPrimaryCamo = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 0, "camo" );
+		loadoutPrimaryReticle = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 0, "reticle" );
+
+		loadoutSecondary = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 1, "weapon" );
+		loadoutSecondaryAttachment = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 1, "attachment", 0 );
+		loadoutSecondaryAttachment2 = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 1, "attachment", 1 );
+		loadoutSecondaryBuff = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 1, "buff" );
+		loadoutSecondaryCamo = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 1, "camo" );
+		loadoutSecondaryReticle = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "weaponSetups", 1, "reticle" );
+		
+		if ( ( loadoutPrimary == "throwingknife" || loadoutPrimary == "none" ) && loadoutSecondary != "none" )
+		{
+			loadoutPrimary = loadoutSecondary;
+			loadoutPrimaryAttachment = loadoutSecondaryAttachment;
+			loadoutPrimaryAttachment2 = loadoutSecondaryAttachment2;
+			loadoutPrimaryBuff = loadoutSecondaryBuff;
+			loadoutPrimaryCamo = loadoutSecondaryCamo;
+			loadoutPrimaryReticle = loadoutSecondaryReticle;	
+			
+			loadoutSecondary = "none";
+			loadoutSecondaryAttachment = "none";
+			loadoutSecondaryAttachment2 = "none";
+			loadoutSecondaryBuff = "specialty_null";
+			loadoutSecondaryCamo = "none";
+			loadoutSecondaryReticle = "none";				
+		}
+		else if ( ( loadoutPrimary == "throwingknife" || loadoutPrimary == "none" ) && loadoutSecondary == "none" )
+		{
+			var_7 = 1;
+			loadoutPrimary = "iw5_usp45";
+			loadoutPrimaryAttachment = "tactical";
+		}
+
+		loadoutEquipment = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "perks", 0 );
+		loadoutPerk1 = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "perks", 1 );
+		loadoutPerk2 = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "perks", 2 );
+		loadoutPerk3 = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "perks", 3 );
+		
+		if ( loadoutSecondary != "none" && !isValidSecondary( loadoutSecondary, loadoutPerk2, loadoutPerk3, false ) )
+		{
+			loadoutSecondary = table_getWeapon( level.classTableName, 10, 1 );
+			loadoutSecondaryAttachment = "none";
+			loadoutSecondaryAttachment2 = "none";
+			loadoutSecondaryBuff = "specialty_null";
+			loadoutSecondaryCamo = "none";
+			loadoutSecondaryReticle = "none";	
+		}
+		
+		loadoutStreakType = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "perks", 5 );
+
+		if ( loadoutStreakType == "specialty_null" )
+		{
+		  loadoutKillstreak1 = "none";
+		  loadoutKillstreak2 = "none";
+		  loadoutKillstreak3 = "none";
+		}
+		else
+		{
+		  loadoutKillstreak1 = recipe_getKillstreak( teamName, classIndex, loadoutStreakType, 0 );
+		  loadoutKillstreak2 = recipe_getKillstreak( teamName, classIndex, loadoutStreakType, 1 );
+		  loadoutKillstreak3 = recipe_getKillstreak( teamName, classIndex, loadoutStreakType, 2 );
+		}
+
+		loadoutOffhand = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "perks", 6 );	
+
+		if ( loadoutOffhand == "specialty_null" )
+			loadoutOffhand = "none";	
+	
+		loadoutDeathStreak = getMatchRulesData( "defaultClasses", teamName, classIndex, "class", "deathstreak" );
+
+		if ( getmatchrulesdata( "defaultClasses", teamName, classIndex, "juggernaut" ) )
+		{
+			thread recipeClassApplyJuggernaut( isJuggernaut() );
+			self.isJuggernaut = true;
+			self.juggmovespeedscaler = 0.7;
+		}
+		else if ( isJuggernaut() )
+		{
+			self notify( "lost_juggernaut" );
+			self.isJuggernaut = false;
+			self.moveSpeedScaler = 1;
+		}
+	}
+	else if ( isSubstr( class, "custom" ) )
+	{
+		class_num = getClassIndex( class );
+		self.class_num = class_num;
+
+		loadoutPrimary = cac_getWeapon( class_num, 0 );
+		loadoutPrimaryAttachment = cac_getWeaponAttachment( class_num, 0 );
+		loadoutPrimaryAttachment2 = cac_getWeaponAttachmentTwo( class_num, 0 );
+		loadoutPrimaryBuff = cac_getWeaponBuff( class_num, 0 );
+		loadoutPrimaryCamo = cac_getWeaponCamo( class_num, 0 );
+		loadoutPrimaryReticle = cac_getWeaponReticle( class_num, 0 );
+		loadoutSecondary = cac_getWeapon( class_num, 1 );
+		loadoutSecondaryAttachment = cac_getWeaponAttachment( class_num, 1 );
+		loadoutSecondaryAttachment2 = cac_getWeaponAttachmentTwo( class_num, 1 );
+		loadoutSecondaryBuff = cac_getWeaponBuff( class_num, 1 );
+		loadoutSecondaryCamo = cac_getWeaponCamo( class_num, 1 );
+		loadoutSecondaryReticle = cac_getWeaponReticle( class_num, 1 );
+		loadoutEquipment = cac_getPerk( class_num, 0 );
+		loadoutPerk1 = cac_getPerk( class_num, 1 );
+		loadoutPerk2 = cac_getPerk( class_num, 2 );
+		loadoutPerk3 = cac_getPerk( class_num, 3 );
+		loadoutStreakType = cac_getPerk( class_num, 5 );
+		loadoutOffhand = cac_getOffhand( class_num );
+		loadoutDeathStreak = cac_getDeathstreak( class_num );
+	}
+	else if ( class == "gamemode" )
+	{
+		gamemodeLoadout = self.pers["gamemodeLoadout"];
+
+		loadoutPrimary = gamemodeLoadout["loadoutPrimary"];
+		loadoutPrimaryAttachment = gamemodeLoadout["loadoutPrimaryAttachment"];
+		loadoutPrimaryAttachment2 = gamemodeLoadout["loadoutPrimaryAttachment2"] ;
+		loadoutPrimaryBuff = gamemodeLoadout["loadoutPrimaryBuff"];
+		loadoutPrimaryCamo = gamemodeLoadout["loadoutPrimaryCamo"];
+		loadoutPrimaryReticle = gamemodeLoadout["loadoutPrimaryReticle"];
+		loadoutSecondary = gamemodeLoadout["loadoutSecondary"];		
+		loadoutSecondaryAttachment = gamemodeLoadout["loadoutSecondaryAttachment"];
+		loadoutSecondaryAttachment2 = gamemodeLoadout["loadoutSecondaryAttachment2"];
+		loadoutSecondaryBuff = gamemodeLoadout["loadoutSecondaryBuff"];
+		loadoutSecondaryCamo = gamemodeLoadout["loadoutSecondaryCamo"];
+		loadoutSecondaryReticle = gamemodeLoadout["loadoutSecondaryReticle"];
+		
+		if ( ( loadoutPrimary == "throwingknife" || loadoutPrimary == "none" ) && loadoutSecondary != "none" )
+		{
+			loadoutPrimary = loadoutSecondary;
+			loadoutPrimaryAttachment = loadoutSecondaryAttachment;
+			loadoutPrimaryAttachment2 = loadoutSecondaryAttachment2;
+			loadoutPrimaryBuff = loadoutSecondaryBuff;
+			loadoutPrimaryCamo = loadoutSecondaryCamo;
+			loadoutPrimaryReticle = loadoutSecondaryReticle;	
+			
+			loadoutSecondary = "none";
+			loadoutSecondaryAttachment = "none";
+			loadoutSecondaryAttachment2 = "none";
+			loadoutSecondaryBuff = "specialty_null";
+			loadoutSecondaryCamo = "none";
+			loadoutSecondaryReticle = "none";				
+		}	
+		else if ( ( loadoutPrimary == "throwingknife" || loadoutPrimary == "none" ) && loadoutSecondary == "none" )
+		{
+			var_7 = 1;
+			loadoutPrimary = "iw5_usp45";
+			loadoutPrimaryAttachment = "tactical";
+		}	
+		
+		loadoutEquipment = gamemodeLoadout["loadoutEquipment"];
+		loadoutOffhand = gamemodeLoadout["loadoutOffhand"];
+
+		if ( loadoutOffhand == "specialty_null" )
+			loadoutOffhand = "none";	
+	
+		loadoutPerk1 = gamemodeLoadout["loadoutPerk1"];
+		loadoutPerk2 = gamemodeLoadout["loadoutPerk2"];
+		loadoutPerk3 = gamemodeLoadout["loadoutPerk3"];
+
+		if ( loadoutSecondary != "none" && !isValidSecondary( loadoutSecondary, loadoutPerk2, loadoutPerk3, false ) )
+		{
+			loadoutSecondary = table_getWeapon( level.classTableName, 10, 1 );
+			loadoutSecondaryAttachment = "none";
+			loadoutSecondaryAttachment2 = "none";
+			loadoutSecondaryBuff = "specialty_null";
+			loadoutSecondaryCamo = "none";
+			loadoutSecondaryReticle = "none";	
+		}
+
+		if ( level.killstreakRewards && isDefined( gamemodeLoadout["loadoutStreakType"] ) && gamemodeLoadout["loadoutStreakType"] != "specialty_null" )
+		{
+			loadoutStreakType = gamemodeLoadout["loadoutStreakType"];
+			loadoutKillstreak1 = gamemodeLoadout["loadoutKillstreak1"];
+			loadoutKillstreak2 = gamemodeLoadout["loadoutKillstreak2"];
+			loadoutKillstreak3 = gamemodeLoadout["loadoutKillstreak3"];			
+		}
+		else if ( level.killstreakRewards && isDefined( self.streakType ) )
+			loadoutStreakType = getLoadoutStreakTypeFromStreakType( self.streakType );
+		else 
+		{
+			loadoutStreakType = "streaktype_assault";
+			loadoutKillstreak1 = "none";
+			loadoutKillstreak2 = "none";
+			loadoutKillstreak3 = "none";			
+		}
+
+		loadoutDeathStreak = gamemodeLoadout["loadoutDeathstreak"];
+
+		if ( gamemodeLoadout["loadoutJuggernaut"] )
+		{
+			self.health = self.maxHealth;
+			thread recipeClassApplyJuggernaut( isJuggernaut() );
+			self.isJuggernaut = true;
+			self.juggmovespeedscaler = 0.7;
+		}
+		else if ( isJuggernaut() )
+		{
+			self notify( "lost_juggernaut" );
+			self.isJuggernaut = false;
+			self.moveSpeedScaler = 1;
+		}
+	}
+	else if ( class == "juggernaut" )
+	{
+		loadoutPrimary = "iw5_m60jugg";
+		loadoutPrimaryAttachment = "none";
+		loadoutPrimaryAttachment2 = "none";
+		loadoutPrimaryBuff = "specialty_null";
+		loadoutPrimaryCamo = "none";
+		loadoutPrimaryReticle = "none";
+		loadoutSecondary = "iw5_mp412jugg";
+		loadoutSecondaryAttachment = "none";
+		loadoutSecondaryAttachment2 = "none";
+		loadoutSecondaryBuff = "specialty_null";
+		loadoutSecondaryCamo = "none";
+		loadoutSecondaryReticle = "none";
+		loadoutEquipment = "frag_grenade_mp";
+		loadoutPerk1 = "specialty_scavenger";
+		loadoutPerk2 = "specialty_quickdraw";
+		loadoutPerk3 = "specialty_detectexplosive";
+		loadoutStreakType = getLoadoutStreakTypeFromStreakType( self.streakType );
+		loadoutOffhand = "smoke_grenade_mp";
+		loadoutDeathStreak = "specialty_null";
+	}
+	else if ( class == "juggernaut_recon" )
+	{
+		loadoutPrimary = "iw5_riotshieldjugg";
+		loadoutPrimaryAttachment = "none";
+		loadoutPrimaryAttachment2 = "none";
+		loadoutPrimaryBuff = "specialty_null";
+		loadoutPrimaryCamo = "none";
+		loadoutPrimaryReticle = "none";
+		loadoutSecondary = "iw5_usp45jugg";
+		loadoutSecondaryAttachment = "none";
+		loadoutSecondaryAttachment2 = "none";
+		loadoutSecondaryBuff = "specialty_null";
+		loadoutSecondaryCamo = "none";
+		loadoutSecondaryReticle = "none";
+		loadoutEquipment = "specialty_portable_radar";
+		loadoutPerk1 = "specialty_scavenger";
+		loadoutPerk2 = "specialty_coldblooded";
+		loadoutPerk3 = "specialty_detectexplosive";
+		loadoutStreakType = getLoadoutStreakTypeFromStreakType( self.streakType );
+		loadoutOffhand = "smoke_grenade_mp";
+		loadoutDeathStreak = "specialty_null";
+	}
+	else
+	{
+		class_num = getClassIndex( class );
+		self.class_num = class_num;
+		
+		loadoutPrimary = table_getWeapon( level.classTableName, class_num, 0 );
+		loadoutPrimaryAttachment = table_getWeaponAttachment( level.classTableName, class_num, 0 , 0);
+		loadoutPrimaryAttachment2 = table_getWeaponAttachment( level.classTableName, class_num, 0, 1 );
+		loadoutPrimaryBuff = table_getWeaponBuff( level.classTableName, class_num, 0 );
+		loadoutPrimaryCamo = table_getWeaponCamo( level.classTableName, class_num, 0 );
+		loadoutPrimaryReticle = table_getWeaponReticle( level.classTableName, class_num, 0 );
+		loadoutSecondary = table_getWeapon( level.classTableName, class_num, 1 );
+		loadoutSecondaryAttachment = table_getWeaponAttachment( level.classTableName, class_num, 1 , 0);
+		loadoutSecondaryAttachment2 = table_getWeaponAttachment( level.classTableName, class_num, 1, 1 );
+		loadoutSecondaryBuff = table_getWeaponBuff( level.classTableName, class_num, 1 );
+		loadoutSecondaryCamo = table_getWeaponCamo( level.classTableName, class_num, 1 );
+		loadoutSecondaryReticle = table_getWeaponReticle( level.classTableName, class_num, 1 );
+		loadoutEquipment = table_getEquipment( level.classTableName, class_num, 0 );
+		loadoutPerk1 = table_getPerk( level.classTableName, class_num, 1 );
+		loadoutPerk2 = table_getPerk( level.classTableName, class_num, 2 );
+		loadoutPerk3 = table_getPerk( level.classTableName, class_num, 3 );
+		loadoutStreakType = table_getPerk( level.classTableName, class_num, 5 );
+		loadoutOffhand = table_getOffhand( level.classTableName, class_num );
+		loadoutDeathstreak = table_getDeathstreak( level.classTableName, class_num );
+	}
+
+	self loadoutFakePerks( loadoutStreakType );
+
+	isCustomClass = isSubstr( class, "custom" );
+	isRecipeClass = isSubstr( class, "recipe" );
+	isGameModeClass = ( class == "gamemode" );
+	
+	if ( !isGameModeClass && !isRecipeClass && !( isDefined( self.pers["copyCatLoadout"] ) && self.pers["copyCatLoadout"]["inUse"] && allowCopycat ) )
+	{
+		if ( !isValidPrimary( loadoutPrimary ) || ( level.rankedMatch && isCustomClass && !self isItemUnlocked( loadoutPrimary )) )
+			loadoutPrimary = table_getWeapon( level.classTableName, 10, 0 );
+		
+		if ( isValidCombination( loadoutPrimary, loadoutPrimaryAttachment ) )
+		{
+			if ( !isValidAttachment( loadoutPrimaryAttachment ) || (  level.rankedMatch && isCustomClass && !self isAttachmentUnlocked( loadoutPrimary, loadoutPrimaryAttachment ) ) )
+				loadoutPrimaryAttachment = table_getWeaponAttachment( level.classTableName, 10, 0 , 0);
+		}
+		else
+		{
+			loadoutPrimaryAttachment = "none";
+		}	
+		
+		if ( isValidCombination( loadoutPrimary, loadoutPrimaryAttachment2 ) )
+		{
+			if ( !isValidAttachment( loadoutPrimaryAttachment2 ) || (  level.rankedMatch && isCustomClass && !self isAttachmentUnlocked( loadoutPrimary, loadoutPrimaryAttachment2 ) ) )
+				loadoutPrimaryAttachment2 = table_getWeaponAttachment( level.classTableName, 10, 0, 1 );
+		}
+		else
+		{
+			loadoutPrimaryAttachment2 = "none";
+		}	
+		
+		if ( !isValidWeaponBuff( loadoutPrimaryBuff, loadoutPrimary ) || ( level.rankedMatch && isCustomClass && !self isWeaponBuffUnlocked( loadoutPrimary, loadoutPrimaryBuff )) )
+			loadoutPrimaryBuff = table_getWeaponBuff( level.classTableName, 10, 0 );
+
+		if ( !isValidCamo( loadoutPrimaryCamo ) || (  level.rankedMatch && isCustomClass && !self isCamoUnlocked( loadoutPrimary, loadoutPrimaryCamo )) )
+			loadoutPrimaryCamo = table_getWeaponCamo( level.classTableName, 10, 0 );
+
+		if ( !isValidReticle( loadoutPrimaryReticle ) )
+			loadoutPrimaryReticle = table_getWeaponReticle( level.classTableNum, 10, 0 );
+		
+		if ( !isValidSecondary( loadoutSecondary, loadoutPerk2, loadoutPerk3 ) || ( level.rankedMatch && isCustomClass && !self isItemUnlocked( loadoutSecondary )) )
+		{
+			loadoutSecondary = table_getWeapon( level.classTableName, 10, 1 );
+			loadoutSecondaryAttachment = "none";
+			loadoutSecondaryAttachment2 = "none";
+			loadoutSecondaryBuff = "specialty_null";
+			loadoutSecondaryCamo = "none";
+			loadoutSecondaryReticle = "none";
+		}
+		
+		if ( isValidCombination( loadoutSecondary, loadoutSecondaryAttachment ) )
+		{
+			if ( !isValidAttachment( loadoutSecondaryAttachment ) || (  level.rankedMatch && isCustomClass && !self isAttachmentUnlocked( loadoutSecondary, loadoutSecondaryAttachment )) )
+				loadoutSecondaryAttachment = table_getWeaponAttachment( level.classTableName, 10, 1 , 0);
+		}
+		else
+		{
+			loadoutSecondaryAttachment = "none";
+		}
+		
+		if ( isValidCombination( loadoutSecondary, loadoutSecondaryAttachment2 ) )
+		{
+			if ( !isValidAttachment( loadoutSecondaryAttachment2 ) || (  level.rankedMatch && isCustomClass && !self isAttachmentUnlocked( loadoutSecondary, loadoutSecondaryAttachment2 )) )
+				loadoutSecondaryAttachment2 = table_getWeaponAttachment( level.classTableName, 10, 1, 1 );
+		}
+		else
+		{
+			loadoutSecondaryAttachment2 = "none";
+		}
+		
+		if ( loadoutPerk2 == "specialty_twoprimaries" && !isValidWeaponBuff( loadoutSecondaryBuff, loadoutSecondary ) || ( level.rankedMatch && isCustomClass && !self isItemUnlocked( loadoutSecondary + " " + loadoutSecondaryBuff ) ) )
+			loadoutSecondaryBuff = table_getWeaponBuff( level.classTableName, 10, 1 );
+
+		if ( !isValidCamo( loadoutSecondaryCamo ) || ( level.rankedMatch && isCustomClass && !self isCamoUnlocked( loadoutSecondary, loadoutSecondaryCamo )) )
+			loadoutSecondaryCamo = table_getWeaponCamo( level.classTableName, 10, 1 );
+
+		if ( !isValidReticle( loadoutSecondaryReticle ) )
+			loadoutSecondaryReticle = table_getWeaponReticle( level.classTableName, 10, 1 );
+		
+		if ( !isValidEquipment( loadoutEquipment ) || ( level.rankedMatch && isCustomClass && !self isItemUnlocked( loadoutEquipment )) )
+			loadoutEquipment = table_getEquipment( level.classTableName, 10, 0 );
+		
+		if ( !isValidPerk1( loadoutPerk1 ) || ( level.rankedMatch && isCustomClass && !self isItemUnlocked( loadoutPerk1 )) )
+			loadoutPerk1 = table_getPerk( level.classTableName, 10, 1 );
+		
+		if ( !isValidPerk2( loadoutPerk2 ) || ( level.rankedMatch && isCustomClass && !self isItemUnlocked( loadoutPerk2 )) )
+			loadoutPerk2 = table_getPerk( level.classTableName, 10, 2 );
+		
+		if ( !isValidPerk3( loadoutPerk3 ) || ( level.rankedMatch && isCustomClass && !self isItemUnlocked( loadoutPerk3 )) )
+			loadoutPerk3 = table_getPerk( level.classTableName, 10, 3 );
+		
+		if ( !isValidDeathStreak( loadoutDeathStreak ) || ( level.rankedMatch && isCustomClass && !self isItemUnlocked( loadoutDeathStreak ) ) )
+			loadoutDeathStreak = table_getDeathstreak( level.classTableName, 10 );
+
+		if ( !isValidOffhand( loadoutOffhand ) )
+			loadoutOffhand = table_getOffhand( level.classTableName, 10 );
+
+		if ( loadoutPrimaryAttachment2 != "none" && loadoutPrimaryBuff != "specialty_bling" )
+			loadoutPrimaryAttachment2 = "none";
+
+		if ( loadoutSecondaryBuff != "specialty_null" && loadoutPerk2 != "specialty_twoprimaries" )
+			loadoutSecondaryBuff = "specialty_null";
+
+		if ( loadoutSecondaryAttachment2 != "none" && ( loadoutSecondaryBuff != "specialty_bling" || loadoutPerk2 != "specialty_twoprimaries" ) )
+			loadoutSecondaryAttachment2 = "none";
+	}
+
+	self.loadoutPrimary = loadoutPrimary;
+	self.loadoutPrimaryCamo = int(tableLookup( "mp/camoTable.csv", 1, loadoutPrimaryCamo, 0 ));
+	self.loadoutSecondary = loadoutSecondary;
+	self.loadoutSecondaryCamo = int(tableLookup( "mp/camoTable.csv", 1, loadoutSecondaryCamo, 0 ));
+	
+	if ( !IsSubstr( loadoutPrimary, "iw5" ) )
+		self.loadoutPrimaryCamo = 0;
+	if ( !IsSubstr( loadoutSecondary, "iw5" ) )
+		self.loadoutSecondaryCamo = 0;
+
+	self.loadoutPrimaryReticle = int(tableLookup( "mp/reticleTable.csv", 1, loadoutPrimaryReticle, 0 ));
+	self.loadoutSecondaryReticle = int(tableLookup( "mp/reticleTable.csv", 1, loadoutSecondaryReticle, 0));
+	
+	if ( !IsSubstr( loadoutPrimary, "iw5" ) )
+		self.loadoutPrimaryReticle = 0;
+	if ( !IsSubstr( loadoutSecondary, "iw5" ) )
+		self.loadoutSecondaryReticle = 0;
+
+	if ( loadoutSecondary == "none" )
+		secondaryName = "none";
+	else
+	{
+		secondaryName = buildWeaponName( loadoutSecondary, loadoutSecondaryAttachment, loadoutSecondaryAttachment2, self.loadoutSecondaryCamo, self.loadoutSecondaryReticle );
+		self _giveWeapon( secondaryName );
+
+		weaponTokens = StrTok( secondaryName, "_" );
+		
+		if ( weaponTokens[0] == "iw5" )
+			weaponTokens[0] = weaponTokens[0] + "_" + weaponTokens[1];
+		else if ( weaponTokens[0] == "alt" )
+			weaponTokens[0] = weaponTokens[1] + "_" + weaponTokens[2];
+		
+		weaponName = weaponTokens[0];
+		
+		curWeaponRank = self maps\mp\gametypes\_rank::getWeaponRank( weaponName );
+		curWeaponStatRank = self GetPlayerData( "weaponRank", weaponName );
+		if( curWeaponRank != curWeaponStatRank )
+			self SetPlayerData( "weaponRank", weaponName, curWeaponRank );
+	}
+		
+	self SetOffhandPrimaryClass( "other" );
+
+	self _SetActionSlot( 1, "" );
+	self _SetActionSlot( 3, "altMode" );
+	self _SetActionSlot( 4, "" );
+
+	if ( !level.console )
+	{
+		_setActionSlot( 5, "" );
+		_setActionSlot( 6, "" );
+		_setActionSlot( 7, "" );
+	}
+
+	self _clearPerks();
+	self _detachAll();
+	
+	if ( level.dieHardMode )
+		self givePerk( "specialty_pistoldeath", false );
+	
+	self loadoutAllPerks( loadoutEquipment, loadoutPerk1, loadoutPerk2, loadoutPerk3, loadoutPrimaryBuff, loadoutSecondaryBuff );
+		
+	if ( self _hasPerk( "specialty_extraammo" ) && secondaryName != "none" && getWeaponClass( secondaryName ) != "weapon_projectile" )
+		self giveMaxAmmo( secondaryName );
+
+	self.spawnPerk = false;
+	if( !self _hasPerk( "specialty_blindeye" ) && self.avoidKillstreakOnSpawnTimer > 0 )
+		self thread maps\mp\perks\_perks::giveBlindEyeAfterSpawn();
+
+	if( self.pers["cur_death_streak"] > 0 )
+	{
+		deathStreaks = [];
+		if( loadoutDeathStreak != "specialty_null" )
+			deathStreaks[ loadoutDeathStreak ] = int( tableLookup( "mp/perkTable.csv", 1, loadoutDeathStreak, 6 ) );
+
+		if ( self getPerkUpgrade( loadoutPerk1 ) == "specialty_rollover" || self getPerkUpgrade( loadoutPerk2 ) == "specialty_rollover" || self getPerkUpgrade( loadoutPerk3 ) == "specialty_rollover" )
+		{
+			foreach( key, value in deathStreaks )
+				deathStreaks[ key ] -= 1;
+		}
+
+		foreach( key, value in deathStreaks )
+		{
+			if ( self.pers["cur_death_streak"] >= value )
+			{
+				if ( key == "specialty_carepackage" && self.pers["cur_death_streak"] > value )
+					continue;
+
+				if ( key == "specialty_uav" && self.pers["cur_death_streak"] > value )
+					continue;
+
+				self thread givePerk( key, true );
+				self thread maps\mp\gametypes\_hud_message::splashNotify( key );
+			}
+		}
+	}
+
+	if ( level.killstreakRewards && !isDefined( loadoutKillstreak1 ) && !isDefined( loadoutKillstreak2 ) && !isDefined( loadoutKillstreak3 ) )
+	{
+		if ( isDefined( self.pers["copyCatLoadout"] ) && self.pers["copyCatLoadout"]["inUse"] && allowCopycat )
+		{
+			loadoutKillstreak1 = clonedLoadout["loadoutKillstreak1"];
+			loadoutKillstreak2 = clonedLoadout["loadoutKillstreak2"];
+			loadoutKillstreak3 = clonedLoadout["loadoutKillstreak3"];
+		}
+		else
+		{
+			defaultKillstreak1 = undefined;
+			defaultKillstreak2 = undefined;
+			defaultKillstreak3 = undefined;
+			playerData = undefined;
+
+			switch( self.streakType )
+			{
+			case "support":
+				defaultKillstreak1 = table_getKillstreak( level.classTableName, 2, 1 );
+				defaultKillstreak2 = table_getKillstreak( level.classTableName, 2, 2 );
+				defaultKillstreak3 = table_getKillstreak( level.classTableName, 2, 3 );
+				playerData = "defenseStreaks";
+				break;
+			case "specialist":
+				defaultKillstreak1 = table_getKillstreak( level.classTableName, 1, 1 );
+				defaultKillstreak2 = table_getKillstreak( level.classTableName, 1, 2 );
+				defaultKillstreak3 = table_getKillstreak( level.classTableName, 1, 3 );
+				playerData = "specialistStreaks";
+				break;
+			default:
+				defaultKillstreak1 = table_getKillstreak( level.classTableName, 0, 1 );
+				defaultKillstreak2 = table_getKillstreak( level.classTableName, 0, 2 );
+				defaultKillstreak3 = table_getKillstreak( level.classTableName, 0, 3 );
+				playerData = "assaultStreaks";
+				break;
+			}
+
+			loadoutKillstreak1 = undefined;
+			loadoutKillstreak2 = undefined;
+			loadoutKillstreak3 = undefined;
+
+			if( IsSubStr( class, "custom" ) )
+			{
+				customClassLoc = cac_getCustomClassLoc();
+				loadoutKillstreak1 = self getPlayerData( customClassLoc, self.class_num, playerData, 0 );
+				loadoutKillstreak2 = self getPlayerData( customClassLoc, self.class_num, playerData, 1 );
+				loadoutKillstreak3 = self getPlayerData( customClassLoc, self.class_num, playerData, 2 );
+			}
+
+			if( IsSubStr( class, "juggernaut" ) || isGameModeClass )
+			{
+				foreach( killstreak in self.killstreaks )
+				{
+					if( !IsDefined( loadoutKillstreak1 ) )
+						loadoutKillstreak1 = killstreak;
+					else if( !IsDefined( loadoutKillstreak2 ) )
+						loadoutKillstreak2 = killstreak;
+					else if( !IsDefined( loadoutKillstreak3 ) )
+						loadoutKillstreak3 = killstreak;
+				}
+
+				if ( isGameModeClass && self.streakType == "specialist" )
+				{
+					self.pers["gamemodeLoadout"]["loadoutKillstreak1"] = loadoutKillstreak1;
+					self.pers["gamemodeLoadout"]["loadoutKillstreak2"] = loadoutKillstreak2;
+					self.pers["gamemodeLoadout"]["loadoutKillstreak3"] = loadoutKillstreak3;
+				}
+			}
+
+			if( !isSubstr( class, "custom" ) && !isSubstr( class, "juggernaut" ) && !isGameModeClass )
+			{
+				loadoutKillstreak1 = defaultKillstreak1;
+				loadoutKillstreak2 = defaultKillstreak2;
+				loadoutKillstreak3 = defaultKillstreak3;
+			}
+
+			if( !IsDefined( loadoutKillstreak1 ) )
+				loadoutKillstreak1 = "none";
+			if( !IsDefined( loadoutKillstreak2 ) )
+				loadoutKillstreak2 = "none";
+			if( !IsDefined( loadoutKillstreak3 ) )
+				loadoutKillstreak3 = "none";
+
+
+			var_56 = 0;
+
+			if ( !isValidKillstreak( loadoutKillstreak1 ) || isCustomClass && !self isitemunlocked( loadoutKillstreak1 ) )
+				var_56 = 1;
+
+			if ( !isValidKillstreak( loadoutKillstreak2 ) || isCustomClass && !self isitemunlocked( loadoutKillstreak2 ) )
+				var_56 = 1;
+
+			if ( !isValidKillstreak( loadoutKillstreak3 ) || isCustomClass && !self isitemunlocked( loadoutKillstreak3 ) )
+				var_56 = 1;
+
+			if ( var_56 )
+			{
+				self.streakType = "assault";
+				loadoutKillstreak1 = table_getKillstreak( level.classTableName, 0, 1 );
+				loadoutKillstreak2 = table_getKillstreak( level.classTableName, 0, 2 );
+				loadoutKillstreak3 = table_getKillstreak( level.classTableName, 0, 3 );
+			}
+		}
+	}
+	else if ( !level.killstreakRewards )
+	{
+		loadoutKillstreak1 = "none";
+		loadoutKillstreak2 = "none";
+		loadoutKillstreak3 = "none";
+	}
+
+	self setKillstreaks( loadoutKillstreak1, loadoutKillstreak2, loadoutKillstreak3 );
+
+	if ( IsDefined( self.lastClass ) && self.lastClass != self.class && !IsSubStr( self.class, "juggernaut" ) && !IsSubStr( self.lastClass, "juggernaut" ) && !IsSubStr( class, "juggernaut" ) )
+	{
+		if ( wasOnlyRound() || self.lastClass != "" )
+		{
+			streakNames = [];
+			inc = 0;
+
+			if( self.pers["killstreaks"].size > 5 )
+			{
+				for ( i = 5; i < self.pers["killstreaks"].size; i++ )
+				{
+					streakNames[inc] = self.pers["killstreaks"][i].streakName;
+					inc++;
+				}
+			}
+
+			if( self.pers["killstreaks"].size )
+			{
+				for ( i = 1; i < 4; i++ )
+				{
+					if( IsDefined( self.pers["killstreaks"][i] ) && 
+						IsDefined( self.pers["killstreaks"][i].streakName ) &&
+						self.pers["killstreaks"][i].available && 
+						!self.pers["killstreaks"][i].isSpecialist )
+					{
+						streakNames[inc] = self.pers["killstreaks"][i].streakName;
+						inc++;
+					}
+				}
+			}
+
+			self notify( "givingLoadout" );
+			maps\mp\killstreaks\_killstreaks::clearKillstreaks();
+
+			for ( i = 0; i < streakNames.size; i++ )
+			{
+				self maps\mp\killstreaks\_killstreaks::giveKillstreak( streakNames[i] );
+			}
+		}
+	}
+
+	if( !IsSubStr( class, "juggernaut" ) )
+	{
+		if( isDefined( self.lastClass ) && self.lastClass != "" && self.lastClass != self.class )
+		{
+			self incPlayerStat( "mostclasseschanged", 1 );
+		}
+
+		self.pers["lastClass"] = self.class;
+		self.lastClass = self.class;		
+	}
+
+	if ( isdefined( self.gamemode_chosenclass ) )
+	{
+		self.pers["class"] = self.gamemode_chosenclass;
+		self.pers["lastClass"] = self.gamemode_chosenclass;
+		self.class = self.gamemode_chosenclass;
+		self.lastClass = self.gamemode_chosenclass;
+		self.gamemode_chosenclass = undefined;
+	}
+
+	primaryName = buildWeaponName( loadoutPrimary, loadoutPrimaryAttachment, loadoutPrimaryAttachment2, self.loadoutPrimaryCamo, self.loadoutPrimaryReticle );
+	self _giveWeapon( primaryName );
+
+	self SwitchToWeapon( primaryName );
+	weaponTokens = StrTok( primaryName, "_" );
+	
+	if ( weaponTokens[0] == "iw5" )
+		weaponName = weaponTokens[0] + "_" + weaponTokens[1];
+	else if ( weaponTokens[0] == "alt" )
+		weaponName = weaponTokens[1] + "_" + weaponTokens[2];
+	else
+		weaponName = weaponTokens[0];
+	
+	curWeaponRank = self maps\mp\gametypes\_rank::getWeaponRank( weaponName );
+	curWeaponStatRank = self GetPlayerData( "weaponRank", weaponName );
+	if( curWeaponRank != curWeaponStatRank )
+		self SetPlayerData( "weaponRank", weaponName, curWeaponRank );
+
+	if ( primaryName == "riotshield_mp" && level.inGracePeriod )
+		self notify ( "weapon_change", "riotshield_mp" );
+
+	if ( self _hasPerk( "specialty_extraammo" ) )
+		self giveMaxAmmo( primaryName );
+
+	if ( setPrimarySpawnWeapon )
+		self setSpawnWeapon( primaryName );
+	
+	self.pers["primaryWeapon"] = weaponName;
+	
+	primaryTokens = strtok( primaryName, "_" );
+	
+	offhandSecondaryWeapon = loadoutOffhand;
+	
+	if ( loadoutOffhand == "none" )
+		self SetOffhandSecondaryClass( "none" );
+	else if ( loadoutOffhand == "flash_grenade_mp" )
+		self SetOffhandSecondaryClass( "flash" );
+	else if ( loadoutOffhand == "smoke_grenade_mp" || loadoutOffhand == "concussion_grenade_mp" )
+		self SetOffhandSecondaryClass( "smoke" );	
+	else 
+		self SetOffhandSecondaryClass( "flash" );
+	
+	switch( offhandSecondaryWeapon )
+	{
+		case "none":
+			break;
+		case "specialty_portable_radar":
+		case "specialty_scrambler":
+		case "specialty_tacticalinsertion":
+		case "trophy_mp":
+			self givePerk( offhandSecondaryWeapon, false );
+			break;
+	
+		default:
+			self giveWeapon( offhandSecondaryWeapon );
+	
+			if( loadOutOffhand == "flash_grenade_mp" )
+				self setWeaponAmmoClip( offhandSecondaryWeapon, 2 );
+			else if( loadOutOffhand == "concussion_grenade_mp" )
+				self setWeaponAmmoClip( offhandSecondaryWeapon, 2 );
+			else
+				self setWeaponAmmoClip( offhandSecondaryWeapon, 1 );
+			break;
+	}
+
+	primaryWeapon = primaryName;
+	self.primaryWeapon = primaryWeapon;
+	self.secondaryWeapon = secondaryName;
+
+	if ( var_7 )
+	{
+		self setweaponammoclip( self.primaryWeapon, 0 );
+		self setweaponammostock( self.primaryWeapon, 0 );
+	}
+
+	self maps\mp\gametypes\_teams::playerModelForWeapon( self.pers["primaryWeapon"], getBaseWeaponName( secondaryName ) );
+		
+	self.isSniper = (weaponClass( self.primaryWeapon ) == "sniper");
+	
+	self maps\mp\gametypes\_weapons::updateMoveSpeedScale();
+
+	self maps\mp\perks\_perks::cac_selector();
+	
+	self notify( "changed_kit" );
+	self notify( "giveLoadout", team, class, allowCopycat, setPrimarySpawnWeapon );
 }
 
 _detachAll()
 {
-    if ( isdefined( self.hasRiotShield ) && self.hasRiotShield )
-    {
-        if ( self.hasRiotShieldEquipped && ( !isdefined( self.hasriotshieldhidden ) || self.hasriotshieldhidden == 0 ) )
-        {
-            self detachshieldmodel( "weapon_riot_shield_mp", "tag_weapon_left" );
-            self.hasRiotShieldEquipped = 0;
-        }
-        else
-            self detachshieldmodel( "weapon_riot_shield_mp", "tag_shield_back" );
+	if ( isdefined( self.hasRiotShield ) && self.hasRiotShield )
+	{
+		if ( self.hasRiotShieldEquipped && ( !isdefined( self.hasriotshieldhidden ) || self.hasriotshieldhidden == 0 ) )
+		{
+			self detachshieldmodel( "weapon_riot_shield_mp", "tag_weapon_left" );
+			self.hasRiotShieldEquipped = 0;
+		}
+		else
+			self detachshieldmodel( "weapon_riot_shield_mp", "tag_shield_back" );
 
-        self.hasRiotShield = 0;
-    }
+		self.hasRiotShield = 0;
+	}
 
-    self detachall();
+	self detachall();
 }
 
-isPerkUpgraded( var_0 )
+isPerkUpgraded( perkName )
 {
-    var_1 = tablelookup( "mp/perktable.csv", 1, var_0, 8 );
-
-    if ( var_1 == "" || var_1 == "specialty_null" )
-        return 0;
-
-    if ( !self isitemunlocked( var_1 ) )
-        return 0;
-
-    return 1;
+	perkUpgrade = tablelookup( "mp/perktable.csv", 1, perkName, 8 );
+	
+	if ( perkUpgrade == "" || perkUpgrade == "specialty_null" )
+		return false;
+		
+	if ( !self isItemUnlocked( perkUpgrade ) )
+		return false;
+		
+	return true;
 }
 
-getPerkUpgrade( var_0 )
+getPerkUpgrade( perkName )
 {
-    var_1 = tablelookup( "mp/perktable.csv", 1, var_0, 8 );
-
-    if ( var_1 == "" || var_1 == "specialty_null" )
-        return "specialty_null";
-
-    if ( !self isitemunlocked( var_1 ) )
-        return "specialty_null";
-
-    return var_1;
+	perkUpgrade = tablelookup( "mp/perktable.csv", 1, perkName, 8 );
+	
+	if ( perkUpgrade == "" || perkUpgrade == "specialty_null" )
+		return "specialty_null";
+		
+	if ( !self isItemUnlocked( perkUpgrade ) )
+		return "specialty_null";
+		
+	return ( perkUpgrade );
 }
 
-loadoutAllPerks( var_0, var_1, var_2, var_3, var_4, var_5 )
+loadoutAllPerks( loadoutEquipment, loadoutPerk1, loadoutPerk2, loadoutPerk3, loadoutPrimaryBuff, loadoutSecondaryBuff )
 {
-    var_0 = maps\mp\perks\_perks::validatePerk( 1, var_0 );
-    var_1 = maps\mp\perks\_perks::validatePerk( 1, var_1 );
-    var_2 = maps\mp\perks\_perks::validatePerk( 2, var_2 );
-    var_3 = maps\mp\perks\_perks::validatePerk( 3, var_3 );
-    var_4 = maps\mp\perks\_perks::validatePerk( undefined, var_4 );
+	loadoutEquipment = maps\mp\perks\_perks::validatePerk( 1, loadoutEquipment );
+	loadoutPerk1 = maps\mp\perks\_perks::validatePerk( 1, loadoutPerk1 );
+	loadoutPerk2 = maps\mp\perks\_perks::validatePerk( 2, loadoutPerk2 );
+	loadoutPerk3 = maps\mp\perks\_perks::validatePerk( 3, loadoutPerk3 );
 
-    if ( var_2 == "specialty_twoprimaries" )
-        var_5 = maps\mp\perks\_perks::validatePerk( undefined, var_5 );
+	loadoutPrimaryBuff = maps\mp\perks\_perks::validatePerk( undefined, loadoutPrimaryBuff );
+	if( loadoutPerk2 == "specialty_twoprimaries" )
+		loadoutSecondaryBuff = maps\mp\perks\_perks::validatePerk( undefined, loadoutSecondaryBuff );
 
-    self.loadoutPerk1 = var_1;
-    self.loadoutPerk2 = var_2;
-    self.loadoutPerk3 = var_3;
-    self.loadoutPerkEquipment = var_0;
-    self.loadoutPrimaryBuff = var_4;
-    self.loadoutSecondaryBuff = var_5;
+	self.loadoutPerk1 = loadoutPerk1;
+	self.loadoutPerk2 = loadoutPerk2;
+	self.loadoutPerk3 = loadoutPerk3;
+	self.loadoutPerkEquipment = loadoutEquipment;
+	self.loadoutPrimaryBuff = loadoutPrimaryBuff;
+	if( loadoutPerk2 == "specialty_twoprimaries" )
+		self.loadoutSecondaryBuff = loadoutSecondaryBuff;
+	else
+		self.loadoutSecondaryBuff = "specialty_null";
 
-    if ( var_0 != "specialty_null" )
-        maps\mp\_utility::givePerk( var_0, 1 );
+	if( loadoutEquipment != "specialty_null" )
+		self givePerk( loadoutEquipment, true );
+	if( loadoutPerk1 != "specialty_null" )
+		self givePerk( loadoutPerk1, true );
+	if( loadoutPerk2 != "specialty_null" )
+		self givePerk( loadoutPerk2, true );
+	if( loadoutPerk3 != "specialty_null" )
+		self givePerk( loadoutPerk3, true );
+	
+	if( loadoutPrimaryBuff != "specialty_null" )
+		self givePerk( loadoutPrimaryBuff, true );
 
-    if ( var_1 != "specialty_null" )
-        maps\mp\_utility::givePerk( var_1, 1 );
+	perkUpgrd[0] = tablelookup( "mp/perktable.csv", 1, loadoutPerk1, 8 );
+	perkUpgrd[1] = tablelookup( "mp/perktable.csv", 1, loadoutPerk2, 8 );
+	perkUpgrd[2] = tablelookup( "mp/perktable.csv", 1, loadoutPerk3, 8 );
+	
+	foreach( upgrade in perkUpgrd )
+	{
+		if ( upgrade == "" || upgrade == "specialty_null" )
+			continue;
+			
+		if ( self isItemUnlocked( upgrade ) || !self rankingEnabled() )
+		{
+			self givePerk( upgrade, true );
+		}
+	}
 
-    if ( var_2 != "specialty_null" )
-        maps\mp\_utility::givePerk( var_2, 1 );
-
-    if ( var_3 != "specialty_null" )
-        maps\mp\_utility::givePerk( var_3, 1 );
-
-    if ( var_4 != "specialty_null" )
-        maps\mp\_utility::givePerk( var_4, 1 );
-
-    var_6[0] = tablelookup( "mp/perktable.csv", 1, var_1, 8 );
-    var_6[1] = tablelookup( "mp/perktable.csv", 1, var_2, 8 );
-    var_6[2] = tablelookup( "mp/perktable.csv", 1, var_3, 8 );
-
-    foreach ( var_8 in var_6 )
-    {
-        if ( var_8 == "" || var_8 == "specialty_null" )
-            continue;
-
-        if ( self isitemunlocked( var_8 ) || !maps\mp\_utility::rankingEnabled() )
-            maps\mp\_utility::givePerk( var_8, 1 );
-    }
-
-    if ( !maps\mp\_utility::_hasPerk( "specialty_assists" ) )
-        self.pers["assistsToKill"] = 0;
+	if( !self _hasPerk( "specialty_assists" ) )
+		self.pers["assistsToKill"] = 0;
 }
 
 watchoffhanduse()
 {
-    self endon( "death" );
-    self endon( "disconnect" );
-    self endon( "faux_spawn" );
+	self endon( "death" );
+	self endon( "disconnect" );
+	self endon( "faux_spawn" );
 
-    for (;;)
-    {
-        self waittill( "grenade_pullback",  var_0  );
+	for (;;)
+	{
+		self waittill( "grenade_pullback",  var_0  );
 
-        if ( self.hasRiotShieldEquipped )
-        {
-            self detachshieldmodel( "weapon_riot_shield_mp", "tag_weapon_left" );
-            self.hasriotshieldhidden = 1;
-        }
-        else
-            continue;
+		if ( self.hasRiotShieldEquipped )
+		{
+			self detachshieldmodel( "weapon_riot_shield_mp", "tag_weapon_left" );
+			self.hasriotshieldhidden = 1;
+		}
+		else
+			continue;
 
-        self waittill( "offhand_end",  var_0  );
+		self waittill( "offhand_end",  var_0  );
 
-        if ( self.hasRiotShieldEquipped )
-        {
-            self attachshieldmodel( "weapon_riot_shield_mp", "tag_weapon_left" );
-            self.hasriotshieldhidden = 0;
-        }
-    }
+		if ( self.hasRiotShieldEquipped )
+		{
+			self attachshieldmodel( "weapon_riot_shield_mp", "tag_weapon_left" );
+			self.hasriotshieldhidden = 0;
+		}
+	}
 }
 
 trackRiotShield()
 {
-    self endon( "death" );
-    self endon( "disconnect" );
-    self endon( "faux_spawn" );
-    self.hasRiotShield = self hasweapon( "riotshield_mp" );
-    self.hasRiotShieldEquipped = self.currentWeaponAtSpawn == "riotshield_mp";
-    thread watchoffhanduse();
+	self endon( "death" );
+	self endon( "disconnect" );
+	self endon( "faux_spawn" );
+	self.hasRiotShield = self hasweapon( "riotshield_mp" );
+	self.hasRiotShieldEquipped = self.currentWeaponAtSpawn == "riotshield_mp";
+	thread watchoffhanduse();
 
-    if ( self.hasRiotShield )
-    {
-        if ( self.primaryWeapon == "riotshield_mp" && self.secondaryWeapon == "riotshield_mp" )
-        {
-            self attachshieldmodel( "weapon_riot_shield_mp", "tag_weapon_left" );
-            self attachshieldmodel( "weapon_riot_shield_mp", "tag_shield_back" );
-        }
-        else if ( self.hasRiotShieldEquipped )
-            self attachshieldmodel( "weapon_riot_shield_mp", "tag_weapon_left" );
-        else
-            self attachshieldmodel( "weapon_riot_shield_mp", "tag_shield_back" );
-    }
+	if ( self.hasRiotShield )
+	{
+		if ( self.primaryWeapon == "riotshield_mp" && self.secondaryWeapon == "riotshield_mp" )
+		{
+			self attachshieldmodel( "weapon_riot_shield_mp", "tag_weapon_left" );
+			self attachshieldmodel( "weapon_riot_shield_mp", "tag_shield_back" );
+		}
+		else if ( self.hasRiotShieldEquipped )
+			self attachshieldmodel( "weapon_riot_shield_mp", "tag_weapon_left" );
+		else
+			self attachshieldmodel( "weapon_riot_shield_mp", "tag_shield_back" );
+	}
 
-    for (;;)
-    {
-        self waittill( "weapon_change",  var_0  );
+	for (;;)
+	{
+		self waittill( "weapon_change",  var_0  );
 
-        if ( var_0 == "riotshield_mp" || var_0 == "iw5_riotshieldjugg_mp" )
-        {
-            if ( self.hasRiotShieldEquipped )
-                continue;
+		if ( var_0 == "riotshield_mp" || var_0 == "iw5_riotshieldjugg_mp" )
+		{
+			if ( self.hasRiotShieldEquipped )
+				continue;
 
-            if ( self.primaryWeapon == var_0 && self.secondaryWeapon == var_0 )
-                continue;
-            else if ( self.hasRiotShield )
-                self moveshieldmodel( "weapon_riot_shield_mp", "tag_shield_back", "tag_weapon_left" );
-            else
-                self attachshieldmodel( "weapon_riot_shield_mp", "tag_weapon_left" );
+			if ( self.primaryWeapon == var_0 && self.secondaryWeapon == var_0 )
+				continue;
+			else if ( self.hasRiotShield )
+				self moveshieldmodel( "weapon_riot_shield_mp", "tag_shield_back", "tag_weapon_left" );
+			else
+				self attachshieldmodel( "weapon_riot_shield_mp", "tag_weapon_left" );
 
-            self.hasRiotShield = 1;
-            self.hasRiotShieldEquipped = 1;
-            continue;
-        }
+			self.hasRiotShield = 1;
+			self.hasRiotShieldEquipped = 1;
+			continue;
+		}
 
-        if ( self ismantling() && var_0 == "none" )
-            continue;
+		if ( self ismantling() && var_0 == "none" )
+			continue;
 
-        if ( self.hasRiotShieldEquipped )
-        {
-            self.hasRiotShield = self hasweapon( "riotshield_mp" ) || self hasweapon( "iw5_riotshieldjugg_mp" );
+		if ( self.hasRiotShieldEquipped )
+		{
+			self.hasRiotShield = self hasweapon( "riotshield_mp" ) || self hasweapon( "iw5_riotshieldjugg_mp" );
 
-            if ( self.hasRiotShield )
-                self moveshieldmodel( "weapon_riot_shield_mp", "tag_weapon_left", "tag_shield_back" );
-            else
-                self detachshieldmodel( "weapon_riot_shield_mp", "tag_weapon_left" );
+			if ( self.hasRiotShield )
+				self moveshieldmodel( "weapon_riot_shield_mp", "tag_weapon_left", "tag_shield_back" );
+			else
+				self detachshieldmodel( "weapon_riot_shield_mp", "tag_weapon_left" );
 
-            self.hasRiotShieldEquipped = 0;
-            continue;
-        }
+			self.hasRiotShieldEquipped = 0;
+			continue;
+		}
 
-        if ( self.hasRiotShield )
-        {
-            if ( !self hasweapon( "riotshield_mp" ) && !self hasweapon( "iw5_riotshieldjugg_mp" ) )
-            {
-                self detachshieldmodel( "weapon_riot_shield_mp", "tag_shield_back" );
-                self.hasRiotShield = 0;
-            }
-        }
-    }
+		if ( self.hasRiotShield )
+		{
+			if ( !self hasweapon( "riotshield_mp" ) && !self hasweapon( "iw5_riotshieldjugg_mp" ) )
+			{
+				self detachshieldmodel( "weapon_riot_shield_mp", "tag_shield_back" );
+				self.hasRiotShield = 0;
+			}
+		}
+	}
 }
 
-tryAttach( var_0 )
+tryAttach( placement )
 {
-    if ( !isdefined( var_0 ) || var_0 != "back" )
-        var_1 = "tag_weapon_left";
-    else
-        var_1 = "tag_shield_back";
-
-    var_2 = self getattachsize();
-
-    for ( var_3 = 0; var_3 < var_2; var_3++ )
-    {
-        var_4 = self getattachtagname( var_3 );
-
-        if ( var_4 == var_1 && self getattachmodelname( var_3 ) == "weapon_riot_shield_mp" )
-            return;
-    }
-
-    self attachshieldmodel( "weapon_riot_shield_mp", var_1 );
+	if ( !isDefined( placement ) || placement != "back" )
+		tag = "tag_weapon_left";
+	else
+		tag = "tag_shield_back";
+	
+	attachSize = self getAttachSize();
+	
+	for ( i = 0; i < attachSize; i++ )
+	{
+		attachedTag = self getAttachTagName( i );
+		if ( attachedTag == tag &&  self getAttachModelName( i ) == "weapon_riot_shield_mp" )
+		{
+			return;
+		}
+	}
+	
+	self AttachShieldModel( "weapon_riot_shield_mp", tag );
 }
 
-tryDetach( var_0 )
+tryDetach( placement )
 {
-    if ( !isdefined( var_0 ) || var_0 != "back" )
-        var_1 = "tag_weapon_left";
-    else
-        var_1 = "tag_shield_back";
-
-    var_2 = self getattachsize();
-
-    for ( var_3 = 0; var_3 < var_2; var_3++ )
-    {
-        var_4 = self getattachmodelname( var_3 );
-
-        if ( var_4 == "weapon_riot_shield_mp" )
-        {
-            self detachshieldmodel( var_4, var_1 );
-            return;
-        }
-    }
-
-    return;
+	if ( !isDefined( placement ) || placement != "back" )
+		tag = "tag_weapon_left";
+	else
+		tag = "tag_shield_back";
+	
+	
+	attachSize = self getAttachSize();
+	
+	for ( i = 0; i < attachSize; i++ )
+	{
+		attachedModel = self getAttachModelName( i );
+		if ( attachedModel == "weapon_riot_shield_mp" )
+		{
+			self DetachShieldModel( attachedModel, tag);
+			return;
+		}
+	}
+	return;
 }
 
-buildWeaponName( var_0, var_1, var_2, var_3, var_4 )
+buildWeaponName( baseName, attachment1, attachment2, camo, reticle )
 {
-    if ( !isdefined( level.letterToNumber ) )
-        level.letterToNumber = makeLettersToNumbers();
+	if ( !isDefined( level.letterToNumber ) )
+		level.letterToNumber = makeLettersToNumbers();
+	
+	if ( getDvarInt ( "scr_game_perks" ) == 0 )
+	{
+		attachment2 = "none";
+	}
+	
+	if ( isDefined( reticle ) && reticle != 0 && getAttachmentType( attachment1 ) != "rail" && getAttachmentType( attachment2 ) != "rail" )
+	{
+		reticle = undefined;
+	}
+		
+	if( getAttachmentType( attachment1 ) == "rail" )
+	{
+		attachment1 = attachmentMap( attachment1, baseName );
+	}
+	else if ( getAttachmentType( attachment2 ) == "rail" )
+	{
+		attachment2 = attachmentMap( attachment2, baseName );
+	}
+	
+	bareWeaponName = "";
+	
+	if ( isSubstr(baseName, "iw5_") )
+	{
+		weaponName = baseName + "_mp";
+		endIndex = baseName.size;
+		bareWeaponName = GetSubStr( baseName, 4, endIndex );
+	}
+	else
+	{
+		weaponName = baseName;
+	}
+	
+	attachments = [];
 
-    if ( getdvarint( "scr_game_perks" ) == 0 )
-        var_2 = "none";
+	if ( attachment1 != "none" && attachment2 != "none" )
+	{
+		if ( level.letterToNumber[attachment1[0]] < level.letterToNumber[attachment2[0]] )
+		{
+			
+			attachments[0] = attachment1;
+			attachments[1] = attachment2;
+			
+		}
+		else if ( level.letterToNumber[attachment1[0]] == level.letterToNumber[attachment2[0]] )
+		{
+			if ( level.letterToNumber[attachment1[1]] < level.letterToNumber[attachment2[1]] )
+			{
+				attachments[0] = attachment1;
+				attachments[1] = attachment2;
+			}
+			else
+			{
+				attachments[0] = attachment2;
+				attachments[1] = attachment1;
+			}	
+		}
+		else
+		{
+			attachments[0] = attachment2;
+			attachments[1] = attachment1;
+		}
+		
+		if ( getWeaponClass( baseName ) == "weapon_sniper" && getAttachmentType( attachment1 ) != "rail" && getAttachmentType( attachment2 ) != "rail" ) 	
+		{
+			if ( attachment1 != "zoomscope" && attachment2 != "zoomscope" )
+				attachments[2] = bareWeaponName + "scope";
+		}
+	}
+	else if ( attachment1 != "none" )
+	{
+		attachments[0] = attachment1;
+		
+		if ( getWeaponClass( baseName ) == "weapon_sniper" && getAttachmentType( attachment1 ) != "rail" && attachment1 != "zoomscope" )
+			attachments[1] = bareWeaponName + "scope";
+		
+	}
+	else if ( attachment2 != "none" )
+	{
+		attachments[0] = attachment2;	
+		
+		if ( getWeaponClass( baseName ) == "weapon_sniper" && getAttachmentType( attachment2 ) != "rail" && attachment2 != "zoomscope" )
+			attachments[1] = bareWeaponName + "scope";
+	}
+	else if ( getWeaponClass( baseName ) == "weapon_sniper" )
+	{
+		attachments[0] = bareWeaponName + "scope";
+	}
+	
+	if( isDefined( attachments[0] ) && attachments[0] == "vzscope" )
+		attachments[0] = bareWeaponName + "scopevz";
+	else if( isDefined( attachments[1] ) && attachments[1] == "vzscope" )
+		attachments[1] = bareWeaponName + "scopevz";
+	else if( isDefined( attachments[2] ) && attachments[2] == "vzscope" )
+		attachments[2] = bareWeaponName + "scopevz";
+	
+	if ( isDefined( attachments.size ) && attachments.size )
+	{
+		i = 0;
+		while( i < attachments.size )
+		{
+			if ( isDefined( attachments[i+1] ) && is_later_in_alphabet( attachments[i], attachments[i+1] ) )
+			{
+				tmpAtch = attachments[i];
+				attachments[i] = attachments[i+1];
+				attachments[i+1] = tmpAtch;
+				i = 0;
+				continue;
+			}
+			i++;
+		}
+	}
+	
+	foreach ( attachment in attachments )
+	{
+		weaponName += "_" + attachment;
+	}
 
-    if ( isdefined( var_4 ) && var_4 != 0 && maps\mp\_utility::getAttachmentType( var_1 ) != "rail" && maps\mp\_utility::getAttachmentType( var_2 ) != "rail" )
-        var_4 = undefined;
-
-    if ( maps\mp\_utility::getAttachmentType( var_1 ) == "rail" )
-        var_1 = maps\mp\_utility::attachmentMap( var_1, var_0 );
-    else if ( maps\mp\_utility::getAttachmentType( var_2 ) == "rail" )
-        var_2 = maps\mp\_utility::attachmentMap( var_2, var_0 );
-
-    var_5 = "";
-
-    if ( issubstr( var_0, "iw5_" ) )
-    {
-        var_6 = var_0 + "_mp";
-        var_7 = var_0.size;
-        var_5 = getsubstr( var_0, 4, var_7 );
-    }
-    else
-        var_6 = var_0;
-
-    var_8 = [];
-
-    if ( var_1 != "none" && var_2 != "none" )
-    {
-        if ( level.letterToNumber[var_1[0]] < level.letterToNumber[var_2[0]] )
-        {
-            var_8[0] = var_1;
-            var_8[1] = var_2;
-        }
-        else if ( level.letterToNumber[var_1[0]] == level.letterToNumber[var_2[0]] )
-        {
-            if ( level.letterToNumber[var_1[1]] < level.letterToNumber[var_2[1]] )
-            {
-                var_8[0] = var_1;
-                var_8[1] = var_2;
-            }
-            else
-            {
-                var_8[0] = var_2;
-                var_8[1] = var_1;
-            }
-        }
-        else
-        {
-            var_8[0] = var_2;
-            var_8[1] = var_1;
-        }
-
-        if ( maps\mp\_utility::getWeaponClass( var_0 ) == "weapon_sniper" && maps\mp\_utility::getAttachmentType( var_1 ) != "rail" && maps\mp\_utility::getAttachmentType( var_2 ) != "rail" )
-        {
-            if ( var_1 != "zoomscope" && var_2 != "zoomscope" )
-                var_8[2] = var_5 + "scope";
-        }
-    }
-    else if ( var_1 != "none" )
-    {
-        var_8[0] = var_1;
-
-        if ( maps\mp\_utility::getWeaponClass( var_0 ) == "weapon_sniper" && maps\mp\_utility::getAttachmentType( var_1 ) != "rail" && var_1 != "zoomscope" )
-            var_8[1] = var_5 + "scope";
-    }
-    else if ( var_2 != "none" )
-    {
-        var_8[0] = var_2;
-
-        if ( maps\mp\_utility::getWeaponClass( var_0 ) == "weapon_sniper" && maps\mp\_utility::getAttachmentType( var_2 ) != "rail" && var_2 != "zoomscope" )
-            var_8[1] = var_5 + "scope";
-    }
-    else if ( maps\mp\_utility::getWeaponClass( var_0 ) == "weapon_sniper" )
-        var_8[0] = var_5 + "scope";
-
-    if ( isdefined( var_8[0] ) && var_8[0] == "vzscope" )
-        var_8[0] = var_5 + "scopevz";
-    else if ( isdefined( var_8[1] ) && var_8[1] == "vzscope" )
-        var_8[1] = var_5 + "scopevz";
-    else if ( isdefined( var_8[2] ) && var_8[2] == "vzscope" )
-        var_8[2] = var_5 + "scopevz";
-
-    if ( isdefined( var_8.size ) && var_8.size )
-    {
-        var_9 = 0;
-
-        while ( var_9 < var_8.size )
-        {
-            if ( isdefined( var_8[var_9 + 1] ) && common_scripts\utility::is_later_in_alphabet( var_8[var_9], var_8[var_9 + 1] ) )
-            {
-                var_10 = var_8[var_9];
-                var_8[var_9] = var_8[var_9 + 1];
-                var_8[var_9 + 1] = var_10;
-                var_9 = 0;
-                continue;
-            }
-
-            var_9++;
-        }
-    }
-
-    foreach ( var_12 in var_8 )
-        var_6 += ( "_" + var_12 );
-
-    if ( issubstr( var_6, "iw5_" ) )
-    {
-        var_6 = buildWeaponNameCamo( var_6, var_3 );
-        var_6 = buildWeaponNameReticle( var_6, var_4 );
-        return var_6;
-    }
-    else if ( !isValidWeapon( var_6 + "_mp" ) )
-        return var_0 + "_mp";
-    else
-    {
-        var_6 = buildWeaponNameCamo( var_6, var_3 );
-        var_6 = buildWeaponNameReticle( var_6, var_4 );
-        return var_6 + "_mp";
-    }
+	if ( isSubstr(weaponName, "iw5_") )
+	{
+		weaponName = buildWeaponNameCamo( weaponName, camo );
+		weaponName = buildWeaponNameReticle( weaponName, reticle );
+		return ( weaponName );
+	}
+	else if ( !isValidWeapon( weaponName + "_mp" ) )
+	{
+		return ( baseName + "_mp" );
+	}
+	else
+	{
+		weaponName = buildWeaponNameCamo( weaponName, camo );
+		weaponName = buildWeaponNameReticle( weaponName, reticle );
+		return ( weaponName + "_mp" );
+	}
 }
 
-buildWeaponNameCamo( var_0, var_1 )
+buildWeaponNameCamo( weaponName, camo )
 {
-    if ( !isdefined( var_1 ) )
-        return var_0;
+	if ( !IsDefined( camo ) || camo <= 0 )
+		return weaponName;
 
-    if ( var_1 <= 0 )
-        return var_0;
-
-    if ( var_1 < 10 )
-        var_0 += "_camo0";
-    else
-        var_0 += "_camo";
-
-    var_0 += var_1;
-    return var_0;
+	return weaponName + "_camo" + ter_op( camo < 10, "0", "" ) + camo;
 }
 
-buildWeaponNameReticle( var_0, var_1 )
+buildWeaponNameReticle( weaponName, reticle )
 {
-    if ( !isdefined( var_1 ) )
-        return var_0;
+	if ( !IsDefined( reticle ) || reticle == 0 )
+	{
+		return weaponName;
+	}
+	
+	weaponName += "_scope" + reticle;
 
-    if ( var_1 <= 0 )
-        return var_0;
-
-    var_0 += "_scope";
-    var_0 += var_1;
-    return var_0;
+	return weaponName;
 }
 
 makeLettersToNumbers()
 {
-    var_0 = [];
-    var_0["a"] = 0;
-    var_0["b"] = 1;
-    var_0["c"] = 2;
-    var_0["d"] = 3;
-    var_0["e"] = 4;
-    var_0["f"] = 5;
-    var_0["g"] = 6;
-    var_0["h"] = 7;
-    var_0["i"] = 8;
-    var_0["j"] = 9;
-    var_0["k"] = 10;
-    var_0["l"] = 11;
-    var_0["m"] = 12;
-    var_0["n"] = 13;
-    var_0["o"] = 14;
-    var_0["p"] = 15;
-    var_0["q"] = 16;
-    var_0["r"] = 17;
-    var_0["s"] = 18;
-    var_0["t"] = 19;
-    var_0["u"] = 20;
-    var_0["v"] = 21;
-    var_0["w"] = 22;
-    var_0["x"] = 23;
-    var_0["y"] = 24;
-    var_0["z"] = 25;
-    return var_0;
+	array = [];
+
+	array["a"] = 0;
+	array["b"] = 1;
+	array["c"] = 2;
+	array["d"] = 3;
+	array["e"] = 4;
+	array["f"] = 5;
+	array["g"] = 6;
+	array["h"] = 7;
+	array["i"] = 8;
+	array["j"] = 9;
+	array["k"] = 10;
+	array["l"] = 11;
+	array["m"] = 12;
+	array["n"] = 13;
+	array["o"] = 14;
+	array["p"] = 15;
+	array["q"] = 16;
+	array["r"] = 17;
+	array["s"] = 18;
+	array["t"] = 19;
+	array["u"] = 20;
+	array["v"] = 21;
+	array["w"] = 22;
+	array["x"] = 23;
+	array["y"] = 24;
+	array["z"] = 25;
+
+	return array;
 }
 
-setKillstreaks( var_0, var_1, var_2 )
+setKillstreaks( streak1, streak2, streak3 )
 {
-    self.killstreaks = [];
-    var_3 = [];
+	self.killStreaks = [];
 
-    if ( isdefined( var_0 ) && var_0 != "none" )
-    {
-        var_4 = maps\mp\killstreaks\_killstreaks::getStreakCost( var_0 );
-        var_3[var_4] = var_0;
-    }
+	killStreaks = [];
 
-    if ( isdefined( var_1 ) && var_1 != "none" )
-    {
-        var_4 = maps\mp\killstreaks\_killstreaks::getStreakCost( var_1 );
-        var_3[var_4] = var_1;
-    }
+	if ( IsDefined( streak1 ) && streak1 != "none" )
+	{
+		streakVal = self maps\mp\killstreaks\_killstreaks::getStreakCost( streak1 );
+		killStreaks[streakVal] = streak1;
+	}
+	if ( IsDefined( streak2 ) && streak2 != "none" )
+	{
+		streakVal = self maps\mp\killstreaks\_killstreaks::getStreakCost( streak2 );
+		killStreaks[streakVal] = streak2;
+	}
+	if ( IsDefined( streak3 ) && streak3 != "none" )
+	{
+		streakVal = self maps\mp\killstreaks\_killstreaks::getStreakCost( streak3 );
+		killStreaks[streakVal] = streak3;
+	}
 
-    if ( isdefined( var_2 ) && var_2 != "none" )
-    {
-        var_4 = maps\mp\killstreaks\_killstreaks::getStreakCost( var_2 );
-        var_3[var_4] = var_2;
-    }
+	maxVal = 0;
+	foreach ( streakVal, streakName in killStreaks )
+	{
+		if ( streakVal > maxVal )
+			maxVal = streakVal;
+	}
 
-    var_5 = 0;
-
-    foreach ( var_4, var_7 in var_3 )
-    {
-        if ( var_4 > var_5 )
-            var_5 = var_4;
-    }
-
-    for ( var_8 = 0; var_8 <= var_5; var_8++ )
-    {
-        if ( !isdefined( var_3[var_8] ) )
-            continue;
-
-        var_7 = var_3[var_8];
-        self.killstreaks[var_8] = var_3[var_8];
-    }
+	for ( streakIndex = 0; streakIndex <= maxVal; streakIndex++ )
+	{
+		if ( !IsDefined( killStreaks[ streakIndex ] ) )
+			continue;
+			
+		streakName = killStreaks[streakIndex];
+			
+		self.killStreaks[ streakIndex ] = killStreaks[ streakIndex ];
+	}
 }
 
 replenishLoadout()
 {
-    var_0 = self.pers["team"];
-    var_1 = self.pers["class"];
-    var_2 = self getweaponslistall();
+	team = self.pers["team"];
+	class = self.pers["class"];
 
-    for ( var_3 = 0; var_3 < var_2.size; var_3++ )
-    {
-        var_4 = var_2[var_3];
-        self givemaxammo( var_4 );
-        self setweaponammoclip( var_4, 9999 );
+	weaponsList = self GetWeaponsListAll();
+	for( idx = 0; idx < weaponsList.size; idx++ )
+	{
+		weapon = weaponsList[idx];
 
-        if ( var_4 == "claymore_mp" || var_4 == "claymore_detonator_mp" )
-            self setweaponammostock( var_4, 2 );
-    }
+		self giveMaxAmmo( weapon );
+		self SetWeaponAmmoClip( weapon, 9999 );
 
-    if ( self getammocount( level.classGrenades[var_1]["primary"]["type"] ) < level.classGrenades[var_1]["primary"]["count"] )
-        self setweaponammoclip( level.classGrenades[var_1]["primary"]["type"], level.classGrenades[var_1]["primary"]["count"] );
+		if ( weapon == "claymore_mp" || weapon == "claymore_detonator_mp" )
+			self setWeaponAmmoStock( weapon, 2 );
+	}
+	
+	if ( self getAmmoCount( level.classGrenades[class]["primary"]["type"] ) < level.classGrenades[class]["primary"]["count"] )
+		self SetWeaponAmmoClip( level.classGrenades[class]["primary"]["type"], level.classGrenades[class]["primary"]["count"] );
 
-    if ( self getammocount( level.classGrenades[var_1]["secondary"]["type"] ) < level.classGrenades[var_1]["secondary"]["count"] )
-        self setweaponammoclip( level.classGrenades[var_1]["secondary"]["type"], level.classGrenades[var_1]["secondary"]["count"] );
+	if ( self getAmmoCount( level.classGrenades[class]["secondary"]["type"] ) < level.classGrenades[class]["secondary"]["count"] )
+		self SetWeaponAmmoClip( level.classGrenades[class]["secondary"]["type"], level.classGrenades[class]["secondary"]["count"] );	
 }
 
 onPlayerConnecting()
 {
-    for (;;)
-    {
-        level waittill( "connected",  var_0  );
+	for(;;)
+	{
+		level waittill( "connected", player );
 
-        if ( !isdefined( var_0.pers["class"] ) )
-            var_0.pers["class"] = "";
-
-        if ( !isdefined( var_0.pers["lastClass"] ) )
-            var_0.pers["lastClass"] = "";
-
-        var_0.class = var_0.pers["class"];
-        var_0.lastClass = var_0.pers["lastClass"];
-        var_0.detectExplosives = 0;
-        var_0.bombSquadIcons = [];
-        var_0.bombSquadIds = [];
-    }
+		if ( !isDefined( player.pers["class"] ) )
+		{
+			player.pers["class"] = "";
+		}
+		if ( !isDefined( player.pers["lastClass"] ) )
+		{
+			player.pers["lastClass"] = "";
+		}
+		player.class = player.pers["class"];
+		player.lastClass = player.pers["lastClass"];
+		player.detectExplosives = false;
+		player.bombSquadIcons = [];
+		player.bombSquadIds = [];
+	}
 }
 
-fadeAway( var_0, var_1 )
+fadeAway( waitDelay, fadeDelay )
 {
-    wait(var_0);
-    self fadeovertime( var_1 );
-    self.alpha = 0;
+	wait waitDelay;
+	
+	self fadeOverTime( fadeDelay );
+	self.alpha = 0;
 }
 
-setClass( var_0 )
+setClass( newClass )
 {
-    self.curClass = var_0;
+	self.curClass = newClass;
 }
 
-getPerkForClass( var_0, var_1 )
+getPerkForClass( perkSlot, className )
 {
-    var_2 = getClassIndex( var_1 );
+	class_num = getClassIndex( className );
 
-    if ( issubstr( var_1, "custom" ) )
-        return cac_getPerk( var_2, var_0 );
-    else
-        return table_getPerk( level.classTableName, var_2, var_0 );
+	if( isSubstr( className, "custom" ) )
+		return cac_getPerk( class_num, perkSlot );
+	else
+		return table_getPerk( level.classTableName, class_num, perkSlot );
 }
 
-classHasPerk( var_0, var_1 )
+classHasPerk( className, perkName )
 {
-    return getPerkForClass( 0, var_0 ) == var_1 || getPerkForClass( 1, var_0 ) == var_1 || getPerkForClass( 2, var_0 ) == var_1;
+	return( getPerkForClass( 0, className ) == perkName || getPerkForClass( 1, className ) == perkName || getPerkForClass( 2, className ) == perkName );
 }
 
-isValidPrimary( var_0, var_1 )
+isValidCombination( weaponName, attachmentName )
 {
-    if ( !isdefined( var_1 ) )
-        var_1 = 1;
+	if ( weaponName == "none" || attachmentName == "none" )
+		return true;
 
-    switch ( var_0 )
-    {
-        case "iw5_m60jugg":
-        case "iw5_riotshieldjugg":
-        case "iw5_m4":
-        case "riotshield":
-        case "iw5_ak47":
-        case "iw5_m16":
-        case "iw5_fad":
-        case "iw5_acr":
-        case "iw5_type95":
-        case "iw5_mk14":
-        case "iw5_scar":
-        case "iw5_g36c":
-        case "iw5_cm901":
-        case "iw5_mp5":
-        case "iw5_mp7":
-        case "iw5_m9":
-        case "iw5_p90":
-        case "iw5_pp90m1":
-        case "iw5_ump45":
-        case "iw5_barrett":
-        case "iw5_rsass":
-        case "iw5_dragunov":
-        case "iw5_msr":
-        case "iw5_as50":
-        case "iw5_ksg":
-        case "iw5_1887":
-        case "iw5_striker":
-        case "iw5_aa12":
-        case "iw5_usas12":
-        case "iw5_spas12":
-        case "xm25":
-        case "iw5_m60":
-        case "iw5_mk46":
-        case "iw5_pecheneg":
-        case "iw5_sa80":
-        case "iw5_mg36":
-        case "iw5_l96a1":
-            return 1;
-        default:
-            if ( var_1 )
-            {
-
-            }
-
-            return 0;
-    }
+	switch ( weaponName )
+	{
+		case "iw5_m60":
+		case "iw5_pecheneg":
+			if ( attachmentName == "heartbeat" )
+				return false;
+			else
+				return true;
+		case "iw5_44magnum":
+		case "iw5_deserteagle":
+		case "iw5_mp412":
+			if ( attachmentName == "silencer02" || attachmentName == "xmags" )
+				return false;
+			else
+				return true;
+		default:
+			return true;
+	}
 }
 
-isValidSecondary( var_0, var_1, var_2, var_3 )
+isValidPrimary( refString, showAssert )
 {
-    if ( !isdefined( var_3 ) )
-        var_3 = 1;
+	if ( !isdefined( showAssert ) )
+		showAssert = true;
 
-    switch ( var_0 )
-    {
-        case "m320":
-        case "iw5_usp45":
-        case "iw5_mp412jugg":
-        case "iw5_usp45jugg":
-        case "xm25":
-        case "iw5_44magnum":
-        case "iw5_deserteagle":
-        case "iw5_mp412":
-        case "iw5_g18":
-        case "iw5_fmg9":
-        case "iw5_mp9":
-        case "iw5_skorpion":
-        case "iw5_p99":
-        case "iw5_fnfiveseven":
-        case "rpg":
-        case "iw5_smaw":
-        case "stinger":
-        case "javelin":
-            return 1;
-        case "iw5_m4":
-        case "riotshield":
-        case "iw5_ak47":
-        case "iw5_m16":
-        case "iw5_fad":
-        case "iw5_acr":
-        case "iw5_type95":
-        case "iw5_mk14":
-        case "iw5_scar":
-        case "iw5_g36c":
-        case "iw5_cm901":
-        case "iw5_mp5":
-        case "iw5_mp7":
-        case "iw5_m9":
-        case "iw5_p90":
-        case "iw5_pp90m1":
-        case "iw5_ump45":
-        case "iw5_barrett":
-        case "iw5_rsass":
-        case "iw5_dragunov":
-        case "iw5_msr":
-        case "iw5_as50":
-        case "iw5_ksg":
-        case "iw5_1887":
-        case "iw5_striker":
-        case "iw5_aa12":
-        case "iw5_usas12":
-        case "iw5_spas12":
-        case "iw5_m60":
-        case "iw5_mk46":
-        case "iw5_pecheneg":
-        case "iw5_sa80":
-        case "iw5_mg36":
-        case "iw5_l96a1":
-            if ( getdvarint( "scr_game_perks" ) == 1 && ( var_1 == "specialty_twoprimaries" || var_2 == "specialty_twoprimaries" ) )
-                return 1;
-            else
-                return 0;
-        default:
-            if ( var_3 )
-            {
-
-            }
-
-            return 0;
-    }
+	switch ( refString )
+	{
+		case "iw5_1887":
+		case "iw5_aa12":
+		case "iw5_acr":
+		case "iw5_ak47":
+		case "iw5_ak74u":
+		case "iw5_as50":
+		case "iw5_barrett":
+		case "iw5_cheytac":
+		case "iw5_cm901":
+		case "iw5_dragunov":
+		case "iw5_fad":
+		case "iw5_g36c":
+		case "iw5_ksg":
+		case "iw5_l96a1":
+		case "iw5_m16":
+		case "iw5_m4":
+		case "iw5_m60":
+		case "iw5_m9":
+		case "iw5_mg36":
+		case "iw5_mk14":
+		case "iw5_mk46":
+		case "iw5_mp5":
+		case "iw5_mp7":
+		case "iw5_msr":
+		case "iw5_p90":
+		case "iw5_pecheneg":
+		case "iw5_pp90m1":
+		case "iw5_rsass":
+		case "iw5_sa80":
+		case "iw5_scar":
+		case "iw5_spas12":
+		case "iw5_striker":
+		case "iw5_type95":
+		case "iw5_ump45":
+		case "iw5_usas12":
+		case "riotshield":
+		case "xm25":
+			return true;
+		case "iw5_m60jugg":
+		case "iw5_riotshieldjugg":
+			if ( isJuggernaut() )
+				return true;
+			else
+				return false;
+		default:
+			return false;
+	}
 }
 
-isValidAttachment( var_0, var_1 )
+isValidSecondary( refString, loadoutPerk2, loadoutPerk3, showAssert )
 {
-    if ( !isdefined( var_1 ) )
-        var_1 = 1;
+	if ( !isdefined( showAssert ) )
+		showAssert = 1;
 
-    switch ( var_0 )
-    {
-        case "none":
-        case "akimbo":
-        case "shotgun":
-        case "tactical":
-        case "vzscope":
-        case "reflex":
-        case "reflexsmg":
-        case "eotech":
-        case "eotechsmg":
-        case "acog":
-        case "acogsmg":
-        case "thermal":
-        case "thermalsmg":
-        case "reflexlmg":
-        case "eotechlmg":
-        case "silencer02":
-        case "silencer03":
-        case "silencer":
-        case "gp25":
-        case "m320":
-        case "gl":
-        case "zoomscope":
-        case "grip":
-        case "heartbeat":
-        case "fmj":
-        case "rof":
-        case "xmags":
-        case "hamrhybrid":
-        case "hybrid":
-            return 1;
-        default:
-            if ( var_1 )
-            {
-
-            }
-
-            return 0;
-    }
+	switch ( refString )
+	{
+		case "iw5_44magnum":
+		case "iw5_deserteagle":
+		case "iw5_fmg9":
+		case "iw5_fnfiveseven":
+		case "iw5_g18":
+		case "iw5_mp412":
+		case "iw5_mp9":
+		case "iw5_p99":
+		case "iw5_skorpion":
+		case "iw5_smaw":
+		case "iw5_usp45":
+		case "javelin":
+		case "m320":
+		case "rpg":
+		case "stinger":
+		case "xm25":
+			return true;
+		case "iw5_mp412jugg":
+		case "iw5_usp45jugg":
+			if ( isJuggernaut() )
+				return true;
+			else
+				return false;
+		case "iw5_1887":
+		case "iw5_aa12":
+		case "iw5_acr":
+		case "iw5_ak74u":
+		case "iw5_ak47":
+		case "iw5_as50":
+		case "iw5_barrett":
+		case "iw5_cheytac":
+		case "iw5_cm901":
+		case "iw5_dragunov":
+		case "iw5_fad":
+		case "iw5_g36c":
+		case "iw5_ksg":
+		case "iw5_l96a1":
+		case "iw5_m16":
+		case "iw5_m4":
+		case "iw5_m60":
+		case "iw5_m9":
+		case "iw5_mg36":
+		case "iw5_mk14":
+		case "iw5_mk46":
+		case "iw5_mp5":
+		case "iw5_mp7":
+		case "iw5_msr":
+		case "iw5_p90":
+		case "iw5_pecheneg":
+		case "iw5_pp90m1":
+		case "iw5_rsass":
+		case "iw5_sa80":
+		case "iw5_scar":
+		case "iw5_spas12":
+		case "iw5_striker":
+		case "iw5_type95":
+		case "iw5_ump45":
+		case "iw5_usas12":
+		case "riotshield":
+			if ( getdvarint( "scr_game_perks" ) == 1 && loadoutPerk2 == "specialty_twoprimaries" )
+				return true;
+			else
+				return false;
+		default:
+			return false;
+	}
 }
 
-isAttachmentUnlocked( var_0, var_1 )
+isValidAttachment( refString, shouldAssert )
 {
-    if ( getdvarint( "xblive_competitionmatch" ) && ( getdvarint( "systemlink" ) || !level.console && ( getdvar( "dedicated" ) == "dedicated LAN server" || getdvar( "dedicated" ) == "dedicated internet server" ) ) )
-        return 1;
+	if ( !isdefined( shouldAssert ) )
+		shouldAssert = 1;
 
-    var_2 = 0;
-    var_3 = 2;
-    var_4 = 4;
-    var_5 = self getplayerdata( "weaponRank", var_0 );
-    var_6 = int( tablelookup( "mp/weaponRankTable.csv", var_2, maps\mp\_utility::getWeaponClass( var_0 ), var_3 ) );
-    var_7 = int( tablelookup( "mp/weaponRankTable.csv", var_6, var_1, var_4 ) );
-
-    if ( var_5 >= var_7 )
-        return 1;
-
-    return 0;
+	switch ( refString )
+	{
+		case "none":
+		case "akimbo":
+		case "shotgun":
+		case "tactical":
+		case "vzscope":
+		case "reflex":
+		case "reflexsmg":
+		case "eotech":
+		case "eotechsmg":
+		case "acog":
+		case "acogsmg":
+		case "thermal":
+		case "thermalsmg":
+		case "reflexlmg":
+		case "eotechlmg":
+		case "silencer02":
+		case "silencer03":
+		case "silencer":
+		case "gp25":
+		case "m320":
+		case "gl":
+		case "zoomscope":
+		case "grip":
+		case "heartbeat":
+		case "fmj":
+		case "rof":
+		case "xmags":
+		case "hamrhybrid":
+		case "hybrid":
+			return true;
+		default:
+			return false;
+	}
 }
 
-isValidWeaponBuff( var_0, var_1 )
+isAttachmentUnlocked( weaponRef, attachmentRef )
 {
-    var_2 = maps\mp\_utility::getWeaponClass( var_1 );
+	if ( getdvarint( "xblive_competitionmatch" ) && ( getdvarint( "systemlink" ) || !level.console && ( getdvar( "dedicated" ) == "dedicated LAN server" || getdvar( "dedicated" ) == "dedicated internet server" ) ) )
+		return true;
 
-    if ( var_2 == "weapon_assault" )
-    {
-        switch ( var_0 )
-        {
-            case "specialty_bling":
-            case "specialty_bulletpenetration":
-            case "specialty_marksman":
-            case "specialty_sharp_focus":
-            case "specialty_holdbreathwhileads":
-            case "specialty_reducedsway":
-                return 1;
-            default:
-                self.detectedexploit = 250;
-                return 0;
-        }
-    }
-    else if ( var_2 == "weapon_smg" )
-    {
-        switch ( var_0 )
-        {
-            case "specialty_bling":
-            case "specialty_marksman":
-            case "specialty_sharp_focus":
-            case "specialty_reducedsway":
-            case "specialty_longerrange":
-            case "specialty_fastermelee":
-                return 1;
-            default:
-                self.detectedexploit = 250;
-                return 0;
-        }
-    }
-    else if ( var_2 == "weapon_lmg" )
-    {
-        switch ( var_0 )
-        {
-            case "specialty_bling":
-            case "specialty_bulletpenetration":
-            case "specialty_marksman":
-            case "specialty_sharp_focus":
-            case "specialty_reducedsway":
-            case "specialty_lightweight":
-                return 1;
-            default:
-                self.detectedexploit = 250;
-                return 0;
-        }
-    }
-    else if ( var_2 == "weapon_sniper" )
-    {
-        switch ( var_0 )
-        {
-            case "specialty_bling":
-            case "specialty_bulletpenetration":
-            case "specialty_marksman":
-            case "specialty_sharp_focus":
-            case "specialty_reducedsway":
-            case "specialty_lightweight":
-                return 1;
-            default:
-                self.detectedexploit = 250;
-                return 0;
-        }
-    }
-    else if ( var_2 == "weapon_shotgun" )
-    {
-        switch ( var_0 )
-        {
-            case "specialty_bling":
-            case "specialty_marksman":
-            case "specialty_sharp_focus":
-            case "specialty_longerrange":
-            case "specialty_fastermelee":
-            case "specialty_moredamage":
-                return 1;
-            default:
-                self.detectedexploit = 250;
-                return 0;
-        }
-    }
-    else if ( var_2 == "weapon_riot" )
-    {
-        switch ( var_0 )
-        {
-            case "specialty_fastermelee":
-            case "specialty_lightweight":
-                return 1;
-            default:
-                self.detectedexploit = 250;
-                return 0;
-        }
-    }
-    else
-    {
-        self.detectedexploit = 250;
-        return 0;
-    }
+	tableWeaponClassCol = 0;
+	tableWeaponClassAttachmentCol = 2;
+	tableWeaponRankCol = 4;
+	weaponRank = self getplayerdata( "weaponRank", weaponRef );
+	colNum = int( tablelookup( "mp/weaponRankTable.csv", tableWeaponClassCol, getWeaponClass( weaponRef ), tableWeaponClassAttachmentCol ) );
+	attachmentRank = int( tablelookup( "mp/weaponRankTable.csv", colNum, attachmentRef, tableWeaponRankCol ) );
+
+	if ( weaponRank >= attachmentRank )
+		return true;
+	else
+		return false;
 }
 
-isWeaponBuffUnlocked( var_0, var_1 )
+isValidWeaponBuff( refString, weapon )
 {
-    if ( getdvarint( "xblive_competitionmatch" ) && ( getdvarint( "systemlink" ) || !level.console && ( getdvar( "dedicated" ) == "dedicated LAN server" || getdvar( "dedicated" ) == "dedicated internet server" ) ) )
-        return 1;
+	weapClass = getWeaponClass( weapon );
 
-    var_2 = 0;
-    var_3 = 4;
-    var_4 = 4;
-    var_5 = self getplayerdata( "weaponRank", var_0 );
-    var_6 = int( tablelookup( "mp/weaponRankTable.csv", var_2, maps\mp\_utility::getWeaponClass( var_0 ), var_3 ) );
-    var_7 = int( tablelookup( "mp/weaponRankTable.csv", var_6, var_1, var_4 ) );
-
-    if ( var_5 >= var_7 )
-        return 1;
-
-    return 0;
+	if ( weapClass == "weapon_assault" )
+	{
+		switch ( refString )
+		{
+			case "specialty_bling":
+			case "specialty_bulletpenetration":
+			case "specialty_marksman":
+			case "specialty_sharp_focus":
+			case "specialty_holdbreathwhileads":
+			case "specialty_reducedsway":
+				return true;
+			default:
+				self.detectedexploit = 250;
+				return false;
+		}
+	}
+	else if ( weapClass == "weapon_smg" )
+	{
+		switch ( refString )
+		{
+			case "specialty_bling":
+			case "specialty_marksman":
+			case "specialty_sharp_focus":
+			case "specialty_reducedsway":
+			case "specialty_longerrange":
+			case "specialty_fastermelee":
+				return true;
+			default:
+				self.detectedexploit = 250;
+				return false;
+		}
+	}
+	else if ( weapClass == "weapon_lmg" )
+	{
+		switch ( refString )
+		{
+			case "specialty_bling":
+			case "specialty_bulletpenetration":
+			case "specialty_marksman":
+			case "specialty_sharp_focus":
+			case "specialty_reducedsway":
+			case "specialty_lightweight":
+				return true;
+			default:
+				self.detectedexploit = 250;
+				return false;
+		}
+	}
+	else if ( weapClass == "weapon_sniper" )
+	{
+		switch ( refString )
+		{
+			case "specialty_bling":
+			case "specialty_bulletpenetration":
+			case "specialty_marksman":
+			case "specialty_sharp_focus":
+			case "specialty_reducedsway":
+			case "specialty_lightweight":
+				return true;
+			default:
+				self.detectedexploit = 250;
+				return false;
+		}
+	}
+	else if ( weapClass == "weapon_shotgun" )
+	{
+		switch ( refString )
+		{
+			case "specialty_bling":
+			case "specialty_marksman":
+			case "specialty_sharp_focus":
+			case "specialty_longerrange":
+			case "specialty_fastermelee":
+			case "specialty_moredamage":
+				return true;
+			default:
+				self.detectedexploit = 250;
+				return false;
+		}
+	}
+	else if ( weapClass == "weapon_riot" )
+	{
+		switch ( refString )
+		{
+			case "specialty_fastermelee":
+			case "specialty_lightweight":
+				return true;
+			default:
+				self.detectedexploit = 250;
+				return false;
+		}
+	}
+	else
+	{
+		self.detectedexploit = 250;
+		return false;
+	}
 }
 
-isValidCamo( var_0 )
+isWeaponBuffUnlocked( weaponRef, buffRef )
 {
-    switch ( var_0 )
-    {
-        case "none":
-        case "classic":
-        case "snow":
-        case "multi":
-        case "d_urban":
-        case "hex":
-        case "choco":
-        case "marine":
-        case "snake":
-        case "winter":
-        case "blue":
-        case "red":
-        case "autumn":
-        case "gold":
-            return 1;
-        default:
-            return 0;
-    }
+	if ( getdvarint( "xblive_competitionmatch" ) && ( getdvarint( "systemlink" ) || !level.console && ( getdvar( "dedicated" ) == "dedicated LAN server" || getdvar( "dedicated" ) == "dedicated internet server" ) ) )
+		return true;
+
+	tableWeaponClassCol = 0;
+	tableWeaponClassBuffCol = 4;
+	tableWeaponRankCol = 4;
+	weaponRank = self getplayerdata( "weaponRank", weaponRef );
+	colNum = int( tablelookup( "mp/weaponRankTable.csv", tableWeaponClassCol, getWeaponClass( weaponRef ), tableWeaponClassBuffCol ) );
+	buffRank = int( tablelookup( "mp/weaponRankTable.csv", colNum, buffRef, tableWeaponRankCol ) );
+
+	if ( weaponRank >= buffRank )
+		return true;
+
+	return false;
 }
 
-isValidReticle( var_0 )
+isValidCamo( refString )
 {
-    switch ( var_0 )
-    {
-        case "none":
-        case "ret1":
-        case "ret2":
-        case "ret3":
-        case "ret4":
-        case "ret5":
-        case "ret6":
-            return 1;
-        default:
-            return 0;
-    }
+	switch ( refString )
+	{
+		case "none":
+		case "classic":
+		case "snow":
+		case "multi":
+		case "d_urban":
+		case "hex":
+		case "choco":
+		case "marine":
+		case "snake":
+		case "winter":
+		case "blue":
+		case "red":
+		case "autumn":
+		case "gold":
+			return true;
+		default:
+			return false;
+	}
 }
 
-isCamoUnlocked( var_0, var_1 )
+isValidReticle( refString )
 {
-    if ( getdvarint( "xblive_competitionmatch" ) && ( getdvarint( "systemlink" ) || !level.console && ( getdvar( "dedicated" ) == "dedicated LAN server" || getdvar( "dedicated" ) == "dedicated internet server" ) ) )
-        return 1;
-
-    var_2 = 0;
-    var_3 = 3;
-    var_4 = 4;
-    var_5 = self getplayerdata( "weaponRank", var_0 );
-    var_6 = int( tablelookup( "mp/weaponRankTable.csv", var_2, maps\mp\_utility::getWeaponClass( var_0 ), var_3 ) );
-    var_7 = int( tablelookup( "mp/weaponRankTable.csv", var_6, var_1, var_4 ) );
-
-    if ( var_5 >= var_7 )
-        return 1;
-
-    return 0;
+	switch ( refString )
+	{
+		case "none":
+		case "ret1":
+		case "ret2":
+		case "ret3":
+		case "ret4":
+		case "ret5":
+		case "ret6":
+			return true;
+		default:
+			return false;
+	}
 }
 
-isValidEquipment( var_0 )
+isCamoUnlocked( weaponRef, camoRef )
 {
-    switch ( var_0 )
-    {
-        case "frag_grenade_mp":
-        case "throwingknife_mp":
-        case "specialty_portable_radar":
-        case "claymore_mp":
-        case "semtex_mp":
-        case "c4_mp":
-        case "bouncingbetty_mp":
-            return 1;
-        default:
-            return 0;
-    }
+	if ( getdvarint( "xblive_competitionmatch" ) && (getdvarint( "systemlink" ) || !level.console && ( getdvar( "dedicated" ) == "dedicated LAN server" || getdvar( "dedicated" ) == "dedicated internet server" ) ) )
+		return true;
+
+	tableWeaponClassCol = 0;
+	tableWeaponClassCamoCol = 3;
+	tableWeaponRankCol = 4;
+	weaponRank = self getplayerdata( "weaponRank", weaponRef );
+	colNum = int( tablelookup( "mp/weaponRankTable.csv", tableWeaponClassCol, getWeaponClass( weaponRef ), tableWeaponClassCamoCol ) );
+	camoRank = int( tablelookup( "mp/weaponRankTable.csv", colNum, camoRef, tableWeaponRankCol ) );
+
+	if ( weaponRank >= camoRank )
+		return true;
+
+	return false;
 }
 
-isValidOffhand( var_0 )
+isValidEquipment( refString )
 {
-    switch ( var_0 )
-    {
-        case "trophy_mp":
-        case "smoke_grenade_mp":
-        case "specialty_portable_radar":
-        case "flash_grenade_mp":
-        case "concussion_grenade_mp":
-        case "specialty_scrambler":
-        case "specialty_tacticalinsertion":
-        case "emp_grenade_mp":
-            return 1;
-        default:
-            return 0;
-    }
+	switch ( refString )
+	{
+		case "frag_grenade_mp":
+		case "throwingknife_mp":
+		case "claymore_mp":
+		case "semtex_mp":
+		case "c4_mp":
+		case "bouncingbetty_mp":
+			return true;
+		default:
+			return false;
+	}
 }
 
-isValidPerk1( var_0 )
+isValidOffhand( refString )
 {
-    switch ( var_0 )
-    {
-        case "specialty_scavenger":
-        case "specialty_blindeye":
-        case "specialty_longersprint":
-        case "specialty_fastreload":
-        case "specialty_paint":
-            return 1;
-        default:
-            return 0;
-    }
+	switch ( refString )
+	{
+		case "trophy_mp":
+		case "smoke_grenade_mp":
+		case "specialty_portable_radar":
+		case "flash_grenade_mp":
+		case "concussion_grenade_mp":
+		case "specialty_scrambler":
+		case "specialty_tacticalinsertion":
+		case "emp_grenade_mp":
+			return true;
+		default:
+			return false;
+	}
 }
 
-isValidPerk2( var_0, var_1 )
+isValidPerk1( refString )
 {
-    if ( !isdefined( var_1 ) || var_1 != "specialty_anytwo" )
-    {
-        switch ( var_0 )
-        {
-            case "specialty_coldblooded":
-            case "specialty_assists":
-            case "specialty_quickdraw":
-            case "specialty_twoprimaries":
-            case "specialty_hardline":
-            case "_specialty_blastshield":
-                return 1;
-            default:
-                return 0;
-        }
-    }
-
-    return 1;
+	switch ( refString )
+	{
+		case "specialty_scavenger":
+		case "specialty_blindeye":
+		case "specialty_longersprint":
+		case "specialty_fastreload":
+		case "specialty_paint":
+			return true;
+		default:
+			return false;
+	}
 }
 
-isValidPerk3( var_0, var_1 )
+isValidPerk2( refString, loadoutPerk1 )
 {
-    if ( !isdefined( var_1 ) || var_1 != "specialty_anytwo" )
-    {
-        switch ( var_0 )
-        {
-            case "specialty_bulletaccuracy":
-            case "specialty_detectexplosive":
-            case "specialty_autospot":
-            case "specialty_quieter":
-            case "specialty_stalker":
-                return 1;
-            default:
-                return 0;
-        }
-    }
-
-    return 1;
+	switch ( refString )
+	{
+		case "specialty_coldblooded":
+		case "specialty_assists":
+		case "specialty_quickdraw":
+		case "specialty_twoprimaries":
+		case "specialty_hardline":
+		case "_specialty_blastshield":
+			return true;
+		default:
+			return false;
+	}
 }
 
-isValidDeathStreak( var_0 )
+isValidPerk3( refString, loadoutPerk1 )
 {
-    switch ( var_0 )
-    {
-        case "specialty_null":
-        case "specialty_finalstand":
-        case "specialty_uav":
-        case "specialty_juiced":
-        case "specialty_grenadepulldeath":
-        case "specialty_revenge":
-        case "specialty_stopping_power":
-        case "specialty_c4death":
-            return 1;
-        default:
-            return 0;
-    }
+	switch ( refString )
+	{
+		case "specialty_bulletaccuracy":
+		case "specialty_detectexplosive":
+		case "specialty_autospot":
+		case "specialty_quieter":
+		case "specialty_stalker":
+			return true;
+		default:
+			return false;
+	}
 }
 
-isValidWeapon( var_0 )
+isValidDeathStreak( refString )
 {
-    if ( !isdefined( level.weaponRefs ) )
-    {
-        level.weaponRefs = [];
-
-        foreach ( var_2 in level.weaponList )
-            level.weaponRefs[var_2] = 1;
-    }
-
-    if ( isdefined( level.weaponRefs[var_0] ) )
-        return 1;
-
-    return 0;
+	switch ( refString )
+	{
+		case "specialty_null":
+		case "specialty_finalstand":
+		case "specialty_juiced":
+		case "specialty_grenadepulldeath":
+		case "specialty_revenge":
+		case "specialty_stopping_power":
+		case "specialty_c4death":
+			return true;
+		default:
+			return false;
+	}
 }
 
-isValidKillstreak( var_0 )
+isValidWeapon( refString )
 {
-    switch ( self.streakType )
-    {
-        case "assault":
-            return isvalidassaultkillstreak( var_0 );
-        case "support":
-            return isvalidsupportkillstreak( var_0 );
-        case "specialist":
-            return isvalidspecialistkillstreak( var_0 );
-        default:
-            return 0;
-    }
+	if ( !isdefined( level.weaponRefs ) )
+	{
+		level.weaponRefs = [];
+
+		foreach ( weaponRef in level.weaponList )
+			level.weaponRefs[weaponRef] = true;
+	}
+
+	if ( isdefined( level.weaponRefs[refString] ) )
+		return true;
+
+	return false;
 }
 
-isvalidassaultkillstreak( var_0 )
+isValidKillstreak( refString )
 {
-    switch ( var_0 )
-    {
-        case "none":
-        case "uav":
-        case "double_uav":
-        case "ac130":
-        case "precision_airstrike":
-        case "predator_missile":
-        case "sentry":
-        case "airdrop_assault":
-        case "airdrop_sentry_minigun":
-        case "airdrop_juggernaut":
-        case "helicopter_flares":
-        case "littlebird_flock":
-        case "minigun_turret":
-        case "osprey_gunner":
-        case "directional_uav":
-        case "heli_sniper":
-        case "ims":
-        case "aastrike":
-        case "remote_mortar":
-        case "remote_tank":
-        case "airdrop_remote_tank":
-        case "helicopter":
-        case "littlebird_support":
-            return 1;
-        default:
-            return 0;
-    }
+	switch ( self.streakType )
+	{
+		case "assault":
+			return isvalidassaultkillstreak( refString );
+		case "support":
+			return isvalidsupportkillstreak( refString );
+		case "specialist":
+			return isvalidspecialistkillstreak( refString );
+		default:
+			return false;
+	}
 }
 
-isvalidsupportkillstreak( var_0 )
+isvalidassaultkillstreak( refString )
 {
-    switch ( var_0 )
-    {
-        case "none":
-        case "emp":
-        case "triple_uav":
-        case "counter_uav":
-        case "stealth_airstrike":
-        case "airdrop_trap":
-        case "escort_airdrop":
-        case "deployable_vest":
-        case "remote_mg_turret":
-        case "airdrop_juggernaut_recon":
-        case "uav_support":
-        case "remote_uav":
-        case "sam_turret":
-            return 1;
-        default:
-            return 0;
-    }
+	switch ( refString )
+	{
+		case "none":
+		case "uav":
+		case "double_uav":
+		case "ac130":
+		case "precision_airstrike":
+		case "predator_missile":
+		case "sentry":
+		case "airdrop_assault":
+		case "airdrop_sentry_minigun":
+		case "airdrop_juggernaut":
+		case "helicopter_flares":
+		case "littlebird_flock":
+		case "minigun_turret":
+		case "osprey_gunner":
+		case "directional_uav":
+		case "heli_sniper":
+		case "ims":
+		case "aastrike":
+		case "remote_mortar":
+		case "remote_tank":
+		case "airdrop_remote_tank":
+		case "helicopter":
+		case "littlebird_support":
+			return true;
+		default:
+			return false;
+	}
 }
 
-isvalidspecialistkillstreak( var_0 )
+isvalidsupportkillstreak( refString )
 {
-    switch ( var_0 )
-    {
-        case "none":
-        case "specialty_longersprint_ks":
-        case "specialty_fastreload_ks":
-        case "specialty_scavenger_ks":
-        case "specialty_blindeye_ks":
-        case "specialty_paint_ks":
-        case "specialty_hardline_ks":
-        case "specialty_coldblooded_ks":
-        case "specialty_quickdraw_ks":
-        case "specialty_assists_ks":
-        case "_specialty_blastshield_ks":
-        case "specialty_detectexplosive_ks":
-        case "specialty_autospot_ks":
-        case "specialty_bulletaccuracy_ks":
-        case "specialty_quieter_ks":
-        case "specialty_stalker_ks":
-            return 1;
-        default:
-            return 0;
-    }
+	switch ( refString )
+	{
+		case "none":
+		case "emp":
+		case "triple_uav":
+		case "counter_uav":
+		case "stealth_airstrike":
+		case "airdrop_trap":
+		case "escort_airdrop":
+		case "deployable_vest":
+		case "remote_mg_turret":
+		case "airdrop_juggernaut_recon":
+		case "uav_support":
+		case "remote_uav":
+		case "sam_turret":
+			return true;
+		default:
+			return false;
+	}
+}
+
+isvalidspecialistkillstreak( refString )
+{
+	switch ( refString )
+	{
+		case "none":
+		case "specialty_longersprint_ks":
+		case "specialty_fastreload_ks":
+		case "specialty_scavenger_ks":
+		case "specialty_blindeye_ks":
+		case "specialty_paint_ks":
+		case "specialty_hardline_ks":
+		case "specialty_coldblooded_ks":
+		case "specialty_quickdraw_ks":
+		case "specialty_assists_ks":
+		case "_specialty_blastshield_ks":
+		case "specialty_detectexplosive_ks":
+		case "specialty_autospot_ks":
+		case "specialty_bulletaccuracy_ks":
+		case "specialty_quieter_ks":
+		case "specialty_stalker_ks":
+			return true;
+		default:
+			return false;
+	}
 }
