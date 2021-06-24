@@ -424,10 +424,14 @@ getSpawnpoint_NearTeam( var_0, var_1 )
             var_7.weight = var_7.weight - 500000;
     }
 
+    favor_weight = getDVarInt("scr_spawnpointfavorweight");
+	if (favor_weight == 0)
+		favor_weight = 50000;
+
     if ( isdefined( var_1 ) )
     {
         for ( var_12 = 0; var_12 < var_1.size; var_12++ )
-            var_1[var_12].weight = var_1[var_12].weight + 50000;
+            var_1[var_12].weight = var_1[var_12].weight + favor_weight;
     }
 
     if ( isdefined( self.predictedSpawnPoint ) && isdefined( self.predictedSpawnPoint.weight ) )
@@ -1242,9 +1246,9 @@ getLosPenalty()
 lastMinuteSightTraces( var_0 )
 {
     var_1 = undefined;
-    var_2 = 1e+08.0;
+    var_2 = 100000000.0;
     var_3 = undefined;
-    var_4 = 1e+08.0;
+    var_4 = 100000000.0;
 
     foreach ( var_6 in level.players )
     {
