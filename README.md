@@ -176,6 +176,7 @@ You can find the ModDB release post [here](https://www.moddb.com/mods/bot-warfar
 - Aesirix - https://github.com/Aesirix
 - EpikIzCool - https://github.com/super23
 - doa3 - https://github.com/doa3
+- ghostwulf - https://github.com/ghostwulf
 
 Feel free to use code, host on other sites, host on servers, mod it and merge mods with it, just give credit where credit is due!
 	-INeedGames/INeedBot(s) @ ineedbots@outlook.com
