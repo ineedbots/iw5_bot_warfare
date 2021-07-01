@@ -2525,6 +2525,29 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 		loadoutDeathStreak = maps\mp\gametypes\_class::table_getDeathstreak( level.classTableName, class_num );
 	}
 
+	// stop default class op'ness
+	allowOp = ( getDvarInt( "bots_loadout_allow_op" ) >= 1 );
+
+	if ( !allowOp )
+	{
+		loadoutDeathstreak = "specialty_none";
+
+		if ( loadoutSecondary == "iw5_smaw" )
+			loadoutSecondary = "iw5_usp";
+
+		if ( loadoutPrimaryAttachment == "m320" )
+			loadoutPrimaryAttachment = "none";
+
+		if ( loadoutPerk2 == "specialty_coldblooded" )
+			loadoutPerk2 = "specialty_none";
+
+		if ( loadoutPerk1 == "specialty_blindeye" )
+			loadoutPerk1 = "specialty_none";
+
+		if ( loadoutStreakType == "streaktype_support" )
+			loadoutStreakType = "streaktype_assault";
+	}
+
 	self maps\mp\gametypes\_class::loadoutFakePerks( loadoutStreakType );
 	isCustomClass = issubstr( class, "custom" );
 	isRecipeClass = issubstr( class, "recipe" );
