@@ -479,6 +479,9 @@ chooseRandomPerk( perkkind )
 		{
 			if ( perkkind == "perk4" )
 				return "specialty_null";
+
+			if (perk == "specialty_coldblooded" || perk == "specialty_blindeye" || perk == "specialty_quieter")
+				continue;
 		}
 
 		if ( reasonable )
