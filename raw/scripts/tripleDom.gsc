@@ -14,16 +14,16 @@ watchFlags()
 	if ( getDvar( "g_gametype" ) != "dom" )
 		return;
 
-	while ( !isDefined( level.flags ) )
+	while ( !isDefined( level.domFlags ) )
 		wait 0.05;
 
 	for ( ;; )
 	{
 		wait 1;
 
-		for ( i = 0; i < level.flags.size; i++ )
+		for ( i = 0; i < level.domFlags.size; i++ )
 		{
-			flag = level.flags[i];
+			flag = level.domFlags[i];
 
 			if ( isDefined( flag.originalUseTime ) )
 			{
@@ -47,9 +47,9 @@ watchFlags()
 
 		if ( team != "none" )
 		{
-			for ( i = 0; i < level.flags.size; i++ )
+			for ( i = 0; i < level.domFlags.size; i++ )
 			{
-				flag = level.flags[i];
+				flag = level.domFlags[i];
 
 				flagTeam = flag maps\mp\gametypes\_gameobjects::getOwnerTeam();
 
