@@ -482,6 +482,9 @@ chooseRandomPerk( perkkind )
 
 			if (perk == "specialty_coldblooded" || perk == "specialty_blindeye" || perk == "specialty_quieter")
 				continue;
+
+			if (perk == "streaktype_specialist" || perk == "streaktype_support")
+				continue;
 		}
 
 		if ( reasonable )
