@@ -94,7 +94,7 @@ watchNotifyKSMessage()
 
 	for (lastKs = self.pers["cur_kill_streak_for_nuke"];;)
 	{
-		self waittill( "killed_enemy" );
+		wait 0.05;
 
 		for (curStreak = lastKs + 1; curStreak <= self.pers["cur_kill_streak_for_nuke"]; curStreak++)
 		{
