@@ -2530,7 +2530,7 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 
 	if ( !allowOp )
 	{
-		loadoutDeathstreak = "specialty_none";
+		loadoutDeathstreak = "specialty_null";
 
 		if ( loadoutSecondary == "iw5_smaw" )
 			loadoutSecondary = "iw5_usp";
@@ -2539,10 +2539,10 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 			loadoutPrimaryAttachment = "none";
 
 		if ( loadoutPerk2 == "specialty_coldblooded" )
-			loadoutPerk2 = "specialty_none";
+			loadoutPerk2 = "specialty_null";
 
 		if ( loadoutPerk1 == "specialty_blindeye" )
-			loadoutPerk1 = "specialty_none";
+			loadoutPerk1 = "specialty_null";
 
 		if ( loadoutStreakType == "streaktype_support" )
 			loadoutStreakType = "streaktype_assault";
