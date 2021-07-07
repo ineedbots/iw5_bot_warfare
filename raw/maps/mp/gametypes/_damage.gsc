@@ -1832,8 +1832,49 @@ Callback_PlayerDamage( var_0, var_1, var_2, var_3, var_4, var_5, var_6, var_7, v
     Callback_PlayerDamage_internal( var_0, var_1, self, var_2, var_3, var_4, var_5, var_6, var_7, var_8, var_9 );
 }
 
+doPrintDamage(dmg, hitloc, flags)
+{
+    huddamage = newclienthudelem(self);
+    huddamage.alignx = "center";
+    huddamage.horzalign = "center";
+    huddamage.x = 10;
+    huddamage.y = 235;
+    huddamage.fontscale = 1.6;
+    huddamage.font = "objective";
+    huddamage setvalue(dmg);
+
+    if ((flags & level.iDFLAGS_PENETRATION) != 0)
+        huddamage.color = (1, 1, 0.25);
+
+    if (hitloc == "head")
+        huddamage.color = (1, 0.25, 0.25);
+
+    huddamage moveovertime(1);
+    huddamage fadeovertime(1);
+    huddamage.alpha = 0;
+    huddamage.x = randomIntRange(25, 70);
+
+    val = 1;
+    if (randomInt(2))
+        val = -1;
+
+    huddamage.y = 235 + randomIntRange(25, 70) * val;
+
+    wait 1;
+
+    huddamage destroy();
+}
+
 finishPlayerDamageWrapper( var_0, var_1, var_2, var_3, var_4, var_5, var_6, var_7, var_8, var_9, var_10 )
 {
+    if( isDefined(level.allowPrintDamage) && level.allowPrintDamage )
+	{
+		if ( isDefined( var_1 ) && isPlayer( var_1 ) && isDefined(var_1.printDamage) && var_1.printDamage )
+			var_1 thread doPrintDamage(var_2, var_8, var_3);
+		else if( isDefined( var_1.owner ) && isPlayer( var_1.owner ) && isDefined(var_1.owner.printDamage) && var_1.owner.printDamage )
+			var_1.owner thread doPrintDamage(var_2, var_8, var_3);
+	}
+
     if ( maps\mp\_utility::isUsingRemote() && var_2 >= self.health && !( var_3 & level.iDFLAGS_STUN ) )
     {
         if ( !isdefined( var_7 ) )
