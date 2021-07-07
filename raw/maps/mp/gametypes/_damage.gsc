@@ -327,6 +327,9 @@ handleNormalDeath( var_0, var_1, var_2, var_3, var_4 )
             if ( var_12 == var_1 )
                 continue;
 
+            if ( self == var_12 )
+                continue;
+
             var_12 thread maps\mp\gametypes\_gamescore::processAssist( self );
 
             if ( var_12 maps\mp\_utility::_hasPerk( "specialty_assists" ) )
@@ -338,12 +341,16 @@ handleNormalDeath( var_0, var_1, var_2, var_3, var_4 )
                     var_12 maps\mp\gametypes\_missions::processChallenge( "ch_hardlineassists" );
                     var_12 maps\mp\killstreaks\_killstreaks::giveAdrenaline( "kill" );
                     var_12.pers["cur_kill_streak"]++;
+
+                    if ( !maps\mp\_utility::isKillstreakWeapon( var_3 ) )
+                        var_12.pers["cur_kill_streak_for_nuke"]++;
+
                     var_7 = 25;
 
                     if ( var_12 maps\mp\_utility::_hasPerk( "specialty_hardline" ) )
                         var_7--;
 
-                    if ( var_12.pers["cur_kill_streak"] == var_7 )
+                    if ( !maps\mp\_utility::isKillstreakWeapon( var_3 ) && var_12.pers["cur_kill_streak_for_nuke"] == var_7 )
                     {
                         var_12 thread maps\mp\killstreaks\_killstreaks::giveKillstreak( "nuke", 0, 1, var_12, 1 );
                         var_12 thread maps\mp\gametypes\_hud_message::killstreakSplashNotify( "nuke", var_7 );
@@ -658,6 +665,11 @@ PlayerKilled_internal( var_0, var_1, var_2, var_3, var_4, var_5, var_6, var_7, v
         thread maps\mp\gametypes\_gamelogic::trackLeaderBoardDeathStats( var_22, var_4 );
         var_1 thread maps\mp\gametypes\_gamelogic::trackAttackerLeaderBoardDeathStats( var_5, var_4 );
     }
+
+    var_2.wasswitchingteamsforonplayerkilled = undefined;
+
+    if ( isdefined( var_2.switching_teams ) )
+        var_2.wasswitchingteamsforonplayerkilled = 1;
 
     var_2 resetPlayerVariables();
     var_2.lastattacker = var_1;
@@ -1001,7 +1013,55 @@ doFinalKillcam()
     }
 
     if ( isdefined( var_3 ) )
+    {
         var_3.finalKill = 1;
+
+        if ( level.gameType == "conf" && isdefined( level.finalKillCam_attacker[var_3.team] ) && level.finalKillCam_attacker[var_3.team] == var_3 )
+        {
+            var_3 maps\mp\gametypes\_missions::processChallenge( "ch_theedge" );
+
+            if ( isdefined( var_3.modifiers["revenge"] ) )
+                var_3 maps\mp\gametypes\_missions::processChallenge( "ch_moneyshot" );
+
+            if ( isdefined( var_3.inFinalStand ) && var_3.inFinalStand )
+                var_3 maps\mp\gametypes\_missions::processChallenge( "ch_lastresort" );
+
+            if ( isdefined( var_2 ) && isdefined( var_2.explosiveInfo ) && isdefined( var_2.explosiveInfo["stickKill"] ) && var_2.explosiveInfo["stickKill"] )
+                var_3 maps\mp\gametypes\_missions::processChallenge( "ch_stickman" );
+
+            if ( isdefined( var_2.attackerData[var_3.guid] ) && isdefined( var_2.attackerData[var_3.guid].sMeansOfDeath ) && isdefined( var_2.attackerData[var_3.guid].weapon ) && issubstr( var_2.attackerData[var_3.guid].sMeansOfDeath, "MOD_MELEE" ) && issubstr( var_2.attackerData[var_3.guid].weapon, "riotshield_mp" ) )
+                var_3 maps\mp\gametypes\_missions::processChallenge( "ch_owned" );
+
+            switch ( level.finalKillCam_sWeapon[var_3.team] )
+            {
+                case "artillery_mp":
+                    var_3 maps\mp\gametypes\_missions::processChallenge( "ch_finishingtouch" );
+                    break;
+                case "stealth_bomb_mp":
+                    var_3 maps\mp\gametypes\_missions::processChallenge( "ch_technokiller" );
+                    break;
+                case "pavelow_minigun_mp":
+                    var_3 maps\mp\gametypes\_missions::processChallenge( "ch_transformer" );
+                    break;
+                case "sentry_minigun_mp":
+                    var_3 maps\mp\gametypes\_missions::processChallenge( "ch_absentee" );
+                    break;
+                case "ac130_105mm_mp":
+                case "ac130_40mm_mp":
+                case "ac130_25mm_mp":
+                    var_3 maps\mp\gametypes\_missions::processChallenge( "ch_deathfromabove" );
+                    break;
+                case "remotemissile_projectile_mp":
+                    var_3 maps\mp\gametypes\_missions::processChallenge( "ch_dronekiller" );
+                    break;
+                case "cobra_20mm_mp":
+                    var_3 maps\mp\gametypes\_missions::processChallenge( "ch_og" );
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
     var_14 = ( gettime() - var_2.deathtime ) / 1000;
 
@@ -1020,7 +1080,7 @@ doFinalKillcam()
         if ( ( var_16 != var_2 || !maps\mp\_utility::isRoundBased() || maps\mp\_utility::isLastRound() ) && var_16 maps\mp\_utility::_hasPerk( "specialty_copycat" ) )
             var_16 maps\mp\_utility::_unsetPerk( "specialty_copycat" );
 
-        var_16 thread maps\mp\gametypes\_killcam::killcam( var_4, var_5, var_6, var_7, var_14 + var_8, var_9, 0, 10000, var_3, var_2 );
+        var_16 thread maps\mp\gametypes\_killcam::killcam( var_4, var_5, var_6, var_7, var_14 + var_8, var_9, 0, 12, var_3, var_2 );
     }
 
     wait 0.1;
@@ -1061,8 +1121,8 @@ getKillcamEntity( var_0, var_1, var_2 )
 
     switch ( var_2 )
     {
-        case "artillery_mp":
         case "bouncingbetty_mp":
+        case "artillery_mp":
         case "stealth_bomb_mp":
         case "pavelow_minigun_mp":
         case "apache_minigun_mp":
@@ -1271,7 +1331,7 @@ Callback_PlayerDamage_internal( var_0, var_1, var_2, var_3, var_4, var_5, var_6,
         var_1 = var_1.gunner;
 
     var_11 = isdefined( var_1 ) && !isdefined( var_1.gunner ) && ( var_1.classname == "script_vehicle" || var_1.classname == "misc_turret" || var_1.classname == "script_model" );
-    var_12 = level.teamBased && isdefined( var_1 ) && var_2 != var_1 && isdefined( var_1.team ) && var_2.pers["team"] == var_1.team;
+    var_12 = level.teamBased && isdefined( var_1 ) && var_2 != var_1 && isdefined( var_1.team ) && ( var_2.pers["team"] == var_1.team || isdefined( var_1.teamchangedthisframe ) );
     var_13 = isdefined( var_1 ) && isdefined( var_0 ) && isdefined( var_2 ) && isplayer( var_1 ) && var_1 == var_0 && var_1 == var_2;
 
     if ( var_13 )
@@ -1338,7 +1398,7 @@ Callback_PlayerDamage_internal( var_0, var_1, var_2, var_3, var_4, var_5, var_6,
         else if ( var_4 & level.iDFLAGS_SHIELD_EXPLOSIVE_SPLASH )
         {
             if ( isdefined( var_0 ) && isdefined( var_0.stuckEnemyEntity ) && var_0.stuckEnemyEntity == var_2 )
-                var_3 = 101;
+                var_3 = 151;
 
             var_2 thread maps\mp\gametypes\_missions::genericChallenge( "shield_explosive_hits", 1 );
             var_9 = "none";
@@ -1354,6 +1414,9 @@ Callback_PlayerDamage_internal( var_0, var_1, var_2, var_3, var_4, var_5, var_6,
             var_2 stunplayer( 0.0 );
         }
     }
+
+    if ( isdefined( var_0 ) && isdefined( var_0.stuckEnemyEntity ) && var_0.stuckEnemyEntity == var_2 )
+        var_3 = 151;
 
     if ( !var_12 )
         var_3 = maps\mp\perks\_perks::cac_modified_damage( var_2, var_1, var_3, var_5, var_6, var_7, var_8, var_9 );
@@ -1410,7 +1473,12 @@ Callback_PlayerDamage_internal( var_0, var_1, var_2, var_3, var_4, var_5, var_6,
         if ( var_5 == "MOD_PISTOL_BULLET" || var_5 == "MOD_RIFLE_BULLET" || var_5 == "MOD_EXPLOSIVE_BULLET" )
             return;
         else if ( var_5 == "MOD_HEAD_SHOT" )
-            var_3 = 150;
+        {
+            if ( var_2 maps\mp\_utility::isJuggernaut() )
+                var_3 = 75;
+            else
+                var_3 = 150;
+        }
     }
 
     if ( var_6 == "none" && isdefined( var_0 ) )
@@ -1478,6 +1546,12 @@ Callback_PlayerDamage_internal( var_0, var_1, var_2, var_3, var_4, var_5, var_6,
             var_2.explosiveInfo["stickKill"] = isdefined( var_0.isStuck ) && var_0.isStuck == "enemy";
             var_2.explosiveInfo["stickFriendlyKill"] = isdefined( var_0.isStuck ) && var_0.isStuck == "friendly";
 
+            if ( isplayer( var_1 ) && var_1 != self )
+                maps\mp\gametypes\_gamelogic::setInflictorStat( var_0, var_1, var_6 );
+        }
+
+        if ( issubstr( var_5, "MOD_IMPACT" ) && ( var_6 == "m320_mp" || issubstr( var_6, "gl" ) || issubstr( var_6, "gp25" ) || var_6 == "xm25_mp" ) )
+        {
             if ( isplayer( var_1 ) && var_1 != self )
                 maps\mp\gametypes\_gamelogic::setInflictorStat( var_0, var_1, var_6 );
         }
@@ -1613,7 +1687,7 @@ Callback_PlayerDamage_internal( var_0, var_1, var_2, var_3, var_4, var_5, var_6,
             var_21 thread maps\mp\gametypes\_damagefeedback::updateDamageFeedback( var_22 );
         }
 
-        var_2.hasDoneCombat = 1;
+        maps\mp\gametypes\_gamelogic::sethasdonecombat( var_2, 1 );
     }
 
     if ( isdefined( var_1 ) && var_1 != var_2 && !var_17 )
@@ -1960,7 +2034,7 @@ c4DeathDetonate()
 {
     self playsound( "detpack_explo_default" );
     self.c4DeathEffect = playfx( level.c4Death, self.origin );
-    radiusdamage( self.origin, 400, 100, 100, self );
+    radiusdamage( self.origin, 312, 100, 100, self );
 
     if ( isalive( self ) )
         maps\mp\_utility::_suicide();
@@ -2203,29 +2277,29 @@ getHitLocHeight( var_0 )
 {
     switch ( var_0 )
     {
-        case "helmet":
         case "head":
+        case "helmet":
         case "neck":
             return 60;
         case "torso_upper":
-        case "left_arm_upper":
         case "right_arm_upper":
-        case "left_arm_lower":
+        case "left_arm_upper":
         case "right_arm_lower":
-        case "left_hand":
+        case "left_arm_lower":
         case "right_hand":
+        case "left_hand":
         case "gun":
             return 48;
         case "torso_lower":
             return 40;
-        case "left_leg_upper":
         case "right_leg_upper":
+        case "left_leg_upper":
             return 32;
-        case "left_leg_lower":
         case "right_leg_lower":
+        case "left_leg_lower":
             return 10;
-        case "left_foot":
         case "right_foot":
+        case "left_foot":
             return 5;
     }
 
