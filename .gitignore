@@ -23,10 +23,6 @@
 !/raw/bots.txt
 
 !/raw/maps/mp/gametypes
-/raw/maps/mp/gametypes/*
-!/raw/maps/mp/gametypes/_rank.gsc
-!/raw/maps/mp/gametypes/_class.gsc
-!/raw/maps/mp/gametypes/_spawnlogic.gsc
 
 
 !/admin
