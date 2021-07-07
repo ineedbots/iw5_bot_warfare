@@ -1844,7 +1844,7 @@ doPrintDamage(dmg, hitloc, flags)
     huddamage setvalue(dmg);
 
     if ((flags & level.iDFLAGS_RADIUS) != 0)
-        huddamage.color = (0.25, 1, 0.25);
+        huddamage.color = (0.25, 0.25, 0.25);
 
     if ((flags & level.iDFLAGS_PENETRATION) != 0)
         huddamage.color = (1, 1, 0.25);
