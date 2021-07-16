@@ -289,7 +289,7 @@ updateWaypointsStats()
 		wait 0.05;
 		intTimer += 50;
 
-		totalWpsHud setText( level.waypointCount );
+		totalWpsHud setValue( level.waypointCount );
 
 		closest = -1;
 		myEye = self getEye();
@@ -339,13 +339,13 @@ updateWaypointsStats()
 
 		self.nearest = closest;
 
-		nearestWP setText( self.nearest );
+		nearestWP setValue( self.nearest );
 
-		children setText( buildChildCountString( self.nearest ) );
+		children setValue( buildChildCountString( self.nearest ) );
 
 		type setText( buildTypeString( self.nearest ) );
 
-		wpToLink setText( level.wpToLink );
+		wpToLink setValue( level.wpToLink );
 
 		infotext.x = infotext.x - 2;
 
@@ -840,9 +840,9 @@ DeleteAllWaypoints()
 buildChildCountString ( wp )
 {
 	if ( wp == -1 )
-		return "";
+		return -1;
 
-	wpstr = level.waypoints[wp].children.size + "";
+	wpstr = level.waypoints[wp].children.size;
 
 	return wpstr;
 }
