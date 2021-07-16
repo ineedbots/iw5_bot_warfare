@@ -1002,13 +1002,17 @@ load_waypoints()
 			case "mp_test":
 				level.waypoints = maps\mp\bots\waypoints\testmap::TestMap();
 				break;
-				
+
 			case "mp_aground_ss":
 				level.waypoints = maps\mp\bots\waypoints\aground::Aground();
 				break;
 
-                        case "mp_radar":
+			case "mp_radar":
 				level.waypoints = maps\mp\bots\waypoints\outpost::Outpost();
+				break;
+
+			case "mp_lambeth":
+				level.waypoints = maps\mp\bots\waypoints\fallen::Fallen();
 				break;
 
 			default:
