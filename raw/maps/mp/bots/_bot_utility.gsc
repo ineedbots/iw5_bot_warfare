@@ -1015,6 +1015,26 @@ load_waypoints()
 				level.waypoints = maps\mp\bots\waypoints\fallen::Fallen();
 				break;
 
+			case "mp_italy":
+				level.waypoints = maps\mp\bots\waypoints\piazza::Piazza();
+				break;
+
+			case "mp_park":
+				level.waypoints = maps\mp\bots\waypoints\liberation::Liberation();
+				break;
+
+			case "mp_overwatch":
+				level.waypoints = maps\mp\bots\waypoints\overwatch::Overwatch();
+				break;
+
+			case "mp_morningwood":
+				level.waypoints = maps\mp\bots\waypoints\blackbox::BlackBox();
+				break;
+
+			case "mp_meteora":
+				level.waypoints = maps\mp\bots\waypoints\sanctuary::Sanctuary();
+				break;
+
 			default:
 				maps\mp\bots\waypoints\_custom_map::main( mapname );
 				break;
