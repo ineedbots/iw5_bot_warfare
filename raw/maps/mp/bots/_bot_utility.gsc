@@ -399,6 +399,14 @@ inLastStand()
 }
 
 /*
+	Is being revived
+*/
+isBeingRevived()
+{
+	return ( isDefined( self.beingRevived ) && self.beingRevived );
+}
+
+/*
 	If the player is in final stand
 */
 inFinalStand()
@@ -1002,16 +1010,54 @@ load_waypoints()
 			case "mp_test":
 				level.waypoints = maps\mp\bots\waypoints\testmap::TestMap();
 				break;
-				
+
 			case "mp_aground_ss":
 				level.waypoints = maps\mp\bots\waypoints\aground::Aground();
 				break;
 
-                        case "mp_radar":
+			case "mp_radar":
 				level.waypoints = maps\mp\bots\waypoints\outpost::Outpost();
 				break;
 
-			default:
+			case "mp_lambeth":
+				level.waypoints = maps\mp\bots\waypoints\fallen::Fallen();
+				break;
+
+			case "mp_italy":
+				level.waypoints = maps\mp\bots\waypoints\piazza::Piazza();
+				break;
+
+			case "mp_park":
+				level.waypoints = maps\mp\bots\waypoints\liberation::Liberation();
+				break;
+
+			case "mp_overwatch":
+				level.waypoints = maps\mp\bots\waypoints\overwatch::Overwatch();
+				break;
+
+			case "mp_morningwood":
+				level.waypoints = maps\mp\bots\waypoints\blackbox::BlackBox();
+				break;
+
+			case "mp_meteora":
+				level.waypoints = maps\mp\bots\waypoints\sanctuary::Sanctuary();
+				break;
+
+			case "mp_cement":
+				level.waypoints = maps\mp\bots\waypoints\foundation::Foundation();
+				break;
+
+			case "mp_courtyard_ss":
+				level.waypoints = maps\mp\bots\waypoints\erosion::Erosion();
+				break;
+
+                        
+                        case "mp_restrepo_ss":
+				level.waypoints = maps\mp\bots\waypoints\lookout::Lookout();
+				break;
+
+
+			 default:
 				maps\mp\bots\waypoints\_custom_map::main( mapname );
 				break;
 		}
@@ -2523,6 +2569,29 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 		loadoutStreakType = maps\mp\gametypes\_class::table_getPerk( level.classTableName, class_num, 5 );
 		loadoutOffhand = maps\mp\gametypes\_class::table_getOffhand( level.classTableName, class_num );
 		loadoutDeathStreak = maps\mp\gametypes\_class::table_getDeathstreak( level.classTableName, class_num );
+	}
+
+	// stop default class op'ness
+	allowOp = ( getDvarInt( "bots_loadout_allow_op" ) >= 1 );
+
+	if ( !allowOp )
+	{
+		loadoutDeathstreak = "specialty_null";
+
+		if ( loadoutSecondary == "iw5_smaw" )
+			loadoutSecondary = "iw5_usp";
+
+		if ( loadoutPrimaryAttachment == "m320" )
+			loadoutPrimaryAttachment = "none";
+
+		if ( loadoutPerk2 == "specialty_coldblooded" )
+			loadoutPerk2 = "specialty_null";
+
+		if ( loadoutPerk1 == "specialty_blindeye" )
+			loadoutPerk1 = "specialty_null";
+
+		if ( loadoutStreakType == "streaktype_support" )
+			loadoutStreakType = "streaktype_assault";
 	}
 
 	self maps\mp\gametypes\_class::loadoutFakePerks( loadoutStreakType );
