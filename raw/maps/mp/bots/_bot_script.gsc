@@ -2069,9 +2069,8 @@ follow_target()
 		if ( randomInt( 100 ) > self.pers["bots"]["behavior"]["follow"] * 5 )
 			continue;
 
-		self thread stop_go_target_on_death( threat );
-
 		self SetScriptGoal( threat.origin, 64 );
+		self thread stop_go_target_on_death( threat );
 
 		if ( self waittill_any_return( "new_goal", "goal", "bad_path" ) != "new_goal" )
 			self ClearScriptGoal();
@@ -3545,8 +3544,8 @@ bot_uav_think_loop()
 
 			if ( !self HasScriptGoal() && !self.bot_lock_goal )
 			{
-				self thread stop_go_target_on_death( player );
 				self SetScriptGoal( player.origin, 128 );
+				self thread stop_go_target_on_death( player );
 
 				if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
 					self ClearScriptGoal();
