@@ -1071,9 +1071,9 @@ heli_damage_monitor()
                 case "ac130_105mm_mp":
                 case "ac130_40mm_mp":
                 case "remotemissile_projectile_mp":
-                case "remote_mortar_missile_mp":
                 case "stinger_mp":
                 case "javelin_mp":
+                case "remote_mortar_missile_mp":
                     self.largeProjectileDamage = 1;
                     var_10 = self.maxHealth + 1;
                     break;
@@ -1082,13 +1082,13 @@ heli_damage_monitor()
 
                     switch ( self.heliType )
                     {
-                        case "osprey":
                         case "osprey_gunner":
                         case "flares":
+                        case "osprey":
                             var_10 = self.maxHealth * 0.07;
                             break;
-                        case "littlebird":
                         case "helicopter":
+                        case "littlebird":
                             var_10 = self.maxHealth * 0.09;
                             break;
                     }
@@ -1103,6 +1103,8 @@ heli_damage_monitor()
                     var_10 *= 2;
                     break;
             }
+
+            maps\mp\killstreaks\_killstreaks::killstreakhit( var_1, var_9, self );
         }
 
         self.damagetaken = self.damagetaken + var_10;
@@ -1137,8 +1139,8 @@ heli_damage_monitor()
                             thread maps\mp\_utility::teamPlayerCardSplash( "callout_destroyed_helicopter_minigun", var_11 );
                             var_12 = 300;
                             break;
-                        case "osprey":
                         case "osprey_gunner":
+                        case "osprey":
                             var_11 thread maps\mp\gametypes\_rank::xpEventPopup( &"SPLASHES_DESTROYED_OSPREY" );
                             thread maps\mp\_utility::teamPlayerCardSplash( "callout_destroyed_osprey", var_11 );
                             var_12 = 300;
@@ -2017,6 +2019,7 @@ heli_flares_monitor()
     switch ( self.heliType )
     {
         case "osprey_gunner":
+        case "osprey":
             self.numFlares = 2;
             break;
         default:
