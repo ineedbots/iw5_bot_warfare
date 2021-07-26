@@ -1035,6 +1035,14 @@ load_waypoints()
 				level.waypoints = maps\mp\bots\waypoints\sanctuary::Sanctuary();
 				break;
 
+			case "mp_cement":
+				level.waypoints = maps\mp\bots\waypoints\foundation::Foundation();
+				break;
+
+			case "mp_courtyard_ss":
+				level.waypoints = maps\mp\bots\waypoints\erosion::Erosion();
+				break;
+
 			default:
 				maps\mp\bots\waypoints\_custom_map::main( mapname );
 				break;
