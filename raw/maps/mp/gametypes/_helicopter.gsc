@@ -1308,8 +1308,22 @@ heli_explode( var_0 )
     if ( isdefined( self.killCamEnt ) )
         self.killCamEnt delete();
 
-    maps\mp\_utility::decrementFauxVehicleCount();
-    self delete();
+    if (self.heliType == "osprey_gunner")
+	{
+		if (isDefined(self))
+			self hide();
+
+		wait 30;
+
+        maps\mp\_utility::decrementFauxVehicleCount();
+		if (isDefined(self))
+			self delete();
+	}
+	else
+    {
+        maps\mp\_utility::decrementFauxVehicleCount();
+        self delete();
+    }
 }
 
 fire_missile( var_0, var_1, var_2 )
@@ -1893,8 +1907,22 @@ heli_leave( var_0 )
     if ( isdefined( self.killCamEnt ) )
         self.killCamEnt delete();
 
-    maps\mp\_utility::decrementFauxVehicleCount();
-    self delete();
+    if (self.heliType == "osprey_gunner")
+	{
+		if (isDefined(self))
+			self hide();
+
+		wait 30;
+
+        maps\mp\_utility::decrementFauxVehicleCount();
+		if (isDefined(self))
+			self delete();
+	}
+	else
+    {
+        maps\mp\_utility::decrementFauxVehicleCount();
+        self delete();
+    }
 }
 
 wait_and_delete( var_0 )
