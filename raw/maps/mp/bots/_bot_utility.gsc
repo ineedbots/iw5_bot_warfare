@@ -1051,7 +1051,13 @@ load_waypoints()
 				level.waypoints = maps\mp\bots\waypoints\erosion::Erosion();
 				break;
 
-			default:
+                        
+                        case "mp_restrepo_ss":
+				level.waypoints = maps\mp\bots\waypoints\lookout::Lookout();
+				break;
+
+
+			 default:
 				maps\mp\bots\waypoints\_custom_map::main( mapname );
 				break;
 		}
