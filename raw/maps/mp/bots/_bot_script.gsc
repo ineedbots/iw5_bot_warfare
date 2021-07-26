@@ -6895,8 +6895,78 @@ bot_dem_defend_spawnkill()
 /*
 	Bots think to revive
 */
+bot_think_revive_loop()
+{
+	needsRevives = [];
+
+	for ( i = 0; i < level.players.size; i++ )
+	{
+		player = level.players[i];
+
+		if ( player.team != self.team )
+			continue;
+
+		if ( distanceSquared( self.origin, player.origin ) >= 2048 * 2048 )
+			continue;
+
+		if ( player inLastStand() )
+			needsRevives[needsRevives.size] = player;
+	}
+
+	if ( !needsRevives.size )
+		return;
+
+	revive = random( needsRevives );
+	self.bot_lock_goal = true;
+
+	self SetScriptGoal( revive.origin, 64 );
+	self thread stop_go_target_on_death( revive );
+
+	ret = self waittill_any_return( "new_goal", "goal", "bad_path" );
+
+	if ( ret != "new_goal" )
+		self ClearScriptGoal();
+
+	self.bot_lock_goal = false;
+
+	if ( ret != "goal" || !isDefined(revive) || distanceSquared(self.origin, revive.origin) >= 100 * 100 || !revive inLastStand() || revive isBeingRevived() || !isAlive(revive) )
+		return;
+
+	waitTime = 3.25;
+	self thread BotPressUse( waitTime );
+	wait waitTime;
+}
+
+/*
+	Bots think to revive
+*/
 bot_think_revive()
 {
+	self endon( "death" );
+	self endon( "disconnect" );
+	level endon( "game_ended" );
+
+	if ( !level.dieHardMode || !level.teamBased )
+		return;
+
+	for ( ;; )
+	{
+		wait( randomintrange( 1, 3 ) );
+
+		if ( self HasScriptGoal() || self.bot_lock_goal )
+			continue;
+
+		if ( self isDefusing() || self isPlanting() )
+			continue;
+
+		if ( self IsUsingRemote() || self BotIsFrozen() )
+			continue;
+
+		if ( self inLastStand() )
+			continue;
+
+		self bot_think_revive_loop();
+	}
 }
 
 /*
