@@ -2270,7 +2270,7 @@ movetowards( goal )
 	else
 		tempGoalDist = level.bots_goalDistance;
 
-	while ( distanceSquared( self.origin, goal ) > tempGoalDist )
+	while ( distanceSquared( self.bot.moveOrigin, goal ) > tempGoalDist )
 	{
 		self botMoveTo( goal );
 
