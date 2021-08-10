@@ -33,6 +33,9 @@ main()
 
 	// scavenge all types of ammo
 	replaceFunc( maps\mp\gametypes\_weapons::handleScavengerBagPickup, ::handleScavengerBagPickup );
+
+	// only nuke slow mo once
+	replaceFunc( maps\mp\killstreaks\_nuke::nukeSlowMo, ::nukeSlowMo );
 }
 
 heli_explode( var_0 )
@@ -458,6 +461,21 @@ handleScavengerBagPickup( var_0 )
 	}
 
 	var_1 maps\mp\gametypes\_damagefeedback::updateDamageFeedback( "scavenger" );
+}
+
+nukeSlowMo()
+{
+	level endon ( "nuke_cancelled" );
+
+	if (isDefined(level.nuked))
+		return;
+
+	//SetSlowMotion( <startTimescale>, <endTimescale>, <deltaTime> )
+	SetSlowMotion( 1.0, 0.25, 0.5 );
+	level waittill( "nuke_death" );
+	SetSlowMotion( 0.25, 1, 2.0 );
+
+	level.nuked = true;
 }
 
 onPlayerConnect()
