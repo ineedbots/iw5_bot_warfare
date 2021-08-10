@@ -358,7 +358,12 @@ finishPlayerDamageWrapper( var_0, var_1, var_2, var_3, var_4, var_5, var_6, var_
 {
 	if ( isDefined( level.allowPrintDamage ) && level.allowPrintDamage )
 	{
-		if ( isDefined( var_1 ) && isPlayer( var_1 ) && isDefined( var_1.printDamage ) && var_1.printDamage )
+		if (!isDefined( var_1 ))
+		{
+			if (!isDefined(var_0))
+				self thread doPrintDamage( var_2, var_8, var_3 );
+		}
+		else if ( isPlayer( var_1 ) && isDefined( var_1.printDamage ) && var_1.printDamage )
 			var_1 thread doPrintDamage( var_2, var_8, var_3 );
 		else if ( isDefined( var_1.owner ) && isPlayer( var_1.owner ) && isDefined( var_1.owner.printDamage ) && var_1.owner.printDamage )
 			var_1.owner thread doPrintDamage( var_2, var_8, var_3 );
