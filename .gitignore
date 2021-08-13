@@ -31,6 +31,7 @@
 !/admin/bot_test.cfg
 !/admin/bot_test.dsr
 !/admin/server.cfg
+!/admin/server.dsr
 
 !/z_client_staging_client.bat
 !/z_client_staging_local.bat
