@@ -2188,6 +2188,15 @@ CampAtSpot( origin, anglePos )
 }
 
 /*
+	Waits for the bot to stop moving
+*/
+bot_wait_stop_move()
+{
+	while ( !self isOnGround() || lengthSquared( self getVelocity() ) > 1 )
+		wait 0.25;
+}
+
+/*
 	Loop
 */
 bot_think_follow_loop()
@@ -3879,9 +3888,9 @@ bot_box_think_loop( data )
 		return;
 
 	self BotFreezeControls( true );
+	self bot_wait_stop_move();
 
 	waitTime = 2.25;
-
 	self thread BotPressUse( waitTime );
 	wait waitTime;
 
@@ -4089,6 +4098,7 @@ bot_crate_think_loop( data )
 	}
 
 	self BotFreezeControls( true );
+	self bot_wait_stop_move();
 
 	waitTime = 3.25;
 
@@ -5591,9 +5601,11 @@ bot_sab_loop()
 		}
 
 		self SetScriptGoal( self.origin, 64 );
+		self bot_wait_stop_move();
 
-		//self bot_use_bomb_thread(site);
-		wait 1;
+		waitTime = ( site.useTime / 1000 ) + 2.5;
+		self thread BotPressUse( waitTime );
+		wait waitTime;
 
 		self ClearScriptGoal();
 		self.bot_lock_goal = false;
@@ -5708,10 +5720,11 @@ bot_sab_loop()
 		}
 
 		self SetScriptGoal( self.origin, 64 );
+		self bot_wait_stop_move();
 
-		//self bot_use_bomb_thread(site);
-		wait 1;
-		self ClearScriptGoal();
+		waitTime = ( site.useTime / 1000 ) + 2.5;
+		self thread BotPressUse( waitTime );
+		wait waitTime;
 
 		self.bot_lock_goal = false;
 	}
@@ -5909,9 +5922,12 @@ bot_sd_defenders_loop( data )
 	}
 
 	self SetScriptGoal( self.origin, 64 );
+	self bot_wait_stop_move();
 
-	//self bot_use_bomb_thread(defuse);
-	wait 1;
+	waitTime = ( defuse.useTime / 1000 ) + 2.5;
+	self thread BotPressUse( waitTime );
+	wait waitTime;
+
 	self ClearScriptGoal();
 	self.bot_lock_goal = false;
 }
@@ -6120,9 +6136,11 @@ bot_sd_attackers_loop( data )
 	}
 
 	self SetScriptGoal( self.origin, 64 );
+	self bot_wait_stop_move();
 
-	//self bot_use_bomb_thread(plant);
-	wait 1;
+	waitTime = ( plant.useTime / 1000 ) + 2.5;
+	self thread BotPressUse( waitTime );
+	wait waitTime;
 
 	self ClearScriptGoal();
 	self.bot_lock_goal = false;
@@ -6608,9 +6626,11 @@ bot_dem_attackers_loop()
 	}
 
 	self SetScriptGoal( self.origin, 64 );
+	self bot_wait_stop_move();
 
-	//self bot_use_bomb_thread(plant);
-	wait 1;
+	waitTime = ( plant.useTime / 1000 ) + 2.5;
+	self thread BotPressUse( waitTime );
+	wait waitTime;
 
 	self ClearScriptGoal();
 
@@ -6836,9 +6856,11 @@ bot_dem_defenders_loop()
 	}
 
 	self SetScriptGoal( self.origin, 64 );
+	self bot_wait_stop_move();
 
-	//self bot_use_bomb_thread(defuse);
-	wait 1;
+	waitTime = ( defuse.useTime / 1000 ) + 2.5;
+	self thread BotPressUse( waitTime );
+	wait waitTime;
 
 	self ClearScriptGoal();
 
@@ -6968,9 +6990,14 @@ bot_think_revive_loop()
 	if ( ret != "goal" || !isDefined( revive ) || distanceSquared( self.origin, revive.origin ) >= 100 * 100 || !revive inLastStand() || revive isBeingRevived() || !isAlive( revive ) )
 		return;
 
+	self BotFreezeControls( true );
+	self bot_wait_stop_move();
+
 	waitTime = 3.25;
 	self thread BotPressUse( waitTime );
 	wait waitTime;
+
+	self BotFreezeControls( false );
 }
 
 /*
