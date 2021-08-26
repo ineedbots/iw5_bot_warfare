@@ -1736,6 +1736,7 @@ start_bot_threads()
 
 		self thread bot_dem_attackers();
 		self thread bot_dem_defenders();
+		self thread bot_dem_overtime();
 	}
 }
 
@@ -6652,6 +6653,9 @@ bot_dem_attackers()
 	if ( self.team != game["attackers"] )
 		return;
 
+	if ( inOvertime() )
+		return;
+
 	for ( ;; )
 	{
 		wait( randomintrange( 3, 5 ) );
@@ -6882,6 +6886,9 @@ bot_dem_defenders()
 	if ( self.team == game["attackers"] )
 		return;
 
+	if ( inOvertime() )
+		return;
+
 	for ( ;; )
 	{
 		wait( randomintrange( 3, 5 ) );
@@ -6893,6 +6900,43 @@ bot_dem_defenders()
 
 		if ( !isDefined( level.bombZones ) || !level.bombZones.size )
 			continue;
+
+		self bot_dem_defenders_loop();
+	}
+}
+
+/*
+	Bots play demo overtime
+*/
+bot_dem_overtime()
+{
+	self endon( "death" );
+	self endon( "disconnect" );
+	level endon( "game_ended" );
+
+	if ( level.gametype != "dd" )
+		return;
+
+	if ( !inOvertime() )
+		return;
+
+	for ( ;; )
+	{
+		wait( randomintrange( 3, 5 ) );
+
+		if ( self IsUsingRemote() || self.bot_lock_goal )
+		{
+			continue;
+		}
+
+		if ( !isDefined( level.bombZones ) || !level.bombZones.size )
+			continue;
+
+		if ( !level.bombZones[0].bombPlanted || !level.bombZones[0] maps\mp\gametypes\_gameobjects::isFriendlyTeam( self.team ) )
+		{
+			self bot_dem_attackers_loop();
+			continue;
+		}
 
 		self bot_dem_defenders_loop();
 	}
