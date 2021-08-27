@@ -5627,7 +5627,7 @@ bot_sab_loop()
 				if ( self HasScriptGoal() )
 					return;
 
-				if ( carrier hasPerk( "specialty_coldblooded" ) )
+				if ( carrier _hasPerk( "specialty_coldblooded" ) )
 					return;
 
 				origin = carrier.origin;
@@ -6219,7 +6219,7 @@ bot_cap_loop()
 				if ( theirzone.bots > 2 || randomInt( 100 ) < 45 )
 				{
 					//kill carrier
-					if ( carrier hasPerk( "specialty_coldblooded" ) )
+					if ( carrier _hasPerk( "specialty_coldblooded" ) )
 						return;
 
 					origin = carrier.origin;
@@ -7262,7 +7262,7 @@ bot_oneflag_loop()
 			if ( theirzone.bots > 2 || randomInt( 100 ) < 45 )
 			{
 				//kill carrier
-				if ( carrier hasPerk( "specialty_coldblooded" ) )
+				if ( carrier _hasPerk( "specialty_coldblooded" ) )
 					return;
 
 				origin = carrier.origin;
