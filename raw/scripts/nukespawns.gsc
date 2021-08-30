@@ -8,8 +8,11 @@ init()
 
 	level thread onPlayerConnect();
 
-	level.killstreakPrint = 2;
-	level.allowPrintDamage = true;
+	setDvarIfUninitialized("scr_killstreak_print", 0);
+	setDvarIfUninitialized("scr_printDamage", 0);
+
+	level.killstreakPrint = getDvarInt("scr_killstreak_print");
+	level.allowPrintDamage = getDvarInt("scr_printDamage");
 }
 
 main()

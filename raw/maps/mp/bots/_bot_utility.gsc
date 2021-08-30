@@ -1054,13 +1054,12 @@ load_waypoints()
 			case "mp_restrepo_ss":
 				level.waypoints = maps\mp\bots\waypoints\lookout::Lookout();
 				break;
-                       
-                        case "mp_nola":
+
+			case "mp_nola":
 				level.waypoints = maps\mp\bots\waypoints\parish::Parish();
 				break;
 
-                        
-                        case "mp_hillside_ss":
+			case "mp_hillside_ss":
 				level.waypoints = maps\mp\bots\waypoints\getaway::Getaway();
 				break;
 
