@@ -23,14 +23,12 @@ You can find the ModDB release post [here](https://www.moddb.com/mods/bot-warfar
 
 - This mod does not edit ANY stock .gsc files, meaning EVERY other mod is compatible with this mod. Mod doesn't add anything unnecessary, what you see is what you get.
 
-- Loading waypoints from CSV files, and if the CSV file is missing, will download the CSV from [this repo](https://github.com/ineedbots/piw5_waypoints) automatically.
-
-- Adds AI clients to multiplayer games to simulate playing real players. (essentially Combat Training for MW2)
+- Adds AI clients to multiplayer games to simulate playing real players. (essentially Combat Training for MW3)
   - Bots move around the maps with native engine input. (all normal maps, most to all custom maps)
   - Bots press all the buttons with native engine input (ads, sprint, jump, etc)
-  - Bots play all gamemodes/objectives, they capture flags, plant, defuse bombs, etc. ( all normal modes, most custom modes)
-  - Bots use all killstreaks. Including AC130 and chopper gunner.
-  - Bots target killstreaks, use stingers and other weapons to take out all killstreaks. ( even sentry guns)
+  - Bots play all gamemodes/objectives, they capture flags, plant, defuse bombs, etc. (all gamemodes modes)
+  - Bots use all killstreaks. Including AC130 and osprey gunner, etc.
+  - Bots target killstreaks, use stingers and other weapons to take out all killstreaks. (even sentry guns)
   - Bots can capture and steal care packages.
   - Bots target equipment, and can even camp TIs.
   - Bots can camp randomly or when about to use the laptop.
@@ -53,20 +51,18 @@ You can find the ModDB release post [here](https://www.moddb.com/mods/bot-warfar
   - ... And pretty much everything you expect a Combat Training bot to have
 
 ## Installation
-0. Make sure that [PlutoniumIW5](https://forum.plutonium.pw/topic/8262/how-to-install-plutonium-iw5) is installed, updated and working properly.
+0. Make sure that [PlutoniumIW5](https://plutonium.pw/docs/install/#iw5) is installed, updated and working properly.
     - Download the [latest release](https://github.com/ineedbots/piw5_bot_warfare/releases) of Bot Warfare.
-1. Locate your IW4x install folder.
-2. Move the files/folders found in 'Move files to root of IW4x folder' from the Bot Warfare release archive you downloaded into the root of your IW4x install folder.
-    - The folder/file structure should follow as '.IW4x game folder\mods\bots\z_svr_bots.iwd'.
+1. Extract all the files from the Bot Warfare release archive you downloaded to anywhere on your computer.
+2. Run the 'install.bat'. This copies the mod to your PlutoniumIW5 mods folder.
 3. The mod is now installed, now run your game.
-    - If you are a dedicated server, you will need to set the DVAR 'fs_game' to 'mods/bots'
-    - If you are not a dedicated server, open the 'Mods' option from the main menu of the game and select 'bots' and then 'Launch'.
+    - You will need to set the DVAR `fs_game` to `mods/bots`. You can do this by entering `set fs_game mods/bots` into the console. You can open the console using the tilde (~) key.
 4. The mod should be loaded! Now go start a map and play!
 
 ## Documentation
 
 ### Menu Usage
-- You can open the menu by pressing the Action Slot 2 key (default '5').
+- You can open the menu by pressing the Action Slot 1 key (default 'N', nightvision key).
 
 - You can navigate the options by pressing your movement keys (default WASD), and you can select options by pressing your jump key (default SPACE).
 
@@ -142,6 +138,7 @@ You can find the ModDB release post [here](https://www.moddb.com/mods/bot-warfar
 - bots_play_target_other - a boolean value (0 or 1), whether or not if the bots will target claymores, killstreaks, etc.
 - bots_play_killstreak - a boolean value (0 or 1), whether or not if the bots will use killstreaks
 - bots_play_ads - a boolean value (0 or 1), whether or not if the bots will ads
+- bots_play_aim a boolean value (0 or 1), wether or not if the bots can aim
 
 ---
 
@@ -152,6 +149,8 @@ You can find the ModDB release post [here](https://www.moddb.com/mods/bot-warfar
 - bots_main_GUIDs - a list of GUIDs (comma separated) of players who will be considered a host
 
 - bots_main_waitForHostTime - a float value, how long in seconds to wait for the host player to connect before adding in bots
+
+- bots_main_kickBotsAtEnd - a boolean value (0 or 1), kicks all the bots at the end of a match
 
 - bots_main_menu - a boolean value (0 or 1), enables or disables the menu
 
