@@ -1061,6 +1061,9 @@ load_waypoints()
 
 			case "mp_hillside_ss":
 				level.waypoints = maps\mp\bots\waypoints\getaway::Getaway();
+			
+			case "mp_terminal_cls":
+				level.waypoints = maps\mp\bots\waypoints\terminal::Terminal();
 				break;
 
 

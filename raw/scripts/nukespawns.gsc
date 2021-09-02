@@ -8,11 +8,11 @@ init()
 
 	level thread onPlayerConnect();
 
-	setDvarIfUninitialized("scr_killstreak_print", 0);
-	setDvarIfUninitialized("scr_printDamage", 0);
+	setDvarIfUninitialized( "scr_killstreak_print", 0 );
+	setDvarIfUninitialized( "scr_printDamage", 0 );
 
-	level.killstreakPrint = getDvarInt("scr_killstreak_print");
-	level.allowPrintDamage = getDvarInt("scr_printDamage");
+	level.killstreakPrint = getDvarInt( "scr_killstreak_print" );
+	level.allowPrintDamage = getDvarInt( "scr_printDamage" );
 }
 
 main()
@@ -361,9 +361,9 @@ finishPlayerDamageWrapper( var_0, var_1, var_2, var_3, var_4, var_5, var_6, var_
 {
 	if ( isDefined( level.allowPrintDamage ) && level.allowPrintDamage )
 	{
-		if (!isDefined( var_1 ))
+		if ( !isDefined( var_1 ) )
 		{
-			if (!isDefined(var_0))
+			if ( !isDefined( var_0 ) )
 				self thread doPrintDamage( var_2, var_8, var_3 );
 		}
 		else if ( isPlayer( var_1 ) && isDefined( var_1.printDamage ) && var_1.printDamage )
@@ -479,7 +479,7 @@ nukeSlowMo()
 {
 	level endon ( "nuke_cancelled" );
 
-	if (isDefined(level.nuked))
+	if ( isDefined( level.nuked ) )
 		return;
 
 	//SetSlowMotion( <startTimescale>, <endTimescale>, <deltaTime> )
@@ -492,149 +492,149 @@ nukeSlowMo()
 
 remoteUAV_trackEntities( var_0, var_1, var_2 )
 {
-    level endon( "game_ended" );
-    var_3 = undefined;
+	level endon( "game_ended" );
+	var_3 = undefined;
 
-    foreach ( var_5 in var_1 )
-    {
-        if ( level.teamBased && ( !isdefined( var_5.team ) || var_5.team == self.team ) )
-            continue;
+	foreach ( var_5 in var_1 )
+	{
+		if ( level.teamBased && ( !isdefined( var_5.team ) || var_5.team == self.team ) )
+			continue;
 
-        if ( isplayer( var_5 ) )
-        {
-            if ( !maps\mp\_utility::isReallyAlive( var_5 ) )
-                continue;
+		if ( isplayer( var_5 ) )
+		{
+			if ( !maps\mp\_utility::isReallyAlive( var_5 ) )
+				continue;
 
-            if ( var_5 == self )
-                continue;
+			if ( var_5 == self )
+				continue;
 
-            var_6 = var_5.guid + "";
-        }
-        else
-            var_6 = var_5.birthtime + "";
+			var_6 = var_5.guid + "";
+		}
+		else
+			var_6 = var_5.birthtime + "";
 
-        if ( isdefined( var_5.sentryType ) || isdefined( var_5.turretType ) )
-        {
-            var_7 = ( 0, 0, 32 );
-            var_8 = "hud_fofbox_hostile_vehicle";
-        }
-        else if ( isdefined( var_5.uavType ) )
-        {
-            var_7 = ( 0, 0, -52 );
-            var_8 = "hud_fofbox_hostile_vehicle";
-        }
-        else
-        {
-            var_7 = ( 0, 0, 26 );
-            var_8 = "veh_hud_target_unmarked";
-        }
+		if ( isdefined( var_5.sentryType ) || isdefined( var_5.turretType ) )
+		{
+			var_7 = ( 0, 0, 32 );
+			var_8 = "hud_fofbox_hostile_vehicle";
+		}
+		else if ( isdefined( var_5.uavType ) )
+		{
+			var_7 = ( 0, 0, -52 );
+			var_8 = "hud_fofbox_hostile_vehicle";
+		}
+		else
+		{
+			var_7 = ( 0, 0, 26 );
+			var_8 = "veh_hud_target_unmarked";
+		}
 
-        if ( isdefined( var_5.UAVRemoteMarkedBy ) )
-        {
-            if ( !isdefined( var_0.markedPlayers[var_6] ) )
-            {
-                var_0.markedPlayers[var_6] = [];
-                var_0.markedPlayers[var_6]["player"] = var_5;
-                var_0.markedPlayers[var_6]["icon"] = var_5 maps\mp\_entityheadicons::setHeadIcon( self, "veh_hud_target_marked", var_7, 10, 10, 0, 0.05, 0, 0, 0, 0 );
-                var_0.markedPlayers[var_6]["icon"].shader = "veh_hud_target_marked";
+		if ( isdefined( var_5.UAVRemoteMarkedBy ) )
+		{
+			if ( !isdefined( var_0.markedPlayers[var_6] ) )
+			{
+				var_0.markedPlayers[var_6] = [];
+				var_0.markedPlayers[var_6]["player"] = var_5;
+				var_0.markedPlayers[var_6]["icon"] = var_5 maps\mp\_entityheadicons::setHeadIcon( self, "veh_hud_target_marked", var_7, 10, 10, 0, 0.05, 0, 0, 0, 0 );
+				var_0.markedPlayers[var_6]["icon"].shader = "veh_hud_target_marked";
 
-                if ( !isdefined( var_5.sentryType ) || !isdefined( var_5.turretType ) )
-                    var_0.markedPlayers[var_6]["icon"] settargetent( var_5 );
-            }
-            else if ( isdefined( var_0.markedPlayers[var_6] ) && isdefined( var_0.markedPlayers[var_6]["icon"] ) && isdefined( var_0.markedPlayers[var_6]["icon"].shader ) && var_0.markedPlayers[var_6]["icon"].shader != "veh_hud_target_marked" )
-            {
-                var_0.markedPlayers[var_6]["icon"].shader = "veh_hud_target_marked";
-                var_0.markedPlayers[var_6]["icon"] setshader( "veh_hud_target_marked", 10, 10 );
-                var_0.markedPlayers[var_6]["icon"] setwaypoint( 0, 0, 0, 0 );
-            }
+				if ( !isdefined( var_5.sentryType ) || !isdefined( var_5.turretType ) )
+					var_0.markedPlayers[var_6]["icon"] settargetent( var_5 );
+			}
+			else if ( isdefined( var_0.markedPlayers[var_6] ) && isdefined( var_0.markedPlayers[var_6]["icon"] ) && isdefined( var_0.markedPlayers[var_6]["icon"].shader ) && var_0.markedPlayers[var_6]["icon"].shader != "veh_hud_target_marked" )
+			{
+				var_0.markedPlayers[var_6]["icon"].shader = "veh_hud_target_marked";
+				var_0.markedPlayers[var_6]["icon"] setshader( "veh_hud_target_marked", 10, 10 );
+				var_0.markedPlayers[var_6]["icon"] setwaypoint( 0, 0, 0, 0 );
+			}
 
-            continue;
-        }
+			continue;
+		}
 
-        if ( isplayer( var_5 ) )
-        {
-            var_9 = isdefined( var_5.spawnTime ) && ( gettime() - var_5.spawnTime ) / 1000 <= 5;
-            var_10 = var_5 maps\mp\_utility::_hasPerk( "specialty_blindeye" );
-            var_11 = 0;
-            var_12 = 0;
-        }
-        else
-        {
-            var_9 = 0;
-            var_10 = 0;
-            var_11 = isdefined( var_5.carriedBy );
-            var_12 = isdefined( var_5.isLeaving ) && var_5.isLeaving == 1;
-        }
+		if ( isplayer( var_5 ) )
+		{
+			var_9 = isdefined( var_5.spawnTime ) && ( gettime() - var_5.spawnTime ) / 1000 <= 5;
+			var_10 = var_5 maps\mp\_utility::_hasPerk( "specialty_blindeye" );
+			var_11 = 0;
+			var_12 = 0;
+		}
+		else
+		{
+			var_9 = 0;
+			var_10 = 0;
+			var_11 = isdefined( var_5.carriedBy );
+			var_12 = isdefined( var_5.isLeaving ) && var_5.isLeaving == 1;
+		}
 
-        if ( !isdefined( var_0.markedPlayers[var_6] ) && !var_9 && !var_10 && !var_11 && !var_12 )
-        {
-            var_0.markedPlayers[var_6] = [];
-            var_0.markedPlayers[var_6]["player"] = var_5;
-            var_0.markedPlayers[var_6]["icon"] = var_5 maps\mp\_entityheadicons::setHeadIcon( self, var_8, var_7, 10, 10, 0, 0.05, 0, 0, 0, 0 );
-            var_0.markedPlayers[var_6]["icon"].shader = var_8;
+		if ( !isdefined( var_0.markedPlayers[var_6] ) && !var_9 && !var_10 && !var_11 && !var_12 )
+		{
+			var_0.markedPlayers[var_6] = [];
+			var_0.markedPlayers[var_6]["player"] = var_5;
+			var_0.markedPlayers[var_6]["icon"] = var_5 maps\mp\_entityheadicons::setHeadIcon( self, var_8, var_7, 10, 10, 0, 0.05, 0, 0, 0, 0 );
+			var_0.markedPlayers[var_6]["icon"].shader = var_8;
 
-            if ( !isdefined( var_5.sentryType ) || !isdefined( var_5.turretType ) )
-                var_0.markedPlayers[var_6]["icon"] settargetent( var_5 );
-        }
+			if ( !isdefined( var_5.sentryType ) || !isdefined( var_5.turretType ) )
+				var_0.markedPlayers[var_6]["icon"] settargetent( var_5 );
+		}
 
-        if ( ( !isdefined( var_3 ) || var_3 != var_5 ) && ( isdefined( var_0.trace["entity"] ) && var_0.trace["entity"] == var_5 && !var_11 && !var_12 ) || distance( var_5.origin, var_2 ) < 200 * var_0.trace["fraction"] && !var_9 && !var_11 && !var_12 || !var_12 && maps\mp\killstreaks\_remoteuav::remoteUAV_canTargetUAV( var_0, var_5 ) )
-        {
-            var_13 = bullettrace( var_0.origin, var_5.origin + ( 0, 0, 32 ), 1, var_0 );
+		if ( ( !isdefined( var_3 ) || var_3 != var_5 ) && ( isdefined( var_0.trace["entity"] ) && var_0.trace["entity"] == var_5 && !var_11 && !var_12 ) || distance( var_5.origin, var_2 ) < 200 * var_0.trace["fraction"] && !var_9 && !var_11 && !var_12 || !var_12 && maps\mp\killstreaks\_remoteuav::remoteUAV_canTargetUAV( var_0, var_5 ) )
+		{
+			var_13 = bullettrace( var_0.origin, var_5.origin + ( 0, 0, 32 ), 1, var_0 );
 
-            if ( isdefined( var_13["entity"] ) && var_13["entity"] == var_5 || var_13["fraction"] == 1 )
-            {
-                self playlocalsound( "recondrone_lockon" );
-                var_3 = var_5;
-            }
-        }
-    }
+			if ( isdefined( var_13["entity"] ) && var_13["entity"] == var_5 || var_13["fraction"] == 1 )
+			{
+				self playlocalsound( "recondrone_lockon" );
+				var_3 = var_5;
+			}
+		}
+	}
 
-    return var_3;
+	return var_3;
 }
 
 remoteUAV_unmarkRemovedPlayer( var_0 )
 {
-    level endon( "game_ended" );
-    var_1 = common_scripts\utility::waittill_any_return( "death", "disconnect", "carried", "leaving" );
+	level endon( "game_ended" );
+	var_1 = common_scripts\utility::waittill_any_return( "death", "disconnect", "carried", "leaving" );
 
-    if ( var_1 == "leaving" || !isdefined( self.uavType ) )
-        self.UAVRemoteMarkedBy = undefined;
+	if ( var_1 == "leaving" || !isdefined( self.uavType ) )
+		self.UAVRemoteMarkedBy = undefined;
 
-    if ( isdefined( var_0 ) )
-    {
-        if ( isplayer( self ) )
-            var_2 = self.guid + "";
-        else if ( isdefined( self.birthtime ) )
-            var_2 = self.birthtime + "";
-        else
-            var_2 = self.birth_time + "";
+	if ( isdefined( var_0 ) )
+	{
+		if ( isplayer( self ) )
+			var_2 = self.guid + "";
+		else if ( isdefined( self.birthtime ) )
+			var_2 = self.birthtime + "";
+		else
+			var_2 = self.birth_time + "";
 
-        if ( var_1 == "carried" || var_1 == "leaving" )
-        {
-            var_0.markedPlayers[var_2]["icon"] destroy();
-            var_0.markedPlayers[var_2]["icon"] = undefined;
-        }
+		if ( var_1 == "carried" || var_1 == "leaving" )
+		{
+			var_0.markedPlayers[var_2]["icon"] destroy();
+			var_0.markedPlayers[var_2]["icon"] = undefined;
+		}
 
-        if ( isdefined( var_2 ) && isdefined( var_0.markedPlayers[var_2] ) )
-        {
-            var_0.markedPlayers[var_2] = undefined;
-            var_0.markedPlayers = common_scripts\utility::array_removeUndefined( var_0.markedPlayers );
-        }
-    }
+		if ( isdefined( var_2 ) && isdefined( var_0.markedPlayers[var_2] ) )
+		{
+			var_0.markedPlayers[var_2] = undefined;
+			var_0.markedPlayers = common_scripts\utility::array_removeUndefined( var_0.markedPlayers );
+		}
+	}
 
-    if ( isplayer( self ) )
-        self unsetperk( "specialty_radarblip", 1 );
-    else
-    {
-        if ( isdefined( self.remoteUAVMarkedObjID01 ) )
-            maps\mp\_utility::_objective_delete( self.remoteUAVMarkedObjID01 );
+	if ( isplayer( self ) )
+		self unsetperk( "specialty_radarblip", 1 );
+	else
+	{
+		if ( isdefined( self.remoteUAVMarkedObjID01 ) )
+			maps\mp\_utility::_objective_delete( self.remoteUAVMarkedObjID01 );
 
-        if ( isdefined( self.remoteUAVMarkedObjID02 ) )
-            maps\mp\_utility::_objective_delete( self.remoteUAVMarkedObjID02 );
+		if ( isdefined( self.remoteUAVMarkedObjID02 ) )
+			maps\mp\_utility::_objective_delete( self.remoteUAVMarkedObjID02 );
 
-        if ( isdefined( self.remoteUAVMarkedObjID03 ) )
-            maps\mp\_utility::_objective_delete( self.remoteUAVMarkedObjID03 );
-    }
+		if ( isdefined( self.remoteUAVMarkedObjID03 ) )
+			maps\mp\_utility::_objective_delete( self.remoteUAVMarkedObjID03 );
+	}
 }
 
 onPlayerConnect()
@@ -664,7 +664,8 @@ onChangeKit()
 	{
 		self waittill( "changed_kit" );
 
-		self thread watchNotifyKSMessage();
+		if ( level.killstreakPrint )
+			self thread watchNotifyKSMessage();
 	}
 }
 
