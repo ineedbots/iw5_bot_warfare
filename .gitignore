@@ -3,6 +3,7 @@
 
 # Files to not ignore
 !/.gitignore
+!/.vscode
 
 # Folder to not ignore
 !/raw
