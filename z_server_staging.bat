@@ -1,2 +1,0 @@
-pushd "%LOCALAPPDATA%\Plutonium-staging"
-start "" "%LOCALAPPDATA%\Plutonium-staging\bin\plutonium-bootstrapper-win32.exe" iw5mp "%PLUTONIUM_IW5_PATH%" -dedicated -lan +set developer "1" +set developer_script "1" +set key "LANKEYXD" +set net_port "27016" +set sv_cheats "1" +set sv_config "server.cfg"
