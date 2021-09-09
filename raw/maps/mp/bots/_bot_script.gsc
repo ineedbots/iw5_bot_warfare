@@ -1205,40 +1205,73 @@ classWatch()
 }
 
 /*
+	Any recipe classes
+*/
+anyMatchRuleDefaultClass( team )
+{
+	if ( !isUsingMatchRulesData() )
+		return false;
+
+	for ( i = 0; i < 5; i++ )
+	{
+		if ( GetMatchRulesData( "defaultClasses", team, i, "class", "inUse" ) )
+			return true;
+	}
+
+	return false;
+}
+
+/*
 	Chooses a random class
 */
-chooseRandomClass()
+chooseRandomClass( )
 {
 	reasonable = getDvarInt( "bots_loadout_reasonable" );
 	class = "";
 	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData( "experience" ) ) + 1;
 
-	if ( rank < 4 || ( randomInt( 100 ) < 2 && !reasonable ) )
+	if ( rank < 4 || ( randomInt( 100 ) < 2 && !reasonable ) || !level.matchRules_allowCustomClasses )
 	{
 		while ( class == "" )
 		{
 			switch ( randomInt( 5 ) )
 			{
 				case 0:
-					class = "class0";
+					if ( isUsingMatchRulesData() && GetMatchRulesData( "defaultClasses", self.team, 0, "class", "inUse" ) )
+						class = self.team + "_recipe1";
+					else if ( !anyMatchRuleDefaultClass( self.team ) )
+						class = "class0";
+
 					break;
 
 				case 1:
-					class = "class1";
+					if ( isUsingMatchRulesData() && GetMatchRulesData( "defaultClasses", self.team, 1, "class", "inUse" ) )
+						class = self.team + "_recipe2";
+					else if ( !anyMatchRuleDefaultClass( self.team ) )
+						class = "class1";
+
 					break;
 
 				case 2:
-					class = "class2";
+					if ( isUsingMatchRulesData() && GetMatchRulesData( "defaultClasses", self.team, 2, "class", "inUse" ) )
+						class = self.team + "_recipe3";
+					else if ( !anyMatchRuleDefaultClass( self.team ) )
+						class = "class2";
+
 					break;
 
 				case 3:
-					if ( rank >= 2 )
+					if ( isUsingMatchRulesData() && GetMatchRulesData( "defaultClasses", self.team, 3, "class", "inUse" ) )
+						class = self.team + "_recipe4";
+					else if ( rank >= 2 && !anyMatchRuleDefaultClass( self.team ) )
 						class = "class3";
 
 					break;
 
 				case 4:
-					if ( rank >= 3 )
+					if ( isUsingMatchRulesData() && GetMatchRulesData( "defaultClasses", self.team, 4, "class", "inUse" ) )
+						class = self.team + "_recipe5";
+					else if ( rank >= 3 && !anyMatchRuleDefaultClass( self.team ) )
 						class = "class4";
 
 					break;
