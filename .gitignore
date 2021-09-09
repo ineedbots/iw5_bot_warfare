@@ -1,9 +1,11 @@
-# Ignore everything in repository root 
+# Ignore everything in repository root
 /*
 
 # Files to not ignore
 !/.gitignore
 !/.vscode
+!/.editorconfig
+!/.gitattributes
 
 # Folder to not ignore
 !/raw
