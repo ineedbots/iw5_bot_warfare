@@ -1230,7 +1230,7 @@ chooseRandomClass( )
 	class = "";
 	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData( "experience" ) ) + 1;
 
-	if ( rank < 4 || ( randomInt( 100 ) < 2 && !reasonable ) || !level.matchRules_allowCustomClasses )
+	if ( rank < 4 || ( randomInt( 100 ) < 2 && !reasonable ) || ( isUsingMatchRulesData() && !level.matchRules_allowCustomClasses ) )
 	{
 		while ( class == "" )
 		{
