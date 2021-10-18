@@ -13,6 +13,24 @@ init()
 
 	level.killstreakPrint = getDvarInt( "scr_killstreak_print" );
 	level.allowPrintDamage = getDvarInt( "scr_printDamage" );
+
+	level thread hook_callbacks();
+}
+
+hook_callbacks()
+{
+	level waittill( "prematch_over" ); // iw4madmin waits this long for some reason...
+	wait 0.1; // so we need to be one frame after it sets up its callbacks.
+	level.prevCallbackPlayerDamage2 = level.callbackPlayerDamage;
+	level.callbackPlayerDamage = ::onPlayerDamage;
+}
+
+onPlayerDamage( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, timeOffset )
+{
+	if ( sWeapon == "iw5_1887_mp" )
+		iDamage = 35;
+
+	self [[level.prevCallbackPlayerDamage2]]( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, timeOffset );
 }
 
 main()
