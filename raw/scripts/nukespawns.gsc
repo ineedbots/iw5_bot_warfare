@@ -340,6 +340,8 @@ getSpawnpoint_NearTeam( var_0, var_1 )
 
 doPrintDamage( dmg, hitloc, flags )
 {
+	self endon( "disconnect" );
+
 	huddamage = newclienthudelem( self );
 	huddamage.alignx = "center";
 	huddamage.horzalign = "center";
@@ -372,7 +374,8 @@ doPrintDamage( dmg, hitloc, flags )
 
 	wait 1;
 
-	huddamage destroy();
+	if ( isDefined( huddamage ) )
+		huddamage destroy();
 }
 
 finishPlayerDamageWrapper( var_0, var_1, var_2, var_3, var_4, var_5, var_6, var_7, var_8, var_9, var_10 )

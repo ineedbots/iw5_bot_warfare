@@ -1226,6 +1226,9 @@ anyMatchRuleDefaultClass( team )
 */
 chooseRandomClass( )
 {
+	if ( self.team != "axis" && self.team != "allies" )
+		return "";
+
 	reasonable = getDvarInt( "bots_loadout_reasonable" );
 	class = "";
 	rank = self maps\mp\gametypes\_rank::getRankForXp( self getPlayerData( "experience" ) ) + 1;
