@@ -665,7 +665,20 @@ onPlayerConnect()
 		level waittill( "connected", player );
 
 		player thread onChangeKit();
+
+		print( "Player connected: " + player.name + " guid " + player getGuid() + "\n" );
+		player thread onPlayerDisconnect();
 	}
+}
+
+onPlayerDisconnect()
+{
+	name = self.name;
+	guid = self getGuid();
+
+	self waittill( "disconnect" );
+
+	print( "Player disconnected: " + name + " guid " + guid + "\n" );
 }
 
 watchNuke()
