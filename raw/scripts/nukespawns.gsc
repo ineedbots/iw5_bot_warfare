@@ -27,7 +27,7 @@ hook_callbacks()
 
 onPlayerDamage( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, timeOffset )
 {
-	if ( sWeapon == "iw5_1887_mp" )
+	if ( isSubStr( sWeapon, "iw5_1887_mp" ) && sMeansOfDeath != "MOD_MELEE" )
 		iDamage = 35;
 
 	self [[level.prevCallbackPlayerDamage2]]( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, timeOffset );
