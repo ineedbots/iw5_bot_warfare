@@ -20,7 +20,7 @@
 !/raw/maps
 /raw/maps/*
 !/raw/maps/mp/
-/raw/maps/mp/*
+/raw/maps/mp/**
 !/raw/maps/mp/bots/
 !/raw/bw-assets
 !/raw/bots.txt
