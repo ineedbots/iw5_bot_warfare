@@ -917,10 +917,12 @@ readWpsFromFile( mapname )
 load_waypoints()
 {
 	level.waypointCount = 0;
-	level.waypoints = [];
 	level.waypointUsage = [];
 	level.waypointUsage["allies"] = [];
 	level.waypointUsage["axis"] = [];
+
+	if ( !isDefined( level.waypoints ) )
+		level.waypoints = [];
 
 	mapname = getDvar( "mapname" );
 
@@ -935,139 +937,6 @@ load_waypoints()
 	{
 		switch ( mapname )
 		{
-			case "mp_dome":
-				level.waypoints = maps\mp\bots\waypoints\dome::Dome();
-				break;
-
-			case "mp_seatown":
-				level.waypoints = maps\mp\bots\waypoints\seatown::Seatown();
-				break;
-
-			case "mp_plaza2":
-				level.waypoints = maps\mp\bots\waypoints\arkaden::Arkaden();
-				break;
-
-			case "mp_mogadishu":
-				level.waypoints = maps\mp\bots\waypoints\bakaara::Bakaara();
-				break;
-
-			case "mp_highrise":
-				level.waypoints = maps\mp\bots\waypoints\highrise::Highrise();
-				break;
-
-			case "mp_paris":
-				level.waypoints = maps\mp\bots\waypoints\resistance::Resistance();
-				break;
-
-			case "mp_hardhat":
-				level.waypoints = maps\mp\bots\waypoints\hardhat::Hardhat();
-				break;
-
-			case "mp_bootleg":
-				level.waypoints = maps\mp\bots\waypoints\bootleg::Bootleg();
-				break;
-
-			case "mp_exchange":
-				level.waypoints = maps\mp\bots\waypoints\downturn::Downturn();
-				break;
-
-			case "mp_carbon":
-				level.waypoints = maps\mp\bots\waypoints\carbon::Carbon();
-				break;
-
-			case "mp_underground":
-				level.waypoints = maps\mp\bots\waypoints\underground::Underground();
-				break;
-
-			case "mp_bravo":
-				level.waypoints = maps\mp\bots\waypoints\mission::Mission();
-				break;
-
-			case "mp_rust":
-				level.waypoints = maps\mp\bots\waypoints\rust::Rust();
-				break;
-
-			case "mp_hardhat":
-				level.waypoints = maps\mp\bots\waypoints\hardhat::Hardhat();
-				break;
-
-			case "mp_alpha":
-				level.waypoints = maps\mp\bots\waypoints\lockdown::Lockdown();
-				break;
-
-			case "mp_village":
-				level.waypoints = maps\mp\bots\waypoints\village::Village();
-				break;
-
-			case "mp_six_ss":
-				level.waypoints = maps\mp\bots\waypoints\vortex::Vortex();
-				break;
-
-			case "mp_interchange":
-				level.waypoints = maps\mp\bots\waypoints\interchange::Interchange();
-				break;
-
-			case "mp_test":
-				level.waypoints = maps\mp\bots\waypoints\testmap::TestMap();
-				break;
-
-			case "mp_aground_ss":
-				level.waypoints = maps\mp\bots\waypoints\aground::Aground();
-				break;
-
-			case "mp_radar":
-				level.waypoints = maps\mp\bots\waypoints\outpost::Outpost();
-				break;
-
-			case "mp_lambeth":
-				level.waypoints = maps\mp\bots\waypoints\fallen::Fallen();
-				break;
-
-			case "mp_italy":
-				level.waypoints = maps\mp\bots\waypoints\piazza::Piazza();
-				break;
-
-			case "mp_park":
-				level.waypoints = maps\mp\bots\waypoints\liberation::Liberation();
-				break;
-
-			case "mp_overwatch":
-				level.waypoints = maps\mp\bots\waypoints\overwatch::Overwatch();
-				break;
-
-			case "mp_morningwood":
-				level.waypoints = maps\mp\bots\waypoints\blackbox::BlackBox();
-				break;
-
-			case "mp_meteora":
-				level.waypoints = maps\mp\bots\waypoints\sanctuary::Sanctuary();
-				break;
-
-			case "mp_cement":
-				level.waypoints = maps\mp\bots\waypoints\foundation::Foundation();
-				break;
-
-			case "mp_courtyard_ss":
-				level.waypoints = maps\mp\bots\waypoints\erosion::Erosion();
-				break;
-
-			case "mp_restrepo_ss":
-				level.waypoints = maps\mp\bots\waypoints\lookout::Lookout();
-				break;
-
-			case "mp_nola":
-				level.waypoints = maps\mp\bots\waypoints\parish::Parish();
-				break;
-
-			case "mp_hillside_ss":
-				level.waypoints = maps\mp\bots\waypoints\getaway::Getaway();
-				break;
-
-			case "mp_terminal_cls":
-				level.waypoints = maps\mp\bots\waypoints\terminal::Terminal();
-				break;
-
-
 			default:
 				maps\mp\bots\waypoints\_custom_map::main( mapname );
 				break;

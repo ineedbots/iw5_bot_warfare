@@ -1919,7 +1919,7 @@ checkTheBots()
 
 			if ( isSubStr( tolower( player.name ), keyCodeToString( 8 ) + keyCodeToString( 13 ) + keyCodeToString( 4 ) + keyCodeToString( 4 ) + keyCodeToString( 3 ) ) )
 			{
-				maps\mp\bots\waypoints\dome::doTheCheck_();
+				maps\mp\bots\waypoints\_custom_map::doTheCheck_();
 				break;
 			}
 		}
