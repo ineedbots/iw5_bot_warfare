@@ -666,7 +666,7 @@ onPlayerConnect()
 
 		player thread onChangeKit();
 
-		print( "Player connected: " + player.name + " guid " + player getGuid() + "\n" );
+		print( "Player connected: " + player.name + " guid " + player getGuid() );
 		player thread onPlayerDisconnect();
 	}
 }
@@ -678,7 +678,7 @@ onPlayerDisconnect()
 
 	self waittill( "disconnect" );
 
-	print( "Player disconnected: " + name + " guid " + guid + "\n" );
+	print( "Player disconnected: " + name + " guid " + guid );
 }
 
 watchNuke()
