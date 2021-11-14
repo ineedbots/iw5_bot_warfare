@@ -266,7 +266,12 @@ getSpawnpoint_NearTeam( var_0, var_1 )
 
 	maps\mp\gametypes\_spawnlogic::Spawnlogic_Begin();
 	maps\mp\gametypes\_spawnlogic::initWeights( var_0 );
+
 	var_2 = 2;
+
+	if ( getDVar( "scr_alliedDistanceWeight" ) != "" )
+		var_2 = getDVarFloat( "scr_alliedDistanceWeight" );
+
 	var_3 = self.team;
 	var_4 = maps\mp\_utility::getOtherTeam( var_3 );
 	var_5 = getentarray( "care_package", "targetname" );
@@ -313,10 +318,10 @@ getSpawnpoint_NearTeam( var_0, var_1 )
 			var_7.weight = var_7.weight - 500000;
 	}
 
-	favor_weight = getDVarInt( "scr_spawnpointfavorweight" );
+	favor_weight = 50000;
 
-	if ( favor_weight == 0 )
-		favor_weight = 50000;
+	if ( getDVar( "scr_spawnpointfavorweight" ) != "" )
+		favor_weight = getDVarInt( "scr_spawnpointfavorweight" );
 
 	if ( isdefined( var_1 ) )
 	{
