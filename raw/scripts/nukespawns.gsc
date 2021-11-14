@@ -166,8 +166,8 @@ syncXPStat()
 rank_init()
 {
 	level.scoreInfo = [];
-	level.xpScale = getdvarint( "scr_xpscale" );
-	level.weaponxpscale = getdvarint( "scr_weaponxpscale" );
+	level.xpScale = getdvarint( "scr_xpscale_" );
+	level.weaponxpscale = getdvarint( "scr_weaponxpscale_" );
 	level.rankTable = [];
 	level.weaponRankTable = [];
 	precacheshader( "white" );
