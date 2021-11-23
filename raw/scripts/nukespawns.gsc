@@ -10,6 +10,8 @@ init()
 
 	setDvarIfUninitialized( "scr_killstreak_print", 0 );
 	setDvarIfUninitialized( "scr_printDamage", 0 );
+	setDvarIfUninitialized( "scr_xpscale_", 1 );
+	setDvarIfUninitialized( "scr_weaponxpscale_", 1 );
 
 	level.killstreakPrint = getDvarInt( "scr_killstreak_print" );
 	level.allowPrintDamage = getDvarInt( "scr_printDamage" );
