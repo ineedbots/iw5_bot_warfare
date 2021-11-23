@@ -10,8 +10,6 @@ init()
 
 	setDvarIfUninitialized( "scr_killstreak_print", 0 );
 	setDvarIfUninitialized( "scr_printDamage", 0 );
-	setDvarIfUninitialized( "scr_xpscale_", 1 );
-	setDvarIfUninitialized( "scr_weaponxpscale_", 1 );
 
 	level.killstreakPrint = getDvarInt( "scr_killstreak_print" );
 	level.allowPrintDamage = getDvarInt( "scr_printDamage" );
@@ -37,6 +35,9 @@ onPlayerDamage( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon,
 
 main()
 {
+	setDvarIfUninitialized( "scr_xpscale_", 1 );
+	setDvarIfUninitialized( "scr_weaponxpscale_", 1 );
+
 	// fix G-GetPlayereye bug
 	replaceFunc( maps\mp\killstreaks\_helicopter::heli_leave, ::heli_leave );
 	replaceFunc( maps\mp\killstreaks\_helicopter::heli_explode, ::heli_explode );
