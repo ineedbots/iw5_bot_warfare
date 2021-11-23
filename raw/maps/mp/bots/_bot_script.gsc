@@ -4171,6 +4171,7 @@ bot_crate_think()
 */
 doReloadCancel_loop()
 {
+	curWeap = self GetCurrentWeapon();
 	ret = self waittill_either_return( "reload", "weapon_change" );
 
 	if ( self BotIsFrozen() )
@@ -4185,10 +4186,17 @@ doReloadCancel_loop()
 	if ( self InLastStand() && !self InFinalStand() )
 		return;
 
-	curWeap = self GetCurrentWeapon();
-
-	if ( getDvar( "sv_enableDoubleTaps" ) == "0" )
+	if ( !getDvarInt( "sv_enableDoubleTaps" ) )
 		return;
+
+	// wait for an actual change
+	if ( ret == "weapon_change" )
+	{
+		for ( i = 0; i < 10 && curWeap == self GetCurrentWeapon(); i++ )
+			wait 0.05;
+	}
+
+	curWeap = self GetCurrentWeapon();
 
 	if ( !maps\mp\gametypes\_weapons::isPrimaryWeapon( curWeap ) )
 		return;
