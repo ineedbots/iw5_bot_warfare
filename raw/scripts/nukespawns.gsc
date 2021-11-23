@@ -508,15 +508,13 @@ nukeSlowMo()
 {
 	level endon ( "nuke_cancelled" );
 
-	if ( isDefined( level.nuked ) )
+	if ( isDefined( level.nuked ) && level.nuked >= 3 )
 		return;
 
 	//SetSlowMotion( <startTimescale>, <endTimescale>, <deltaTime> )
 	SetSlowMotion( 1.0, 0.25, 0.5 );
 	level waittill( "nuke_death" );
 	SetSlowMotion( 0.25, 1, 2.0 );
-
-	level.nuked = true;
 }
 
 remoteUAV_trackEntities( var_0, var_1, var_2 )
@@ -691,9 +689,21 @@ onPlayerDisconnect()
 
 watchNuke()
 {
+	if ( !isDefined( level.nuked ) )
+		level.nuked = 0;
+
 	setDvar( "scr_spawnpointfavorweight", "" );
-	level waittill( "nuke_death" );
-	setDvar( "scr_spawnpointfavorweight", "499999" );
+
+	while ( true )
+	{
+		level waittill( "nuke_death" );
+		level.nuked++;
+
+		if ( !isDefined( level.nuked ) || level.nuked < 3 )
+			continue;
+
+		setDvar( "scr_spawnpointfavorweight", "499999" );
+	}
 }
 
 onChangeKit()
