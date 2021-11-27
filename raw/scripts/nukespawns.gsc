@@ -392,7 +392,7 @@ finishPlayerDamageWrapper( var_0, var_1, var_2, var_3, var_4, var_5, var_6, var_
 	{
 		if ( !isDefined( var_1 ) )
 		{
-			if ( !isDefined( var_0 ) )
+			if ( !isDefined( var_0 ) && isDefined( self.printDamage ) && self.printDamage )
 				self thread doPrintDamage( var_2, var_8, var_3 );
 		}
 		else if ( isPlayer( var_1 ) && isDefined( var_1.printDamage ) && var_1.printDamage )
