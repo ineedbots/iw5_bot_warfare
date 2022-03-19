@@ -55,7 +55,10 @@ init()
 
 	setDvar( "player_sustainAmmo", 1 );
 
-	level.waypoints = [];
+
+	if ( !isDefined( level.waypoints ) )
+		level.waypoints = [];
+
 	level.waypointCount = 0;
 
 	level waittill( "connected", player );
@@ -580,7 +583,7 @@ watchSaveWaypointsCommand()
 
 LoadWaypoints()
 {
-	self DeleteAllWaypoints();
+	// self DeleteAllWaypoints();
 	self iPrintlnBold( "Loading WPS..." );
 	load_waypoints();
 
