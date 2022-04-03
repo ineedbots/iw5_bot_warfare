@@ -1781,6 +1781,7 @@ start_bot_threads()
 
 		self thread bot_conf();
 		self thread bot_grnd();
+		self thread bot_tdef();
 	}
 }
 
@@ -2829,6 +2830,8 @@ bot_watch_riot_weapons_loop()
 	threat = self GetThreat();
 	dist = DistanceSquared( threat.origin, self.origin );
 	curWeap = self GetCurrentWeapon();
+
+	self BotCrouch();
 
 	if ( randomInt( 2 ) )
 	{
@@ -7816,5 +7819,74 @@ bot_grnd()
 		}
 
 		self bot_grnd_loop();
+	}
+}
+
+/*
+	Loop
+*/
+bot_tdef_loop()
+{
+	if ( isDefined( level.gameFlag.carrier ) )
+	{
+		if ( level.gameFlag maps\mp\gametypes\_gameobjects::getOwnerTeam() == level.otherTeam[self.team] )
+		{
+			// go kill
+			self SetScriptGoal( level.gameFlag.carrier.origin, 64 );
+			self thread bot_escort_obj( level.gameFlag, level.gameFlag.carrier );
+
+			if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
+				self ClearScriptGoal();
+		}
+		else if ( level.gameFlag.carrier != self )
+		{
+			// go protect
+			if ( self HasScriptGoal() )
+				return;
+
+			if ( DistanceSquared( level.gameFlag.carrier.origin, self.origin ) <= 1024 * 1024 )
+				return;
+
+			self SetScriptGoal( level.gameFlag.carrier.origin, 256 );
+			self thread bot_escort_obj( level.gameFlag, level.gameFlag.carrier );
+
+			if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
+				self ClearScriptGoal();
+		}
+
+		return;
+	}
+
+	//go get it
+	self bot_cap_get_flag( level.gameFlag );
+}
+
+/*
+	Bots play groundzone
+*/
+bot_tdef()
+{
+	self endon( "death" );
+	self endon( "disconnect" );
+	level endon( "game_ended" );
+
+	if ( level.gametype != "tdef" )
+		return;
+
+	for ( ;; )
+	{
+		wait( randomintrange( 1, 3 ) );
+
+		if ( self IsUsingRemote() || self.bot_lock_goal )
+		{
+			continue;
+		}
+
+		if ( !isdefined( level.gameFlag ) )
+		{
+			continue;
+		}
+
+		self bot_tdef_loop();
 	}
 }

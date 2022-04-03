@@ -395,23 +395,6 @@ auditModels()
 }
 
 /*
-	Does our flag have a radar?
-*/
-flag_has_radar()
-{
-	if ( !isDefined( level.gameFlag ) || !isDefined( level.gameFlag.currentCarrier ) )
-		return false;
-
-	if ( level.gameFlag.currentCarrier != self )
-		return false;
-
-	if ( !isDefined( level.gameFlag.portable_radar ) )
-		return false;
-
-	return true;
-}
-
-/*
 	Loop
 */
 watchRadar_loop()
@@ -457,7 +440,7 @@ watchRadar_loop()
 
 	for ( i = level.players.size - 1; i >= 0; i-- )
 	{
-		if ( !isDefined( level.players[i].personalRadar ) && !level.players[i] flag_has_radar() )
+		if ( !isDefined( level.players[i].personalRadar ) )
 			continue;
 
 		if ( !isReallyAlive( level.players[i] ) )
@@ -480,6 +463,28 @@ watchRadar_loop()
 				continue;
 
 			if ( DistanceSquared( player.origin, level.players[i].origin ) > 256 * 256 )
+				continue;
+
+			player.bot_isInRadar = true;
+		}
+	}
+
+	if ( isDefined( level.gameFlag ) && isDefined( level.gameFlag.carrier ) && isDefined( level.gameFlag.portable_radar ) )
+	{
+		for ( h = level.players.size - 1; h >= 0; h-- )
+		{
+			player = level.players[h];
+
+			if ( !isReallyAlive( player ) )
+				continue;
+
+			if ( level.teamBased && level.gameFlag.carrier.team != player.team )
+				continue;
+
+			if ( player _hasPerk( "specialty_coldblooded" ) )
+				continue;
+
+			if ( DistanceSquared( player.origin, level.gameFlag.carrier.origin ) > 256 * 256 )
 				continue;
 
 			player.bot_isInRadar = true;
