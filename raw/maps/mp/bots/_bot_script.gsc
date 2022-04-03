@@ -1773,6 +1773,13 @@ start_bot_threads()
 		self thread bot_dem_attackers();
 		self thread bot_dem_defenders();
 		self thread bot_dem_overtime();
+
+		self thread bot_gtnw();
+		self thread bot_oneflag();
+		self thread bot_arena();
+		self thread bot_vip();
+
+		self thread bot_conf();
 	}
 }
 
@@ -7588,5 +7595,90 @@ bot_vip()
 				}
 			}
 		    break;*/
+	}
+}
+
+bot_conf_loop()
+{
+	dog_tag_keys = getArrayKeys( level.dogtags );
+	tags = [];
+	tag = undefined;
+
+	for ( i = 0; i < dog_tag_keys.size; i++ )
+	{
+		temp_tag = level.dogtags[dog_tag_keys[i]];
+
+		if ( !isDefined( temp_tag ) )
+			continue;
+
+		if ( DistanceSquared( self.origin, temp_tag.trigger.origin ) > 1024 * 1024 )
+			continue;
+
+		if ( !isDefined( temp_tag.bots ) )
+			temp_tag.bots = 0;
+
+		if ( temp_tag.bots >= 2 )
+			continue;
+
+		tags[tags.size] = temp_tag;
+	}
+
+	if ( randomInt( 2 ) )
+	{
+		for ( i = 0; i < tags.size; i++ )
+		{
+			temp_tag = tags[i];
+
+			if ( !isDefined( tag ) || DistanceSquared( self.origin, temp_tag.trigger.origin ) < DistanceSquared( self.origin, tag.trigger.origin ) )
+			{
+				tag = temp_tag;
+			}
+		}
+	}
+	else
+	{
+		tag = random( tags );
+	}
+
+	if ( !isdefined( tag ) )
+		return;
+
+	self.bot_lock_goal = true;
+	self SetScriptGoal( tag.trigger.origin, 16 );
+	self thread bot_inc_bots( tag, true );
+
+	if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
+		self ClearScriptGoal();
+
+	self.bot_lock_goal = false;
+}
+
+/*
+	Bots play arena
+*/
+bot_conf()
+{
+	self endon( "death" );
+	self endon( "disconnect" );
+	level endon( "game_ended" );
+
+	if ( level.gametype != "conf" )
+		return;
+
+	for ( ;; )
+	{
+		wait( randomintrange( 1, 2 ) );
+
+		if ( self IsUsingRemote() || self.bot_lock_goal )
+		{
+			continue;
+		}
+
+		if ( !isdefined( level.dogtags ) )
+		{
+			continue;
+		}
+
+		self bot_conf_loop();
 	}
 }
