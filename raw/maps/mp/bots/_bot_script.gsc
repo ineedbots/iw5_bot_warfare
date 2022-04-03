@@ -1782,6 +1782,8 @@ start_bot_threads()
 		self thread bot_conf();
 		self thread bot_grnd();
 		self thread bot_tdef();
+
+		self thread bot_infect();
 	}
 }
 
@@ -7751,7 +7753,7 @@ bot_grnd_loop()
 			if ( isDefined( target ) )
 			{
 				self SetScriptGoal( target.origin, 32 );
-				self thread stop_go_target_on_death( player );
+				self thread stop_go_target_on_death( target );
 
 				if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
 					self ClearScriptGoal();
@@ -7888,5 +7890,72 @@ bot_tdef()
 		}
 
 		self bot_tdef_loop();
+	}
+}
+
+/*
+	Loop
+*/
+bot_infect_loop()
+{
+	if ( self HasScriptGoal() )
+		return;
+
+	if ( self.team == "axis" )
+	{
+		target = undefined;
+
+		for ( i = 0; i < level.players.size; i++ )
+		{
+			player = level.players[i];
+
+			if ( player == self )
+				continue;
+
+			if ( !isReallyAlive( player ) )
+				continue;
+
+			if ( level.teambased && self.team == player.team )
+				continue;
+
+			if ( !isdefined( target ) || DistanceSquared( self.origin, player.origin ) < DistanceSquared( self.origin, target.origin ) )
+			{
+				target = player;
+			}
+		}
+
+		if ( isDefined( target ) )
+		{
+			self SetScriptGoal( target.origin, 32 );
+			self thread stop_go_target_on_death( target );
+
+			if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
+				self ClearScriptGoal();
+		}
+	}
+}
+
+/*
+	Bots play infect
+*/
+bot_infect()
+{
+	self endon( "death" );
+	self endon( "disconnect" );
+	level endon( "game_ended" );
+
+	if ( level.gametype != "infect" )
+		return;
+
+	for ( ;; )
+	{
+		wait( randomintrange( 1, 3 ) );
+
+		if ( self IsUsingRemote() || self.bot_lock_goal )
+		{
+			continue;
+		}
+
+		self bot_infect_loop();
 	}
 }
