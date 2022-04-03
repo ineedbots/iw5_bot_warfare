@@ -1780,6 +1780,7 @@ start_bot_threads()
 		self thread bot_vip();
 
 		self thread bot_conf();
+		self thread bot_grnd();
 	}
 }
 
@@ -7598,6 +7599,9 @@ bot_vip()
 	}
 }
 
+/*
+	Loop
+*/
 bot_conf_loop()
 {
 	dog_tag_keys = getArrayKeys( level.dogtags );
@@ -7646,6 +7650,7 @@ bot_conf_loop()
 	self.bot_lock_goal = true;
 	self SetScriptGoal( tag.trigger.origin, 16 );
 	self thread bot_inc_bots( tag, true );
+	self thread bots_watch_touch_obj( tag.trigger );
 
 	if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
 		self ClearScriptGoal();
@@ -7654,7 +7659,7 @@ bot_conf_loop()
 }
 
 /*
-	Bots play arena
+	Bots play conf
 */
 bot_conf()
 {
@@ -7680,5 +7685,136 @@ bot_conf()
 		}
 
 		self bot_conf_loop();
+	}
+}
+
+/*
+	Watches for grnd zone
+*/
+bots_watch_grnd()
+{
+	self endon( "death" );
+	self endon( "disconnect" );
+	self endon( "goal" );
+	self endon( "bad_path" );
+	self endon( "new_goal" );
+
+	grnd_origin = level.grnd_zone.origin;
+
+	for ( ;; )
+	{
+		wait 1 + randomInt( 5 ) * 0.5;
+
+		if ( grnd_origin != level.grnd_zone.origin )
+			break;
+
+		if ( self maps\mp\gametypes\grnd::isingrindzone() )
+			break;
+	}
+
+	if ( grnd_origin != level.grnd_zone.origin )
+		self notify( "bad_path" );
+	else
+		self notify( "goal" );
+}
+
+/*
+	Loop
+*/
+bot_grnd_loop()
+{
+	if ( isDefined( self.inGrindZone ) && self.inGrindZone && isReallyAlive( self ) && self.pers["team"] != "spectator" && self maps\mp\gametypes\grnd::isingrindzone() )
+	{
+		// in the grnd zone
+
+		if ( level.grnd_numplayers[level.otherTeam[self.team]] )
+		{
+			// hunt enemy in drop zone
+			target = undefined;
+
+			for ( i = 0; i < level.players.size; i++ )
+			{
+				player = level.players[i];
+
+				if ( isDefined( player.inGrindZone ) && player.inGrindZone && isReallyAlive( player ) && player.pers["team"] != "spectator" && player maps\mp\gametypes\grnd::isingrindzone() )
+				{
+					target = player;
+
+					if ( cointoss() )
+						break;
+				}
+			}
+
+			if ( isDefined( target ) )
+			{
+				self SetScriptGoal( target.origin, 32 );
+				self thread stop_go_target_on_death( player );
+
+				if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
+					self ClearScriptGoal();
+			}
+		}
+		else
+		{
+			// stay in the zone
+			goal = self.origin;
+			self SetScriptGoal( goal, 64 );
+
+			while ( self HasScriptGoal() && self GetScriptGoal() == goal && self maps\mp\gametypes\grnd::isingrindzone() )
+			{
+				if ( level.grnd_numplayers[level.otherTeam[self.team]] )
+					break;
+
+				wait 0.5;
+			}
+
+			if ( self HasScriptGoal() && self GetScriptGoal() == goal )
+				self ClearScriptGoal();
+		}
+
+		return;
+	}
+
+	if ( randomInt( 100 ) < 40 || level.grnd_numplayers[self.team] <= 0 )
+	{
+		// go to grnd zone
+		self.bot_lock_goal = true;
+		self SetScriptGoal( level.grnd_zone.origin, 32 );
+		self thread bots_watch_grnd();
+
+		if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
+			self ClearScriptGoal();
+
+		self.bot_lock_goal = false;
+	}
+}
+
+/*
+	Bots play groundzone
+*/
+bot_grnd()
+{
+	self endon( "death" );
+	self endon( "disconnect" );
+	level endon( "game_ended" );
+
+	if ( level.gametype != "grnd" )
+		return;
+
+	for ( ;; )
+	{
+		wait( randomintrange( 1, 3 ) );
+
+		if ( self IsUsingRemote() || self.bot_lock_goal )
+		{
+			continue;
+		}
+
+		if ( !isdefined( level.grnd_zone ) )
+		{
+			continue;
+		}
+
+		self bot_grnd_loop();
 	}
 }
