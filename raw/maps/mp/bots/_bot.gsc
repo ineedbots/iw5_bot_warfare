@@ -395,6 +395,23 @@ auditModels()
 }
 
 /*
+	Does our flag have a radar?
+*/
+flag_has_radar()
+{
+	if ( !isDefined( level.gameFlag ) || !isDefined( level.gameFlag.currentCarrier ) )
+		return false;
+
+	if ( level.gameFlag.currentCarrier != self )
+		return false;
+
+	if ( !isDefined( level.gameFlag.portable_radar ) )
+		return false;
+
+	return true;
+}
+
+/*
 	Loop
 */
 watchRadar_loop()
@@ -440,7 +457,7 @@ watchRadar_loop()
 
 	for ( i = level.players.size - 1; i >= 0; i-- )
 	{
-		if ( !isDefined( level.players[i].personalRadar ) && !( isDefined( level.players[i].carryFlag ) && isDefined( level.players[i].carryFlag.portable_radar ) ) )
+		if ( !isDefined( level.players[i].personalRadar ) && !level.players[i] flag_has_radar() )
 			continue;
 
 		if ( !isReallyAlive( level.players[i] ) )
