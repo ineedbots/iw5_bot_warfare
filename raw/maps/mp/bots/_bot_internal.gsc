@@ -868,6 +868,9 @@ stance_loop()
 		toStance = "stand";
 	}
 
+	if ( self.hasRiotShieldEquipped && isDefined( self.bot.target ) && isDefined( self.bot.target.entity ) && isPlayer( self.bot.target.entity ) )
+		toStance = "crouch";
+
 	if ( toStance != "stand" && toStance != "crouch" && toStance != "prone" )
 		toStance = "crouch";
 

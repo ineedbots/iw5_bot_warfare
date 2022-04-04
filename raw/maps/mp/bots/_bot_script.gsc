@@ -2833,8 +2833,6 @@ bot_watch_riot_weapons_loop()
 	dist = DistanceSquared( threat.origin, self.origin );
 	curWeap = self GetCurrentWeapon();
 
-	self BotCrouch();
-
 	if ( randomInt( 2 ) )
 	{
 		nade = self getValidGrenade();
