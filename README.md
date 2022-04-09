@@ -55,23 +55,27 @@ You can find the ModDB release post [here](https://www.moddb.com/mods/bot-warfar
 0. Make sure that [PlutoniumIW5](https://plutonium.pw/docs/install/#iw5) is installed, updated and working properly.
 
 ### Manual Loading
-1. Click on the green Code button then click on Download ZIP
-2. Extract the `piw5_bot_warfare-master` folder inside the downloaded ZIP file anywhere on your PC
-3. In the extracted folder go in the out folder and run `install.bat`. Press any key when it's done to close it
+1. Click on the green `Code` button at the top then click on `Download ZIP`
+2. Extract the downloaded `piw5_bot_warfare-master` ZIP file anywhere on your PC
+3. In the extracted folder go to `out/` and run `install.bat`. Press any key when it's done to close it
 
-### Automatic loading
-1. Follow steps 1 to 2 from the Manual loading instructions above
-2. In the extracted folder go in the out folder and right click on `install.bat` and click Edit
+### Automatic Loading
+1. Follow steps 1 to 2 from the Manual Loading instructions above
+2. In the extracted folder go to `out/` and edit `install.bat` with any text editor (ex. Notepad)
 3. In the opened notepad delete everything and paste this then save and close the notepad
 ```
 xcopy ..\raw "%LOCALAPPDATA%"\Plutonium\storage\iw5\ /Y /S /E /I
 pause
 ```
-4. Run `install.bat`. Press any key when it's done to close it
+4. Run `out/install.bat`. Press any key when it's done to close it
 
 The mod is now installed, now run your game.
-    - You will need to set the DVAR `fs_game` to `mods/bots`. You can do this by entering `set fs_game mods/bots` into the console. You can open the console using the tilde `~` key.
-The mod should be loaded! Now go start a map and play!
+You will need to set the DVAR `fs_game` to `mods/bots`. You can do this by entering 
+```
+set fs_game mods/bots
+``` 
+into the console. You can open the console using the tilde `~` key.
+The mod should be loaded! Now go start a map, setup of bots is described in the section below.
 
 ## Documentation
 
