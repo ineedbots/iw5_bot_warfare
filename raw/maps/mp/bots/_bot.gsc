@@ -80,6 +80,12 @@ init()
 	if ( getDvar( "bots_skill_allies_med" ) == "" )
 		setDvar( "bots_skill_allies_med", 0 );
 
+	if ( getDvar( "bots_skill_min" ) == "" )
+		setDvar( "bots_skill_min", 1 );
+
+	if ( getDvar( "bots_skill_max" ) == "" )
+		setDvar( "bots_skill_max", 7 );
+
 	if ( getDvar( "bots_loadout_reasonable" ) == "" ) //filter out the bad 'guns' and perks
 		setDvar( "bots_loadout_reasonable", false );
 
@@ -606,9 +612,6 @@ addNotifyOnAirdrops_loop()
 	{
 		airdrop = dropCrates[i];
 
-		if ( !isDefined( airdrop.owner ) )
-			continue;
-
 		if ( isDefined( airdrop.doingPhysics ) )
 			continue;
 
@@ -638,7 +641,26 @@ doNotifyOnAirdrop()
 	self waittill( "physics_finished" );
 
 	self.doingPhysics = false;
-	self.owner notify( "crate_physics_done" );
+
+	if ( isDefined( self.owner ) )
+		self.owner notify( "crate_physics_done" );
+
+	self thread onCarepackageCaptured();
+}
+
+/*
+	Waits to be captured
+*/
+onCarepackageCaptured()
+{
+	self endon( "death" );
+
+	self waittill( "captured", player );
+
+	if ( isDefined( self.owner ) && self.owner is_bot() )
+	{
+		self.owner BotNotifyBotEvent( "crate_cap", "captured", self, player );
+	}
 }
 
 /*
@@ -702,6 +724,26 @@ connected()
 	self thread onDisconnect();
 
 	level notify( "bot_connected", self );
+
+	self thread watchBotDebugEvent();
+}
+
+/*
+	DEBUG
+*/
+watchBotDebugEvent()
+{
+	self endon( "disconnect" );
+
+	for ( ;; )
+	{
+		self waittill( "bot_event", msg, str, b, c, d, e, f, g );
+
+		if ( msg == "debug" && GetDvarInt( "bots_main_debug" ) )
+		{
+			PrintLn( "Bot Warfare debug: " + self.name + ": " + str );
+		}
+	}
 }
 
 /*
@@ -805,6 +847,20 @@ diffBots_loop()
 
 			player.pers["bots"]["skill"]["base"] = var_skill;
 		}
+	}
+
+	playercount = level.players.size;
+	min_diff = GetDvarInt( "bots_skill_min" );
+	max_diff = GetDvarInt( "bots_skill_max" );
+
+	for ( i = 0; i < playercount; i++ )
+	{
+		player = level.players[i];
+
+		if ( !player is_bot() )
+			continue;
+
+		player.pers["bots"]["skill"]["base"] = int( clamp( player.pers["bots"]["skill"]["base"], min_diff, max_diff ) );
 	}
 }
 

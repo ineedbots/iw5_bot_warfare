@@ -2142,6 +2142,10 @@ bot_think_camp_loop()
 
 	self SetScriptGoal( campSpot.origin, 16 );
 
+	time = randomIntRange( 10, 20 );
+
+	self BotNotifyBotEvent( "camp", "go", campSpot, time );
+
 	ret = self waittill_any_return( "new_goal", "goal", "bad_path" );
 
 	if ( ret != "new_goal" )
@@ -2150,8 +2154,12 @@ bot_think_camp_loop()
 	if ( ret != "goal" )
 		return;
 
-	self thread killCampAfterTime( randomIntRange( 10, 20 ) );
+	self BotNotifyBotEvent( "camp", "start", campSpot, time );
+
+	self thread killCampAfterTime( time );
 	self CampAtSpot( campSpot.origin, campSpot.origin + AnglesToForward( campSpot.angles ) * 2048 );
+
+	self BotNotifyBotEvent( "camp", "stop", campSpot, time );
 }
 
 /*
@@ -2277,8 +2285,14 @@ bot_think_follow_loop()
 	if ( !isDefined( toFollow ) )
 		return;
 
-	self thread killFollowAfterTime( randomIntRange( 10, 20 ) );
+	time = randomIntRange( 10, 20 );
+
+	self BotNotifyBotEvent( "follow", "start", toFollow, time );
+
+	self thread killFollowAfterTime( time );
 	self followPlayer( toFollow );
+
+	self BotNotifyBotEvent( "follow", "stop", toFollow, time );
 }
 
 /*
@@ -4127,6 +4141,8 @@ bot_crate_think_loop( data )
 		if ( !isDefined( crate ) )
 			return;
 
+		self BotNotifyBotEvent( "crate_cap", "go", crate );
+
 		self.bot_lock_goal = true;
 
 		radius = GetDvarFloat( "player_useRadius" ) - 16;
@@ -4142,8 +4158,15 @@ bot_crate_think_loop( data )
 			self ClearScriptGoal();
 
 		if ( path != "goal" || !isDefined( crate ) || DistanceSquared( self.origin, crate.origin ) > radius * radius )
+		{
+			if ( isDefined( crate ) && path == "bad_path" )
+				self BotNotifyBotEvent( "crate_cap", "unreachable", crate );
+
 			return;
+		}
 	}
+
+	self BotNotifyBotEvent( "crate_cap", "start", crate );
 
 	self BotRandomStance();
 
@@ -4152,13 +4175,16 @@ bot_crate_think_loop( data )
 
 	waitTime = 3.25;
 
-	if ( isDefined( crate.owner ) && crate.owner == self )
+	if ( !isDefined( crate.owner ) || crate.owner == self )
 		waitTime = 0.75;
 
 	self thread BotPressUse( waitTime );
 	wait waitTime;
 
 	self BotFreezeControls( false );
+
+	// check if actually captured it?
+	self BotNotifyBotEvent( "crate_cap", "stop", crate );
 }
 
 /*
@@ -7638,7 +7664,7 @@ bot_vip_loop()
 		if ( !isReallyAlive( player ) )
 			continue;
 
-		if ( isDefined( self.isVip ) && self.isVip )
+		if ( isDefined( player.isVip ) && player.isVip )
 			vip = player;
 	}
 

@@ -231,6 +231,14 @@ BotStopMoving( what )
 }
 
 /*
+	Notify the bot chat message
+*/
+BotNotifyBotEvent( msg, a, b, c, d, e, f, g )
+{
+	self notify( "bot_event", msg, a, b, c, d, e, f, g );
+}
+
+/*
 	Returns if the bot has a script goal.
 	(like t5 gsc bot)
 */
@@ -764,19 +772,6 @@ Round( x )
 	}
 	else
 		return y;
-}
-
-/*
-	Rounds up the given value.
-*/
-RoundUp( floatVal )
-{
-	i = int( floatVal );
-
-	if ( i != floatVal )
-		return i + 1;
-	else
-		return i;
 }
 
 /*
@@ -2493,6 +2488,12 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 
 		if ( loadoutStreakType == "streaktype_support" )
 			loadoutStreakType = "streaktype_assault";
+
+		if ( loadoutPrimary == "riotshield" )
+			loadoutPrimary = "iw5_m4";
+
+		if ( loadoutSecondary == "riotshield" )
+			loadoutSecondary = "iw5_m4";
 	}
 
 	self maps\mp\gametypes\_class::loadoutFakePerks( loadoutStreakType );
