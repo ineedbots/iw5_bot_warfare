@@ -594,6 +594,9 @@ watchPickupGun()
 	{
 		wait 1;
 
+		if ( self UseButtonPressed() )
+			continue;
+
 		weap = self GetCurrentWeapon();
 
 		if ( weap != "none" && self GetAmmoCount( weap ) )
