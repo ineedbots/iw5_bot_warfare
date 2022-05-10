@@ -1000,13 +1000,6 @@ bot_chat_streak( streakCount )
 					break;
 			}
 		}
-		else
-		{
-			if ( GetDvarInt( "bots_loadout_allow_op" ) )
-				self BotDoChat( 100, "Come on! I would of had a nuke but I don't got it set..." );
-			else
-				self BotDoChat( 100, "WOW.. I could have a nuke but dumb admin disabled it for bots." );
-		}
 	}
 }
 
@@ -1878,7 +1871,9 @@ bot_chat_crate_cap_watch( state, aircare, player, d, e, f, g )
 						break;
 
 					case 5:
-						self BotDoChat( 10, ":3 i got my " + aircare.crateType );
+						if ( isDefined( aircare.crateType ) )
+							self BotDoChat( 10, ":3 i got my " + aircare.crateType );
+
 						break;
 				}
 			}
@@ -1903,7 +1898,9 @@ bot_chat_crate_cap_watch( state, aircare, player, d, e, f, g )
 						break;
 
 					case 4:
-						self BotDoChat( 10, "hahaah jajaja i took your " + aircare.crateType );
+						if ( isDefined( aircare.crateType ) )
+							self BotDoChat( 10, "hahaah jajaja i took your " + aircare.crateType );
+
 						break;
 				}
 			}
@@ -1930,7 +1927,9 @@ bot_chat_crate_cap_watch( state, aircare, player, d, e, f, g )
 					break;
 
 				case 4:
-					self BotDoChat( 10, "Wow! there goes my " + aircare.crateType + "!" );
+					if ( isDefined( aircare.crateType ) )
+						self BotDoChat( 10, "Wow! there goes my " + aircare.crateType + "!" );
+
 					break;
 			}
 
@@ -3090,25 +3089,19 @@ bot_chat_tdef_watch( state, sub_state, c, d, e, f, g )
 /*
 	bot_chat_box_cap_watch
 */
-bot_chat_box_cap_watch( state, sub_state, box, d, e, f, g )
+bot_chat_box_cap_watch( state, box, c, d, e, f, g )
 {
 	self endon( "disconnect" );
 
-	switch ( sub_state )
+	switch ( state )
 	{
-		case "cap":
-			switch ( state )
-			{
-				case "go":
-					break;
+		case "go":
+			break;
 
-				case "start":
-					break;
+		case "start":
+			break;
 
-				case "stop":
-					break;
-			}
-
+		case "stop":
 			break;
 	}
 }
