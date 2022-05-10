@@ -54,9 +54,8 @@ You can find the ModDB release post [here](https://www.moddb.com/mods/bot-warfar
 0. Make sure that [PlutoniumIW5](https://plutonium.pw/docs/install/#iw5) is installed, updated and working properly.
     - Download the [latest release](https://github.com/ineedbots/piw5_bot_warfare/releases) of Bot Warfare.
 1. Extract all the files from the Bot Warfare release archive you downloaded to anywhere on your computer.
-2. Run the 'install.bat'. This copies the mod to your PlutoniumIW5 mods folder.
+2. Run the 'install.bat'. This copies the mod to your PlutoniumIW5 storage folder.
 3. The mod is now installed, now run your game.
-    - You will need to set the DVAR `fs_game` to `mods/bots`. You can do this by entering `set fs_game mods/bots` into the console. You can open the console using the tilde (~) key.
 4. The mod should be loaded! Now go start a map and play!
 
 ## Documentation
@@ -78,6 +77,7 @@ You can find the ModDB release post [here](https://www.moddb.com/mods/bot-warfar
 | bots_main_menu                   | Enable the in-game menu for hosts.                                                          | true          |
 | bots_main_debug                  | Enable the in-game waypoint editor.                                                         | false         |
 | bots_main_kickBotsAtEnd          | Kick the bots at the end of a match.                                                        | false         |
+| bots_main_chat                   | The rate bots will chat at, set to 0 to disable.                                            | 1.0           |
 | bots_manage_add                  | Amount of bots to add to the game, once bots are added, resets back to `0`.                 | 0             |
 | bots_manage_fill                 | Amount of players/bots (look at `bots_manage_fill_mode`) to maintain in the match.          | 0             |
 | bots_manage_fill_mode            | `bots_manage_fill` players/bots counting method.<ul><li>`0` - counts both players and bots.</li><li>`1` - only counts bots.</li></ul> | 0 |
@@ -112,8 +112,8 @@ You can find the ModDB release post [here](https://www.moddb.com/mods/bot-warfar
 | bots_play_aim                    | If the bots can aim.                                                                           | true       |
 
 ## Changelog
-- v2.0.2
-  - soon
+- v2.1.0
+  - Initial release (sync'd versions with other Bot Warfares)
 
 ## Credits
 - Plutonium Team - https://plutonium.pw/
