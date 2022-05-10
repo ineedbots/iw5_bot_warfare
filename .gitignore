@@ -22,6 +22,7 @@
 !/raw/maps/mp/
 /raw/maps/mp/**
 !/raw/maps/mp/bots/
+!/raw/maps/mp/bots/_bot_chat.gsc
 !/raw/bw-assets
 !/raw/bots.txt
 !/out

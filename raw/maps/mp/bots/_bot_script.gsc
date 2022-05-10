@@ -8157,7 +8157,7 @@ bot_grnd_loop()
 			if ( self HasScriptGoal() && self GetScriptGoal() == goal )
 				self ClearScriptGoal();
 
-			self BotNotifyBotEvent( "grnd", "start", "stop" );
+			self BotNotifyBotEvent( "grnd", "stop", "cap" );
 		}
 
 		return;
