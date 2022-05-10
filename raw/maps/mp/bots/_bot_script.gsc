@@ -8220,6 +8220,9 @@ bot_tdef_loop()
 	{
 		if ( level.gameFlag maps\mp\gametypes\_gameobjects::getOwnerTeam() == level.otherTeam[self.team] )
 		{
+			if ( self HasScriptGoal() )
+				return;
+
 			// go kill
 			self SetScriptGoal( level.gameFlag.carrier.origin, 64 );
 			self thread bot_escort_obj( level.gameFlag, level.gameFlag.carrier );
@@ -8241,6 +8244,58 @@ bot_tdef_loop()
 
 			if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
 				self ClearScriptGoal();
+		}
+		else if ( self BotGetRandom() < 70 )
+		{
+			// we haev flag, lets run away from enemies
+			avg_org = ( 0, 0, 0 );
+			count = 0;
+
+			for ( i = 0; i < level.players.size; i++ )
+			{
+				player = level.players[i];
+
+				if ( !isDefined( player.team ) )
+					continue;
+
+				if ( !isReallyAlive( player ) )
+					continue;
+
+				if ( player.team == self.team )
+					continue;
+
+				count++;
+				avg_org += player.origin;
+			}
+
+			if ( count )
+			{
+				avg_org /= count;
+				wps = [];
+
+				for ( i = 0; i < level.waypoints.size; i++ )
+				{
+					wp = level.waypoints[i];
+
+					if ( DistanceSquared( wp.origin, avg_org ) < 1024 * 1024 )
+						continue;
+
+					wps[wps.size] = wp;
+				}
+
+				wp = random( wps );
+
+				if ( isDefined( wp ) )
+				{
+					self.bot_lock_goal = true;
+					self SetScriptGoal( wp.origin, 256 );
+
+					if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
+						self ClearScriptGoal();
+
+					self.bot_lock_goal = false;
+				}
+			}
 		}
 
 		return;
