@@ -8021,6 +8021,8 @@ bot_conf_loop()
 	if ( !isdefined( tag ) )
 		return;
 
+	self BotNotifyBotEvent( "conf", "start", "cap", tag );
+
 	self.bot_lock_goal = true;
 	self SetScriptGoal( tag.trigger.origin, 16 );
 	self thread bot_inc_bots( tag, true );
@@ -8030,6 +8032,8 @@ bot_conf_loop()
 		self ClearScriptGoal();
 
 	self.bot_lock_goal = false;
+
+	self BotNotifyBotEvent( "conf", "stop", "cap", tag );
 }
 
 /*
@@ -8121,11 +8125,15 @@ bot_grnd_loop()
 
 			if ( isDefined( target ) )
 			{
+				self BotNotifyBotEvent( "grnd", "start", "kill", target );
+
 				self SetScriptGoal( target.origin, 32 );
 				self thread stop_go_target_on_death( target );
 
 				if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
 					self ClearScriptGoal();
+
+				self BotNotifyBotEvent( "grnd", "stop", "kill", target );
 			}
 		}
 		else
@@ -8133,6 +8141,8 @@ bot_grnd_loop()
 			// stay in the zone
 			goal = self.origin;
 			self SetScriptGoal( goal, 64 );
+
+			self BotNotifyBotEvent( "grnd", "start", "cap" );
 
 			while ( self HasScriptGoal() && self GetScriptGoal() == goal && self maps\mp\gametypes\grnd::isingrindzone() )
 			{
@@ -8146,6 +8156,8 @@ bot_grnd_loop()
 
 			if ( self HasScriptGoal() && self GetScriptGoal() == goal )
 				self ClearScriptGoal();
+
+			self BotNotifyBotEvent( "grnd", "start", "stop" );
 		}
 
 		return;
@@ -8153,6 +8165,8 @@ bot_grnd_loop()
 
 	if ( randomInt( 100 ) < 40 || level.grnd_numplayers[self.team] <= 0 )
 	{
+		self BotNotifyBotEvent( "grnd", "start", "go_cap" );
+
 		// go to grnd zone
 		self.bot_lock_goal = true;
 		self SetScriptGoal( level.grnd_zone.origin, 32 );
@@ -8162,6 +8176,8 @@ bot_grnd_loop()
 			self ClearScriptGoal();
 
 		self.bot_lock_goal = false;
+
+		self BotNotifyBotEvent( "grnd", "stop", "go_cap" );
 	}
 }
 
@@ -8231,7 +8247,11 @@ bot_tdef_loop()
 	}
 
 	//go get it
+	self BotNotifyBotEvent( "tdef", "start", "cap" );
+
 	self bot_cap_get_flag( level.gameFlag );
+
+	self BotNotifyBotEvent( "tdef", "stop", "cap" );
 }
 
 /*
