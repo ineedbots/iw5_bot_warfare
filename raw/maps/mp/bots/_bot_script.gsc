@@ -1173,11 +1173,15 @@ doKillcamStuff()
 	self endon( "disconnect" );
 	self endon( "killcam_ended" );
 
+	self BotNotifyBotEvent( "killcam", "start" );
+
 	wait 0.5 + randomInt( 3 );
 
 	wait 0.1;
 
 	self notify( "abort_killcam" );
+
+	self BotNotifyBotEvent( "killcam", "stop" );
 }
 
 /*
@@ -2122,11 +2126,15 @@ follow_target()
 		if ( randomInt( 100 ) > self.pers["bots"]["behavior"]["follow"] * 5 )
 			continue;
 
+		self BotNotifyBotEvent( "follow_threat", "start", threat );
+
 		self SetScriptGoal( threat.origin, 64 );
 		self thread stop_go_target_on_death( threat );
 
 		if ( self waittill_any_return( "new_goal", "goal", "bad_path" ) != "new_goal" )
 			self ClearScriptGoal();
+
+		self BotNotifyBotEvent( "follow_threat", "stop", threat );
 	}
 }
 
@@ -2464,6 +2472,8 @@ bot_use_tube_think_loop( data )
 		}
 		else
 		{
+			self BotNotifyBotEvent( "tube", "go", tubeWp, tube );
+
 			self SetScriptGoal( tubeWp.origin, 16 );
 
 			ret = self waittill_any_return( "new_goal", "goal", "bad_path" );
@@ -2486,6 +2496,8 @@ bot_use_tube_think_loop( data )
 
 	if ( !isDefined( loc ) )
 		return;
+
+	self BotNotifyBotEvent( "tube", "start", loc, tube );
 
 	self SetScriptAimPos( loc );
 	self BotStopMoving( true );
@@ -2600,6 +2612,8 @@ bot_use_equipment_think_loop( data )
 		}
 		else
 		{
+			self BotNotifyBotEvent( "equ", "go", clayWp, nade );
+
 			self SetScriptGoal( clayWp.origin, 16 );
 
 			ret = self waittill_any_return( "new_goal", "goal", "bad_path" );
@@ -2622,6 +2636,8 @@ bot_use_equipment_think_loop( data )
 
 	if ( !isDefined( loc ) )
 		return;
+
+	self BotNotifyBotEvent( "equ", "start", loc, nade );
 
 	self SetScriptAimPos( loc );
 	self BotStopMoving( true );
@@ -2722,6 +2738,8 @@ bot_use_grenade_think_loop( data )
 		}
 		else
 		{
+			self BotNotifyBotEvent( "nade", "go", nadeWp, nade );
+
 			self SetScriptGoal( nadeWp.origin, 16 );
 
 			ret = self waittill_any_return( "new_goal", "goal", "bad_path" );
@@ -2744,6 +2762,8 @@ bot_use_grenade_think_loop( data )
 
 	if ( !isDefined( loc ) )
 		return;
+
+	self BotNotifyBotEvent( "nade", "start", loc, nade );
 
 	self SetScriptAimPos( loc );
 	self BotStopMoving( true );
@@ -2997,6 +3017,8 @@ bot_jav_loc_think_loop( data )
 		}
 		else
 		{
+			self BotNotifyBotEvent( "jav", "go", javWp );
+
 			self SetScriptGoal( javWp.origin, 16 );
 
 			ret = self waittill_any_return( "new_goal", "goal", "bad_path" );
@@ -3019,6 +3041,8 @@ bot_jav_loc_think_loop( data )
 
 	if ( !isDefined( loc ) )
 		return;
+
+	self BotNotifyBotEvent( "jav", "start", loc );
 
 	self SetBotJavelinLocation( loc );
 
@@ -3364,6 +3388,8 @@ bot_equipment_kill_think_loop()
 	// must be ti
 	if ( isDefined( target.enemyTrigger ) && !self HasScriptGoal() && !self.bot_lock_goal )
 	{
+		self BotNotifyBotEvent( "attack_equ", "go_ti", target );
+
 		self SetScriptGoal( target.origin, 64 );
 		self thread bot_inc_bots( target, true );
 		self thread bots_watch_touch_obj( target );
@@ -3378,19 +3404,29 @@ bot_equipment_kill_think_loop()
 
 		if ( randomInt( 100 ) < self.pers["bots"]["behavior"]["camp"] * 8 )
 		{
+			self BotNotifyBotEvent( "attack_equ", "camp_ti", target );
+
 			self thread killCampAfterTime( randomIntRange( 10, 20 ) );
 			self thread killCampAfterEntGone( target );
 			self CampAtSpot( target.origin, target.origin + ( 0, 0, 42 ) );
 		}
 
-		self thread BotPressUse();
+		if ( isDefined( target ) )
+		{
+			self BotNotifyBotEvent( "attack_equ", "trigger_ti", target );
+			self thread BotPressUse();
+		}
 
 		return;
 	}
 
+	self BotNotifyBotEvent( "attack_equ", "start", target );
+
 	self SetScriptEnemy( target );
 	self bot_equipment_attack( target );
 	self ClearScriptEnemy();
+
+	self BotNotifyBotEvent( "attack_equ", "stop", target );
 }
 
 /*
@@ -3527,6 +3563,8 @@ bot_listen_to_steps_loop()
 	if ( !IsDefined( heard ) )
 		return;
 
+	self BotNotifyBotEvent( "heard_target", "start", heard );
+
 	if ( bulletTracePassed( self getEye(), heard getTagOrigin( "j_spineupper" ), false, heard ) )
 	{
 		self setAttacker( heard );
@@ -3540,6 +3578,8 @@ bot_listen_to_steps_loop()
 
 	if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
 		self ClearScriptGoal();
+
+	self BotNotifyBotEvent( "heard_target", "stop", heard );
 }
 
 /*
@@ -3611,6 +3651,8 @@ bot_uav_think_loop()
 
 		if ( ( !isSubStr( player getCurrentWeapon(), "_silencer" ) && player.bots_firing ) || ( hasRadar && !player _hasPerk( "specialty_coldblooded" ) ) || player maps\mp\perks\_perkfunctions::isPainted() || player.bot_isInRadar || player isJuggernaut() || isDefined( player.UAVRemoteMarkedBy ) )
 		{
+			self BotNotifyBotEvent( "uav_target", "start", player );
+
 			distSq = self.pers["bots"]["skill"]["help_dist"] * self.pers["bots"]["skill"]["help_dist"];
 
 			if ( distFromPlayer < distSq && bulletTracePassed( self getEye(), player getTagOrigin( "j_spineupper" ), false, player ) )
@@ -3625,6 +3667,8 @@ bot_uav_think_loop()
 
 				if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
 					self ClearScriptGoal();
+
+				self BotNotifyBotEvent( "uav_target", "stop", player );
 			}
 
 			break;
@@ -3685,10 +3729,14 @@ bot_revenge_think()
 		if ( randomint( 100 ) < 75 )
 			return;
 
+		self BotNotifyBotEvent( "revenge", "start", loc, self.lastKiller );
+
 		self SetScriptGoal( loc, 64 );
 
 		if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
 			self ClearScriptGoal();
+
+		self BotNotifyBotEvent( "revenge", "stop", loc, self.lastKiller );
 	}
 }
 
@@ -3831,6 +3879,8 @@ bot_turret_think_loop()
 
 	if ( !facing && !self HasScriptGoal() && !self.bot_lock_goal )
 	{
+		self BotNotifyBotEvent( "turret_attack", "go", turret );
+
 		self SetScriptGoal( turret.origin, 32 );
 		self thread bot_inc_bots( turret, true );
 		self thread turret_death_monitor( turret );
@@ -3843,9 +3893,13 @@ bot_turret_think_loop()
 	if ( !isDefined( turret ) )
 		return;
 
+	self BotNotifyBotEvent( "turret_attack", "start", turret );
+
 	self SetScriptEnemy( turret, ( 0, 0, 25 ) );
 	self bot_turret_attack( turret );
 	self ClearScriptEnemy();
+
+	self BotNotifyBotEvent( "turret_attack", "stop", turret );
 }
 
 /*
@@ -3932,6 +3986,8 @@ bot_box_think_loop( data )
 	if ( !isDefined( box ) )
 		return;
 
+	self BotNotifyBotEvent( "box_cap", "go", box );
+
 	self.bot_lock_goal = true;
 
 	radius = GetDvarFloat( "player_useRadius" ) / 2;
@@ -3949,6 +4005,8 @@ bot_box_think_loop( data )
 	if ( path != "goal" || !isDefined( box ) || DistanceSquared( self.origin, box.origin ) > radius * radius )
 		return;
 
+	self BotNotifyBotEvent( "box_cap", "start", box );
+
 	self BotFreezeControls( true );
 	self bot_wait_stop_move();
 
@@ -3957,6 +4015,8 @@ bot_box_think_loop( data )
 	wait waitTime;
 
 	self BotFreezeControls( false );
+
+	self BotNotifyBotEvent( "box_cap", "stop", box );
 }
 
 /*
@@ -4464,10 +4524,14 @@ bot_target_vehicle_loop()
 			return;
 	}
 
+	self BotNotifyBotEvent( "attack_vehicle", "start", target, rocketAmmo );
+
 	self SetScriptEnemy( target, ( 0, 0, 0 ) );
 	self bot_attack_vehicle( target );
 	self ClearScriptEnemy();
 	self notify( "bot_force_check_switch" );
+
+	self BotNotifyBotEvent( "attack_vehicle", "stop", target, rocketAmmo );
 }
 
 /*
@@ -4710,6 +4774,8 @@ bot_killstreak_think_loop( data )
 
 			if ( isDefined( campSpot ) )
 			{
+				self BotNotifyBotEvent( "killstreak", "camp", streakName, campSpot );
+
 				self SetScriptGoal( campSpot.origin, 16 );
 
 				if ( self waittill_any_return( "new_goal", "goal", "bad_path" ) != "new_goal" )
@@ -4781,6 +4847,8 @@ bot_killstreak_think_loop( data )
 			if ( DistanceSquared( self.origin, forwardTrace["position"] ) < distCheck && self.pers["bots"]["skill"]["base"] > 3 )
 				return;
 
+			self BotNotifyBotEvent( "killstreak", "call", streakName );
+
 			if ( doRandomStance )
 				self BotRandomStance();
 
@@ -4809,6 +4877,8 @@ bot_killstreak_think_loop( data )
 
 			if ( !isDefined( location ) )
 				return;
+
+			self BotNotifyBotEvent( "killstreak", "call", streakName, location );
 
 			self BotRandomStance();
 			self setUsingRemote( "remotemissile" );
@@ -4887,6 +4957,8 @@ bot_killstreak_think_loop( data )
 					return;
 			}
 
+			self BotNotifyBotEvent( "killstreak", "call", streakName, location, directionYaw );
+
 			self BotRandomStance();
 			self BotStopMoving( true );
 
@@ -4912,6 +4984,8 @@ bot_killstreak_think_loop( data )
 
 			if ( DistanceSquared( self.origin, forwardTrace["position"] ) < 96 * 96 && self.pers["bots"]["skill"]["base"] > 3 )
 				return;
+
+			self BotNotifyBotEvent( "killstreak", "call", streakName );
 
 			self BotStopMoving( true );
 			self SetScriptAimPos( forwardTrace["position"] );
@@ -4965,6 +5039,8 @@ bot_killstreak_think_loop( data )
 
 			if ( !bulletTracePassed( forwardTrace["position"], forwardTrace["position"] + ( 0, 0, 2048 ), false, self ) && self.pers["bots"]["skill"]["base"] > 3 )
 				return;
+
+			self BotNotifyBotEvent( "killstreak", "call", streakName );
 
 			self BotStopMoving( true );
 			self SetScriptAimPos( forwardTrace["position"] );
@@ -5050,6 +5126,8 @@ bot_killstreak_think_loop( data )
 				case "nuke":
 				case "emp":
 					self BotStopMoving( true );
+
+					self BotNotifyBotEvent( "killstreak", "call", streakName, location, directionYaw );
 
 					if ( self changeToWeapon( ksWeap ) )
 					{
@@ -5256,12 +5334,16 @@ bot_dom_spawn_kill_think_loop()
 	if ( DistanceSquared( self.origin, flag.origin ) < 2048 * 2048 )
 		return;
 
+	self BotNotifyBotEvent( "dom", "start", "spawnkill", flag );
+
 	self SetScriptGoal( flag.origin, 1024 );
 
 	self thread bot_dom_watch_flags( myFlagCount, myTeam );
 
 	if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
 		self ClearScriptGoal();
+
+	self BotNotifyBotEvent( "dom", "stop", "spawnkill", flag );
 }
 
 /*
@@ -5334,6 +5416,8 @@ bot_dom_def_think_loop()
 	if ( !isDefined( flag ) )
 		return;
 
+	self BotNotifyBotEvent( "dom", "start", "defend", flag );
+
 	self SetScriptGoal( flag.origin, 128 );
 
 	self thread bot_dom_watch_for_flashing( flag, myTeam );
@@ -5341,6 +5425,8 @@ bot_dom_def_think_loop()
 
 	if ( self waittill_any_return( "goal", "bad_path", "new_goal" ) != "new_goal" )
 		self ClearScriptGoal();
+
+	self BotNotifyBotEvent( "dom", "stop", "defend", flag );
 }
 
 /*
@@ -5454,6 +5540,8 @@ bot_dom_cap_think_loop()
 	if ( !isDefined( flag ) )
 		return;
 
+	self BotNotifyBotEvent( "dom", "go", "cap", flag );
+
 	self.bot_lock_goal = true;
 	self SetScriptGoal( flag.origin, 64 );
 
@@ -5470,6 +5558,8 @@ bot_dom_cap_think_loop()
 		return;
 	}
 
+	self BotNotifyBotEvent( "dom", "start", "cap", flag );
+
 	self SetScriptGoal( self.origin, 64 );
 
 	while ( flag maps\mp\gametypes\dom::getFlagTeam() != myTeam && self isTouching( flag ) )
@@ -5482,6 +5572,8 @@ bot_dom_cap_think_loop()
 
 		self thread bot_do_random_action_for_objective( flag );
 	}
+
+	self BotNotifyBotEvent( "dom", "stop", "cap", flag );
 
 	self ClearScriptGoal();
 
@@ -5579,6 +5671,8 @@ bot_hq_loop()
 
 		//capture it
 
+		self BotNotifyBotEvent( "hq", "go", "cap" );
+
 		self.bot_lock_goal = true;
 		self SetScriptGoal( origin, 64 );
 		self thread bot_hq_go_cap( gameobj, radio );
@@ -5600,6 +5694,8 @@ bot_hq_loop()
 			return;
 		}
 
+		self BotNotifyBotEvent( "hq", "start", "cap" );
+
 		self SetScriptGoal( self.origin, 64 );
 
 		while ( self isTouching( gameobj.trigger ) && gameobj.ownerTeam != myTeam && level.radio == radio )
@@ -5615,11 +5711,15 @@ bot_hq_loop()
 
 		self ClearScriptGoal();
 		self.bot_lock_goal = false;
+
+		self BotNotifyBotEvent( "hq", "stop", "cap" );
 	}
 	else//we own it
 	{
 		if ( gameobj.objPoints[myteam].isFlashing ) //underattack
 		{
+			self BotNotifyBotEvent( "hq", "start", "defend" );
+
 			self.bot_lock_goal = true;
 			self SetScriptGoal( origin, 64 );
 			self thread bot_hq_watch_flashing( gameobj, radio );
@@ -5628,6 +5728,8 @@ bot_hq_loop()
 				self ClearScriptGoal();
 
 			self.bot_lock_goal = false;
+
+			self BotNotifyBotEvent( "hq", "stop", "defend" );
 			return;
 		}
 
@@ -5760,6 +5862,8 @@ bot_sab_loop()
 			// kill defuser
 			if ( site isInUse() ) //somebody is defusing our bomb we planted
 			{
+				self BotNotifyBotEvent( "sab", "start", "defuser" );
+
 				self.bot_lock_goal = true;
 				self SetScriptGoal( origin, 64 );
 
@@ -5769,6 +5873,8 @@ bot_sab_loop()
 					self ClearScriptGoal();
 
 				self.bot_lock_goal = false;
+
+				self BotNotifyBotEvent( "sab", "stop", "defuser" );
 				return;
 			}
 
@@ -5813,6 +5919,8 @@ bot_sab_loop()
 		if ( timepassed < 120 && timeleft >= 90 && randomInt( 100 ) < 98 )
 			return;
 
+		self BotNotifyBotEvent( "sab", "go", "plant" );
+
 		self.bot_lock_goal = true;
 		self SetScriptGoal( origin, 1 );
 
@@ -5828,6 +5936,8 @@ bot_sab_loop()
 			return;
 		}
 
+		self BotNotifyBotEvent( "sab", "start", "plant" );
+
 		self BotRandomStance();
 		self SetScriptGoal( self.origin, 64 );
 		self bot_wait_stop_move();
@@ -5838,6 +5948,8 @@ bot_sab_loop()
 
 		self ClearScriptGoal();
 		self.bot_lock_goal = false;
+
+		self BotNotifyBotEvent( "sab", "stop", "plant" );
 	}
 	else if ( bombteam == otherTeam ) // the bomb is theirs, we are on the defense
 	{
@@ -5876,6 +5988,8 @@ bot_sab_loop()
 
 			if ( site isInUse() ) //somebody is planting
 			{
+				self BotNotifyBotEvent( "sab", "start", "planter" );
+
 				self.bot_lock_goal = true;
 				self SetScriptGoal( origin, 64 );
 				self thread bot_inc_bots( site );
@@ -5886,6 +6000,8 @@ bot_sab_loop()
 					self ClearScriptGoal();
 
 				self.bot_lock_goal = false;
+
+				self BotNotifyBotEvent( "sab", "stop", "planter" );
 				return;
 			}
 
@@ -5931,6 +6047,8 @@ bot_sab_loop()
 		}
 
 		// lets go defuse
+		self BotNotifyBotEvent( "sab", "go", "defuse" );
+
 		self.bot_lock_goal = true;
 
 		self SetScriptGoal( origin, 1 );
@@ -5948,6 +6066,8 @@ bot_sab_loop()
 			return;
 		}
 
+		self BotNotifyBotEvent( "sab", "start", "defuse" );
+
 		self BotRandomStance();
 		self SetScriptGoal( self.origin, 64 );
 		self bot_wait_stop_move();
@@ -5957,10 +6077,14 @@ bot_sab_loop()
 		wait waitTime;
 
 		self.bot_lock_goal = false;
+
+		self BotNotifyBotEvent( "sab", "stop", "defuse" );
 	}
 	else // we need to go get the bomb!
 	{
 		origin = ( bomb.curorigin[0], bomb.curorigin[1], bomb.curorigin[2] + 5 );
+
+		self BotNotifyBotEvent( "sab", "start", "bomb" );
 
 		self.bot_lock_goal = true;
 		self SetScriptGoal( origin, 64 );
@@ -5971,6 +6095,8 @@ bot_sab_loop()
 			self ClearScriptGoal();
 
 		self.bot_lock_goal = false;
+
+		self BotNotifyBotEvent( "sab", "stop", "bomb" );
 		return;
 	}
 }
@@ -6079,6 +6205,8 @@ bot_sd_defenders_loop( data )
 
 		if ( site isInUse() ) //somebody is planting
 		{
+			self BotNotifyBotEvent( "sd", "start", "planter", site );
+
 			self.bot_lock_goal = true;
 			self SetScriptGoal( origin, 64 );
 
@@ -6088,6 +6216,8 @@ bot_sd_defenders_loop( data )
 				self ClearScriptGoal();
 
 			self.bot_lock_goal = false;
+
+			self BotNotifyBotEvent( "sd", "stop", "planter", site );
 			return;
 		}
 
@@ -6135,6 +6265,8 @@ bot_sd_defenders_loop( data )
 	}
 
 	// lets defuse
+	self BotNotifyBotEvent( "sd", "go", "defuse" );
+
 	self.bot_lock_goal = true;
 	self SetScriptGoal( origin, 1 );
 	self thread bot_inc_bots( defuse );
@@ -6151,6 +6283,8 @@ bot_sd_defenders_loop( data )
 		return;
 	}
 
+	self BotNotifyBotEvent( "sd", "start", "defuse" );
+
 	self BotRandomStance();
 	self SetScriptGoal( self.origin, 64 );
 	self bot_wait_stop_move();
@@ -6161,6 +6295,8 @@ bot_sd_defenders_loop( data )
 
 	self ClearScriptGoal();
 	self.bot_lock_goal = false;
+
+	self BotNotifyBotEvent( "sd", "stop", "defuse" );
 }
 
 /*
@@ -6227,6 +6363,8 @@ bot_sd_attackers_loop( data )
 
 		if ( site IsInUse() ) //somebody is defusing
 		{
+			self BotNotifyBotEvent( "sd", "start", "defuser" );
+
 			self.bot_lock_goal = true;
 
 			self SetScriptGoal( origin, 64 );
@@ -6237,6 +6375,8 @@ bot_sd_attackers_loop( data )
 				self ClearScriptGoal();
 
 			self.bot_lock_goal = false;
+
+			self BotNotifyBotEvent( "sd", "stop", "defuser" );
 			return;
 		}
 
@@ -6312,6 +6452,8 @@ bot_sd_attackers_loop( data )
 		}
 
 		// go get the bomb
+		self BotNotifyBotEvent( "sd", "start", "bomb" );
+
 		self.bot_lock_goal = true;
 		self SetScriptGoal( origin, 64 );
 		self thread bot_inc_bots( bomb );
@@ -6321,6 +6463,8 @@ bot_sd_attackers_loop( data )
 			self ClearScriptGoal();
 
 		self.bot_lock_goal = false;
+
+		self BotNotifyBotEvent( "sd", "stop", "bomb" );
 		return;
 	}
 
@@ -6351,6 +6495,8 @@ bot_sd_attackers_loop( data )
 
 	origin = ( plant.curorigin[0] + 50, plant.curorigin[1] + 50, plant.curorigin[2] + 5 );
 
+	self BotNotifyBotEvent( "sd", "go", "plant", plant );
+
 	self.bot_lock_goal = true;
 	self SetScriptGoal( origin, 1 );
 	self thread bot_go_plant( plant );
@@ -6366,6 +6512,8 @@ bot_sd_attackers_loop( data )
 		return;
 	}
 
+	self BotNotifyBotEvent( "sd", "start", "plant", plant );
+
 	self BotRandomStance();
 	self SetScriptGoal( self.origin, 64 );
 	self bot_wait_stop_move();
@@ -6376,6 +6524,8 @@ bot_sd_attackers_loop( data )
 
 	self ClearScriptGoal();
 	self.bot_lock_goal = false;
+
+	self BotNotifyBotEvent( "sd", "stop", "plant", plant );
 }
 
 /*
@@ -6424,9 +6574,21 @@ bot_cap_loop()
 		if ( !isDefined( carrier ) ) //someone doesnt has our flag
 		{
 			if ( !isDefined( theirflag.carrier ) && DistanceSquared( self.origin, theirflag.curorigin ) < DistanceSquared( self.origin, myflag.curorigin ) ) //no one has their flag and its closer
+			{
+				self BotNotifyBotEvent( "cap", "start", "their_flag", theirflag );
+
 				self bot_cap_get_flag( theirflag );
+
+				self BotNotifyBotEvent( "cap", "stop", "their_flag", theirflag );
+			}
 			else//go get it
+			{
+				self BotNotifyBotEvent( "cap", "start", "my_flag", myflag );
+
 				self bot_cap_get_flag( myflag );
+
+				self BotNotifyBotEvent( "cap", "stop", "my_flag", myflag );
+			}
 
 			return;
 		}
@@ -6435,7 +6597,11 @@ bot_cap_loop()
 			if ( theirflag maps\mp\gametypes\_gameobjects::isHome() && randomint( 100 ) < 50 )
 			{
 				//take their flag
+				self BotNotifyBotEvent( "cap", "start", "their_flag", theirflag );
+
 				self bot_cap_get_flag( theirflag );
+
+				self BotNotifyBotEvent( "cap", "stop", "their_flag", theirflag );
 			}
 			else
 			{
@@ -6491,6 +6657,8 @@ bot_cap_loop()
 			//go cap
 			origin = myzone.curorigin;
 
+			self BotNotifyBotEvent( "cap", "start", "cap" );
+
 			self.bot_lock_goal = true;
 			self SetScriptGoal( origin, 32 );
 
@@ -6503,6 +6671,8 @@ bot_cap_loop()
 				self ClearScriptGoal();
 
 			self.bot_lock_goal = false;
+
+			self BotNotifyBotEvent( "cap", "stop", "cap" );
 			return;
 		}
 
@@ -6510,7 +6680,11 @@ bot_cap_loop()
 
 		if ( !isDefined( carrier ) ) //if no one has enemy flag
 		{
+			self BotNotifyBotEvent( "cap", "start", "their_flag", theirflag );
+
 			self bot_cap_get_flag( theirflag );
+
+			self BotNotifyBotEvent( "cap", "stop", "their_flag", theirflag );
 			return;
 		}
 
@@ -6782,6 +6956,8 @@ bot_dem_attackers_loop()
 
 		if ( site IsInUse() ) //somebody is defusing
 		{
+			self BotNotifyBotEvent( "dem", "start", "defuser", site );
+
 			self.bot_lock_goal = true;
 			self SetScriptGoal( origin, 64 );
 
@@ -6791,6 +6967,8 @@ bot_dem_attackers_loop()
 				self ClearScriptGoal();
 
 			self.bot_lock_goal = false;
+
+			self BotNotifyBotEvent( "dem", "stop", "defuser", site );
 			return;
 		}
 
@@ -6840,6 +7018,8 @@ bot_dem_attackers_loop()
 		return;
 	}
 
+	self BotNotifyBotEvent( "dem", "go", "plant", plant );
+
 	self.bot_lock_goal = true;
 
 	self SetScriptGoal( origin, 1 );
@@ -6857,6 +7037,8 @@ bot_dem_attackers_loop()
 		return;
 	}
 
+	self BotNotifyBotEvent( "dem", "start", "plant", plant );
+
 	self BotRandomStance();
 	self SetScriptGoal( self.origin, 64 );
 	self bot_wait_stop_move();
@@ -6868,6 +7050,8 @@ bot_dem_attackers_loop()
 	self ClearScriptGoal();
 
 	self.bot_lock_goal = false;
+
+	self BotNotifyBotEvent( "dem", "stop", "plant", plant );
 }
 
 /*
@@ -7013,6 +7197,8 @@ bot_dem_defenders_loop()
 
 		if ( site IsInUse() ) //somebody is planting
 		{
+			self BotNotifyBotEvent( "dem", "start", "planter", site );
+
 			self.bot_lock_goal = true;
 			self SetScriptGoal( origin, 64 );
 
@@ -7022,6 +7208,8 @@ bot_dem_defenders_loop()
 				self ClearScriptGoal();
 
 			self.bot_lock_goal = false;
+
+			self BotNotifyBotEvent( "dem", "stop", "planter", site );
 			return;
 		}
 
@@ -7074,6 +7262,8 @@ bot_dem_defenders_loop()
 		return;
 	}
 
+	self BotNotifyBotEvent( "dem", "go", "defuse", defuse );
+
 	self.bot_lock_goal = true;
 
 	self SetScriptGoal( origin, 1 );
@@ -7091,6 +7281,8 @@ bot_dem_defenders_loop()
 		return;
 	}
 
+	self BotNotifyBotEvent( "dem", "start", "defuse", defuse );
+
 	self BotRandomStance();
 	self SetScriptGoal( self.origin, 64 );
 	self bot_wait_stop_move();
@@ -7102,6 +7294,8 @@ bot_dem_defenders_loop()
 	self ClearScriptGoal();
 
 	self.bot_lock_goal = false;
+
+	self BotNotifyBotEvent( "dem", "stop", "defuse", defuse );
 }
 
 /*
@@ -7252,6 +7446,8 @@ bot_think_revive_loop()
 		return;
 
 	revive = random( needsRevives );
+
+	self BotNotifyBotEvent( "revive", "go", revive );
 	self.bot_lock_goal = true;
 
 	self SetScriptGoal( revive.origin, 64 );
@@ -7267,6 +7463,8 @@ bot_think_revive_loop()
 	if ( ret != "goal" || !isDefined( revive ) || distanceSquared( self.origin, revive.origin ) >= 100 * 100 || !revive inLastStand() || revive isBeingRevived() || !isAlive( revive ) )
 		return;
 
+	self BotNotifyBotEvent( "revive", "start", revive );
+
 	self BotFreezeControls( true );
 	self bot_wait_stop_move();
 
@@ -7275,6 +7473,8 @@ bot_think_revive_loop()
 	wait waitTime;
 
 	self BotFreezeControls( false );
+
+	self BotNotifyBotEvent( "revive", "stop", revive );
 }
 
 /*
@@ -7326,6 +7526,8 @@ bot_gtnw_loop()
 	if ( ( !ourCapCount && !theirCapCount ) || rand <= 20 )
 	{
 		// go cap the obj
+		self BotNotifyBotEvent( "gtnw", "go", "cap" );
+
 		self.bot_lock_goal = true;
 		self SetScriptGoal( origin, 64 );
 		self thread bots_watch_touch_obj( trigger );
@@ -7340,6 +7542,8 @@ bot_gtnw_loop()
 			self.bot_lock_goal = false;
 			return;
 		}
+
+		self BotNotifyBotEvent( "gtnw", "start", "cap" );
 
 		self SetScriptGoal( self.origin, 64 );
 
@@ -7356,6 +7560,8 @@ bot_gtnw_loop()
 
 		self ClearScriptGoal();
 		self.bot_lock_goal = false;
+
+		self BotNotifyBotEvent( "gtnw", "stop", "cap" );
 		return;
 	}
 
@@ -7433,6 +7639,8 @@ bot_oneflag_loop()
 			//go cap
 			origin = myzone.curorigin;
 
+			self BotNotifyBotEvent( "oneflag", "start", "cap" );
+
 			self.bot_lock_goal = true;
 			self SetScriptGoal( origin, 32 );
 
@@ -7444,6 +7652,8 @@ bot_oneflag_loop()
 				self ClearScriptGoal();
 
 			self.bot_lock_goal = false;
+
+			self BotNotifyBotEvent( "oneflag", "stop", "cap" );
 			return;
 		}
 
@@ -7451,7 +7661,9 @@ bot_oneflag_loop()
 
 		if ( !isDefined( carrier ) ) //if no one has enemy flag
 		{
+			self BotNotifyBotEvent( "oneflag", "start", "their_flag" );
 			self bot_cap_get_flag( theirflag );
+			self BotNotifyBotEvent( "oneflag", "stop", "their_flag" );
 			return;
 		}
 
@@ -7482,7 +7694,9 @@ bot_oneflag_loop()
 
 			if ( !isDefined( carrier ) ) //someone doesnt has our flag
 			{
+				self BotNotifyBotEvent( "oneflag", "start", "my_flag" );
 				self bot_cap_get_flag( myflag );
+				self BotNotifyBotEvent( "oneflag", "stop", "my_flag" );
 				return;
 			}
 
@@ -7585,6 +7799,8 @@ bot_arena_loop()
 	flag = level.arenaFlag;
 	myTeam = self.team;
 
+	self BotNotifyBotEvent( "arena", "go", "cap" );
+
 	self.bot_lock_goal = true;
 	self SetScriptGoal( flag.trigger.origin, 64 );
 
@@ -7598,6 +7814,8 @@ bot_arena_loop()
 		self.bot_lock_goal = false;
 		return;
 	}
+
+	self BotNotifyBotEvent( "arena", "start", "cap" );
 
 	self SetScriptGoal( self.origin, 64 );
 
@@ -7614,6 +7832,8 @@ bot_arena_loop()
 
 	self ClearScriptGoal();
 	self.bot_lock_goal = false;
+
+	self BotNotifyBotEvent( "arena", "stop", "cap" );
 }
 
 /*
@@ -7675,6 +7895,8 @@ bot_vip_loop()
 			if ( isDefined( level.extractionZone ) && !isDefined( level.extractionTime ) )
 			{
 				// go to extraction zone
+				self BotNotifyBotEvent( "vip", "start", "cap" );
+
 				self.bot_lock_goal = true;
 				self SetScriptGoal( level.extractionZone.trigger.origin, 32 );
 
@@ -7686,6 +7908,8 @@ bot_vip_loop()
 					self ClearScriptGoal();
 
 				self.bot_lock_goal = false;
+
+				self BotNotifyBotEvent( "vip", "stop", "cap" );
 			}
 		}
 		else if ( isDefined( vip ) )
