@@ -91,12 +91,23 @@ The editor will generate some GSC code for the waypoints.<br>
 ![games_mp.log](/raw/bw-assets/wp-editor-gamesmp.png)<br>
 This is the GSC function that will generate the waypoints for the map. If you have trouble beyond this point, simply create an Issue and provide the output from here, I can do the rest from there.
 
-You can create/replace the map's waypoints GSC file with the function in `games_mp.log`. Just copy and paste the function into the `maps\mp\bots\waypoints\<MAPNAME>.gsc` file.<br>
+You can create/replace the map's waypoints GSC file with the function in `games_mp.log`.  
+Just copy and paste the function into the `scripts\mp\<MAPNAME>\<WAYPOINT>.gsc` file.  
+If you're working with a custom map you might need to create the folder with your map's name.  
+Then inside that newly created folder put your waypoints GSC file.  
+Make sure to have it named `wps_mapname`.  
+Also you need to add this `main` function at the topc of your waypoints GSC file to ensure Bot Warfare will load your waypoints. Replace `Dome` with the name of the function in your file.
+```
+main()
+{
+    level.waypoints = Dome();
+}
+```
+<br>
+
+![GSC waypoints path](/raw/bw-assets/wp-editor-wps-path.png)
 ![GSC waypoints](/raw/bw-assets/wp-editor-wps.png)
 
 
-The waypoints are loaded in the `maps\mp\bots\_bot_utility::load_waypoints()` function. Make changes accordingly to have Bot Warfare load your waypoints.<br>
-![GSC loading the waypoints](/raw/bw-assets/wp-editor-loadwps.png)
-
-
-Now Bot Warfare will use your waypoints you've created! Create a pull request to have your waypoints included in the mod if you like, any help is greatly appreciated.
+Now Bot Warfare will use your waypoints you've created!  
+Create a pull request to have your waypoints included in the mod if you like, any help is greatly appreciated.
