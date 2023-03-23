@@ -775,16 +775,6 @@ Round( x )
 }
 
 /*
-	converts a string into a float
-*/
-float( num )
-{
-	setdvar( "temp_dvar_bot_util", num );
-
-	return GetDvarFloat( "temp_dvar_bot_util" );
-}
-
-/*
 	Tokenizes a string (strtok has limits...) (only one char tok)
 */
 tokenizeLine( line, tok )
