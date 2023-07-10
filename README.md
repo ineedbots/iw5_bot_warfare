@@ -111,6 +111,19 @@ You can find the ModDB release post [here](https://www.moddb.com/mods/bot-warfar
 | bots_play_ads                    | If the bots can aim down sights.                                                               | 1          |
 | bots_play_aim                    | If the bots can aim.                                                                           | 1          |
 
+### Renaming bots
+
+With Bot Warfare installed:
+
+- Make sure Plutonium IW5 is closed
+- Press Win + R, paste `%localappdata%\Plutonium\storage\iw5` and press Enter
+- Open the file called `z_svr_bots` with an archiver such as [7-Zip](https://www.7-zip.org/)
+- Drag the `bots.txt` file on your desktop and open it
+- Edit the bots names. Each line is the name of a bot
+- Save the file and close the notepad
+- Drag the `bots.txt` file you just edited inside the `z_svr_bots` file you opened in step 3. Replace the file if needed
+- Open your game and play with the new bots names
+
 ## Changelog
 - v2.1.0
   - Initial release (sync'd versions with other Bot Warfares)
