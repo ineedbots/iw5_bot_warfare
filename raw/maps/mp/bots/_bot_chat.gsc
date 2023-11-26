@@ -1451,7 +1451,7 @@ bot_chat_death_watch( killer, last_ks )
 			break;
 
 		case 60:
-			if ( isDefined( self.attackerData[killer.guid] ) && isDefined( self.attackerData[killer.guid].weapon ) )
+			if ( isDefined( self.attackerData ) && isDefined( self.attackerData[killer.guid] ) && isDefined( self.attackerData[killer.guid].weapon ) )
 				message = "Wow! Nice " + getBaseWeaponName( self.attackerData[killer.guid].weapon ) + " you got there, " + killer.name + "!";
 
 			break;
@@ -2116,6 +2116,11 @@ bot_chat_camp_watch( state, wp, time, d, e, f, g )
 bot_chat_follow_watch( state, player, time, d, e, f, g )
 {
 	self endon( "disconnect" );
+
+	if ( !isDefined( player ) )
+	{
+		return;
+	}
 
 	switch ( state )
 	{
