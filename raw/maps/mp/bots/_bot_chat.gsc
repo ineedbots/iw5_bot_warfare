@@ -1178,7 +1178,7 @@ bot_chat_killed_watch( victim )
 			break;
 
 		case 40:
-			if ( isDefined( victim.attackerData[self.guid] ) && isDefined( victim.attackerData[self.guid].weapon ) )
+			if ( isDefined( victim.attackerData ) && isDefined( victim.attackerData[self.guid] ) && isDefined( victim.attackerData[self.guid].weapon ) )
 				message = ( "Man, I sure love my " + getBaseWeaponName( victim.attackerData[self.guid].weapon ) + "!" );
 
 			break;
