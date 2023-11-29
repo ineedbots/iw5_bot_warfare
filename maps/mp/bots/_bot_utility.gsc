@@ -10,6 +10,109 @@
 #include maps\mp\gametypes\_hud_util;
 
 /*
+	Waits for the built-ins to be defined
+*/
+wait_for_builtins()
+{
+	for ( i = 0; i < 20; i++ )
+	{
+		if ( isDefined( level.bot_builtins ) )
+			return true;
+
+		if ( i < 18 )
+			waittillframeend;
+		else
+			wait 0.05;
+	}
+
+	return false;
+}
+
+/*
+	Prints to console without dev script on
+*/
+BotBuiltinPrintConsole( s )
+{
+	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins["printconsole"] ) )
+	{
+		[[ level.bot_builtins["printconsole" ]]]( s );
+	}
+}
+
+/*
+	Writes to the file, mode can be "append" or "write"
+*/
+BotBuiltinFileWrite( file, contents, mode )
+{
+	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins["filewrite"] ) )
+	{
+		[[ level.bot_builtins["filewrite" ]]]( file, contents, mode );
+	}
+}
+
+/*
+	Returns the whole file as a string
+*/
+BotBuiltinFileRead( file )
+{
+	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins["fileread"] ) )
+	{
+		return [[ level.bot_builtins["fileread" ]]]( file );
+	}
+
+	return undefined;
+}
+
+/*
+	Test if a file exists
+*/
+BotBuiltinFileExists( file )
+{
+	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins["fileexists"] ) )
+	{
+		return [[ level.bot_builtins["fileexists" ]]]( file );
+	}
+
+	return false;
+}
+
+/*
+	Bot action, does a bot action
+	<client> botAction(<action string (+ or - then action like frag or smoke)>)
+*/
+BotBuiltinBotAction( action )
+{
+	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins["botaction"] ) )
+	{
+		self [[ level.bot_builtins["botaction" ]]]( action );
+	}
+}
+
+/*
+	Clears the bot from movement and actions
+	<client> botStop()
+*/
+BotBuiltinBotStop()
+{
+	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins["botstop"] ) )
+	{
+		self [[ level.bot_builtins["botstop" ]]]();
+	}
+}
+
+/*
+	Sets the bot's movement
+	<client> botMovement(<int left>, <int forward>)
+*/
+BotBuiltinBotMovement( left, forward )
+{
+	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins["botmovement"] ) )
+	{
+		self [[ level.bot_builtins["botmovement" ]]]( left, forward );
+	}
+}
+
+/*
 	Returns if player is the host
 */
 is_host()
@@ -31,7 +134,7 @@ doHostCheck()
 
 	if ( getDvar( "bots_main_firstIsHost" ) != "0" )
 	{
-		printLn( "WARNING: bots_main_firstIsHost is enabled" );
+		BotBuiltinPrintConsole( "WARNING: bots_main_firstIsHost is enabled" );
 
 		if ( getDvar( "bots_main_firstIsHost" ) == "1" )
 		{
@@ -91,14 +194,6 @@ BotSetStance( stance )
 			self maps\mp\bots\_bot_internal::prone();
 			break;
 	}
-}
-
-/*
-	Bot changes to the weap
-*/
-BotChangeToWeapon( weap )
-{
-	self maps\mp\bots\_bot_internal::changeToWeap( weap );
 }
 
 /*
@@ -855,20 +950,21 @@ parseTokensIntoWaypoint( tokens )
 */
 getWaypointLinesFromFile( filename )
 {
-	/*  result = spawnStruct();
-	    result.lines = [];
+	result = spawnStruct();
+	result.lines = [];
 
-	    waypointStr = fileRead(filename);
+	waypointStr = BotBuiltinFileRead( filename );
 
-	    if (!isDefined(waypointStr))
+	if ( !isDefined( waypointStr ) )
 		return result;
 
-	    line = "";
-	    for (i=0;i<waypointStr.size;i++)
-	    {
+	line = "";
+
+	for ( i = 0; i < waypointStr.size; i++ )
+	{
 		c = waypointStr[i];
 
-		if (c == "\n")
+		if ( c == "\n" )
 		{
 			result.lines[result.lines.size] = line;
 
@@ -877,10 +973,11 @@ getWaypointLinesFromFile( filename )
 		}
 
 		line += c;
-	    }
-	    result.lines[result.lines.size] = line;
+	}
 
-	    return result;*/
+	result.lines[result.lines.size] = line;
+
+	return result;
 }
 
 /*
@@ -888,31 +985,31 @@ getWaypointLinesFromFile( filename )
 */
 readWpsFromFile( mapname )
 {
-	/*  waypoints = [];
-	    filename = "waypoints/" + mapname + "_wp.csv";
+	waypoints = [];
+	filename = "waypoints/" + mapname + "_wp.csv";
 
-	    if (!fileExists(filename))
+	if ( !BotBuiltinFileExists( filename ) )
 		return waypoints;
 
-	    res = getWaypointLinesFromFile(filename);
+	res = getWaypointLinesFromFile( filename );
 
-	    if (!res.lines.size)
+	if ( !res.lines.size )
 		return waypoints;
 
-	    printLn("Attempting to read waypoints from " + filename);
+	BotBuiltinPrintConsole( "Attempting to read waypoints from " + filename );
 
-	    waypointCount = int(res.lines[0]);
+	waypointCount = int( res.lines[0] );
 
-	    for (i = 1; i <= waypointCount; i++)
-	    {
-		tokens = tokenizeLine(res.lines[i], ",");
+	for ( i = 1; i <= waypointCount; i++ )
+	{
+		tokens = tokenizeLine( res.lines[i], "," );
 
-		waypoint = parseTokensIntoWaypoint(tokens);
+		waypoint = parseTokensIntoWaypoint( tokens );
 
-		waypoints[i-1] = waypoint;
-	    }
+		waypoints[i - 1] = waypoint;
+	}
 
-	    return waypoints;*/
+	return waypoints;
 
 	return [];
 }
@@ -937,7 +1034,7 @@ load_waypoints()
 	if ( wps.size )
 	{
 		level.waypoints = wps;
-		printLn( "Loaded " + wps.size + " waypoints from csv." );
+		BotBuiltinPrintConsole( "Loaded " + wps.size + " waypoints from csv." );
 	}
 	else
 	{
@@ -949,12 +1046,12 @@ load_waypoints()
 		}
 
 		if ( level.waypoints.size )
-			printLn( "Loaded " + level.waypoints.size + " waypoints from script." );
+			BotBuiltinPrintConsole( "Loaded " + level.waypoints.size + " waypoints from script." );
 	}
 
 	if ( !level.waypoints.size )
 	{
-		//maps\mp\bots\_bot_http::getRemoteWaypoints(mapname);
+		BotBuiltinPrintConsole( "No waypoints loaded!" );
 	}
 
 	level.waypointCount = level.waypoints.size;

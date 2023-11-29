@@ -2003,7 +2003,7 @@ changeToWeapon( weap )
 	if ( !self HasWeapon( weap ) )
 		return false;
 
-	self BotChangeToWeapon( weap );
+	self switchToWeapon( weap );
 
 	if ( self GetCurrentWeapon() == weap )
 		return true;

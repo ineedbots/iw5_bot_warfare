@@ -23,6 +23,9 @@ init()
 	if ( !getDvarInt( "bots_main" ) )
 		return;
 
+	if ( !wait_for_builtins() )
+		PrintLn( "FATAL: NO BUILT-INS FOR BOTS" );
+
 	thread load_waypoints();
 	thread hook_callbacks();
 
@@ -202,8 +205,6 @@ init()
 	level thread auditModels();
 
 	level thread handleBots();
-
-	//level thread maps\mp\bots\_bot_http::doVersionCheck();
 }
 
 /*
@@ -764,11 +765,11 @@ watchBotDebugEvent()
 			if ( isDefined( g ) && isString( g ) )
 				big_str += ", " + g;
 
-			PrintLn( big_str );
+			BotBuiltinPrintConsole( big_str );
 		}
 		else if ( msg == "debug" && GetDvarInt( "bots_main_debug" ) )
 		{
-			PrintLn( "Bot Warfare debug: " + self.name + ": " + str );
+			BotBuiltinPrintConsole( "Bot Warfare debug: " + self.name + ": " + str );
 		}
 	}
 }

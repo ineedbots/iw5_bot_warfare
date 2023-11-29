@@ -143,7 +143,7 @@ resetBotVars()
 
 	self.bot.rand = randomInt( 100 );
 
-	self botStop();
+	self BotBuiltinBotStop();
 }
 
 /*
@@ -373,7 +373,7 @@ watchUsingTurret()
 	{
 		if ( self getCurrentWeapon() != "killstreak_remote_turret_remote_mp" )
 		{
-			self changeToWeap( "killstreak_remote_turret_remote_mp" );
+			self switchToWeapon( "killstreak_remote_turret_remote_mp" );
 		}
 
 		if ( isDefined( self.bot.target ) )
@@ -423,7 +423,7 @@ watchUsingTank()
 	{
 		if ( self getCurrentWeapon() != "killstreak_remote_tank_remote_mp" )
 		{
-			self changeToWeap( "killstreak_remote_tank_remote_mp" );
+			self switchToWeapon( "killstreak_remote_tank_remote_mp" );
 		}
 
 		if ( isDefined( self.bot.target ) )
@@ -462,7 +462,7 @@ watchUsingUav()
 	{
 		if ( self getCurrentWeapon() != "uav_remote_mp" )
 		{
-			self changeToWeap( "uav_remote_mp" );
+			self switchToWeapon( "uav_remote_mp" );
 		}
 
 		if ( isDefined( self.lockedTarget ) )
@@ -483,7 +483,7 @@ watchUsingMortar()
 	{
 		if ( self getCurrentWeapon() != "mortar_remote_mp" )
 		{
-			self changeToWeap( "mortar_remote_mp" );
+			self switchToWeapon( "mortar_remote_mp" );
 		}
 
 		if ( isDefined( self.bot.target ) )
@@ -504,7 +504,7 @@ watchUsingMinigun()
 	{
 		if ( self getCurrentWeapon() != "heli_remote_mp" )
 		{
-			self changeToWeap( "heli_remote_mp" );
+			self switchToWeapon( "heli_remote_mp" );
 		}
 
 		if ( isDefined( self.bot.target ) )
@@ -528,7 +528,7 @@ watchAc130Weapon()
 		curWeap = self GetCurrentWeapon();
 
 		if ( curWeap != "ac130_105mm_mp" && curWeap != "ac130_40mm_mp" && curWeap != "ac130_25mm_mp" )
-			self changeToWeap( "ac130_105mm_mp" );
+			self switchToWeapon( "ac130_105mm_mp" );
 
 		if ( isDefined( self.bot.target ) )
 			self thread pressFire();
@@ -546,11 +546,11 @@ watchUsingAc130()
 
 	while ( isDefined( level.ac130Player ) && level.ac130player == self )
 	{
-		self changeToWeap( "ac130_105mm_mp" );
+		self switchToWeapon( "ac130_105mm_mp" );
 		wait 1 + randomInt( 2 );
-		self changeToWeap( "ac130_40mm_mp" );
+		self switchToWeapon( "ac130_40mm_mp" );
 		wait 2 + randomInt( 2 );
-		self changeToWeap( "ac130_25mm_mp" );
+		self switchToWeapon( "ac130_25mm_mp" );
 		wait 3 + randomInt( 2 );
 	}
 }
@@ -757,7 +757,7 @@ doBotMovement_loop( data )
 	if ( self.bot.wantsprint && self.bot.issprinting )
 		dir = ( 127, dir[1], 0 );
 
-	self botMovement( int( dir[0] ), int( dir[1] ) );
+	self BotBuiltinBotMovement( int( dir[0] ), int( dir[1] ) );
 
 	if ( isDefined( self.remoteUAV ) )
 	{
@@ -2439,9 +2439,9 @@ getRandomLargestStafe( dist )
 holdbreath( what )
 {
 	if ( what )
-		self botAction( "+holdbreath" );
+		self BotBuiltinBotAction( "+holdbreath" );
 	else
-		self botAction( "-holdbreath" );
+		self BotBuiltinBotAction( "-holdbreath" );
 }
 
 /*
@@ -2454,9 +2454,9 @@ sprint()
 	self notify( "bot_sprint" );
 	self endon( "bot_sprint" );
 
-	self botAction( "+sprint" );
+	self BotBuiltinBotAction( "+sprint" );
 	wait 0.05;
-	self botAction( "-sprint" );
+	self BotBuiltinBotAction( "-sprint" );
 }
 
 /*
@@ -2469,9 +2469,9 @@ gostand()
 	self notify( "bot_gostand" );
 	self endon( "bot_gostand" );
 
-	self botAction( "+gostand" );
+	self BotBuiltinBotAction( "+gostand" );
 	wait 0.05;
-	self botAction( "-gostand" );
+	self BotBuiltinBotAction( "-gostand" );
 }
 
 /*
@@ -2484,9 +2484,9 @@ pressfrag()
 	self notify( "bot_frag" );
 	self endon( "bot_frag" );
 
-	self botAction( "+frag" );
+	self BotBuiltinBotAction( "+frag" );
 	wait 0.05;
-	self botAction( "-frag" );
+	self BotBuiltinBotAction( "-frag" );
 }
 
 /*
@@ -2502,9 +2502,9 @@ knife()
 	self.bot.isknifing = true;
 	self.bot.isknifingafter = true;
 
-	self botAction( "+melee" );
+	self BotBuiltinBotAction( "+melee" );
 	wait 0.05;
-	self botAction( "-melee" );
+	self BotBuiltinBotAction( "-melee" );
 
 	self.bot.isknifing = false;
 
@@ -2523,9 +2523,9 @@ reload()
 	self notify( "bot_reload" );
 	self endon( "bot_reload" );
 
-	self botAction( "+reload" );
+	self BotBuiltinBotAction( "+reload" );
 	wait 0.05;
-	self botAction( "-reload" );
+	self BotBuiltinBotAction( "-reload" );
 }
 
 /*
@@ -2541,14 +2541,14 @@ frag( time )
 	if ( !isDefined( time ) )
 		time = 0.05;
 
-	self botAction( "+frag" );
+	self BotBuiltinBotAction( "+frag" );
 	self.bot.isfragging = true;
 	self.bot.isfraggingafter = true;
 
 	if ( time )
 		wait time;
 
-	self botAction( "-frag" );
+	self BotBuiltinBotAction( "-frag" );
 	self.bot.isfragging = false;
 
 	wait 1.25;
@@ -2568,14 +2568,14 @@ smoke( time )
 	if ( !isDefined( time ) )
 		time = 0.05;
 
-	self botAction( "+smoke" );
+	self BotBuiltinBotAction( "+smoke" );
 	self.bot.issmoking = true;
 	self.bot.issmokingafter = true;
 
 	if ( time )
 		wait time;
 
-	self botAction( "-smoke" );
+	self BotBuiltinBotAction( "-smoke" );
 	self.bot.issmoking = false;
 
 	wait 1.25;
@@ -2590,9 +2590,9 @@ fire( what )
 	self notify( "bot_fire" );
 
 	if ( what )
-		self botAction( "+fire" );
+		self BotBuiltinBotAction( "+fire" );
 	else
-		self botAction( "-fire" );
+		self BotBuiltinBotAction( "-fire" );
 }
 
 /*
@@ -2608,12 +2608,12 @@ pressFire( time )
 	if ( !isDefined( time ) )
 		time = 0.05;
 
-	self botAction( "+fire" );
+	self BotBuiltinBotAction( "+fire" );
 
 	if ( time )
 		wait time;
 
-	self botAction( "-fire" );
+	self BotBuiltinBotAction( "-fire" );
 }
 
 /*
@@ -2624,9 +2624,9 @@ ads( what )
 	self notify( "bot_ads" );
 
 	if ( what )
-		self botAction( "+ads" );
+		self BotBuiltinBotAction( "+ads" );
 	else
-		self botAction( "-ads" );
+		self BotBuiltinBotAction( "-ads" );
 }
 
 /*
@@ -2642,12 +2642,12 @@ pressADS( time )
 	if ( !isDefined( time ) )
 		time = 0.05;
 
-	self botAction( "+ads" );
+	self BotBuiltinBotAction( "+ads" );
 
 	if ( time )
 		wait time;
 
-	self botAction( "-ads" );
+	self BotBuiltinBotAction( "-ads" );
 }
 
 /*
@@ -2663,12 +2663,12 @@ use( time )
 	if ( !isDefined( time ) )
 		time = 0.05;
 
-	self botAction( "+activate" );
+	self BotBuiltinBotAction( "+activate" );
 
 	if ( time )
 		wait time;
 
-	self botAction( "-activate" );
+	self BotBuiltinBotAction( "-activate" );
 }
 
 /*
@@ -2690,9 +2690,9 @@ jump()
 		wait 1;
 	}
 
-	self botAction( "+gostand" );
+	self BotBuiltinBotAction( "+gostand" );
 	wait 0.05;
-	self botAction( "-gostand" );
+	self BotBuiltinBotAction( "-gostand" );
 }
 
 /*
@@ -2703,8 +2703,8 @@ stand()
 	if ( self IsUsingRemote() )
 		return;
 
-	self botAction( "-gocrouch" );
-	self botAction( "-goprone" );
+	self BotBuiltinBotAction( "-gocrouch" );
+	self BotBuiltinBotAction( "-goprone" );
 }
 
 /*
@@ -2715,8 +2715,8 @@ crouch()
 	if ( self IsUsingRemote() )
 		return;
 
-	self botAction( "+gocrouch" );
-	self botAction( "-goprone" );
+	self BotBuiltinBotAction( "+gocrouch" );
+	self BotBuiltinBotAction( "-goprone" );
 }
 
 /*
@@ -2727,16 +2727,8 @@ prone()
 	if ( self IsUsingRemote() || self.hasRiotShieldEquipped )
 		return;
 
-	self botAction( "-gocrouch" );
-	self botAction( "+goprone" );
-}
-
-/*
-	Changes to the weap
-*/
-changeToWeap( weap )
-{
-	self botWeapon( weap );
+	self BotBuiltinBotAction( "-gocrouch" );
+	self BotBuiltinBotAction( "+goprone" );
 }
 
 /*
@@ -2859,12 +2851,4 @@ bot_lookat( pos, time, vel, doAimPredict )
 		self setPlayerAngles( myAngle );
 		wait 0.05;
 	}
-}
-
-/*
-	Bot change weap
-*/
-botWeapon( weap )
-{
-	self switchToWeapon( weap );
 }
