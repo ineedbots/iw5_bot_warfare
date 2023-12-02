@@ -896,34 +896,6 @@ Round( x )
 }
 
 /*
-	Tokenizes a string (strtok has limits...) (only one char tok)
-*/
-tokenizeLine( line, tok )
-{
-	tokens = [];
-
-	token = "";
-
-	for ( i = 0; i < line.size; i++ )
-	{
-		c = line[i];
-
-		if ( c == tok )
-		{
-			tokens[tokens.size] = token;
-			token = "";
-			continue;
-		}
-
-		token += c;
-	}
-
-	tokens[tokens.size] = token;
-
-	return tokens;
-}
-
-/*
 	If the string starts with
 */
 isStrStart( string1, subStr )
@@ -1028,7 +1000,7 @@ readWpsFromFile( mapname )
 
 	for ( i = 1; i <= waypointCount; i++ )
 	{
-		tokens = tokenizeLine( res.lines[i], "," );
+		tokens = strtok( res.lines[i], "," );
 
 		waypoint = parseTokensIntoWaypoint( tokens );
 
