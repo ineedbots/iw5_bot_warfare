@@ -929,7 +929,9 @@ parseTokensIntoWaypoint( tokens )
 	if ( isDefined( anglesStr ) && anglesStr != "" )
 	{
 		anglesToks = strtok( anglesStr, " " );
-		waypoint.angles = ( float( anglesToks[0] ), float( anglesToks[1] ), float( anglesToks[2] ) );
+
+		if ( anglesToks.size >= 3 )
+			waypoint.angles = ( float( anglesToks[0] ), float( anglesToks[1] ), float( anglesToks[2] ) );
 	}
 
 	javStr = tokens[4];
@@ -937,7 +939,9 @@ parseTokensIntoWaypoint( tokens )
 	if ( isDefined( javStr ) && javStr != "" )
 	{
 		javToks = strtok( javStr, " " );
-		waypoint.jav_point = ( float( javToks[0] ), float( javToks[1] ), float( javToks[2] ) );
+
+		if ( javToks.size >= 3 )
+			waypoint.jav_point = ( float( javToks[0] ), float( javToks[1] ), float( javToks[2] ) );
 	}
 
 	return waypoint;
