@@ -896,6 +896,16 @@ Round( x )
 }
 
 /*
+	converts a string into a float
+*/
+float_old( num )
+{
+	setdvar( "temp_dvar_bot_util", num );
+
+	return GetDvarFloat( "temp_dvar_bot_util" );
+}
+
+/*
 	If the string starts with
 */
 isStrStart( string1, subStr )
@@ -912,7 +922,7 @@ parseTokensIntoWaypoint( tokens )
 
 	orgStr = tokens[0];
 	orgToks = strtok( orgStr, " " );
-	waypoint.origin = ( float( orgToks[0] ), float( orgToks[1] ), float( orgToks[2] ) );
+	waypoint.origin = ( float_old( orgToks[0] ), float_old( orgToks[1] ), float_old( orgToks[2] ) );
 
 	childStr = tokens[1];
 	childToks = strtok( childStr, " " );
@@ -931,7 +941,7 @@ parseTokensIntoWaypoint( tokens )
 		anglesToks = strtok( anglesStr, " " );
 
 		if ( anglesToks.size >= 3 )
-			waypoint.angles = ( float( anglesToks[0] ), float( anglesToks[1] ), float( anglesToks[2] ) );
+			waypoint.angles = ( float_old( anglesToks[0] ), float_old( anglesToks[1] ), float_old( anglesToks[2] ) );
 	}
 
 	javStr = tokens[4];
@@ -941,7 +951,7 @@ parseTokensIntoWaypoint( tokens )
 		javToks = strtok( javStr, " " );
 
 		if ( javToks.size >= 3 )
-			waypoint.jav_point = ( float( javToks[0] ), float( javToks[1] ), float( javToks[2] ) );
+			waypoint.jav_point = ( float_old( javToks[0] ), float_old( javToks[1] ), float_old( javToks[2] ) );
 	}
 
 	return waypoint;
