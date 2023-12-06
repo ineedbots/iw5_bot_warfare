@@ -958,37 +958,53 @@ parseTokensIntoWaypoint( tokens )
 }
 
 /*
-	Returns an array of each line
+	Function to extract lines from a file specified by 'filename' and store them in a result structure.
 */
 getWaypointLinesFromFile( filename )
 {
+	// Create a structure to store the result, including an array to hold individual lines.
 	result = spawnStruct();
 	result.lines = [];
 
+	// Read the entire content of the file into the 'waypointStr' variable.
+	// Note: max string length in GSC is 65535.
 	waypointStr = BotBuiltinFileRead( filename );
 
+	// If the file is empty or not defined, return the empty result structure.
 	if ( !isDefined( waypointStr ) )
 		return result;
 
-	line = "";
+	// Variables to track the current line's character count and starting position.
+	linecount = 0;
+	linestart = 0;
 
+	// Iterate through each character in the 'waypointStr'.
 	for ( i = 0; i < waypointStr.size; i++ )
 	{
-		c = waypointStr[i];
-
-		if ( c == "\n" )
+		// Check for newline characters '\n' or '\r'.
+		if ( waypointStr[i] == "\n" || waypointStr[i] == "\r" )
 		{
-			result.lines[result.lines.size] = line;
+			// Extract the current line using 'getSubStr' and store it in the result array.
+			result.lines[result.lines.size] = getSubStr( waypointStr, linestart, linestart + linecount );
 
-			line = "";
+			// If the newline is '\r\n', skip the next character.
+			if ( waypointStr[i] == "\r" && i < waypointStr.size - 1 && waypointStr[i + 1] == "\n" )
+				i++;
+
+			// Reset linecount and update linestart for the next line.
+			linecount = 0;
+			linestart = i + 1;
 			continue;
 		}
 
-		line += c;
+		// Increment linecount for the current line.
+		linecount++;
 	}
 
-	result.lines[result.lines.size] = line;
+	// Store the last line (or the only line if there are no newline characters) in the result array.
+	result.lines[result.lines.size] = getSubStr( waypointStr, linestart, linestart + linecount );
 
+	// Return the result structure containing the array of extracted lines.
 	return result;
 }
 
