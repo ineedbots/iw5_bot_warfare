@@ -4360,7 +4360,7 @@ doReloadCancel()
 */
 bot_weapon_think_loop( data )
 {
-	self waittill_any_timeout( randomIntRange( 2, 4 ), "bot_force_check_switch" );
+	ret = self waittill_any_timeout( randomIntRange( 2, 4 ), "bot_force_check_switch" );
 
 	if ( self BotIsFrozen() )
 		return;
@@ -4399,6 +4399,8 @@ bot_weapon_think_loop( data )
 		return;
 	}
 
+	force = ( ret == "bot_force_check_switch" );
+
 	if ( data.first )
 	{
 		data.first = false;
@@ -4416,6 +4418,8 @@ bot_weapon_think_loop( data )
 			if ( hasTarget )
 				return;
 		}
+		else
+			force = true;
 	}
 
 	weaponslist = self getweaponslistall();
@@ -4426,7 +4430,7 @@ bot_weapon_think_loop( data )
 		weapon = weaponslist[randomInt( weaponslist.size )];
 		weaponslist = array_remove( weaponslist, weapon );
 
-		if ( !self getAmmoCount( weapon ) )
+		if ( !self getAmmoCount( weapon ) && !force )
 			continue;
 
 		if ( !isWeaponPrimary( weapon ) )

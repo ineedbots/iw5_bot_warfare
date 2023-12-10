@@ -113,6 +113,17 @@ BotBuiltinBotMovement( forward, right )
 }
 
 /*
+	Sets melee params
+*/
+BotBuiltinBotMeleeParams( entNum, dist )
+{
+	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins["botmeleeparams"] ) )
+	{
+		self [[ level.bot_builtins["botmeleeparams" ]]]( entNum, dist );
+	}
+}
+
+/*
 	Returns if player is the host
 */
 is_host()
