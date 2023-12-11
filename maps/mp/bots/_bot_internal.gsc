@@ -1065,7 +1065,6 @@ createTargetObj( ent, theTime )
 	obj.trace_time_time = 0;
 	obj.rand = randomInt( 100 );
 	obj.didlook = false;
-	obj.isplay = isPlayer( ent );
 	obj.offset = undefined;
 	obj.bone = undefined;
 	obj.aim_offset = undefined;
@@ -1420,7 +1419,7 @@ onNewEnemy()
 		if ( !isDefined( self.bot.target ) )
 			continue;
 
-		if ( !isDefined( self.bot.target.entity ) || !self.bot.target.isplay )
+		if ( !isDefined( self.bot.target.entity ) || !isPlayer( self.bot.target.entity ) )
 			continue;
 
 		if ( self.bot.target.didlook )
@@ -1581,7 +1580,7 @@ aim_loop()
 			last_pos = self.bot.target.last_seen_pos;
 			target = self.bot.target.entity;
 			conedot = 0;
-			isplay = self.bot.target.isplay;
+			isplay = isPlayer( self.bot.target.entity );
 
 			offset = self.bot.target.offset;
 
@@ -1999,7 +1998,7 @@ walk_loop()
 			return;
 		}
 
-		if ( self.bot.target.isplay && self.bot.target.trace_time && self canFire( curweap ) && self isInRange( self.bot.target.dist, curweap ) )
+		if ( isPlayer( self.bot.target.entity ) && self.bot.target.trace_time && self canFire( curweap ) && self isInRange( self.bot.target.dist, curweap ) )
 		{
 			if ( self InLastStand() || self GetStance() == "prone" || ( self.bot.is_cur_sniper && self PlayerADS() > 0 ) )
 				return;
