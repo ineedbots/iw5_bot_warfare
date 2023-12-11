@@ -1651,7 +1651,7 @@ aim_loop()
 				}
 
 				if ( !usingRemote )
-					self thread bot_lookat( last_pos + ( 0, 0, self getEyeHeight() + nadeAimOffset ), aimspeed );
+					self thread bot_lookat( last_pos + ( 0, 0, self GetPlayerViewHeight() + nadeAimOffset ), aimspeed );
 				else
 					self thread bot_lookat( last_pos, aimspeed );
 
@@ -1754,7 +1754,7 @@ aim_loop()
 				nadeAimOffset = dist / 3000;
 		}
 
-		aimpos = last_pos + ( 0, 0, self getEyeHeight() + nadeAimOffset );
+		aimpos = last_pos + ( 0, 0, self GetPlayerViewHeight() + nadeAimOffset );
 
 		if ( usingRemote )
 			aimpos = last_pos;
@@ -1810,7 +1810,7 @@ aim_loop()
 			lookat = self.bot.towards_goal;
 
 		if ( isDefined( lookat ) )
-			self thread bot_lookat( lookat + ( 0, 0, self getEyeHeight() ), aimspeed );
+			self thread bot_lookat( lookat + ( 0, 0, self GetPlayerViewHeight() ), aimspeed );
 	}
 }
 
