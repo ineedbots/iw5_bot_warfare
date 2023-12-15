@@ -2502,7 +2502,7 @@ do_knife_target( target )
 	self endon( "disconnect" );
 	self endon( "bot_knife" );
 
-	if ( !getDvarInt( "aim_automelee_enabled" ) || !self isOnGround() || self GetStance() == "prone" || self InLastStand() )
+	if ( !self isOnGround() || self GetStance() == "prone" || self InLastStand() )
 	{
 		self.bot.knifing_target = undefined;
 		self BotBuiltinBotMeleeParams( 0, 0 );
@@ -2518,7 +2518,7 @@ do_knife_target( target )
 
 	dist = distance( target.origin, self.origin );
 
-	if ( dist > getDvarFloat( "aim_automelee_range" ) )
+	if ( dist > 128.0 ) // iw5 hardcodes this ._.
 	{
 		self.bot.knifing_target = undefined;
 		self BotBuiltinBotMeleeParams( 0, 0 );
