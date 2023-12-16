@@ -1642,6 +1642,9 @@ onGiveLoadout()
 	{
 		self waittill( "giveLoadout", team, class, allowCopycat, setPrimarySpawnWeapon );
 
+		if ( !allowClassChoice() )
+			continue;
+
 		if ( !isDefined( team ) )
 			team = self.team;
 
