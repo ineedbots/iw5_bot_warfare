@@ -3688,7 +3688,7 @@ bot_uav_think()
 	{
 		wait 0.75;
 
-		if ( self.pers["bots"]["skill"]["base"] <= 1 )
+		if ( self.pers["bots"]["skill"]["base"] <= 1 || self IsUsingRemote() )
 			continue;
 
 		self bot_uav_think_loop();
