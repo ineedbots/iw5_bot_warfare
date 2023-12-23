@@ -34,20 +34,20 @@ do_fileexists( file )
 
 do_botaction( action )
 {
-	self BotAction( action );
+	self botaction( action );
 }
 
 do_botstop()
 {
-	self BotStop();
+	self botstop();
 }
 
 do_botmovement( forward, right )
 {
-	self BotMovement( forward, right );
+	self botmovement( forward, right );
 }
 
 do_botmeleeparams( entNum, dist )
 {
-	// self BotMeleeParams( entNum, dist );
+	// self botmeleeparams( entNum, dist );
 }
