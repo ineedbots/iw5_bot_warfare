@@ -86,8 +86,8 @@ StartDev()
 	self.nearest = -1;
 
 	self takeAllWeapons();
-	self giveWeapon( "iw5_m16_mp_gl" ); //to knife windows
-	self giveWeapon( "javelin_mp" ); //to mark jav spots
+	self giveWeapon( "iw5_m16_mp_gl" ); // to knife windows
+	self giveWeapon( "javelin_mp" ); // to mark jav spots
 	self SetOffhandPrimaryClass( "other" );
 	self giveWeapon( "semtex_mp" );
 	self _clearperks();
@@ -363,8 +363,8 @@ updateWaypointsStats()
 
 		if ( isDefined( self.astar ) )
 		{
-			//print3d(self.astar.start + (0, 0, 35), "start", (0,0,1), 2);
-			//print3d(self.astar.goal + (0, 0, 35), "goal", (0,0,1), 2);
+			// print3d(self.astar.start + (0, 0, 35), "start", (0,0,1), 2);
+			// print3d(self.astar.goal + (0, 0, 35), "goal", (0,0,1), 2);
 			if ( timeToUpdate )
 			{
 				drawPath( self.astar.start );
@@ -377,13 +377,13 @@ updateWaypointsStats()
 			{
 				node = self.astar.nodes[ i ];
 
-				//line(prev, level.waypoints[ node ].origin + (0, 0, 35), (0,1,1));
+				// line(prev, level.waypoints[ node ].origin + (0, 0, 35), (0,1,1));
 				if ( timeToUpdate ) drawPath( level.waypoints[ node ].origin );
 
 				prev = level.waypoints[ node ].origin + ( 0, 0, 35 );
 			}
 
-			//line(prev, self.astar.goal + (0, 0, 35), (0,1,1));
+			// line(prev, self.astar.goal + (0, 0, 35), (0,1,1));
 		}
 	}
 }

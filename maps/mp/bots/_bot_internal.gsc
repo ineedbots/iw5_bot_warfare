@@ -1619,7 +1619,7 @@ aim_loop()
 				{
 					if ( isplay )
 					{
-						//better room to nade? cook time function with dist?
+						// better room to nade? cook time function with dist?
 						if ( !self.bot.isfraggingafter && !self.bot.issmokingafter && getDvarInt( "bots_play_nade" ) )
 						{
 							nade = self getValidGrenade();
@@ -2238,7 +2238,7 @@ doWalk( goal, dist, isScriptGoal )
 {
 	level endon ( "game_ended" );
 	self endon( "kill_goal" );
-	self endon( "goal_internal" ); //so that the watchOnGoal notify can happen same frame, not a frame later
+	self endon( "goal_internal" ); // so that the watchOnGoal notify can happen same frame, not a frame later
 
 	dist *= dist;
 
@@ -2409,7 +2409,7 @@ doMantle()
 */
 getRandomLargestStafe( dist )
 {
-	//find a better algo?
+	// find a better algo?
 	traces = NewHeap( ::HeapTraceFraction );
 	myOrg = self.bot.moveOrigin + ( 0, 0, 16 );
 

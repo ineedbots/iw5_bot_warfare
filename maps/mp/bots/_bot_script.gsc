@@ -3791,7 +3791,7 @@ bot_turret_attack( enemy )
 		if ( isDefined( enemy.carriedBy ) )
 			return;
 
-		//if ( !BulletTracePassed( self getEye(), enemy.origin + ( 0, 0, 15 ), false, enemy ) )
+		// if ( !BulletTracePassed( self getEye(), enemy.origin + ( 0, 0, 15 ), false, enemy ) )
 		//	return;
 	}
 }
@@ -5575,7 +5575,7 @@ bot_dom_cap_think_loop()
 		wait 0.5;
 
 		if ( flag.useObj.curProgress == cur )
-			break;//some enemy is near us, kill him
+			break; // some enemy is near us, kill him
 
 		self thread bot_do_random_action_for_objective( flag );
 	}
@@ -5657,10 +5657,10 @@ bot_hq_loop()
 	gameobj = radio.gameobject;
 	origin = ( radio.origin[ 0 ], radio.origin[ 1 ], radio.origin[ 2 ] + 5 );
 
-	//if neut or enemy
+	// if neut or enemy
 	if ( gameobj.ownerTeam != myTeam )
 	{
-		if ( gameobj.interactTeam == "none" ) //wait for it to become active
+		if ( gameobj.interactTeam == "none" ) // wait for it to become active
 		{
 			if ( self HasScriptGoal() )
 				return;
@@ -5676,7 +5676,7 @@ bot_hq_loop()
 			return;
 		}
 
-		//capture it
+		// capture it
 
 		self BotNotifyBotEvent( "hq", "go", "cap" );
 
@@ -5711,7 +5711,7 @@ bot_hq_loop()
 			wait 0.5;
 
 			if ( cur == gameobj.curProgress )
-				break;//no prog made, enemy must be capping
+				break; // no prog made, enemy must be capping
 
 			self thread bot_do_random_action_for_objective( gameobj.trigger );
 		}
@@ -5721,9 +5721,9 @@ bot_hq_loop()
 
 		self BotNotifyBotEvent( "hq", "stop", "cap" );
 	}
-	else//we own it
+	else // we own it
 	{
-		if ( gameobj.objPoints[ myteam ].isFlashing ) //underattack
+		if ( gameobj.objPoints[ myteam ].isFlashing ) // underattack
 		{
 			self BotNotifyBotEvent( "hq", "start", "defend" );
 
@@ -5867,7 +5867,7 @@ bot_sab_loop()
 		if ( level.bombPlanted )
 		{
 			// kill defuser
-			if ( site isInUse() ) //somebody is defusing our bomb we planted
+			if ( site isInUse() ) // somebody is defusing our bomb we planted
 			{
 				self BotNotifyBotEvent( "sab", "start", "defuser" );
 
@@ -5885,7 +5885,7 @@ bot_sab_loop()
 				return;
 			}
 
-			//else hang around the site
+			// else hang around the site
 			if ( DistanceSquared( origin, self.origin ) <= 1024 * 1024 )
 				return;
 
@@ -5968,7 +5968,7 @@ bot_sab_loop()
 		// protect our site from planters
 		if ( !level.bombPlanted )
 		{
-			//kill bomb carrier
+			// kill bomb carrier
 			if ( site.bots > 2 || randomInt( 100 ) < 45 )
 			{
 				if ( self HasScriptGoal() )
@@ -5988,12 +5988,12 @@ bot_sab_loop()
 				return;
 			}
 
-			//protect bomb site
+			// protect bomb site
 			origin = ( site.curorigin[ 0 ] + 50, site.curorigin[ 1 ] + 50, site.curorigin[ 2 ] + 5 );
 
 			self thread bot_inc_bots( site );
 
-			if ( site isInUse() ) //somebody is planting
+			if ( site isInUse() ) // somebody is planting
 			{
 				self BotNotifyBotEvent( "sab", "start", "planter" );
 
@@ -6012,7 +6012,7 @@ bot_sab_loop()
 				return;
 			}
 
-			//else hang around the site
+			// else hang around the site
 			if ( DistanceSquared( origin, self.origin ) <= 1024 * 1024 )
 			{
 				wait 4;
@@ -6169,7 +6169,7 @@ bot_sd_defenders_loop( data )
 			{
 				origin = ( bomb.curorigin[ 0 ], bomb.curorigin[ 1 ], bomb.curorigin[ 2 ] + 5 );
 
-				//hang around the bomb
+				// hang around the bomb
 				if ( self HasScriptGoal() )
 					return;
 
@@ -6211,7 +6211,7 @@ bot_sd_defenders_loop( data )
 
 		origin = ( site.curorigin[ 0 ] + 50, site.curorigin[ 1 ] + 50, site.curorigin[ 2 ] + 5 );
 
-		if ( site isInUse() ) //somebody is planting
+		if ( site isInUse() ) // somebody is planting
 		{
 			self BotNotifyBotEvent( "sd", "start", "planter", site );
 
@@ -6229,7 +6229,7 @@ bot_sd_defenders_loop( data )
 			return;
 		}
 
-		//else hang around the site
+		// else hang around the site
 		if ( DistanceSquared( origin, self.origin ) <= 1024 * 1024 )
 			return;
 
@@ -6359,7 +6359,7 @@ bot_sd_attackers_loop( data )
 	myTeam = self.pers[ "team" ];
 	otherTeam = getOtherTeam( myTeam );
 
-	//bomb planted
+	// bomb planted
 	if ( level.bombPlanted )
 	{
 		if ( !isDefined( level.defuseObject ) )
@@ -6369,7 +6369,7 @@ bot_sd_attackers_loop( data )
 
 		origin = ( site.curorigin[ 0 ], site.curorigin[ 1 ], site.curorigin[ 2 ] + 5 );
 
-		if ( site IsInUse() ) //somebody is defusing
+		if ( site IsInUse() ) // somebody is defusing
 		{
 			self BotNotifyBotEvent( "sd", "start", "defuser" );
 
@@ -6388,7 +6388,7 @@ bot_sd_attackers_loop( data )
 			return;
 		}
 
-		//else hang around the site
+		// else hang around the site
 		if ( DistanceSquared( origin, self.origin ) <= 1024 * 1024 )
 			return;
 
@@ -6405,7 +6405,7 @@ bot_sd_attackers_loop( data )
 	timeleft = maps\mp\gametypes\_gamelogic::getTimeRemaining() / 1000;
 	timepassed = getTimePassed() / 1000;
 
-	//dont have a bomb
+	// dont have a bomb
 	if ( !self IsBombCarrier() && !level.multiBomb )
 	{
 		if ( !isDefined( level.sdBomb ) )
@@ -6414,10 +6414,10 @@ bot_sd_attackers_loop( data )
 		bomb = level.sdBomb;
 		carrier = level.sdBomb.carrier;
 
-		//bomb is picked up
+		// bomb is picked up
 		if ( isDefined( carrier ) )
 		{
-			//escort the bomb carrier
+			// escort the bomb carrier
 			if ( self HasScriptGoal() )
 				return;
 
@@ -6440,7 +6440,7 @@ bot_sd_attackers_loop( data )
 
 		origin = ( bomb.curorigin[ 0 ], bomb.curorigin[ 1 ], bomb.curorigin[ 2 ] + 5 );
 
-		//hang around the bomb if other is going to go get it
+		// hang around the bomb if other is going to go get it
 		if ( bomb.bots > 1 )
 		{
 			if ( self HasScriptGoal() )
@@ -6579,9 +6579,9 @@ bot_cap_loop()
 	{
 		carrier = myflag.carrier;
 
-		if ( !isDefined( carrier ) ) //someone doesnt has our flag
+		if ( !isDefined( carrier ) ) // someone doesnt has our flag
 		{
-			if ( !isDefined( theirflag.carrier ) && DistanceSquared( self.origin, theirflag.curorigin ) < DistanceSquared( self.origin, myflag.curorigin ) ) //no one has their flag and its closer
+			if ( !isDefined( theirflag.carrier ) && DistanceSquared( self.origin, theirflag.curorigin ) < DistanceSquared( self.origin, myflag.curorigin ) ) // no one has their flag and its closer
 			{
 				self BotNotifyBotEvent( "cap", "start", "their_flag", theirflag );
 
@@ -6589,7 +6589,7 @@ bot_cap_loop()
 
 				self BotNotifyBotEvent( "cap", "stop", "their_flag", theirflag );
 			}
-			else//go get it
+			else // go get it
 			{
 				self BotNotifyBotEvent( "cap", "start", "my_flag", myflag );
 
@@ -6604,7 +6604,7 @@ bot_cap_loop()
 		{
 			if ( theirflag maps\mp\gametypes\_gameobjects::isHome() && randomint( 100 ) < 50 )
 			{
-				//take their flag
+				// take their flag
 				self BotNotifyBotEvent( "cap", "start", "their_flag", theirflag );
 
 				self bot_cap_get_flag( theirflag );
@@ -6623,7 +6623,7 @@ bot_cap_loop()
 
 				if ( theirzone.bots > 2 || randomInt( 100 ) < 45 )
 				{
-					//kill carrier
+					// kill carrier
 					if ( carrier _hasPerk( "specialty_coldblooded" ) )
 						return;
 
@@ -6640,7 +6640,7 @@ bot_cap_loop()
 
 				self thread bot_inc_bots( theirzone );
 
-				//camp their zone
+				// camp their zone
 				if ( DistanceSquared( origin, self.origin ) <= 1024 * 1024 )
 				{
 					wait 4;
@@ -6658,11 +6658,11 @@ bot_cap_loop()
 			}
 		}
 	}
-	else//our flag is ok
+	else // our flag is ok
 	{
-		if ( self isFlagCarrier() ) //if have flag
+		if ( self isFlagCarrier() ) // if have flag
 		{
-			//go cap
+			// go cap
 			origin = myzone.curorigin;
 
 			self BotNotifyBotEvent( "cap", "start", "cap" );
@@ -6686,7 +6686,7 @@ bot_cap_loop()
 
 		carrier = theirflag.carrier;
 
-		if ( !isDefined( carrier ) ) //if no one has enemy flag
+		if ( !isDefined( carrier ) ) // if no one has enemy flag
 		{
 			self BotNotifyBotEvent( "cap", "start", "their_flag", theirflag );
 
@@ -6696,7 +6696,7 @@ bot_cap_loop()
 			return;
 		}
 
-		//escort them
+		// escort them
 
 		if ( self HasScriptGoal() )
 			return;
@@ -6765,7 +6765,7 @@ bot_cap_get_flag( flag )
 {
 	origin = flag.curorigin;
 
-	//go get it
+	// go get it
 
 	self.bot_lock_goal = true;
 	self SetScriptGoal( origin, 32 );
@@ -6792,7 +6792,7 @@ bot_cap_get_flag( flag )
 		wait 0.5;
 
 		if ( flag.curProgress == cur )
-			break;//some enemy is near us, kill him
+			break; // some enemy is near us, kill him
 	}
 
 	self ClearScriptGoal();
@@ -6863,9 +6863,9 @@ bot_dem_attackers_loop()
 	myTeam = self.pers[ "team" ];
 	otherTeam = getOtherTeam( myTeam );
 
-	bombs = [];//sites with bombs
-	sites = [];//sites to bomb at
-	bombed = 0;//exploded sites
+	bombs = []; // sites with bombs
+	sites = []; // sites to bomb at
+	bombed = 0; // exploded sites
 
 	for ( i = 0; i < level.bombZones.size; i++ )
 	{
@@ -6902,9 +6902,9 @@ bot_dem_attackers_loop()
 
 	shouldLet = ( game[ "teamScores" ][ myteam ] > game[ "teamScores" ][ otherTeam ] && timeleft < 90 && bombed == 1 );
 
-	//spawnkill conditions
-	//if we have bombed one site or 1 bomb is planted with lots of time left, spawn kill
-	//if we want the other team to win for overtime and they do not need to defuse, spawn kill
+	// spawnkill conditions
+	// if we have bombed one site or 1 bomb is planted with lots of time left, spawn kill
+	// if we want the other team to win for overtime and they do not need to defuse, spawn kill
 	if ( ( ( bombed + bombs.size == 1 && timeleft >= 90 ) || ( shouldLet && !bombs.size ) ) && randomInt( 100 ) < 95 )
 	{
 		if ( self HasScriptGoal() )
@@ -6930,9 +6930,9 @@ bot_dem_attackers_loop()
 		return;
 	}
 
-	//let defuse conditions
-	//if enemy is going to lose and lots of time left, let them defuse to play longer
-	//or if want to go into overtime near end of the extended game
+	// let defuse conditions
+	// if enemy is going to lose and lots of time left, let them defuse to play longer
+	// or if want to go into overtime near end of the extended game
 	if ( ( ( bombs.size + bombed == 2 && timeleft >= 90 ) || ( shouldLet && bombs.size ) ) && randomInt( 100 ) < 95 )
 	{
 		spawnPoints = maps\mp\gametypes\_spawnlogic::getSpawnpointArray( "mp_dd_spawn_attacker_start" );
@@ -6955,14 +6955,14 @@ bot_dem_attackers_loop()
 		return;
 	}
 
-	//defend bomb conditions
-	//if time is running out and we have a bomb planted
+	// defend bomb conditions
+	// if time is running out and we have a bomb planted
 	if ( bombs.size && timeleft < 90 && ( !sites.size || randomInt( 100 ) < 95 ) )
 	{
 		site = self bot_array_nearest_curorigin( bombs );
 		origin = ( site.curorigin[ 0 ] + 50, site.curorigin[ 1 ] + 50, site.curorigin[ 2 ] + 5 );
 
-		if ( site IsInUse() ) //somebody is defusing
+		if ( site IsInUse() ) // somebody is defusing
 		{
 			self BotNotifyBotEvent( "dem", "start", "defuser", site );
 
@@ -6980,7 +6980,7 @@ bot_dem_attackers_loop()
 			return;
 		}
 
-		//else hang around the site
+		// else hang around the site
 		if ( DistanceSquared( origin, self.origin ) <= 1024 * 1024 )
 			return;
 
@@ -6994,7 +6994,7 @@ bot_dem_attackers_loop()
 		return;
 	}
 
-	//else go plant
+	// else go plant
 	if ( !sites.size )
 		return;
 
@@ -7008,7 +7008,7 @@ bot_dem_attackers_loop()
 
 	origin = ( plant.curorigin[ 0 ] + 50, plant.curorigin[ 1 ] + 50, plant.curorigin[ 2 ] + 5 );
 
-	//hang around the site if lots of time left
+	// hang around the site if lots of time left
 	if ( plant.bots > 1 && timeleft >= 60 )
 	{
 		if ( self HasScriptGoal() )
@@ -7104,9 +7104,9 @@ bot_dem_defenders_loop()
 	myTeam = self.pers[ "team" ];
 	otherTeam = getOtherTeam( myTeam );
 
-	bombs = [];//sites with bombs
-	sites = [];//sites to bomb at
-	bombed = 0;//exploded sites
+	bombs = []; // sites with bombs
+	sites = []; // sites to bomb at
+	bombed = 0; // exploded sites
 
 	for ( i = 0; i < level.bombZones.size; i++ )
 	{
@@ -7143,9 +7143,9 @@ bot_dem_defenders_loop()
 
 	shouldLet = ( timeleft < 60 && ( ( bombed == 0 && bombs.size != 2 ) || ( game[ "teamScores" ][ myteam ] > game[ "teamScores" ][ otherTeam ] && bombed == 1 ) ) && randomInt( 100 ) < 98 );
 
-	//spawnkill conditions
-	//if nothing to defuse with a lot of time left, spawn kill
-	//or letting a bomb site to explode but a bomb is planted, so spawnkill
+	// spawnkill conditions
+	// if nothing to defuse with a lot of time left, spawn kill
+	// or letting a bomb site to explode but a bomb is planted, so spawnkill
 	if ( ( !bombs.size && timeleft >= 60 && randomInt( 100 ) < 95 ) || ( shouldLet && bombs.size == 1 ) )
 	{
 		if ( self HasScriptGoal() )
@@ -7171,9 +7171,9 @@ bot_dem_defenders_loop()
 		return;
 	}
 
-	//let blow up conditions
-	//let enemy blow up at least one to extend play time
-	//or if want to go into overtime after extended game
+	// let blow up conditions
+	// let enemy blow up at least one to extend play time
+	// or if want to go into overtime after extended game
 	if ( shouldLet )
 	{
 		spawnPoints = maps\mp\gametypes\_spawnlogic::getSpawnpointArray( "mp_dd_spawn_defender_start" );
@@ -7196,14 +7196,14 @@ bot_dem_defenders_loop()
 		return;
 	}
 
-	//defend conditions
-	//if no bombs planted with little time left
+	// defend conditions
+	// if no bombs planted with little time left
 	if ( !bombs.size && timeleft < 60 && randomInt( 100 ) < 95 && sites.size )
 	{
 		site = self bot_array_nearest_curorigin( sites );
 		origin = ( site.curorigin[ 0 ] + 50, site.curorigin[ 1 ] + 50, site.curorigin[ 2 ] + 5 );
 
-		if ( site IsInUse() ) //somebody is planting
+		if ( site IsInUse() ) // somebody is planting
 		{
 			self BotNotifyBotEvent( "dem", "start", "planter", site );
 
@@ -7221,7 +7221,7 @@ bot_dem_defenders_loop()
 			return;
 		}
 
-		//else hang around the site
+		// else hang around the site
 
 		if ( DistanceSquared( origin, self.origin ) <= 1024 * 1024 )
 			return;
@@ -7236,7 +7236,7 @@ bot_dem_defenders_loop()
 		return;
 	}
 
-	//else go defuse
+	// else go defuse
 
 	if ( !bombs.size )
 		return;
@@ -7251,7 +7251,7 @@ bot_dem_defenders_loop()
 
 	origin = ( defuse.curorigin[ 0 ] + 50, defuse.curorigin[ 1 ] + 50, defuse.curorigin[ 2 ] + 5 );
 
-	//hang around the site if not in danger of losing
+	// hang around the site if not in danger of losing
 	if ( defuse.bots > 1 && bombed + bombs.size != 2 )
 	{
 		if ( self HasScriptGoal() )
@@ -7561,7 +7561,7 @@ bot_gtnw_loop()
 			wait 0.5;
 
 			if ( cur == level.nukeSite.curProgress )
-				break;//no prog made, enemy must be capping
+				break; // no prog made, enemy must be capping
 
 			self thread bot_do_random_action_for_objective( trigger );
 		}
@@ -7588,7 +7588,7 @@ bot_gtnw_loop()
 		return;
 	}
 
-	//else hang around the site
+	// else hang around the site
 	if ( DistanceSquared( origin, self.origin ) <= 1024 * 1024 )
 		return;
 
@@ -7644,7 +7644,7 @@ bot_oneflag_loop()
 
 		if ( self isFlagCarrier() )
 		{
-			//go cap
+			// go cap
 			origin = myzone.curorigin;
 
 			self BotNotifyBotEvent( "oneflag", "start", "cap" );
@@ -7667,7 +7667,7 @@ bot_oneflag_loop()
 
 		carrier = theirflag.carrier;
 
-		if ( !isDefined( carrier ) ) //if no one has enemy flag
+		if ( !isDefined( carrier ) ) // if no one has enemy flag
 		{
 			self BotNotifyBotEvent( "oneflag", "start", "their_flag" );
 			self bot_cap_get_flag( theirflag );
@@ -7675,7 +7675,7 @@ bot_oneflag_loop()
 			return;
 		}
 
-		//escort them
+		// escort them
 
 		if ( self HasScriptGoal() )
 			return;
@@ -7700,7 +7700,7 @@ bot_oneflag_loop()
 		{
 			carrier = myflag.carrier;
 
-			if ( !isDefined( carrier ) ) //someone doesnt has our flag
+			if ( !isDefined( carrier ) ) // someone doesnt has our flag
 			{
 				self BotNotifyBotEvent( "oneflag", "start", "my_flag" );
 				self bot_cap_get_flag( myflag );
@@ -7718,7 +7718,7 @@ bot_oneflag_loop()
 
 			if ( theirzone.bots > 2 || randomInt( 100 ) < 45 )
 			{
-				//kill carrier
+				// kill carrier
 				if ( carrier _hasPerk( "specialty_coldblooded" ) )
 					return;
 
@@ -7735,7 +7735,7 @@ bot_oneflag_loop()
 
 			self thread bot_inc_bots( theirzone );
 
-			//camp their zone
+			// camp their zone
 			if ( DistanceSquared( origin, self.origin ) <= 1024 * 1024 )
 			{
 				wait 4;
@@ -7833,7 +7833,7 @@ bot_arena_loop()
 		wait 0.5;
 
 		if ( cur == flag.curProgress )
-			break;//no prog made, enemy must be capping
+			break; // no prog made, enemy must be capping
 
 		self thread bot_do_random_action_for_objective( flag.trigger );
 	}
@@ -8309,7 +8309,7 @@ bot_tdef_loop()
 		return;
 	}
 
-	//go get it
+	// go get it
 	self BotNotifyBotEvent( "tdef", "start", "cap" );
 
 	self bot_cap_get_flag( level.gameFlag );
