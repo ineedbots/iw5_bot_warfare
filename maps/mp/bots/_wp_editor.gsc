@@ -13,10 +13,14 @@
 init()
 {
 	if ( getDvar( "bots_main_debug" ) == "" )
+	{
 		setDvar( "bots_main_debug", 0 );
+	}
 
 	if ( !getDVarint( "bots_main_debug" ) )
+	{
 		return;
+	}
 
 	/*  if(!getDVarint("developer"))
 	    {
@@ -36,28 +40,42 @@ init()
 	setDvar( "bots_manage_fill_spec", 1 );
 
 	if ( getDvar( "bots_main_debug_distance" ) == "" )
+	{
 		setDvar( "bots_main_debug_distance", 512.0 );
+	}
 
 	if ( getDvar( "bots_main_debug_cone" ) == "" )
+	{
 		setDvar( "bots_main_debug_cone", 0.65 );
+	}
 
 	if ( getDvar( "bots_main_debug_minDist" ) == "" )
+	{
 		setDvar( "bots_main_debug_minDist", 32.0 );
+	}
 
 	if ( getDvar( "bots_main_debug_drawThrough" ) == "" )
+	{
 		setDvar( "bots_main_debug_drawThrough", false );
+	}
 
 	if ( getDvar( "bots_main_debug_updateRate" ) == "" )
+	{
 		setDvar( "bots_main_debug_updateRate", 500 );
+	}
 
 	if ( getDvar( "bots_main_debug_dashAmount" ) == "" )
+	{
 		setDvar( "bots_main_debug_dashAmount", 35.0 );
+	}
 
 	setDvar( "player_sustainAmmo", 1 );
 
 
 	if ( !isDefined( level.waypoints ) )
+	{
 		level.waypoints = [];
+	}
 
 	level.waypointCount = 0;
 
@@ -141,7 +159,9 @@ watchAstarCommand()
 		self waittill( "astar" );
 
 		if ( 1 )
+		{
 			continue;
+		}
 
 		self iprintln( "Start AStar" );
 		self.astar = undefined;
@@ -162,7 +182,9 @@ watchAstarCommand()
 drawWaypoint( i )
 {
 	if ( !isDefined( level.drawn_wps ) )
+	{
 		level.drawn_wps = [];
+	}
 
 	newdeathicon = newHudElem();
 	newdeathicon.x = level.waypoints[ i ].origin[ 0 ];
@@ -179,7 +201,9 @@ drawWaypoint( i )
 drawPath( where )
 {
 	if ( !isDefined( level.drawn_wps ) )
+	{
 		level.drawn_wps = [];
+	}
 
 	newdeathicon = newHudElem();
 	newdeathicon.x = where[ 0 ];
@@ -196,7 +220,9 @@ drawPath( where )
 clearWaypoints()
 {
 	if ( !isDefined( level.drawn_wps ) )
+	{
 		return;
+	}
 
 	for ( i = 0; i < level.drawn_wps.size; i++ )
 	{
@@ -209,7 +235,9 @@ clearWaypoints()
 clearWpLinks()
 {
 	if ( !isDefined( level.drawn_links ) )
+	{
 		return;
+	}
 
 	for ( i = 0; i < level.waypointCount; i++ )
 	{
@@ -218,7 +246,7 @@ clearWpLinks()
 
 	for ( i = 0; i < level.drawn_links.size; i++ )
 	{
-		level.drawn_links[ i ] delete();
+		level.drawn_links[ i ] delete ();
 	}
 
 	level.drawn_links = [];
@@ -227,16 +255,24 @@ clearWpLinks()
 showWpLink( i, h )
 {
 	if ( !isDefined( level.drawn_links ) )
+	{
 		level.drawn_links = [];
+	}
 
 	if ( !isDefined( level.waypoints[ i ].drawn_links ) )
+	{
 		level.waypoints[ i ].drawn_links = [];
+	}
 
 	if ( !isDefined( level.waypoints[ h ].drawn_links ) )
+	{
 		level.waypoints[ h ].drawn_links = [];
+	}
 
 	if ( isDefined( level.waypoints[ h ].drawn_links[ "" + i ] ) || isDefined( level.waypoints[ i ].drawn_links[ "" + h ] ) )
+	{
 		return;
+	}
 
 	level.waypoints[ h ].drawn_links[ "" + i ] = true;
 	level.waypoints[ i ].drawn_links[ "" + h ] = true;
@@ -308,7 +344,9 @@ updateWaypointsStats()
 		for ( i = 0; i < level.waypointCount; i++ )
 		{
 			if ( closest == -1 || closer( self.origin, level.waypoints[ i ].origin, level.waypoints[ closest ].origin ) )
+			{
 				closest = i;
+			}
 
 			wpOrg = level.waypoints[ i ].origin + ( 0, 0, 25 );
 
@@ -321,7 +359,9 @@ updateWaypointsStats()
 						drawWaypoint( i );
 
 						for ( h = level.waypoints[ i ].children.size - 1; h >= 0; h-- )
+						{
 							showWpLink( i, level.waypoints[ i ].children[ h ] );
+						}
 					}
 				}
 
@@ -353,7 +393,9 @@ updateWaypointsStats()
 		infotext.x = infotext.x - 2;
 
 		if ( infotext.x <= -800 )
+		{
 			infotext.x = 800;
+		}
 
 		if ( time > 2 && self UseButtonPressed() )
 		{
@@ -378,7 +420,10 @@ updateWaypointsStats()
 				node = self.astar.nodes[ i ];
 
 				// line(prev, level.waypoints[ node ].origin + (0, 0, 35), (0,1,1));
-				if ( timeToUpdate ) drawPath( level.waypoints[ node ].origin );
+				if ( timeToUpdate )
+				{
+					drawPath( level.waypoints[ node ].origin );
+				}
 
 				prev = level.waypoints[ node ].origin + ( 0, 0, 35 );
 			}
@@ -530,10 +575,14 @@ watchSaveWaypointsCommand()
 			}
 
 			if ( isDefined( level.waypoints[ i ].angles ) && ( level.waypoints[ i ].type == "claymore" || level.waypoints[ i ].type == "tube" || ( level.waypoints[ i ].type == "crouch" && level.waypoints[ i ].children.size == 1 ) || level.waypoints[ i ].type == "climb" || level.waypoints[ i ].type == "grenade" ) )
+			{
 				logprint( "*/waypoints[ " + i + " ].angles = " + level.waypoints[ i ].angles + ";\n/*" );
+			}
 
 			if ( isDefined( level.waypoints[ i ].jav_point ) && level.waypoints[ i ].type == "javelin" )
+			{
 				logprint( "*/waypoints[ " + i + " ].jav_point = " + level.waypoints[ i ].jav_point + ";\n/*" );
+			}
 		}
 
 		logprint( "*/return waypoints;\n}\n\n\n\n" );
@@ -557,20 +606,30 @@ watchSaveWaypointsCommand()
 				str += wp.children[ h ];
 
 				if ( h < wp.children.size - 1 )
+				{
 					str += " ";
+				}
 			}
 
 			str += "," + wp.type + ",";
 
 			if ( isDefined( wp.angles ) )
+			{
 				str += wp.angles[ 0 ] + " " + wp.angles[ 1 ] + " " + wp.angles[ 2 ] + ",";
+			}
 			else
+			{
 				str += ",";
+			}
 
 			if ( isDefined( wp.jav_point ) )
+			{
 				str += wp.jav_point[ 0 ] + " " + wp.jav_point[ 1 ] + " " + wp.jav_point[ 2 ] + ",";
+			}
 			else
+			{
 				str += ",";
+			}
 
 			PrintLn( str );
 			BotBuiltinFileWrite( filename, str + "\n", "append" );
@@ -596,10 +655,14 @@ LoadWaypoints()
 checkForWarnings()
 {
 	if ( level.waypointCount <= 0 )
+	{
 		self iprintln( "WARNING: waypointCount is " + level.waypointCount );
+	}
 
 	if ( level.waypointCount != level.waypoints.size )
+	{
 		self iprintln( "WARNING: waypointCount is not " + level.waypoints.size );
+	}
 
 	for ( i = 0; i < level.waypointCount; i++ )
 	{
@@ -610,7 +673,9 @@ checkForWarnings()
 		}
 
 		if ( level.waypoints[ i ].children.size <= 0 )
+		{
 			self iprintln( "WARNING: waypoint " + i + " childCount is " + level.waypoints[ i ].children.size );
+		}
 		else
 		{
 			if ( !isDefined( level.waypoints[ i ].children ) || !isDefined( level.waypoints[ i ].children.size ) )
@@ -624,9 +689,13 @@ checkForWarnings()
 					child = level.waypoints[ i ].children[ h ];
 
 					if ( !isDefined( level.waypoints[ child ] ) )
+					{
 						self iprintln( "WARNING: waypoint " + i + " child " + child + " is undefined" );
+					}
 					else if ( child == i )
+					{
 						self iprintln( "WARNING: waypoint " + i + " child " + child + " is itself" );
+					}
 				}
 			}
 		}
@@ -638,10 +707,14 @@ checkForWarnings()
 		}
 
 		if ( level.waypoints[ i ].type == "javelin" && !isDefined( level.waypoints[ i ].jav_point ) )
+		{
 			self iprintln( "WARNING: waypoint " + i + " jav_point is undefined" );
+		}
 
 		if ( !isDefined( level.waypoints[ i ].angles ) && ( level.waypoints[ i ].type == "claymore" || level.waypoints[ i ].type == "tube" || ( level.waypoints[ i ].type == "crouch" && level.waypoints[ i ].children.size == 1 ) || level.waypoints[ i ].type == "climb" || level.waypoints[ i ].type == "grenade" ) )
+		{
 			self iprintln( "WARNING: waypoint " + i + " angles is undefined" );
+		}
 	}
 
 	// check reachability, assume bidirectional graph
@@ -651,12 +724,16 @@ checkForWarnings()
 	for ( i = 0; i < level.waypointCount; i++ )
 	{
 		if ( i % 5 == 0 )
+		{
 			wait 0.05;
+		}
 
 		astar = AStarSearch( level.waypoints[ wpIdx ].origin, level.waypoints[ i ].origin, undefined, true );
 
 		if ( astar.size <= 0 )
+		{
 			self iprintln( "WARNING: waypoint " + wpIdx + " has no path to waypoint " + i );
+		}
 	}
 
 	self iprintln( "Waypoint warnings check completed." );
@@ -764,7 +841,9 @@ DeleteWaypoint( nwp )
 		for ( h = level.waypoints[ i ].children.size - 1; h >= 0; h-- )
 		{
 			if ( level.waypoints[ i ].children[ h ] > nwp )
+			{
 				level.waypoints[ i ].children[ h ]--;
+			}
 		}
 	}
 
@@ -796,17 +875,29 @@ AddWaypoint()
 	level.waypoints[ level.waypointCount ].origin = pos;
 
 	if ( isDefined( self.javelinTargetPoint ) )
+	{
 		level.waypoints[ level.waypointCount ].type = "javelin";
+	}
 	else if ( self AdsButtonPressed() )
+	{
 		level.waypoints[ level.waypointCount ].type = "climb";
+	}
 	else if ( self AttackButtonPressed() && self UseButtonPressed() )
+	{
 		level.waypoints[ level.waypointCount ].type = "tube";
+	}
 	else if ( self AttackButtonPressed() )
+	{
 		level.waypoints[ level.waypointCount ].type = "grenade";
+	}
 	else if ( self UseButtonPressed() )
+	{
 		level.waypoints[ level.waypointCount ].type = "claymore";
+	}
 	else
+	{
 		level.waypoints[ level.waypointCount ].type = self getStance();
+	}
 
 	level.waypoints[ level.waypointCount ].angles = self getPlayerAngles();
 
@@ -822,7 +913,9 @@ AddWaypoint()
 	if ( level.autoLink )
 	{
 		if ( level.wpToLink == -1 )
+		{
 			level.wpToLink = level.waypointCount - 1;
+		}
 
 		level.waypointCount++;
 		self LinkWaypoint( level.waypointCount - 1 );
@@ -844,7 +937,9 @@ DeleteAllWaypoints()
 buildChildCountString ( wp )
 {
 	if ( wp == -1 )
+	{
 		return -1;
+	}
 
 	wpstr = level.waypoints[ wp ].children.size;
 
@@ -854,16 +949,22 @@ buildChildCountString ( wp )
 buildChildString( wp )
 {
 	if ( wp == -1 )
+	{
 		return "";
+	}
 
 	wpstr = "";
 
 	for ( i = 0; i < level.waypoints[ wp ].children.size; i++ )
 	{
 		if ( i != 0 )
+		{
 			wpstr = wpstr + "," + level.waypoints[ wp ].children[ i ];
+		}
 		else
+		{
 			wpstr = wpstr + level.waypoints[ wp ].children[ i ];
+		}
 	}
 
 	return wpstr;
@@ -872,7 +973,9 @@ buildChildString( wp )
 buildTypeString( wp )
 {
 	if ( wp == -1 )
+	{
 		return "";
+	}
 
 	return level.waypoints[ wp ].type;
 }

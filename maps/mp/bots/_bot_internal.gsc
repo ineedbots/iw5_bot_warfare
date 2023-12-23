@@ -179,7 +179,9 @@ onPlayerSpawned()
 SetWeaponDistMulti( weap )
 {
 	if ( weap == "none" )
+	{
 		return 1;
+	}
 
 	switch ( weaponClass( weap ) )
 	{
@@ -203,10 +205,14 @@ SetWeaponDistMulti( weap )
 IsWeapSniper( weap )
 {
 	if ( weap == "none" )
+	{
 		return false;
+	}
 
 	if ( weaponClass( weap ) != "sniper" )
+	{
 		return false;
+	}
 
 	return true;
 }
@@ -231,7 +237,9 @@ onWeaponChange()
 			newWeapon = self getCurrentWeapon();
 		}
 		else
+		{
 			self waittill( "weapon_change", newWeapon );
+		}
 
 		self.bot.is_cur_full_auto = WeaponIsFullAuto( newWeapon );
 		self.bot.cur_weap_dist_multi = SetWeaponDistMulti( newWeapon );
@@ -256,10 +264,14 @@ reload_watch()
 		while ( true )
 		{
 			if ( self waittill_any_timeout( 7.5, "reload" ) == "timeout" )
+			{
 				break;
+			}
 
 			if ( self GetWeaponAmmoClip( self GetCurrentWeapon() ) >= WeaponClipSize( self GetCurrentWeapon() ) )
+			{
 				break;
+			}
 		}
 
 		self.bot.isreloading = false;
@@ -295,12 +307,16 @@ onLastStand()
 	while ( true )
 	{
 		while ( !self inLastStand() )
+		{
 			wait 0.05;
+		}
 
 		self notify( "kill_goal" );
 
 		while ( self inLastStand() )
+		{
 			wait 0.05;
+		}
 	}
 }
 
@@ -317,10 +333,14 @@ watchUsingRemote()
 		wait 1;
 
 		if ( !isAlive( self ) )
+		{
 			return;
+		}
 
 		if ( !self IsUsingRemote() )
+		{
 			continue;
+		}
 
 		if ( isDefined( level.chopper ) && isDefined( level.chopper.gunner ) && level.chopper.gunner == self )
 		{
@@ -366,7 +386,9 @@ watchUsingRemote()
 watchUsingTurret()
 {
 	if ( !isDefined( self.remoteTurretList ) || !isDefined( self.remoteTurretList[ 0 ] ) )
+	{
 		return;
+	}
 
 	turret = self.remoteTurretList[ 0 ];
 
@@ -380,7 +402,9 @@ watchUsingTurret()
 		}
 
 		if ( isDefined( self.bot.target ) )
+		{
 			self thread pressFire();
+		}
 
 		wait 0.05;
 	}
@@ -399,10 +423,14 @@ watchUsingTank()
 		tempTank = level.ugvs[ tankKeys[ i ] ];
 
 		if ( !isDefined( tempTank ) )
+		{
 			continue;
+		}
 
 		if ( !isDefined( tempTank.owner ) )
+		{
 			continue;
+		}
 
 		if ( tempTank.owner == self )
 		{
@@ -414,7 +442,9 @@ watchUsingTank()
 	tankKeys = undefined;
 
 	if ( !isDefined( tank ) )
+	{
 		return;
+	}
 
 	self.remoteTank = tank;
 
@@ -430,7 +460,9 @@ watchUsingTank()
 		}
 
 		if ( isDefined( self.bot.target ) )
+		{
 			self thread pressFire();
+		}
 
 		wait 0.05;
 	}
@@ -450,7 +482,9 @@ useTankRocket( tank )
 		wait 3.5;
 
 		if ( isDefined( self.bot.target ) )
+		{
 			self thread pressfrag();
+		}
 	}
 }
 
@@ -469,7 +503,9 @@ watchUsingUav()
 		}
 
 		if ( isDefined( self.lockedTarget ) )
+		{
 			self notify( "remoteUAV_tag" );
+		}
 
 		wait 0.05;
 	}
@@ -490,7 +526,9 @@ watchUsingMortar()
 		}
 
 		if ( isDefined( self.bot.target ) )
+		{
 			self thread pressFire();
+		}
 
 		wait 0.05;
 	}
@@ -511,7 +549,9 @@ watchUsingMinigun()
 		}
 
 		if ( isDefined( self.bot.target ) )
+		{
 			self thread pressFire();
+		}
 
 		wait 0.05;
 	}
@@ -531,10 +571,14 @@ watchAc130Weapon()
 		curWeap = self GetCurrentWeapon();
 
 		if ( curWeap != "ac130_105mm_mp" && curWeap != "ac130_40mm_mp" && curWeap != "ac130_25mm_mp" )
+		{
 			self switchToWeapon( "ac130_105mm_mp" );
+		}
 
 		if ( isDefined( self.bot.target ) )
+		{
 			self thread pressFire();
+		}
 
 		wait 0.05;
 	}
@@ -598,12 +642,16 @@ watchPickupGun()
 		wait 1;
 
 		if ( self UseButtonPressed() )
+		{
 			continue;
+		}
 
 		weap = self GetCurrentWeapon();
 
 		if ( weap != "none" && self GetAmmoCount( weap ) )
+		{
 			continue;
+		}
 
 		self thread use( 0.5 );
 	}
@@ -622,10 +670,14 @@ watchGrenadeFire()
 		self waittill( "grenade_fire", nade, weapname );
 
 		if ( !isDefined( nade ) )
+		{
 			continue;
+		}
 
 		if ( weapname == "c4_mp" )
+		{
 			self thread watchC4Thrown( nade );
+		}
 	}
 }
 
@@ -650,30 +702,44 @@ watchC4Thrown( c4 )
 			player = level.players[ i ];
 
 			if ( player == self )
+			{
 				continue;
+			}
 
 			if ( ( level.teamBased && self.team == player.team ) || player.sessionstate != "playing" || !isReallyAlive( player ) )
+			{
 				continue;
+			}
 
 			if ( distanceSquared( c4.origin, player.origin ) > 200 * 200 )
+			{
 				continue;
+			}
 
 			if ( !bulletTracePassed( c4.origin, player.origin + ( 0, 0, 25 ), false, c4 ) )
+			{
 				continue;
+			}
 
 			shouldBreak = true;
 		}
 
 		if ( shouldBreak )
+		{
 			break;
+		}
 	}
 
 	weap = self getCurrentWeapon();
 
 	if ( weap != "c4_mp" )
+	{
 		self notify( "alt_detonate" );
+	}
 	else
+	{
 		self thread pressFire();
+	}
 }
 
 /*
@@ -682,11 +748,17 @@ watchC4Thrown( c4 )
 doBotMovement_loop( data )
 {
 	if ( isDefined( self.remoteUAV ) )
+	{
 		self.bot.moveOrigin = self.remoteUAV.origin - ( 0, 0, 50 );
+	}
 	else if ( isDefined( self.remoteTank ) )
+	{
 		self.bot.moveOrigin = self.remoteTank.origin;
+	}
 	else
+	{
 		self.bot.moveOrigin = self.origin;
+	}
 
 	waittillframeend;
 	move_To = self.bot.moveTo;
@@ -753,12 +825,16 @@ doBotMovement_loop( data )
 	{
 		// check if need to crouch
 		if ( bulletTracePassed( startPos - ( 0, 0, 25 ), startPosForward - ( 0, 0, 25 ), false, self ) && !self.bot.climbing )
+		{
 			self crouch();
+		}
 	}
 
 	// move!
 	if ( ( self.bot.wantsprint && self.bot.issprinting ) || isDefined( self.bot.knifing_target ) )
+	{
 		dir = ( 127, dir[ 1 ], 0 );
+	}
 
 	self BotBuiltinBotMovement( int( dir[ 0 ] ), int( dir[ 1 ] ) );
 
@@ -767,9 +843,13 @@ doBotMovement_loop( data )
 		if ( abs( move_To[ 2 ] - self.bot.moveOrigin[ 2 ] ) > 12 )
 		{
 			if ( move_To[ 2 ] > self.bot.moveOrigin[ 2 ] )
+			{
 				self thread gostand();
+			}
 			else
+			{
 				self thread sprint();
+			}
 		}
 	}
 }
@@ -790,7 +870,9 @@ doBotMovement()
 		wait 0.05;
 
 		if ( !isAlive( self ) )
+		{
 			return;
+		}
 
 		self doBotMovement_loop( data );
 	}
@@ -809,7 +891,9 @@ watchHoldBreath()
 		wait 1;
 
 		if ( self.bot.isfrozen )
+		{
 			continue;
+		}
 
 		self holdbreath( self playerADS() > 0 );
 	}
@@ -827,16 +911,24 @@ grenade_danager_loop()
 		frag = level.bots_fragList.data[ i ];
 
 		if ( level.teamBased && frag.team == self.team )
+		{
 			continue;
+		}
 
 		if ( lengthSquared( frag.velocity ) > 10000 )
+		{
 			continue;
+		}
 
 		if ( DistanceSquared( self.origin, frag.origin ) > 20000 )
+		{
 			continue;
+		}
 
 		if ( !bulletTracePassed( myEye, frag.origin, false, frag.grenade ) )
+		{
 			continue;
+		}
 
 		self BotNotifyBotEvent( "throwback", "stop", frag );
 		self thread frag();
@@ -857,19 +949,29 @@ grenade_danager()
 		wait 1;
 
 		if ( self inLastStand() && !self _hasPerk( "specialty_laststandoffhand" ) && !self inFinalStand() )
+		{
 			continue;
+		}
 
 		if ( self.bot.isfrozen || level.gameEnded || !gameFlag( "prematch_done" ) )
+		{
 			continue;
+		}
 
 		if ( self.bot.isfraggingafter || self.bot.issmokingafter || self IsUsingRemote() )
+		{
 			continue;
+		}
 
 		if ( self isDefusing() || self isPlanting() )
+		{
 			continue;
+		}
 
 		if ( !getDvarInt( "bots_play_nade" ) )
+		{
 			continue;
+		}
 
 		self grenade_danager_loop();
 	}
@@ -883,16 +985,24 @@ stance_loop()
 	toStance = "stand";
 
 	if ( self.bot.next_wp != -1 )
+	{
 		toStance = level.waypoints[ self.bot.next_wp ].type;
+	}
 
 	if ( !isDefined( toStance ) )
+	{
 		toStance = "crouch";
+	}
 
 	if ( toStance == "stand" && randomInt( 100 ) <= self.pers[ "bots" ][ "behavior" ][ "crouch" ] )
+	{
 		toStance = "crouch";
+	}
 
 	if ( self.hasRiotShieldEquipped && isDefined( self.bot.target ) && isDefined( self.bot.target.entity ) && isPlayer( self.bot.target.entity ) )
+	{
 		toStance = "crouch";
+	}
 
 	if ( toStance == "climb" )
 	{
@@ -901,39 +1011,61 @@ stance_loop()
 	}
 
 	if ( toStance != "stand" && toStance != "crouch" && toStance != "prone" )
+	{
 		toStance = "crouch";
+	}
 
 	if ( toStance == "stand" )
+	{
 		self stand();
+	}
 	else if ( toStance == "crouch" )
+	{
 		self crouch();
+	}
 	else
+	{
 		self prone();
+	}
 
 	curweap = self getCurrentWeapon();
 	time = getTime();
 	chance = self.pers[ "bots" ][ "behavior" ][ "sprint" ];
 
 	if ( time - self.lastSpawnTime < 5000 )
+	{
 		chance *= 2;
+	}
 
 	if ( isDefined( self.bot.script_goal ) && DistanceSquared( self.origin, self.bot.script_goal ) > 256 * 256 )
+	{
 		chance *= 2;
+	}
 
 	if ( toStance != "stand" || self.bot.isreloading || self.bot.issprinting || self.bot.isfraggingafter || self.bot.issmokingafter )
+	{
 		return;
+	}
 
 	if ( randomInt( 100 ) > chance )
+	{
 		return;
+	}
 
 	if ( isDefined( self.bot.target ) && self canFire( curweap ) && self isInRange( self.bot.target.dist, curweap ) )
+	{
 		return;
+	}
 
 	if ( self.bot.sprintendtime != -1 && time - self.bot.sprintendtime < 2000 )
+	{
 		return;
+	}
 
 	if ( !isDefined( self.bot.towards_goal ) || DistanceSquared( self.origin, physicsTrace( self getEye(), self getEye() + anglesToForward( self getPlayerAngles() ) * 1024, false, undefined ) ) < level.bots_minSprintDistance || getConeDot( self.bot.towards_goal, self.origin, self GetPlayerAngles() ) < 0.75 )
+	{
 		return;
+	}
 
 	self thread sprint();
 	self thread setBotWantSprint();
@@ -972,7 +1104,9 @@ stance()
 		self.bot.climbing = false;
 
 		if ( self.bot.isfrozen || self IsUsingRemote() )
+		{
 			continue;
+		}
 
 		self stance_loop();
 	}
@@ -1005,24 +1139,34 @@ reload_thread()
 	wait 2.5;
 
 	if ( self.bot.isfrozen || level.gameEnded || !gameFlag( "prematch_done" ) )
+	{
 		return;
+	}
 
 	if ( isDefined( self.bot.target ) || self.bot.isreloading || self.bot.isfraggingafter || self.bot.issmokingafter || self.bot.isfrozen )
+	{
 		return;
+	}
 
 	cur = self getCurrentWEapon();
 
 	if ( cur == "" || cur == "none" )
+	{
 		return;
+	}
 
 	if ( IsWeaponClipOnly( cur ) || !self GetWeaponAmmoStock( cur ) || self IsUsingRemote() )
+	{
 		return;
+	}
 
 	maxsize = WeaponClipSize( cur );
 	cursize = self GetWeaponammoclip( cur );
 
 	if ( cursize / maxsize < 0.5 )
+	{
 		self thread reload();
+	}
 }
 
 /*
@@ -1041,10 +1185,14 @@ updateBones()
 		self waittill_any_timeout( waittime, "new_enemy" );
 
 		if ( !isAlive( self ) )
+		{
 			return;
+		}
 
 		if ( !isDefined( self.bot.target ) )
+		{
 			continue;
+		}
 
 		self.bot.target.bone = random( bones );
 	}
@@ -1083,20 +1231,28 @@ updateAimOffset( obj, theTime )
 		offsetAmount = self.pers[ "bots" ][ "skill" ][ "aim_offset_amount" ];
 
 		if ( offsetAmount > 0 )
+		{
 			obj.aim_offset_base = ( randomFloatRange( 0 - offsetAmount, offsetAmount ),
 			        randomFloatRange( 0 - offsetAmount, offsetAmount ),
 			        randomFloatRange( 0 - offsetAmount, offsetAmount ) );
+		}
 		else
+		{
 			obj.aim_offset_base = ( 0, 0, 0 );
+		}
 	}
 
 	aimDiffTime = self.pers[ "bots" ][ "skill" ][ "aim_offset_time" ] * 1000;
 	objCreatedFor = obj.trace_time;
 
 	if ( objCreatedFor >= aimDiffTime )
+	{
 		offsetScalar = 0;
+	}
 	else
+	{
 		offsetScalar = 1 - objCreatedFor / aimDiffTime;
+	}
 
 	obj.aim_offset = obj.aim_offset_base * offsetScalar;
 }
@@ -1119,9 +1275,13 @@ targetObjUpdateTraced( obj, daDist, ent, theTime, isScriptObj, usingRemote )
 	if ( !usingRemote && !isScriptObj )
 	{
 		if ( daDist > distMax )
+		{
 			timeMulti = 0;
+		}
 		else if ( daDist > distClose )
+		{
 			timeMulti = 1 - ( ( daDist - distClose ) / ( distMax - distClose ) );
+		}
 	}
 
 	obj.no_trace_time = 0;
@@ -1151,7 +1311,9 @@ target_loop()
 	myEye = self GetEye();
 
 	if ( isDefined( self.remoteUAV ) )
+	{
 		myEye = self.remoteUAV getTagOrigin( "tag_origin" );
+	}
 
 	theTime = getTime();
 	myAngles = self GetPlayerAngles();
@@ -1170,10 +1332,14 @@ target_loop()
 	if ( usingRemote )
 	{
 		if ( isDefined( level.ac130player ) && level.ac130player == self )
+		{
 			vehEnt = level.ac130.planeModel;
+		}
 
 		if ( isDefined( level.chopper ) && isDefined( level.chopper.gunner ) && level.chopper.gunner == self )
+		{
 			vehEnt = level.chopper;
+		}
 	}
 
 	// reduce fov if ads'ing
@@ -1197,7 +1363,9 @@ target_loop()
 		if ( i == -1 )
 		{
 			if ( !isDefined( self.bot.script_target ) )
+			{
 				continue;
+			}
 
 			ent = self.bot.script_target;
 			key = ent getEntityNumber() + "";
@@ -1207,7 +1375,9 @@ target_loop()
 			entOrigin = ent.origin;
 
 			if ( isDefined( self.bot.script_target_offset ) )
+			{
 				entOrigin += self.bot.script_target_offset;
+			}
 
 			if ( ignoreSmoke || ( SmokeTrace( myEye, entOrigin, level.smokeRadius ) ) && bulletTracePassed( myEye, entOrigin, false, ent ) )
 			{
@@ -1224,7 +1394,9 @@ target_loop()
 			else
 			{
 				if ( !isObjDef )
+				{
 					continue;
+				}
 
 				self targetObjUpdateNoTrace( obj );
 
@@ -1240,7 +1412,9 @@ target_loop()
 			player = level.players[ i ];
 
 			if ( player == self )
+			{
 				continue;
+			}
 
 			key = player getEntityNumber() + "";
 			obj = self.bot.targets[ key ];
@@ -1248,14 +1422,18 @@ target_loop()
 			daDist = distanceSquared( self.origin, player.origin );
 
 			if ( usingRemote )
+			{
 				daDist = 0;
+			}
 
 			isObjDef = isDefined( obj );
 
 			if ( ( level.teamBased && self.team == player.team ) || player.sessionstate != "playing" || !isReallyAlive( player ) )
 			{
 				if ( isObjDef )
+				{
 					self.bot.targets[ key ] = undefined;
+				}
 
 				continue;
 			}
@@ -1301,7 +1479,9 @@ target_loop()
 			}
 
 			if ( isDefined( self.remoteUAV ) && isDefined( player.UAVRemoteMarkedBy ) )
+			{
 				canTargetPlayer = false;
+			}
 
 			if ( canTargetPlayer )
 			{
@@ -1317,7 +1497,9 @@ target_loop()
 			else
 			{
 				if ( !isObjDef )
+				{
 					continue;
+				}
 
 				self targetObjUpdateNoTrace( obj );
 
@@ -1330,10 +1512,14 @@ target_loop()
 		}
 
 		if ( !isdefined( obj ) )
+		{
 			continue;
+		}
 
 		if ( theTime - obj.time < initReactTime )
+		{
 			continue;
+		}
 
 		timeDiff = theTime - obj.trace_time_time;
 
@@ -1344,11 +1530,15 @@ target_loop()
 		}
 
 		if ( timeDiff == bestTime )
+		{
 			bestTargets[ key ] = obj;
+		}
 	}
 
 	if ( hasTarget && isDefined( bestTargets[ self.bot.target.entity getEntityNumber() + "" ] ) )
+	{
 		return;
+	}
 
 	closest = 2147483647;
 	toBeTarget = undefined;
@@ -1360,7 +1550,9 @@ target_loop()
 		theDist = bestTargets[ bestKeys[ i ] ].dist;
 
 		if ( theDist > closest )
+		{
 			continue;
+		}
 
 		closest = theDist;
 		toBeTarget = bestTargets[ bestKeys[ i ] ];
@@ -1370,10 +1562,14 @@ target_loop()
 	newTargetID = -1;
 
 	if ( hasTarget && isDefined( self.bot.target.entity ) )
+	{
 		beforeTargetID = self.bot.target.entity getEntityNumber();
+	}
 
 	if ( isDefined( toBeTarget ) && isDefined( toBeTarget.entity ) )
+	{
 		newTargetID = toBeTarget.entity getEntityNumber();
+	}
 
 	if ( beforeTargetID != newTargetID )
 	{
@@ -1395,10 +1591,14 @@ target()
 		wait 0.05;
 
 		if ( !isAlive( self ) )
+		{
 			return;
+		}
 
 		if ( self maps\mp\_flashgrenades::isFlashbanged() )
+		{
 			continue;
+		}
 
 		self target_loop();
 	}
@@ -1417,13 +1617,19 @@ onNewEnemy()
 		self waittill( "new_enemy" );
 
 		if ( !isDefined( self.bot.target ) )
+		{
 			continue;
+		}
 
 		if ( !isDefined( self.bot.target.entity ) || !isPlayer( self.bot.target.entity ) )
+		{
 			continue;
+		}
 
 		if ( self.bot.target.didlook )
+		{
 			continue;
+		}
 
 		self thread watchToLook();
 	}
@@ -1441,47 +1647,73 @@ watchToLook()
 	for ( ;; )
 	{
 		while ( isDefined( self.bot.target ) && self.bot.target.didlook )
+		{
 			wait 0.05;
+		}
 
 		while ( isDefined( self.bot.target ) && self.bot.target.no_trace_time )
+		{
 			wait 0.05;
+		}
 
 		if ( !isDefined( self.bot.target ) )
+		{
 			break;
+		}
 
 		self.bot.target.didlook = true;
 
 		if ( self.bot.isfrozen )
+		{
 			continue;
+		}
 
 		if ( self.bot.target.dist > level.bots_maxShotgunDistance * 2 )
+		{
 			continue;
+		}
 
 		if ( self.bot.target.dist <= level.bots_maxKnifeDistance )
+		{
 			continue;
+		}
 
 		if ( !self canFire( self getCurrentWEapon() ) )
+		{
 			continue;
+		}
 
 		if ( !self isInRange( self.bot.target.dist, self getCurrentWEapon() ) )
+		{
 			continue;
+		}
 
 		if ( self.bot.is_cur_sniper )
+		{
 			continue;
+		}
 
 		if ( randomInt( 100 ) > self.pers[ "bots" ][ "behavior" ][ "jump" ] )
+		{
 			continue;
+		}
 
 		if ( !getDvarInt( "bots_play_jumpdrop" ) )
+		{
 			continue;
+		}
 
 		if ( isDefined( self.bot.jump_time ) && getTime() - self.bot.jump_time <= 5000 )
+		{
 			continue;
+		}
 
 		if ( self.bot.target.rand <= self.pers[ "bots" ][ "behavior" ][ "strafe" ] )
 		{
 			if ( self getStance() != "stand" )
+			{
 				continue;
+			}
 
 			self.bot.jump_time = getTime();
 			self thread jump();
@@ -1489,7 +1721,9 @@ watchToLook()
 		else
 		{
 			if ( getConeDot( self.bot.target.last_seen_pos, self.origin, self getPlayerAngles() ) < 0.8 || self.bot.target.dist <= level.bots_noADSDistance )
+			{
 				continue;
+			}
 
 			self.bot.jump_time = getTime();
 			self prone();
@@ -1536,7 +1770,9 @@ aim_loop()
 	aimspeed = self.pers[ "bots" ][ "skill" ][ "aim_time" ];
 
 	if ( self IsStunned() || self isArtShocked() )
+	{
 		aimspeed = 1;
+	}
 
 	usingRemote = self IsUsingRemote();
 	curweap = self getCurrentWeapon();
@@ -1544,7 +1780,9 @@ aim_loop()
 	eyePos = self getEye();
 
 	if ( isDefined( self.remoteUAV ) )
+	{
 		eyePos = self.remoteUAV getTagOrigin( "tag_origin" );
+	}
 
 	angles = self GetPlayerAngles();
 	adsAmount = self PlayerADS();
@@ -1564,7 +1802,9 @@ aim_loop()
 		self thread pressAds();
 
 		if ( curweap == "javelin_mp" && getDvarInt( "bots_play_fire" ) )
+		{
 			self botFire( curweap );
+		}
 
 		return;
 	}
@@ -1585,12 +1825,16 @@ aim_loop()
 			offset = self.bot.target.offset;
 
 			if ( !isDefined( offset ) )
+			{
 				offset = ( 0, 0, 0 );
+			}
 
 			aimoffset = self.bot.target.aim_offset;
 
 			if ( !isDefined( aimoffset ) )
+			{
 				aimoffset = ( 0, 0, 0 );
+			}
 
 			dist = self.bot.target.dist;
 			rand = self.bot.target.rand;
@@ -1601,16 +1845,24 @@ aim_loop()
 			bone = self.bot.target.bone;
 
 			if ( !isDefined( bone ) )
+			{
 				bone = "j_spineupper";
+			}
 
 			if ( self.bot.isfraggingafter || self.bot.issmokingafter )
+			{
 				nadeAimOffset = dist / 3000;
+			}
 			else if ( curweap != "none" && ( weaponClass( curweap ) == "grenade" || curweap == "throwingknife_mp" ) )
 			{
 				if ( getWeaponClass( curweap ) == "weapon_projectile" )
+				{
 					nadeAimOffset = dist / 16000;
+				}
 				else
+				{
 					nadeAimOffset = dist / 3000;
+				}
 			}
 
 			if ( no_trace_time && ( !isDefined( self.bot.after_target ) || self.bot.after_target != target ) )
@@ -1629,12 +1881,18 @@ aim_loop()
 								time = 0.5;
 
 								if ( nade == "frag_grenade_mp" )
+								{
 									time = 2;
+								}
 
 								if ( isSecondaryGrenade( nade ) )
+								{
 									self thread smoke( time );
+								}
 								else
+								{
 									self thread frag( time );
+								}
 
 								self notify( "kill_goal" );
 							}
@@ -1646,14 +1904,20 @@ aim_loop()
 					if ( self canFire( curweap ) && self isInRange( dist, curweap ) && self canAds( dist, curweap ) )
 					{
 						if ( !self.bot.is_cur_sniper || !self.pers[ "bots" ][ "behavior" ][ "quickscope" ] )
+						{
 							self thread pressAds();
+						}
 					}
 				}
 
 				if ( !usingRemote )
+				{
 					self thread bot_lookat( last_pos + ( 0, 0, self GetPlayerViewHeight() + nadeAimOffset ), aimspeed );
+				}
 				else
+				{
 					self thread bot_lookat( last_pos, aimspeed );
+				}
 
 				return;
 			}
@@ -1670,11 +1934,17 @@ aim_loop()
 					conedot = getConeDot( aimpos, eyePos, angles );
 
 					if ( isDefined( self.bot.knifing_target ) )
+					{
 						self thread bot_lookat( target getTagOrigin( "j_spine4" ), 0.05 );
+					}
 					else if ( !nadeAimOffset && conedot > 0.999 && lengthsquared( aimoffset ) < 0.05 )
+					{
 						self thread bot_lookat( aimpos, 0.05 );
+					}
 					else
+					{
 						self thread bot_lookat( aimpos, aimspeed, target getVelocity(), true );
+					}
 				}
 				else
 				{
@@ -1686,9 +1956,13 @@ aim_loop()
 					conedot = getConeDot( aimpos, eyePos, angles );
 
 					if ( !nadeAimOffset && conedot > 0.999 && lengthsquared( aimoffset ) < 0.05 )
+					{
 						self thread bot_lookat( aimpos, 0.05 );
+					}
 					else
+					{
 						self thread bot_lookat( aimpos, aimspeed );
+					}
 				}
 
 				knifeDist = level.bots_maxKnifeDistance;
@@ -1701,7 +1975,9 @@ aim_loop()
 				}
 
 				if ( !self canFire( curweap ) || !self isInRange( dist, curweap ) )
+				{
 					return;
+				}
 
 				canADS = ( self canAds( dist, curweap ) && conedot > 0.75 );
 
@@ -1712,25 +1988,37 @@ aim_loop()
 					if ( self.bot.is_cur_sniper )
 					{
 						if ( self.pers[ "bots" ][ "behavior" ][ "quickscope" ] && self.bot.last_fire_time != -1 && getTime() - self.bot.last_fire_time < 1000 )
+						{
 							stopAdsOverride = true;
+						}
 						else
+						{
 							self notify( "kill_goal" );
+						}
 					}
 
 					if ( !stopAdsOverride )
+					{
 						self thread pressAds();
+					}
 				}
 
 				if ( curweap == "iw5_smaw_mp" && entIsVehicle( self.bot.target.entity ) && ( !IsDefined( self.stingerStage ) || self.stingerStage != 2 ) )
+				{
 					return;
+				}
 
 				if ( trace_time > reaction_time )
 				{
 					if ( ( !canADS || adsAmount >= 1.0 || self InLastStand() || self GetStance() == "prone" ) && ( conedot > 0.99 || dist < level.bots_maxKnifeDistance ) && getDvarInt( "bots_play_fire" ) )
+					{
 						self botFire( curweap );
+					}
 
 					if ( isplay )
+					{
 						self thread start_bot_after_target( target );
+					}
 				}
 
 				return;
@@ -1745,26 +2033,36 @@ aim_loop()
 		dist = DistanceSquared( self.origin, last_pos );
 
 		if ( self.bot.isfraggingafter || self.bot.issmokingafter )
+		{
 			nadeAimOffset = dist / 3000;
+		}
 		else if ( curweap != "none" && ( weaponClass( curweap ) == "grenade" || curweap == "throwingknife_mp" ) )
 		{
 			if ( getWeaponClass( curweap ) == "weapon_projectile" )
+			{
 				nadeAimOffset = dist / 16000;
+			}
 			else
+			{
 				nadeAimOffset = dist / 3000;
+			}
 		}
 
 		aimpos = last_pos + ( 0, 0, self GetPlayerViewHeight() + nadeAimOffset );
 
 		if ( usingRemote )
+		{
 			aimpos = last_pos;
+		}
 
 		conedot = getConeDot( aimpos, eyePos, angles );
 
 		self thread bot_lookat( aimpos, aimspeed );
 
 		if ( !self canFire( curweap ) || !self isInRange( dist, curweap ) )
+		{
 			return;
+		}
 
 		canADS = ( self canAds( dist, curweap ) && conedot > 0.75 );
 
@@ -1775,17 +2073,25 @@ aim_loop()
 			if ( self.bot.is_cur_sniper )
 			{
 				if ( self.pers[ "bots" ][ "behavior" ][ "quickscope" ] && self.bot.last_fire_time != -1 && getTime() - self.bot.last_fire_time < 1000 )
+				{
 					stopAdsOverride = true;
+				}
 				else
+				{
 					self notify( "kill_goal" );
+				}
 			}
 
 			if ( !stopAdsOverride )
+			{
 				self thread pressAds();
+			}
 		}
 
 		if ( ( !canADS || adsAmount >= 1.0 || self InLastStand() || self GetStance() == "prone" ) && ( conedot > 0.95 || dist < level.bots_maxKnifeDistance ) && getDvarInt( "bots_play_fire" ) )
+		{
 			self botFire( curweap );
+		}
 
 		return;
 	}
@@ -1805,12 +2111,18 @@ aim_loop()
 		lookat = undefined;
 
 		if ( self.bot.second_next_wp != -1 && !self.bot.issprinting && !self.bot.climbing )
+		{
 			lookat = level.waypoints[ self.bot.second_next_wp ].origin;
+		}
 		else if ( isDefined( self.bot.towards_goal ) )
+		{
 			lookat = self.bot.towards_goal;
+		}
 
 		if ( isDefined( lookat ) )
+		{
 			self thread bot_lookat( lookat + ( 0, 0, self GetPlayerViewHeight() ), aimspeed );
+		}
 	}
 }
 
@@ -1827,10 +2139,14 @@ aim()
 		wait 0.05;
 
 		if ( !isAlive( self ) )
+		{
 			return;
+		}
 
 		if ( !gameFlag( "prematch_done" ) || level.gameEnded || self.bot.isfrozen || self maps\mp\_flashgrenades::isFlashbanged() )
+		{
 			continue;
+		}
 
 		self aim_loop();
 	}
@@ -1847,17 +2163,25 @@ botFire( curweap )
 	{
 		self thread pressFire();
 
-		if ( self.bot.is_cur_akimbo ) self thread pressAds();
+		if ( self.bot.is_cur_akimbo )
+		{
+			self thread pressAds();
+		}
 
 		return;
 	}
 
 	if ( self.bot.semi_time )
+	{
 		return;
+	}
 
 	self thread pressFire();
 
-	if ( self.bot.is_cur_akimbo ) self thread pressAds();
+	if ( self.bot.is_cur_akimbo )
+	{
+		self thread pressAds();
+	}
 
 	self thread doSemiTime();
 }
@@ -1883,13 +2207,19 @@ doSemiTime()
 canFire( curweap )
 {
 	if ( curweap == "none" )
+	{
 		return false;
+	}
 
 	if ( curweap == "riotshield_mp" )
+	{
 		return false;
+	}
 
 	if ( self IsUsingRemote() || curweap == "c4death_mp" )
+	{
 		return true;
+	}
 
 	return self GetWeaponammoclip( curweap );
 }
@@ -1900,35 +2230,53 @@ canFire( curweap )
 canAds( dist, curweap )
 {
 	if ( self IsUsingRemote() )
+	{
 		return false;
+	}
 
 	if ( curweap == "none" || curweap == "c4death_mp" )
+	{
 		return false;
+	}
 
 	if ( curweap == "c4_mp" )
+	{
 		return RandomInt( 2 );
+	}
 
 	if ( !getDvarInt( "bots_play_ads" ) )
+	{
 		return false;
+	}
 
 	far = level.bots_noADSDistance;
 
 	if ( self _hasPerk( "specialty_bulletaccuracy" ) )
+	{
 		far *= 1.4;
+	}
 
 	if ( dist < far )
+	{
 		return false;
+	}
 
 	weapclass = ( weaponClass( curweap ) );
 
 	if ( weapclass == "spread" || weapclass == "grenade" )
+	{
 		return false;
+	}
 
 	if ( curweap == "riotshield_mp" )
+	{
 		return false;
+	}
 
 	if ( self.bot.is_cur_akimbo )
+	{
 		return false;
+	}
 
 	return true;
 }
@@ -1939,18 +2287,26 @@ canAds( dist, curweap )
 isInRange( dist, curweap )
 {
 	if ( curweap == "none" )
+	{
 		return false;
+	}
 
 	weapclass = weaponClass( curweap );
 
 	if ( self IsUsingRemote() )
+	{
 		return true;
+	}
 
 	if ( ( weapclass == "spread" || self.bot.is_cur_akimbo || curweap == "c4death_mp" ) && dist > level.bots_maxShotgunDistance )
+	{
 		return false;
+	}
 
 	if ( curweap == "riotshield_mp" && dist > level.bots_maxKnifeDistance )
+	{
 		return false;
+	}
 
 	return true;
 }
@@ -2001,10 +2357,14 @@ walk_loop()
 		if ( isPlayer( self.bot.target.entity ) && self.bot.target.trace_time && self canFire( curweap ) && self isInRange( self.bot.target.dist, curweap ) )
 		{
 			if ( self InLastStand() || self GetStance() == "prone" || ( self.bot.is_cur_sniper && self PlayerADS() > 0 ) )
+			{
 				return;
+			}
 
 			if ( self.bot.target.rand <= self.pers[ "bots" ][ "behavior" ][ "strafe" ] )
+			{
 				self strafe( self.bot.target.entity );
+			}
 
 			return;
 		}
@@ -2013,7 +2373,9 @@ walk_loop()
 	dist = 16;
 
 	if ( level.waypointCount )
+	{
 		goal = level.waypoints[ randomInt( level.waypointCount ) ].origin;
+	}
 	else
 	{
 		self thread killWalkCauseNoWaypoints();
@@ -2064,7 +2426,9 @@ walk_loop()
 	else
 	{
 		if ( hasTarget )
+		{
 			goal = self.bot.target.last_seen_pos;
+		}
 
 		self notify( "new_goal_internal" );
 	}
@@ -2088,15 +2452,21 @@ walk()
 		wait 0.05;
 
 		if ( !isAlive( self ) )
+		{
 			return;
+		}
 
 		self botSetMoveTo( self.bot.moveOrigin );
 
 		if ( !getDVarINt( "bots_play_move" ) )
+		{
 			continue;
+		}
 
 		if ( level.gameEnded || !gameFlag( "prematch_done" ) || self.bot.isfrozen || self.bot.stop_move )
+		{
 			continue;
+		}
 
 		if ( self maps\mp\_flashgrenades::isFlashbanged() )
 		{
@@ -2132,7 +2502,9 @@ strafe( target )
 	strafe = traceLeft[ "position" ];
 
 	if ( traceRight[ "fraction" ] > traceLeft[ "fraction" ] )
+	{
 		strafe = traceRight[ "position" ];
+	}
 
 	self.bot.last_next_wp = -1;
 	self.bot.last_second_next_wp = -1;
@@ -2151,7 +2523,9 @@ watchOnGoal( goal, dis )
 	self endon( "kill_goal" );
 
 	while ( DistanceSquared( self.bot.moveOrigin, goal ) > dis )
+	{
 		wait 0.05;
+	}
 
 	self notify( "goal_internal" );
 }
@@ -2164,7 +2538,9 @@ cleanUpAStar( team )
 	self waittill_any( "spawned_player", "disconnect", "kill_goal" );
 
 	for ( i = self.bot.astar.size - 1; i >= 0; i-- )
+	{
 		RemoveWaypointUsage( self.bot.astar[ i ], team );
+	}
 }
 
 /*
@@ -2175,12 +2551,16 @@ initAStar( goal )
 	team = undefined;
 
 	if ( level.teamBased )
+	{
 		team = self.team;
+	}
 
 	self.bot.astar = AStarSearch( self.bot.moveOrigin, goal, team, self.bot.greedy_path );
 
 	if ( isDefined( team ) )
+	{
 		self thread cleanUpAStar( team );
+	}
 
 	return self.bot.astar.size - 1;
 }
@@ -2193,7 +2573,9 @@ removeAStar()
 	remove = self.bot.astar.size - 1;
 
 	if ( level.teamBased )
+	{
 		RemoveWaypointUsage( self.bot.astar[ remove ], self.team );
+	}
 
 	self.bot.astar[ remove ] = undefined;
 
@@ -2226,9 +2608,13 @@ doWalkScriptNotify()
 	self endon( "kill_goal" );
 
 	if ( self waittill_either_return( "goal_internal", "bad_path_internal" ) == "goal_internal" )
+	{
 		self notify( "goal" );
+	}
 	else
+	{
 		self notify( "bad_path" );
+	}
 }
 
 /*
@@ -2243,7 +2629,9 @@ doWalk( goal, dist, isScriptGoal )
 	dist *= dist;
 
 	if ( isScriptGoal )
+	{
 		self thread doWalkScriptNotify();
+	}
 
 	self thread killWalkOnEvents();
 	self thread watchOnGoal( goal, dist );
@@ -2252,7 +2640,9 @@ doWalk( goal, dist, isScriptGoal )
 
 	// skip waypoints we already completed to prevent rubber banding
 	if ( current > 0 && self.bot.astar[ current ] == self.bot.last_next_wp && self.bot.astar[ current - 1 ] == self.bot.last_second_next_wp )
+	{
 		current = self removeAStar();
+	}
 
 	if ( current >= 0 )
 	{
@@ -2265,7 +2655,9 @@ doWalk( goal, dist, isScriptGoal )
 				self.bot.second_next_wp = -1;
 
 				if ( current > 0 )
+				{
 					self.bot.second_next_wp = self.bot.astar[ current - 1 ];
+				}
 
 				self notify( "new_static_waypoint" );
 
@@ -2294,7 +2686,9 @@ doWalk( goal, dist, isScriptGoal )
 	wait 1;
 
 	if ( DistanceSquared( self.bot.moveOrigin, goal ) > dist )
+	{
 		self notify( "bad_path_internal" );
+	}
 }
 
 /*
@@ -2303,7 +2697,9 @@ doWalk( goal, dist, isScriptGoal )
 movetowards( goal )
 {
 	if ( !isDefined( goal ) )
+	{
 		return;
+	}
 
 	self.bot.towards_goal = goal;
 
@@ -2313,9 +2709,13 @@ movetowards( goal )
 	time = 0;
 
 	if ( self.bot.issprinting )
+	{
 		tempGoalDist = level.bots_goalDistance * 2;
+	}
 	else
+	{
 		tempGoalDist = level.bots_goalDistance;
+	}
 
 	while ( distanceSquared( self.bot.moveOrigin, goal ) > tempGoalDist )
 	{
@@ -2353,7 +2753,9 @@ movetowards( goal )
 		else if ( time == 2000 )
 		{
 			if ( distanceSquared( self.bot.moveOrigin, lastOri ) < 32 * 32 )
+			{
 				self crouch();
+			}
 		}
 		else if ( time == 1750 )
 		{
@@ -2371,17 +2773,27 @@ movetowards( goal )
 		time += 50;
 
 		if ( lengthsquared( self getVelocity() ) < 1000 )
+		{
 			timeslow += 50;
+		}
 		else
+		{
 			timeslow = 0;
+		}
 
 		if ( self.bot.issprinting )
+		{
 			tempGoalDist = level.bots_goalDistance * 2;
+		}
 		else
+		{
 			tempGoalDist = level.bots_goalDistance;
+		}
 
 		if ( stucks >= 2 )
+		{
 			self notify( "bad_path_internal" );
+		}
 	}
 
 	self.bot.towards_goal = undefined;
@@ -2443,9 +2855,13 @@ getRandomLargestStafe( dist )
 holdbreath( what )
 {
 	if ( what )
+	{
 		self BotBuiltinBotAction( "+holdbreath" );
+	}
 	else
+	{
 		self BotBuiltinBotAction( "-holdbreath" );
+	}
 }
 
 /*
@@ -2587,14 +3003,18 @@ frag( time )
 	self endon( "bot_frag" );
 
 	if ( !isDefined( time ) )
+	{
 		time = 0.05;
+	}
 
 	self BotBuiltinBotAction( "+frag" );
 	self.bot.isfragging = true;
 	self.bot.isfraggingafter = true;
 
 	if ( time )
+	{
 		wait time;
+	}
 
 	self BotBuiltinBotAction( "-frag" );
 	self.bot.isfragging = false;
@@ -2614,14 +3034,18 @@ smoke( time )
 	self endon( "bot_smoke" );
 
 	if ( !isDefined( time ) )
+	{
 		time = 0.05;
+	}
 
 	self BotBuiltinBotAction( "+smoke" );
 	self.bot.issmoking = true;
 	self.bot.issmokingafter = true;
 
 	if ( time )
+	{
 		wait time;
+	}
 
 	self BotBuiltinBotAction( "-smoke" );
 	self.bot.issmoking = false;
@@ -2638,9 +3062,13 @@ fire( what )
 	self notify( "bot_fire" );
 
 	if ( what )
+	{
 		self BotBuiltinBotAction( "+fire" );
+	}
 	else
+	{
 		self BotBuiltinBotAction( "-fire" );
+	}
 }
 
 /*
@@ -2654,12 +3082,16 @@ pressFire( time )
 	self endon( "bot_fire" );
 
 	if ( !isDefined( time ) )
+	{
 		time = 0.05;
+	}
 
 	self BotBuiltinBotAction( "+fire" );
 
 	if ( time )
+	{
 		wait time;
+	}
 
 	self BotBuiltinBotAction( "-fire" );
 }
@@ -2672,9 +3104,13 @@ ads( what )
 	self notify( "bot_ads" );
 
 	if ( what )
+	{
 		self BotBuiltinBotAction( "+ads" );
+	}
 	else
+	{
 		self BotBuiltinBotAction( "-ads" );
+	}
 }
 
 /*
@@ -2688,12 +3124,16 @@ pressADS( time )
 	self endon( "bot_ads" );
 
 	if ( !isDefined( time ) )
+	{
 		time = 0.05;
+	}
 
 	self BotBuiltinBotAction( "+ads" );
 
 	if ( time )
+	{
 		wait time;
+	}
 
 	self BotBuiltinBotAction( "-ads" );
 }
@@ -2709,12 +3149,16 @@ use( time )
 	self endon( "bot_use" );
 
 	if ( !isDefined( time ) )
+	{
 		time = 0.05;
+	}
 
 	self BotBuiltinBotAction( "+activate" );
 
 	if ( time )
+	{
 		wait time;
+	}
 
 	self BotBuiltinBotAction( "-activate" );
 }
@@ -2730,7 +3174,9 @@ jump()
 	self endon( "bot_jump" );
 
 	if ( self IsUsingRemote() )
+	{
 		return;
+	}
 
 	if ( self getStance() != "stand" )
 	{
@@ -2749,7 +3195,9 @@ jump()
 stand()
 {
 	if ( self IsUsingRemote() )
+	{
 		return;
+	}
 
 	self BotBuiltinBotAction( "-gocrouch" );
 	self BotBuiltinBotAction( "-goprone" );
@@ -2761,7 +3209,9 @@ stand()
 crouch()
 {
 	if ( self IsUsingRemote() )
+	{
 		return;
+	}
 
 	self BotBuiltinBotAction( "+gocrouch" );
 	self BotBuiltinBotAction( "-goprone" );
@@ -2773,7 +3223,9 @@ crouch()
 prone()
 {
 	if ( self IsUsingRemote() || self.hasRiotShieldEquipped )
+	{
 		return;
+	}
 
 	self BotBuiltinBotAction( "-gocrouch" );
 	self BotBuiltinBotAction( "+goprone" );
@@ -2803,9 +3255,13 @@ botGetThirdPersonOffset( angles )
 			curweap = self getCurrentWeapon();
 
 			if ( ( isSubStr( curweap, "_thermal" ) || weaponClass( curweap ) == "sniper" ) && !isSubStr( curweap, "_acog" ) )
+			{
 				offset = ( 0, 0, 0 );
+			}
 			else
+			{
 				offset = getDvarVector( "camera_thirdPersonOffsetAds" );
+			}
 		}
 
 		// rotate about x             // y cos xangle - z sin xangle                                  // y sin xangle + z cos xangle
@@ -2834,31 +3290,45 @@ bot_lookat( pos, time, vel, doAimPredict )
 	level endon ( "game_ended" );
 
 	if ( level.gameEnded || !gameFlag( "prematch_done" ) || self.bot.isfrozen || !getDvarInt( "bots_play_aim" ) )
+	{
 		return;
+	}
 
 	if ( !isDefined( pos ) )
+	{
 		return;
+	}
 
 	if ( !isDefined( doAimPredict ) )
+	{
 		doAimPredict = false;
+	}
 
 	if ( !isDefined( time ) )
+	{
 		time = 0.05;
+	}
 
 	if ( !isDefined( vel ) )
+	{
 		vel = ( 0, 0, 0 );
+	}
 
 	steps = int( time * 20 );
 
 	if ( steps < 1 )
+	{
 		steps = 1;
+	}
 
 	myAngle = self getPlayerAngles();
 
 	myEye = self GetEye(); // get our eye pos
 
 	if ( isDefined( self.remoteUAV ) )
+	{
 		myEye = self.remoteUAV getTagOrigin( "tag_origin" ); // fix for iw5 kekware
+	}
 
 	myEye += self botGetThirdPersonOffset( myAngle ); // account for third person
 

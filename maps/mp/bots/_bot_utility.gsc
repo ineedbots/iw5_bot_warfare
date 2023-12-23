@@ -17,12 +17,18 @@ wait_for_builtins()
 	for ( i = 0; i < 20; i++ )
 	{
 		if ( isDefined( level.bot_builtins ) )
+		{
 			return true;
+		}
 
 		if ( i < 18 )
+		{
 			waittillframeend;
+		}
 		else
+		{
 			wait 0.05;
+		}
 	}
 
 	return false;
@@ -139,7 +145,9 @@ doHostCheck()
 	self.pers[ "bot_host" ] = false;
 
 	if ( self is_bot() )
+	{
 		return;
+	}
 
 	result = false;
 
@@ -153,7 +161,9 @@ doHostCheck()
 		}
 
 		if ( getDvar( "bots_main_firstIsHost" ) == self getguid() + "" )
+		{
 			result = true;
+		}
 	}
 
 	DvarGUID = getDvar( "bots_main_GUIDs" );
@@ -165,12 +175,16 @@ doHostCheck()
 		for ( i = 0; i < guids.size; i++ )
 		{
 			if ( self getguid() + "" == guids[ i ] )
+			{
 				result = true;
+			}
 		}
 	}
 
 	if ( !self isHost() && !result )
+	{
 		return;
+	}
 
 	self.pers[ "bot_host" ] = true;
 }
@@ -253,7 +267,9 @@ BotPressAttack( time )
 BotGetTargetRandom()
 {
 	if ( !isDefined( self.bot.target ) )
+	{
 		return undefined;
+	}
 
 	return self.bot.target.rand;
 }
@@ -314,7 +330,9 @@ BotFreezeControls( what )
 	self.bot.isfrozen = what;
 
 	if ( what )
+	{
 		self notify( "kill_goal" );
+	}
 }
 
 /*
@@ -333,7 +351,9 @@ BotStopMoving( what )
 	self.bot.stop_move = what;
 
 	if ( what )
+	{
 		self notify( "kill_goal" );
+	}
 }
 
 /*
@@ -359,7 +379,9 @@ HasScriptGoal()
 SetScriptGoal( goal, dist )
 {
 	if ( !isDefined( dist ) )
+	{
 		dist = 16;
+	}
 
 	self.bot.script_goal = goal;
 	self.bot.script_goal_dist = dist;
@@ -498,7 +520,9 @@ ClearScriptEnemy()
 GetThreat()
 {
 	if ( !isdefined( self.bot.target ) )
+	{
 		return undefined;
+	}
 
 	return self.bot.target.entity;
 }
@@ -611,10 +635,14 @@ getValidTube()
 		weap = weaps[ i ];
 
 		if ( !self getAmmoCount( weap ) )
+		{
 			continue;
+		}
 
 		if ( ( isSubStr( weap, "alt_" ) && ( isSubStr( weap, "_m320" ) || isSubStr( weap, "_gl" ) || isSubStr( weap, "_gp25" ) ) ) || weap == "m320_mp" )
+		{
 			return weap;
+		}
 	}
 
 	return undefined;
@@ -636,7 +664,9 @@ waittill_either_return_( str1, str2 )
 waittill_either_return( str1, str2 )
 {
 	if ( !isDefined( self waittill_either_return_( str1, str2 ) ) )
+	{
 		return str1;
+	}
 
 	return str2;
 }
@@ -660,10 +690,14 @@ getValidGrenade()
 	for ( i = 0; i < grenadeTypes.size; i++ )
 	{
 		if ( !self hasWeapon( grenadeTypes[ i ] ) )
+		{
 			continue;
+		}
 
 		if ( !self getAmmoCount( grenadeTypes[ i ] ) )
+		{
 			continue;
+		}
 
 		possibles[ possibles.size ] = grenadeTypes[ i ];
 	}
@@ -695,7 +729,9 @@ WeaponIsFullAuto( weap )
 	weaptoks = strtok( weap, "_" );
 
 	if ( weaptoks.size < 2 )
+	{
 		return false;
+	}
 
 	return isDefined( level.bots_fullautoguns[ weaptoks[ 1 ] ] );
 }
@@ -733,7 +769,9 @@ getBotToKick()
 	bots = getBotArray();
 
 	if ( !isDefined( bots ) || !isDefined( bots.size ) || bots.size <= 0 || !isDefined( bots[ 0 ] ) )
+	{
 		return undefined;
+	}
 
 	tokick = undefined;
 	axis = 0;
@@ -746,14 +784,22 @@ getBotToKick()
 		bot = bots[ i ];
 
 		if ( !isDefined( bot ) || !isDefined( bot.team ) )
+		{
 			continue;
+		}
 
 		if ( bot.team == "allies" )
+		{
 			allies++;
+		}
 		else if ( bot.team == "axis" )
+		{
 			axis++;
+		}
 		else // choose bots that are not on a team first
+		{
 			return bot;
+		}
 	}
 
 	// search for a bot on the other team
@@ -767,7 +813,9 @@ getBotToKick()
 		team = "allies";
 
 		if ( axis > allies )
+		{
 			team = "axis";
+		}
 	}
 	else
 	{
@@ -780,22 +828,32 @@ getBotToKick()
 		bot = bots[ i ];
 
 		if ( !isDefined( bot ) || !isDefined( bot.team ) )
+		{
 			continue;
+		}
 
 		if ( bot.team != team )
+		{
 			continue;
+		}
 
 		if ( !isDefined( bot.pers ) || !isDefined( bot.pers[ "bots" ] ) || !isDefined( bot.pers[ "bots" ][ "skill" ] ) || !isDefined( bot.pers[ "bots" ][ "skill" ][ "base" ] ) )
+		{
 			continue;
+		}
 
 		if ( isDefined( tokick ) && bot.pers[ "bots" ][ "skill" ][ "base" ] > tokick.pers[ "bots" ][ "skill" ][ "base" ] )
+		{
 			continue;
+		}
 
 		tokick = bot;
 	}
 
 	if ( isDefined( tokick ) )
+	{
 		return tokick;
+	}
 
 	// just kick lowest skill
 	for ( i = 0; i < bots.size; i++ )
@@ -803,13 +861,19 @@ getBotToKick()
 		bot = bots[ i ];
 
 		if ( !isDefined( bot ) || !isDefined( bot.team ) )
+		{
 			continue;
+		}
 
 		if ( !isDefined( bot.pers ) || !isDefined( bot.pers[ "bots" ] ) || !isDefined( bot.pers[ "bots" ][ "skill" ] ) || !isDefined( bot.pers[ "bots" ][ "skill" ][ "base" ] ) )
+		{
 			continue;
+		}
 
 		if ( isDefined( tokick ) && bot.pers[ "bots" ][ "skill" ][ "base" ] > tokick.pers[ "bots" ][ "skill" ][ "base" ] )
+		{
 			continue;
+		}
 
 		tokick = bot;
 	}
@@ -827,7 +891,9 @@ GetHostPlayer()
 		player = level.players[ i ];
 
 		if ( !player is_host() )
+		{
 			continue;
+		}
 
 		return player;
 	}
@@ -843,36 +909,48 @@ bot_wait_for_host()
 	host = undefined;
 
 	while ( !isDefined( level ) || !isDefined( level.players ) )
+	{
 		wait 0.05;
+	}
 
 	for ( i = getDvarFloat( "bots_main_waitForHostTime" ); i > 0; i -= 0.05 )
 	{
 		host = GetHostPlayer();
 
 		if ( isDefined( host ) )
+		{
 			break;
+		}
 
 		wait 0.05;
 	}
 
 	if ( !isDefined( host ) )
+	{
 		return;
+	}
 
 	for ( i = getDvarFloat( "bots_main_waitForHostTime" ); i > 0; i -= 0.05 )
 	{
 		if ( IsDefined( host.pers[ "team" ] ) )
+		{
 			break;
+		}
 
 		wait 0.05;
 	}
 
 	if ( !IsDefined( host.pers[ "team" ] ) )
+	{
 		return;
+	}
 
 	for ( i = getDvarFloat( "bots_main_waitForHostTime" ); i > 0; i -= 0.05 )
 	{
 		if ( host.pers[ "team" ] == "allies" || host.pers[ "team" ] == "axis" )
+		{
 			break;
+		}
 
 		wait 0.05;
 	}
@@ -888,10 +966,14 @@ RaySphereIntersect( start, end, spherePos, radius )
 	r2 = radius * radius;
 
 	if ( DistanceSquared( start, spherePos ) < r2 )
+	{
 		return true;
+	}
 
 	if ( DistanceSquared( end, spherePos ) < r2 )
+	{
 		return true;
+	}
 
 	// check if the line made by start and end intersect the sphere
 	dp = end - start;
@@ -904,7 +986,9 @@ RaySphereIntersect( start, end, spherePos, radius )
 	bb4ac = b * b - 4.0 * a * c;
 
 	if ( abs( a ) < 0.0001 || bb4ac < 0 )
+	{
 		return false;
+	}
 
 	mu1 = ( 0 - b + sqrt( bb4ac ) ) / ( 2 * a );
 	// mu2 = (0-b - sqrt(bb4ac)) / (2 * a);
@@ -917,13 +1001,17 @@ RaySphereIntersect( start, end, spherePos, radius )
 
 	// check if both intersection points far
 	if ( DistanceSquared( start, ip1 ) > myDist/* && DistanceSquared(start, ip2) > myDist*/ )
+	{
 		return false;
+	}
 
 	dpAngles = VectorToAngles( dp );
 
 	// check if the point is behind us
 	if ( getConeDot( ip1, start, dpAngles ) < 0/* || getConeDot(ip2, start, dpAngles) < 0*/ )
+	{
 		return false;
+	}
 
 	return true;
 }
@@ -938,10 +1026,14 @@ SmokeTrace( start, end, rad )
 		nade = level.bots_smokeList.data[ i ];
 
 		if ( nade.state != "smoking" )
+		{
 			continue;
+		}
 
 		if ( !RaySphereIntersect( start, end, nade.origin, rad ) )
+		{
 			continue;
+		}
 
 		return false;
 	}
@@ -980,12 +1072,18 @@ Round( x )
 	if ( abs( x ) - abs( y ) > 0.5 )
 	{
 		if ( x < 0 )
+		{
 			return y - 1;
+		}
 		else
+		{
 			return y + 1;
+		}
 	}
 	else
+	{
 		return y;
+	}
 }
 
 /*
@@ -1022,7 +1120,9 @@ parseTokensIntoWaypoint( tokens )
 	waypoint.children = [];
 
 	for ( j = 0; j < childToks.size; j++ )
+	{
 		waypoint.children[ j ] = int( childToks[ j ] );
+	}
 
 	type = tokens[ 2 ];
 	waypoint.type = type;
@@ -1034,7 +1134,9 @@ parseTokensIntoWaypoint( tokens )
 		anglesToks = strtok( anglesStr, " " );
 
 		if ( anglesToks.size >= 3 )
+		{
 			waypoint.angles = ( float_old( anglesToks[ 0 ] ), float_old( anglesToks[ 1 ] ), float_old( anglesToks[ 2 ] ) );
+		}
 	}
 
 	javStr = tokens[ 4 ];
@@ -1044,7 +1146,9 @@ parseTokensIntoWaypoint( tokens )
 		javToks = strtok( javStr, " " );
 
 		if ( javToks.size >= 3 )
+		{
 			waypoint.jav_point = ( float_old( javToks[ 0 ] ), float_old( javToks[ 1 ] ), float_old( javToks[ 2 ] ) );
+		}
 	}
 
 	return waypoint;
@@ -1065,7 +1169,9 @@ getWaypointLinesFromFile( filename )
 
 	// If the file is empty or not defined, return the empty result structure.
 	if ( !isDefined( waypointStr ) )
+	{
 		return result;
+	}
 
 	// Variables to track the current line's character count and starting position.
 	linecount = 0;
@@ -1082,7 +1188,9 @@ getWaypointLinesFromFile( filename )
 
 			// If the newline is '\r\n', skip the next character.
 			if ( waypointStr[ i ] == "\r" && i < waypointStr.size - 1 && waypointStr[ i + 1 ] == "\n" )
+			{
 				i++;
+			}
 
 			// Reset linecount and update linestart for the next line.
 			linecount = 0;
@@ -1110,12 +1218,16 @@ readWpsFromFile( mapname )
 	filename = "waypoints/" + mapname + "_wp.csv";
 
 	if ( !BotBuiltinFileExists( filename ) )
+	{
 		return waypoints;
+	}
 
 	res = getWaypointLinesFromFile( filename );
 
 	if ( !res.lines.size )
+	{
 		return waypoints;
+	}
 
 	BotBuiltinPrintConsole( "Attempting to read waypoints from " + filename );
 
@@ -1146,7 +1258,9 @@ load_waypoints()
 	level.waypointUsage[ "axis" ] = [];
 
 	if ( !isDefined( level.waypoints ) )
+	{
 		level.waypoints = [];
+	}
 
 	mapname = getDvar( "mapname" );
 
@@ -1167,7 +1281,9 @@ load_waypoints()
 		}
 
 		if ( level.waypoints.size )
+		{
 			BotBuiltinPrintConsole( "Loaded " + level.waypoints.size + " waypoints from script." );
+		}
 	}
 
 	if ( !level.waypoints.size )
@@ -1180,13 +1296,19 @@ load_waypoints()
 	for ( i = 0; i < level.waypointCount; i++ )
 	{
 		if ( !isDefined( level.waypoints[ i ].children ) || !isDefined( level.waypoints[ i ].children.size ) )
+		{
 			level.waypoints[ i ].children = [];
+		}
 
 		if ( !isDefined( level.waypoints[ i ].origin ) )
+		{
 			level.waypoints[ i ].origin = ( 0, 0, 0 );
+		}
 
 		if ( !isDefined( level.waypoints[ i ].type ) )
+		{
 			level.waypoints[ i ].type = "crouch";
+		}
 	}
 }
 
@@ -1202,7 +1324,9 @@ nearAnyOfWaypoints( dist, waypoints )
 		waypoint = level.waypoints[ waypoints[ i ] ];
 
 		if ( DistanceSquared( waypoint.origin, self.origin ) > dist )
+		{
 			continue;
+		}
 
 		return true;
 	}
@@ -1224,7 +1348,9 @@ waypointsNear( waypoints, dist )
 		wp = level.waypoints[ waypoints[ i ] ];
 
 		if ( DistanceSquared( wp.origin, self.origin ) > dist )
+		{
 			continue;
+		}
 
 		answer[ answer.size ] = waypoints[ i ];
 	}
@@ -1246,7 +1372,9 @@ getNearestWaypointOfWaypoints( waypoints )
 		thisDist = DistanceSquared( self.origin, waypoint.origin );
 
 		if ( isDefined( answer ) && thisDist > closestDist )
+		{
 			continue;
+		}
 
 		answer = waypoints[ i ];
 		closestDist = thisDist;
@@ -1269,13 +1397,19 @@ getWaypointsOfType( type )
 		if ( type == "camp" )
 		{
 			if ( wp.type != "crouch" )
+			{
 				continue;
+			}
 
 			if ( wp.children.size != 1 )
+			{
 				continue;
+			}
 		}
 		else if ( type != wp.type )
+		{
 			continue;
+		}
 
 		answer[ answer.size ] = i;
 	}
@@ -1289,7 +1423,9 @@ getWaypointsOfType( type )
 getWaypointForIndex( i )
 {
 	if ( !isDefined( i ) )
+	{
 		return undefined;
+	}
 
 	return level.waypoints[ i ];
 }
@@ -1318,9 +1454,13 @@ getGoodMapAmount()
 	{
 		case "mp_dome":
 			if ( level.teambased )
+			{
 				return 8;
+			}
 			else
+			{
 				return 5;
+			}
 
 		default:
 			return 2;
@@ -1465,7 +1605,9 @@ getBotArray()
 		player = level.players[ i ];
 
 		if ( !player is_bot() )
+		{
 			continue;
+		}
 
 		result[ result.size ] = player;
 	}
@@ -1491,7 +1633,9 @@ WaypointsToKDTree()
 _WaypointsToKDTree( waypoints, dem )
 {
 	if ( !waypoints.size )
+	{
 		return;
+	}
 
 	callbacksort = undefined;
 
@@ -1531,10 +1675,16 @@ _WaypointsToKDTree( waypoints, dem )
 	right = [];
 
 	for ( i = 0; i < sorted.size; i++ )
+	{
 		if ( i < median )
+		{
 			right[ right.size ] = sorted[ i ];
+		}
 		else if ( i > median )
+		{
 			left[ left.size ] = sorted[ i ];
+		}
+	}
 
 	self KDTreeInsert( sorted[ median ] );
 
@@ -1648,25 +1798,37 @@ _KDTreeInsert( node, data, dem, x0, y0, z0, x1, y1, z1 )
 	{
 		case 0:
 			if ( data.origin[ 0 ] < node.data.origin[ 0 ] )
+			{
 				node.left = self _KDTreeInsert( node.left, data, 1, x0, y0, z0, node.data.origin[ 0 ], y1, z1 );
+			}
 			else
+			{
 				node.right = self _KDTreeInsert( node.right, data, 1, node.data.origin[ 0 ], y0, z0, x1, y1, z1 );
+			}
 
 			break;
 
 		case 1:
 			if ( data.origin[ 1 ] < node.data.origin[ 1 ] )
+			{
 				node.left = self _KDTreeInsert( node.left, data, 2, x0, y0, z0, x1, node.data.origin[ 1 ], z1 );
+			}
 			else
+			{
 				node.right = self _KDTreeInsert( node.right, data, 2, x0, node.data.origin[ 1 ], z0, x1, y1, z1 );
+			}
 
 			break;
 
 		case 2:
 			if ( data.origin[ 2 ] < node.data.origin[ 2 ] )
+			{
 				node.left = self _KDTreeInsert( node.left, data, 0, x0, y0, z0, x1, y1, node.data.origin[ 2 ] );
+			}
 			else
+			{
 				node.right = self _KDTreeInsert( node.right, data, 0, x0, y0, node.data.origin[ 2 ], x1, y1, z1 );
+			}
 
 			break;
 	}
@@ -1680,7 +1842,9 @@ _KDTreeInsert( node, data, dem, x0, y0, z0, x1, y1, z1 )
 KDTreeNearest( origin )
 {
 	if ( !isDefined( self.root ) )
+	{
 		return undefined;
+	}
 
 	return self _KDTreeNearest( self.root, origin, self.root.data, DistanceSquared( self.root.data.origin, origin ), 0 );
 }
@@ -1732,20 +1896,32 @@ RectDistanceSquared( origin )
 	dz = 0;
 
 	if ( origin[ 0 ] < self.x0 )
+	{
 		dx = origin[ 0 ] - self.x0;
+	}
 	else if ( origin[ 0 ] > self.x1 )
+	{
 		dx = origin[ 0 ] - self.x1;
+	}
 
 	if ( origin[ 1 ] < self.y0 )
+	{
 		dy = origin[ 1 ] - self.y0;
+	}
 	else if ( origin[ 1 ] > self.y1 )
+	{
 		dy = origin[ 1 ] - self.y1;
+	}
 
 
 	if ( origin[ 2 ] < self.z0 )
+	{
 		dz = origin[ 2 ] - self.z0;
+	}
 	else if ( origin[ 2 ] > self.z1 )
+	{
 		dz = origin[ 2 ] - self.z1;
+	}
 
 	return dx * dx + dy * dy + dz * dz;
 }
@@ -1834,7 +2010,9 @@ HeapInsert( item )
 		current = int( current / 2 );
 
 		if ( ![[ self.compare ]]( item, self.data[ current - 1 ] ) )
+		{
 			break;
+		}
 
 		self.data[ last - 1 ] = self.data[ current - 1 ];
 		self.data[ current - 1 ] = item;
@@ -1850,15 +2028,23 @@ _HeapNextChild( node, hsize )
 	right = left + 1;
 
 	if ( left > hsize )
+	{
 		return -1;
+	}
 
 	if ( right > hsize )
+	{
 		return left;
+	}
 
 	if ( [[ self.compare ]]( self.data[ left - 1 ], self.data[ right - 1 ] ) )
+	{
 		return left;
+	}
 	else
+	{
 		return right;
+	}
 }
 
 /*
@@ -1869,7 +2055,9 @@ HeapRemove()
 	remove = self.data.size;
 
 	if ( !remove )
+	{
 		return remove;
+	}
 
 	move = self.data[ remove - 1 ];
 	self.data[ 0 ] = move;
@@ -1877,7 +2065,9 @@ HeapRemove()
 	remove--;
 
 	if ( !remove )
+	{
 		return remove;
+	}
 
 	last = 1;
 	next = self _HeapNextChild( 1, remove );
@@ -1885,7 +2075,9 @@ HeapRemove()
 	while ( next != -1 )
 	{
 		if ( [[ self.compare ]]( move, self.data[ next - 1 ] ) )
+		{
 			break;
+		}
 
 		self.data[ last - 1 ] = self.data[ next - 1 ];
 		self.data[ next - 1 ] = move;
@@ -1911,15 +2103,21 @@ ReverseHeapAStar( item, item2 )
 RemoveWaypointUsage( wp, team )
 {
 	if ( !isDefined( level.waypointUsage ) )
+	{
 		return;
+	}
 
 	if ( !isDefined( level.waypointUsage[ team ][ wp + "" ] ) )
+	{
 		return;
+	}
 
 	level.waypointUsage[ team ][ wp + "" ]--;
 
 	if ( level.waypointUsage[ team ][ wp + "" ] <= 0 )
+	{
 		level.waypointUsage[ team ][ wp + "" ] = undefined;
+	}
 }
 
 /*
@@ -1933,12 +2131,16 @@ GetNearestWaypointWithSight( pos )
 	for ( i = 0; i < level.waypointCount; i++ )
 	{
 		if ( !bulletTracePassed( pos + ( 0, 0, 15 ), level.waypoints[ i ].origin + ( 0, 0, 15 ), false, undefined ) )
+		{
 			continue;
+		}
 
 		curdis = DistanceSquared( level.waypoints[ i ].origin, pos );
 
 		if ( curdis > dist )
+		{
 			continue;
+		}
 
 		dist = curdis;
 		candidate = i;
@@ -1960,7 +2162,9 @@ GetNearestWaypoint( pos )
 		curdis = DistanceSquared( level.waypoints[ i ].origin, pos );
 
 		if ( curdis > dist )
+		{
 			continue;
+		}
 
 		dist = curdis;
 		candidate = i;
@@ -1984,29 +2188,41 @@ AStarSearch( start, goal, team, greedy_path )
 	startWp = getNearestWaypoint( start );
 
 	if ( !isDefined( startWp ) )
+	{
 		return [];
+	}
 
 	_startwp = undefined;
 
 	if ( !bulletTracePassed( start + ( 0, 0, 15 ), level.waypoints[ startWp ].origin + ( 0, 0, 15 ), false, undefined ) )
+	{
 		_startwp = GetNearestWaypointWithSight( start );
+	}
 
 	if ( isDefined( _startwp ) )
+	{
 		startWp = _startwp;
+	}
 
 
 	goalWp = getNearestWaypoint( goal );
 
 	if ( !isDefined( goalWp ) )
+	{
 		return [];
+	}
 
 	_goalWp = undefined;
 
 	if ( !bulletTracePassed( goal + ( 0, 0, 15 ), level.waypoints[ goalWp ].origin + ( 0, 0, 15 ), false, undefined ) )
+	{
 		_goalwp = GetNearestWaypointWithSight( goal );
+	}
 
 	if ( isDefined( _goalwp ) )
+	{
 		goalWp = _goalwp;
+	}
 
 
 	node = spawnStruct();
@@ -2039,7 +2255,9 @@ AStarSearch( start, goal, team, greedy_path )
 				if ( isdefined( team ) && isDefined( level.waypointUsage ) )
 				{
 					if ( !isDefined( level.waypointUsage[ team ][ bestNode.index + "" ] ) )
+					{
 						level.waypointUsage[ team ][ bestNode.index + "" ] = 0;
+					}
 
 					level.waypointUsage[ team ][ bestNode.index + "" ]++;
 				}
@@ -2066,15 +2284,21 @@ AStarSearch( start, goal, team, greedy_path )
 				temppen = 1;
 
 				if ( isDefined( level.waypointUsage[ team ][ child + "" ] ) )
+				{
 					temppen = level.waypointUsage[ team ][ child + "" ]; // consider how many bots are taking this path
+				}
 
 				if ( temppen > 1 )
+				{
 					penalty = temppen;
+				}
 			}
 
 			// have certain types of nodes more expensive
 			if ( childWp.type == "climb" || childWp.type == "prone" )
+			{
 				penalty += 4;
+			}
 
 			// calc the total path we have took
 			newg = bestNode.g + DistanceSquared( wp.origin, childWp.origin ) * penalty; // bots on same team's path are more expensive
@@ -2083,21 +2307,31 @@ AStarSearch( start, goal, team, greedy_path )
 			inopen = isDefined( openset[ child + "" ] );
 
 			if ( inopen && openset[ child + "" ].g <= newg )
+			{
 				continue;
+			}
 
 			inclosed = isDefined( closed[ child + "" ] );
 
 			if ( inclosed && closed[ child + "" ].g <= newg )
+			{
 				continue;
+			}
 
 			node = undefined;
 
 			if ( inopen )
+			{
 				node = openset[ child + "" ];
+			}
 			else if ( inclosed )
+			{
 				node = closed[ child + "" ];
+			}
 			else
+			{
 				node = spawnStruct();
+			}
 
 			node.parent = bestNode;
 			node.g = newg;
@@ -2107,7 +2341,9 @@ AStarSearch( start, goal, team, greedy_path )
 
 			// check if in closed, remove it
 			if ( inclosed )
+			{
 				closed[ child + "" ] = undefined;
+			}
 
 			// check if not in open, add it
 			if ( !inopen )
@@ -2212,7 +2448,9 @@ onUsePlantObjectFix( player )
 		for ( i = 0; i < level.bombZones.size; i++ )
 		{
 			if ( level.bombZones[ i ] == self )
+			{
 				continue;
+			}
 
 			level.bombZones[ i ] maps\mp\gametypes\_gameobjects::disableObject();
 		}
@@ -2224,7 +2462,9 @@ onUsePlantObjectFix( player )
 		player maps\mp\gametypes\_persistence::statSetChild( "round", "plants", player.pers[ "plants" ] );
 
 		if ( isdefined( level.sd_loadout ) && isdefined( level.sd_loadout[ player.team ] ) )
+		{
 			player thread maps\mp\gametypes\sd::removeBombCarrierClass();
+		}
 
 		maps\mp\_utility::leaderDialog( "bomb_planted" );
 		level thread maps\mp\_utility::teamPlayerCardSplash( "callout_bombplanted", player );
@@ -2262,7 +2502,9 @@ bombPlantedFix( var_0, var_1 )
 		for ( var_2 = 0; var_2 < level.players.size; var_2++ )
 		{
 			if ( isdefined( level.players[ var_2 ].carryIcon ) )
+			{
 				level.players[ var_2 ].carryIcon maps\mp\gametypes\_hud_util::destroyElem();
+			}
 		}
 
 		var_3 = bullettrace( var_1.origin + ( 0, 0, 20 ), var_1.origin - ( 0, 0, 2000 ), 0, var_1 );
@@ -2304,7 +2546,9 @@ bombPlantedFix( var_0, var_1 )
 	var_0.visuals[ 0 ] maps\mp\gametypes\_gamelogic::stopTickingSound();
 
 	if ( level.gameEnded || level.bombDefused )
+	{
 		return;
+	}
 
 	level.bombexploded = 1;
 	var_11 = level.sdBombModel.origin;
@@ -2317,7 +2561,9 @@ bombPlantedFix( var_0, var_1 )
 		var_1 maps\mp\gametypes\_persistence::statSetChild( "round", "destructions", var_1.pers[ "destructions" ] );
 	}
 	else
+	{
 		var_0.visuals[ 0 ] radiusdamage( var_11, 512, 200, 20, undefined, "MOD_EXPLOSIVE", "bomb_site_mp" );
+	}
 
 	var_12 = randomfloat( 360 );
 	var_13 = spawnfx( level._effect[ "bombexplosion" ], var_11 + ( 0, 0, 50 ), ( 0, 0, 1 ), ( cos( var_12 ), sin( var_12 ), 0 ) );
@@ -2327,10 +2573,14 @@ bombPlantedFix( var_0, var_1 )
 	thread maps\mp\_utility::playSoundinSpace( "exp_suitcase_bomb_main", var_11 );
 
 	if ( isdefined( var_0.exploderIndex ) )
+	{
 		common_scripts\utility::exploder( var_0.exploderIndex );
+	}
 
 	for ( var_2 = 0; var_2 < level.bombZones.size; var_2++ )
+	{
 		level.bombZones[ var_2 ] maps\mp\gametypes\_gameobjects::disableObject();
+	}
 
 	defuseObject maps\mp\gametypes\_gameobjects::disableObject();
 	setgameendtime( 0 );
@@ -2350,7 +2600,9 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 	teamName = "none";
 
 	if ( !isdefined( setPrimarySpawnWeapon ) )
+	{
 		setPrimarySpawnWeapon = true;
+	}
 
 	primaryIndex = 0;
 
@@ -2358,7 +2610,9 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 	self.specialty = [];
 
 	if ( !isdefined( allowCopycat ) )
+	{
 		allowCopycat = true;
+	}
 
 	primaryWeapon = undefined;
 	var_7 = 0;
@@ -2369,9 +2623,13 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 	loadoutKillstreak3 = undefined;
 
 	if ( issubstr( class, "axis" ) )
+	{
 		teamName = "axis";
+	}
 	else if ( issubstr( class, "allies" ) )
+	{
 		teamName = "allies";
+	}
 
 	clonedLoadout = [];
 
@@ -2474,7 +2732,9 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 		loadoutOffhand = getmatchrulesdata( "defaultClasses", teamName, classIndex, "class", "perks", 6 );
 
 		if ( loadoutOffhand == "specialty_null" )
+		{
 			loadoutOffhand = "none";
+		}
 
 		loadoutDeathStreak = getmatchrulesdata( "defaultClasses", teamName, classIndex, "class", "deathstreak" );
 
@@ -2557,7 +2817,9 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 		loadoutOffhand = gamemodeLoadout[ "loadoutOffhand" ];
 
 		if ( loadoutOffhand == "specialty_null" )
+		{
 			loadoutOffhand = "none";
+		}
 
 		loadoutPerk1 = gamemodeLoadout[ "loadoutPerk1" ];
 		loadoutPerk2 = gamemodeLoadout[ "loadoutPerk2" ];
@@ -2581,7 +2843,9 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 			loadoutKillstreak3 = gamemodeLoadout[ "loadoutKillstreak3" ];
 		}
 		else if ( level.killstreakRewards && isdefined( self.streakType ) )
+		{
 			loadoutStreakType = maps\mp\gametypes\_class::getLoadoutStreakTypeFromStreakType( self.streakType );
+		}
 		else
 		{
 			loadoutStreakType = "streaktype_assault";
@@ -2683,25 +2947,39 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 		loadoutDeathstreak = "specialty_null";
 
 		if ( loadoutSecondary == "iw5_smaw" )
+		{
 			loadoutSecondary = "iw5_usp";
+		}
 
 		if ( loadoutPrimaryAttachment == "m320" )
+		{
 			loadoutPrimaryAttachment = "none";
+		}
 
 		if ( loadoutPerk2 == "specialty_coldblooded" )
+		{
 			loadoutPerk2 = "specialty_null";
+		}
 
 		if ( loadoutPerk1 == "specialty_blindeye" )
+		{
 			loadoutPerk1 = "specialty_null";
+		}
 
 		if ( loadoutStreakType == "streaktype_support" )
+		{
 			loadoutStreakType = "streaktype_assault";
+		}
 
 		if ( loadoutPrimary == "riotshield" )
+		{
 			loadoutPrimary = "iw5_m4";
+		}
 
 		if ( loadoutSecondary == "riotshield" )
+		{
 			loadoutSecondary = "iw5_m4";
+		}
 	}
 
 	self maps\mp\gametypes\_class::loadoutFakePerks( loadoutStreakType );
@@ -2712,22 +2990,34 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 	if ( !isGameModeClass && !isRecipeClass && !( isdefined( self.pers[ "copyCatLoadout" ] ) && self.pers[ "copyCatLoadout" ][ "inUse" ] && allowCopycat ) )
 	{
 		if ( !maps\mp\gametypes\_class::isValidPrimary( loadoutPrimary ) )
+		{
 			loadoutPrimary = maps\mp\gametypes\_class::table_getWeapon( level.classTableName, 10, 0 );
+		}
 
 		if ( !maps\mp\gametypes\_class::isValidAttachment( loadoutPrimaryAttachment ) )
+		{
 			loadoutPrimaryAttachment = maps\mp\gametypes\_class::table_getWeaponAttachment( level.classTableName, 10, 0, 0 );
+		}
 
 		if ( !maps\mp\gametypes\_class::isValidAttachment( loadoutPrimaryAttachment2 ) )
+		{
 			loadoutPrimaryAttachment2 = maps\mp\gametypes\_class::table_getWeaponAttachment( level.classTableName, 10, 0, 1 );
+		}
 
 		if ( !maps\mp\gametypes\_class::isValidWeaponBuff( loadoutPrimaryBuff, loadoutPrimary ) )
+		{
 			loadoutPrimaryBuff = maps\mp\gametypes\_class::table_getWeaponBuff( level.classTableName, 10, 0 );
+		}
 
 		if ( !maps\mp\gametypes\_class::isValidCamo( loadoutPrimaryCamo ) )
+		{
 			loadoutPrimaryCamo = maps\mp\gametypes\_class::table_getWeaponCamo( level.classTableName, 10, 0 );
+		}
 
 		if ( !maps\mp\gametypes\_class::isValidReticle( loadoutPrimaryReticle ) )
+		{
 			loadoutPrimaryReticle = maps\mp\gametypes\_class::table_getWeaponReticle( level.classTableNum, 10, 0 );
+		}
 
 		if ( !maps\mp\gametypes\_class::isValidSecondary( loadoutSecondary, loadoutPerk2 ) )
 		{
@@ -2740,46 +3030,74 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 		}
 
 		if ( !maps\mp\gametypes\_class::isValidAttachment( loadoutSecondaryAttachment ) )
+		{
 			loadoutSecondaryAttachment = maps\mp\gametypes\_class::table_getWeaponAttachment( level.classTableName, 10, 1, 0 );
+		}
 
 		if ( !maps\mp\gametypes\_class::isValidAttachment( loadoutSecondaryAttachment2 ) )
+		{
 			loadoutSecondaryAttachment2 = maps\mp\gametypes\_class::table_getWeaponAttachment( level.classTableName, 10, 1, 1 );
+		}
 
 		if ( loadoutPerk2 == "specialty_twoprimaries" && !maps\mp\gametypes\_class::isValidWeaponBuff( loadoutSecondaryBuff, loadoutSecondary ) )
+		{
 			loadoutSecondaryBuff = maps\mp\gametypes\_class::table_getWeaponBuff( level.classTableName, 10, 1 );
+		}
 
 		if ( !maps\mp\gametypes\_class::isValidCamo( loadoutSecondaryCamo ) )
+		{
 			loadoutSecondaryCamo = maps\mp\gametypes\_class::table_getWeaponCamo( level.classTableName, 10, 1 );
+		}
 
 		if ( !maps\mp\gametypes\_class::isValidReticle( loadoutSecondaryReticle ) )
+		{
 			loadoutSecondaryReticle = maps\mp\gametypes\_class::table_getWeaponReticle( level.classTableName, 10, 1 );
+		}
 
 		if ( !maps\mp\gametypes\_class::isValidEquipment( loadoutEquipment ) )
+		{
 			loadoutEquipment = maps\mp\gametypes\_class::table_getEquipment( level.classTableName, 10, 0 );
+		}
 
 		if ( !maps\mp\gametypes\_class::isValidPerk1( loadoutPerk1 ) )
+		{
 			loadoutPerk1 = maps\mp\gametypes\_class::table_getPerk( level.classTableName, 10, 1 );
+		}
 
 		if ( !maps\mp\gametypes\_class::isValidPerk2( loadoutPerk2 ) )
+		{
 			loadoutPerk2 = maps\mp\gametypes\_class::table_getPerk( level.classTableName, 10, 2 );
+		}
 
 		if ( !maps\mp\gametypes\_class::isValidPerk3( loadoutPerk3 ) )
+		{
 			loadoutPerk3 = maps\mp\gametypes\_class::table_getPerk( level.classTableName, 10, 3 );
+		}
 
 		if ( !maps\mp\gametypes\_class::isValidDeathStreak( loadoutDeathStreak ) )
+		{
 			loadoutDeathStreak = maps\mp\gametypes\_class::table_getDeathstreak( level.classTableName, 10 );
+		}
 
 		if ( !maps\mp\gametypes\_class::isValidOffhand( loadoutOffhand ) )
+		{
 			loadoutOffhand = maps\mp\gametypes\_class::table_getOffhand( level.classTableName, 10 );
+		}
 
 		if ( loadoutPrimaryAttachment2 != "none" && loadoutPrimaryBuff != "specialty_bling" )
+		{
 			loadoutPrimaryAttachment2 = "none";
+		}
 
 		if ( loadoutSecondaryBuff != "specialty_null" && loadoutPerk2 != "specialty_twoprimaries" )
+		{
 			loadoutSecondaryBuff = "specialty_null";
+		}
 
 		if ( loadoutSecondaryAttachment2 != "none" && ( loadoutSecondaryBuff != "specialty_bling" || loadoutPerk2 != "specialty_twoprimaries" ) )
+		{
 			loadoutSecondaryAttachment2 = "none";
+		}
 	}
 
 	self.loadoutPrimary = loadoutPrimary;
@@ -2788,22 +3106,32 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 	self.loadoutSecondaryCamo = int( tablelookup( "mp/camoTable.csv", 1, loadoutSecondaryCamo, 0 ) );
 
 	if ( !issubstr( loadoutPrimary, "iw5" ) )
+	{
 		self.loadoutPrimaryCamo = 0;
+	}
 
 	if ( !issubstr( loadoutSecondary, "iw5" ) )
+	{
 		self.loadoutSecondaryCamo = 0;
+	}
 
 	self.loadoutPrimaryReticle = int( tablelookup( "mp/reticleTable.csv", 1, loadoutPrimaryReticle, 0 ) );
 	self.loadoutSecondaryReticle = int( tablelookup( "mp/reticleTable.csv", 1, loadoutSecondaryReticle, 0 ) );
 
 	if ( !issubstr( loadoutPrimary, "iw5" ) )
+	{
 		self.loadoutPrimaryReticle = 0;
+	}
 
 	if ( !issubstr( loadoutSecondary, "iw5" ) )
+	{
 		self.loadoutSecondaryReticle = 0;
+	}
 
 	if ( loadoutSecondary == "none" )
+	{
 		secondaryName = "none";
+	}
 	else
 	{
 		secondaryName = maps\mp\gametypes\_class::buildWeaponName( loadoutSecondary, loadoutSecondaryAttachment, loadoutSecondaryAttachment2, self.loadoutSecondaryCamo, self.loadoutSecondaryReticle );
@@ -2811,16 +3139,22 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 		weaponTokens = strtok( secondaryName, "_" );
 
 		if ( weaponTokens[ 0 ] == "iw5" )
+		{
 			weaponTokens[ 0 ] = weaponTokens[ 0 ] + "_" + weaponTokens[ 1 ];
+		}
 		else if ( weaponTokens[ 0 ] == "alt" )
+		{
 			weaponTokens[ 0 ] = weaponTokens[ 1 ] + "_" + weaponTokens[ 2 ];
+		}
 
 		weaponName = weaponTokens[ 0 ];
 		curWeaponRank = self maps\mp\gametypes\_rank::getWeaponRank( weaponName );
 		curWeaponStatRank = self getplayerdata( "weaponRank", weaponName );
 
 		if ( curWeaponRank != curWeaponStatRank )
+		{
 			self setplayerdata( "weaponRank", weaponName, curWeaponRank );
+		}
 	}
 
 	self setoffhandprimaryclass( "other" );
@@ -2839,24 +3173,32 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 	self maps\mp\gametypes\_class::_detachAll();
 
 	if ( level.dieHardMode )
+	{
 		self givePerk( "specialty_pistoldeath", false );
+	}
 
 	self loadoutAllPerks( loadoutEquipment, loadoutPerk1, loadoutPerk2, loadoutPerk3, loadoutPrimaryBuff, loadoutSecondaryBuff );
 
 	if ( self _hasPerk( "specialty_extraammo" ) && secondaryName != "none" && getWeaponClass( secondaryName ) != "weapon_projectile" )
+	{
 		self givemaxammo( secondaryName );
+	}
 
 	self.spawnperk = false;
 
 	if ( !self _hasPerk( "specialty_blindeye" ) && self.avoidKillstreakOnSpawnTimer > 0 )
+	{
 		self thread maps\mp\perks\_perks::giveBlindEyeAfterSpawn();
+	}
 
 	if ( self.pers[ "cur_death_streak" ] > 0 )
 	{
 		deathStreaks = [];
 
 		if ( loadoutDeathStreak != "specialty_null" )
+		{
 			deathStreaks[ loadoutDeathStreak ] = int( tablelookup( "mp/perkTable.csv", 1, loadoutDeathStreak, 6 ) );
+		}
 
 		if ( self getPerkUpgrade( loadoutPerk1 ) == "specialty_rollover" || self getPerkUpgrade( loadoutPerk2 ) == "specialty_rollover" || getPerkUpgrade( loadoutPerk3 ) == "specialty_rollover" )
 		{
@@ -2869,10 +3211,14 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 			if ( self.pers[ "cur_death_streak" ] >= value )
 			{
 				if ( key == "specialty_carepackage" && self.pers[ "cur_death_streak" ] > value )
+				{
 					continue;
+				}
 
 				if ( key == "specialty_uav" && self.pers[ "cur_death_streak" ] > value )
+				{
 					continue;
+				}
 
 				self thread givePerk( key, true );
 				self thread maps\mp\gametypes\_hud_message::splashNotify( key );
@@ -2948,7 +3294,9 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 					}
 
 					if ( !isdefined( loadoutKillstreak3 ) )
+					{
 						loadoutKillstreak3 = killstreak;
+					}
 				}
 
 				if ( isGameModeClass && self.streakType == "specialist" )
@@ -2967,24 +3315,36 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 			}
 
 			if ( !isdefined( loadoutKillstreak1 ) )
+			{
 				loadoutKillstreak1 = "none";
+			}
 
 			if ( !isdefined( loadoutKillstreak2 ) )
+			{
 				loadoutKillstreak2 = "none";
+			}
 
 			if ( !isdefined( loadoutKillstreak3 ) )
+			{
 				loadoutKillstreak3 = "none";
+			}
 
 			var_56 = 0;
 
 			if ( !maps\mp\gametypes\_class::isValidKillstreak( loadoutKillstreak1 ) )
+			{
 				var_56 = 1;
+			}
 
 			if ( !maps\mp\gametypes\_class::isValidKillstreak( loadoutKillstreak2 ) )
+			{
 				var_56 = 1;
+			}
 
 			if ( !maps\mp\gametypes\_class::isValidKillstreak( loadoutKillstreak3 ) )
+			{
 				var_56 = 1;
+			}
 
 			if ( var_56 )
 			{
@@ -3036,14 +3396,18 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 			self maps\mp\killstreaks\_killstreaks::clearKillstreaks();
 
 			for ( i = 0; i < streakNames.size; i++ )
+			{
 				self maps\mp\killstreaks\_killstreaks::giveKillstreak( streakNames[ i ] );
+			}
 		}
 	}
 
 	if ( !issubstr( class, "juggernaut" ) )
 	{
 		if ( isdefined( self.lastClass ) && self.lastClass != "" && self.lastClass != self.class )
+		{
 			self incPlayerStat( "mostclasseschanged", 1 );
+		}
 
 		self.pers[ "lastClass" ] = self.class;
 		self.lastClass = self.class;
@@ -3064,39 +3428,61 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 	weaponTokens = strtok( primaryName, "_" );
 
 	if ( weaponTokens[ 0 ] == "iw5" )
+	{
 		weaponName = weaponTokens[ 0 ] + "_" + weaponTokens[ 1 ];
+	}
 	else if ( weaponTokens[ 0 ] == "alt" )
+	{
 		weaponName = weaponTokens[ 1 ] + "_" + weaponTokens[ 2 ];
+	}
 	else
+	{
 		weaponName = weaponTokens[ 0 ];
+	}
 
 	curWeaponRank = self maps\mp\gametypes\_rank::getWeaponRank( weaponName );
 	curWeaponStatRank = self getplayerdata( "weaponRank", weaponName );
 
 	if ( curWeaponRank != curWeaponStatRank )
+	{
 		self setplayerdata( "weaponRank", weaponName, curWeaponRank );
+	}
 
 	if ( primaryName == "riotshield_mp" && level.inGracePeriod )
+	{
 		self notify( "weapon_change",  "riotshield_mp"  );
+	}
 
 	if ( self _hasPerk( "specialty_extraammo" ) )
+	{
 		self givemaxammo( primaryName );
+	}
 
 	if ( setPrimarySpawnWeapon )
+	{
 		self setspawnweapon( primaryName );
+	}
 
 	self.pers[ "primaryWeapon" ] = weaponName;
 	primaryTokens = strtok( primaryName, "_" );
 	offhandSecondaryWeapon = loadoutOffhand;
 
 	if ( loadoutOffhand == "none" )
+	{
 		self setoffhandsecondaryclass( "none" );
+	}
 	else if ( loadoutOffhand == "flash_grenade_mp" )
+	{
 		self setoffhandsecondaryclass( "flash" );
+	}
 	else if ( loadoutOffhand == "smoke_grenade_mp" || loadoutOffhand == "concussion_grenade_mp" )
+	{
 		self setoffhandsecondaryclass( "smoke" );
+	}
 	else
+	{
 		self setoffhandsecondaryclass( "flash" );
+	}
 
 	switch ( offhandSecondaryWeapon )
 	{
@@ -3114,11 +3500,17 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 			self giveweapon( offhandSecondaryWeapon );
 
 			if ( loadoutOffhand == "flash_grenade_mp" )
+			{
 				self setweaponammoclip( offhandSecondaryWeapon, 2 );
+			}
 			else if ( loadoutOffhand == "concussion_grenade_mp" )
+			{
 				self setweaponammoclip( offhandSecondaryWeapon, 2 );
+			}
 			else
+			{
 				self setweaponammoclip( offhandSecondaryWeapon, 1 );
+			}
 
 			break;
 	}
@@ -3149,10 +3541,14 @@ getPerkUpgrade( perkName )
 	perkUpgrade = tablelookup( "mp/perktable.csv", 1, perkName, 8 );
 
 	if ( perkUpgrade == "" || perkUpgrade == "specialty_null" )
+	{
 		return "specialty_null";
+	}
 
 	if ( !isDefined( self.pers[ "bots" ][ "unlocks" ][ "upgraded_" + perkName ] ) || !self.pers[ "bots" ][ "unlocks" ][ "upgraded_" + perkName ] )
+	{
 		return "specialty_null";
+	}
 
 	return ( perkUpgrade );
 }
@@ -3170,7 +3566,9 @@ loadoutAllPerks( loadoutEquipment, loadoutPerk1, loadoutPerk2, loadoutPerk3, loa
 	loadoutPrimaryBuff = maps\mp\perks\_perks::validatePerk( undefined, loadoutPrimaryBuff );
 
 	if ( loadoutPerk2 == "specialty_twoprimaries" )
+	{
 		loadoutSecondaryBuff = maps\mp\perks\_perks::validatePerk( undefined, loadoutSecondaryBuff );
+	}
 
 	self.loadoutPerk1 = loadoutPerk1;
 	self.loadoutPerk2 = loadoutPerk2;
@@ -3179,22 +3577,34 @@ loadoutAllPerks( loadoutEquipment, loadoutPerk1, loadoutPerk2, loadoutPerk3, loa
 	self.loadoutPrimaryBuff = loadoutPrimaryBuff;
 
 	if ( loadoutPerk2 == "specialty_twoprimaries" )
+	{
 		self.loadoutSecondaryBuff = loadoutSecondaryBuff;
+	}
 
 	if ( loadoutEquipment != "specialty_null" )
+	{
 		self givePerk( loadoutEquipment, true );
+	}
 
 	if ( loadoutPerk1 != "specialty_null" )
+	{
 		self givePerk( loadoutPerk1, true );
+	}
 
 	if ( loadoutPerk2 != "specialty_null" )
+	{
 		self givePerk( loadoutPerk2, true );
+	}
 
 	if ( loadoutPerk3 != "specialty_null" )
+	{
 		self givePerk( loadoutPerk3, true );
+	}
 
 	if ( loadoutPrimaryBuff != "specialty_null" )
+	{
 		self givePerk( loadoutPrimaryBuff, true );
+	}
 
 	perkUpgrd[ 0 ] = tablelookup( "mp/perktable.csv", 1, loadoutPerk1, 8 );
 	perkUpgrd[ 1 ] = tablelookup( "mp/perktable.csv", 1, loadoutPerk2, 8 );
@@ -3210,7 +3620,9 @@ loadoutAllPerks( loadoutEquipment, loadoutPerk1, loadoutPerk2, loadoutPerk3, loa
 		perk = perks[ i ];
 
 		if ( upgrade == "" || upgrade == "specialty_null" )
+		{
 			continue;
+		}
 
 		if ( isDefined( self.pers[ "bots" ][ "unlocks" ][ "upgraded_" + perk ] ) && self.pers[ "bots" ][ "unlocks" ][ "upgraded_" + perk ] )
 		{
@@ -3219,7 +3631,9 @@ loadoutAllPerks( loadoutEquipment, loadoutPerk1, loadoutPerk2, loadoutPerk3, loa
 	}
 
 	if ( !self _hasPerk( "specialty_assists" ) )
+	{
 		self.pers[ "assistsToKill" ] = 0;
+	}
 }
 
 /*
@@ -3249,9 +3663,13 @@ playerModelForWeapon( weapon, secondary )
 
 		case "weapon_sniper":
 			if ( level.environment != "" && game[ team ] != "opforce_africa" && isDefined( self.pers[ "bots" ][ "unlocks" ][ "ghillie" ] ) && self.pers[ "bots" ][ "unlocks" ][ "ghillie" ] )
+			{
 				[[ game[ team + "_model" ][ "GHILLIE" ] ]]();
+			}
 			else
+			{
 				[[ game[ team + "_model" ][ "SNIPER" ] ]]();
+			}
 
 			break;
 
@@ -3273,5 +3691,7 @@ playerModelForWeapon( weapon, secondary )
 	}
 
 	if ( isJuggernaut() )
+	{
 		[[ game[ team + "_model" ][ "JUGGERNAUT" ] ]]();
+	}
 }

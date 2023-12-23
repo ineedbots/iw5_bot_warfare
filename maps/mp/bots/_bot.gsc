@@ -18,127 +18,207 @@ init()
 	level.bw_VERSION = "2.1.0";
 
 	if ( getDvar( "bots_main" ) == "" )
+	{
 		setDvar( "bots_main", true );
+	}
 
 	if ( !getDvarInt( "bots_main" ) )
+	{
 		return;
+	}
 
 	if ( !wait_for_builtins() )
+	{
 		PrintLn( "FATAL: NO BUILT-INS FOR BOTS" );
+	}
 
 	thread load_waypoints();
 	thread hook_callbacks();
 
 	if ( getDvar( "bots_main_GUIDs" ) == "" )
+	{
 		setDvar( "bots_main_GUIDs", "" ); // guids of players who will be given host powers, comma seperated
+	}
 
 	if ( getDvar( "bots_main_firstIsHost" ) == "" )
+	{
 		setDvar( "bots_main_firstIsHost", false ); // first play to connect is a host
+	}
 
 	if ( getDvar( "bots_main_waitForHostTime" ) == "" )
+	{
 		setDvar( "bots_main_waitForHostTime", 10.0 ); // how long to wait to wait for the host player
+	}
 
 	if ( getDvar( "bots_main_kickBotsAtEnd" ) == "" )
+	{
 		setDvar( "bots_main_kickBotsAtEnd", false ); // kicks the bots at game end
+	}
 
 	if ( getDvar( "bots_manage_add" ) == "" )
+	{
 		setDvar( "bots_manage_add", 0 ); // amount of bots to add to the game
+	}
 
 	if ( getDvar( "bots_manage_fill" ) == "" )
+	{
 		setDvar( "bots_manage_fill", 0 ); // amount of bots to maintain
+	}
 
 	if ( getDvar( "bots_manage_fill_spec" ) == "" )
+	{
 		setDvar( "bots_manage_fill_spec", true ); // to count for fill if player is on spec team
+	}
 
 	if ( getDvar( "bots_manage_fill_mode" ) == "" )
+	{
 		setDvar( "bots_manage_fill_mode", 0 ); // fill mode, 0 adds everyone, 1 just bots, 2 maintains at maps, 3 is 2 with 1
+	}
 
 	if ( getDvar( "bots_manage_fill_kick" ) == "" )
+	{
 		setDvar( "bots_manage_fill_kick", false ); // kick bots if too many
+	}
 
 	if ( getDvar( "bots_team" ) == "" )
+	{
 		setDvar( "bots_team", "autoassign" ); // which team for bots to join
+	}
 
 	if ( getDvar( "bots_team_amount" ) == "" )
+	{
 		setDvar( "bots_team_amount", 0 ); // amount of bots on axis team
+	}
 
 	if ( getDvar( "bots_team_force" ) == "" )
+	{
 		setDvar( "bots_team_force", false ); // force bots on team
+	}
 
 	if ( getDvar( "bots_team_mode" ) == "" )
+	{
 		setDvar( "bots_team_mode", 0 ); // counts just bots when 1
+	}
 
 	if ( getDvar( "bots_skill" ) == "" )
+	{
 		setDvar( "bots_skill", 0 ); // 0 is random, 1 is easy 7 is hard, 8 is custom, 9 is completely random
+	}
 
 	if ( getDvar( "bots_skill_axis_hard" ) == "" )
+	{
 		setDvar( "bots_skill_axis_hard", 0 ); // amount of hard bots on axis team
+	}
 
 	if ( getDvar( "bots_skill_axis_med" ) == "" )
+	{
 		setDvar( "bots_skill_axis_med", 0 );
+	}
 
 	if ( getDvar( "bots_skill_allies_hard" ) == "" )
+	{
 		setDvar( "bots_skill_allies_hard", 0 );
+	}
 
 	if ( getDvar( "bots_skill_allies_med" ) == "" )
+	{
 		setDvar( "bots_skill_allies_med", 0 );
+	}
 
 	if ( getDvar( "bots_skill_min" ) == "" )
+	{
 		setDvar( "bots_skill_min", 1 );
+	}
 
 	if ( getDvar( "bots_skill_max" ) == "" )
+	{
 		setDvar( "bots_skill_max", 7 );
+	}
 
 	if ( getDvar( "bots_loadout_reasonable" ) == "" ) // filter out the bad 'guns' and perks
+	{
 		setDvar( "bots_loadout_reasonable", false );
+	}
 
 	if ( getDvar( "bots_loadout_allow_op" ) == "" ) // allows jug, marty and laststand
+	{
 		setDvar( "bots_loadout_allow_op", true );
+	}
 
 	if ( getDvar( "bots_loadout_rank" ) == "" ) // what rank the bots should be around, -1 is around the players, 0 is all random
+	{
 		setDvar( "bots_loadout_rank", -1 );
+	}
 
 	if ( getDvar( "bots_loadout_prestige" ) == "" ) // what pretige the bots will be, -1 is the players, -2 is random
+	{
 		setDvar( "bots_loadout_prestige", -1 );
+	}
 
 	if ( getDvar( "bots_play_move" ) == "" ) // bots move
+	{
 		setDvar( "bots_play_move", true );
+	}
 
 	if ( getDvar( "bots_play_knife" ) == "" ) // bots knife
+	{
 		setDvar( "bots_play_knife", true );
+	}
 
 	if ( getDvar( "bots_play_fire" ) == "" ) // bots fire
+	{
 		setDvar( "bots_play_fire", true );
+	}
 
 	if ( getDvar( "bots_play_nade" ) == "" ) // bots grenade
+	{
 		setDvar( "bots_play_nade", true );
+	}
 
 	if ( getDvar( "bots_play_take_carepackages" ) == "" ) // bots take carepackages
+	{
 		setDvar( "bots_play_take_carepackages", true );
+	}
 
 	if ( getDvar( "bots_play_obj" ) == "" ) // bots play the obj
+	{
 		setDvar( "bots_play_obj", true );
+	}
 
 	if ( getDvar( "bots_play_camp" ) == "" ) // bots camp and follow
+	{
 		setDvar( "bots_play_camp", true );
+	}
 
 	if ( getDvar( "bots_play_jumpdrop" ) == "" ) // bots jump and dropshot
+	{
 		setDvar( "bots_play_jumpdrop", true );
+	}
 
 	if ( getDvar( "bots_play_target_other" ) == "" ) // bot target non play ents (vehicles)
+	{
 		setDvar( "bots_play_target_other", true );
+	}
 
 	if ( getDvar( "bots_play_killstreak" ) == "" ) // bot use killstreaks
+	{
 		setDvar( "bots_play_killstreak", true );
+	}
 
 	if ( getDvar( "bots_play_ads" ) == "" ) // bot ads
+	{
 		setDvar( "bots_play_ads", true );
+	}
 
 	if ( getDvar( "bots_play_aim" ) == "" )
+	{
 		setDvar( "bots_play_aim", true );
+	}
 
 	if ( !isDefined( game[ "botWarfare" ] ) )
+	{
 		game[ "botWarfare" ] = true;
+	}
 
 	level.defuseObject = undefined;
 	level.bots_smokeList = List();
@@ -217,12 +297,16 @@ handleBots()
 	level addBots();
 
 	while ( !level.intermission )
+	{
 		wait 0.05;
+	}
 
 	setDvar( "bots_manage_add", getBotArray().size );
 
 	if ( !getDvarInt( "bots_main_kickBotsAtEnd" ) )
+	{
 		return;
+	}
 
 	bots = getBotArray();
 
@@ -284,7 +368,9 @@ fixGamemodes()
 		if ( isDefined( level.bombZones ) && level.gametype == "sd" )
 		{
 			for ( i = 0; i < level.bombZones.size; i++ )
+			{
 				level.bombZones[ i ].onUse = ::onUsePlantObjectFix;
+			}
 
 			break;
 		}
@@ -320,9 +406,13 @@ fixDem()
 		for ( i = 0; i < level.bombZones.size; i++ )
 		{
 			if ( isDefined( level.bombZones[ i ].trigger.trigger_off ) )
+			{
 				level.bombZones[ i ].bombExploded = true;
+			}
 			else
+			{
 				level.bombZones[ i ].bombExploded = undefined;
+			}
 		}
 
 		wait 0.05;
@@ -348,14 +438,18 @@ fixKoth()
 		for ( i = level.radios.size - 1; i >= 0; i-- )
 		{
 			if ( level.radioObject != level.radios[ i ].gameobject )
+			{
 				continue;
+			}
 
 			level.radio = level.radios[ i ];
 			break;
 		}
 
 		while ( isDefined( level.radioObject ) && level.radio.gameobject == level.radioObject )
+		{
 			wait 0.05;
+		}
 	}
 }
 
@@ -371,10 +465,14 @@ auditModels_loop()
 		model = s_models[ i ];
 
 		if ( !isDefined( model ) )
+		{
 			continue;
+		}
 
 		if ( isDefined( model.bot_audit_model ) )
+		{
 			continue;
+		}
 
 		if ( model.model == "com_deploy_ballistic_vest_friend_world" )
 		{
@@ -417,29 +515,43 @@ watchRadar_loop()
 		grenade = level.players[ i ].deployedPortableRadar;
 
 		if ( !isDefined( grenade ) )
+		{
 			continue;
+		}
 
 		if ( grenade.model != "weapon_radar" )
+		{
 			continue;
+		}
 
 		for ( h = level.players.size - 1; h >= 0; h-- )
 		{
 			player = level.players[ h ];
 
 			if ( !isReallyAlive( player ) )
+			{
 				continue;
+			}
 
 			if ( isDefined( grenade.owner ) && grenade.owner == player )
+			{
 				continue;
+			}
 
 			if ( level.teamBased && grenade.team == player.team )
+			{
 				continue;
+			}
 
 			if ( player _hasPerk( "specialty_coldblooded" ) )
+			{
 				continue;
+			}
 
 			if ( DistanceSquared( player.origin, grenade.origin ) > 256 * 256 )
+			{
 				continue;
+			}
 
 			player.bot_isInRadar = true;
 		}
@@ -448,29 +560,43 @@ watchRadar_loop()
 	for ( i = level.players.size - 1; i >= 0; i-- )
 	{
 		if ( !isDefined( level.players[ i ].personalRadar ) )
+		{
 			continue;
+		}
 
 		if ( !isReallyAlive( level.players[ i ] ) )
+		{
 			continue;
+		}
 
 		for ( h = level.players.size - 1; h >= 0; h-- )
 		{
 			player = level.players[ h ];
 
 			if ( !isReallyAlive( player ) )
+			{
 				continue;
+			}
 
 			if ( level.players[ i ] == player )
+			{
 				continue;
+			}
 
 			if ( level.teamBased && level.players[ i ].team == player.team )
+			{
 				continue;
+			}
 
 			if ( player _hasPerk( "specialty_coldblooded" ) )
+			{
 				continue;
+			}
 
 			if ( DistanceSquared( player.origin, level.players[ i ].origin ) > 256 * 256 )
+			{
 				continue;
+			}
 
 			player.bot_isInRadar = true;
 		}
@@ -483,16 +609,24 @@ watchRadar_loop()
 			player = level.players[ h ];
 
 			if ( !isReallyAlive( player ) )
+			{
 				continue;
+			}
 
 			if ( level.teamBased && level.gameFlag.carrier.team != player.team )
+			{
 				continue;
+			}
 
 			if ( player _hasPerk( "specialty_coldblooded" ) )
+			{
 				continue;
+			}
 
 			if ( DistanceSquared( player.origin, level.gameFlag.carrier.origin ) > 256 * 256 )
+			{
 				continue;
+			}
 
 			player.bot_isInRadar = true;
 		}
@@ -528,26 +662,38 @@ watchScrabler_loop()
 		scrambler = level.scramblers[ i ];
 
 		if ( !isDefined( scrambler ) )
+		{
 			continue;
+		}
 
 		for ( h = level.players.size - 1; h >= 0; h-- )
 		{
 			player = level.players[ h ];
 
 			if ( !isReallyAlive( player ) )
+			{
 				continue;
+			}
 
 			if ( isDefined( scrambler.owner ) && scrambler.owner == player )
+			{
 				continue;
+			}
 
 			if ( level.teamBased && scrambler.team == player.team )
+			{
 				continue;
+			}
 
 			if ( player _hasPerk( "specialty_spygame" ) )
+			{
 				continue;
+			}
 
 			if ( DistanceSquared( player.origin, scrambler.origin ) > 256 * 256 )
+			{
 				continue;
+			}
 
 			player.bot_isScrambled = true;
 		}
@@ -556,10 +702,14 @@ watchScrabler_loop()
 	drones = [];
 
 	if ( isDefined( level.remote_uav[ "axis" ] ) )
+	{
 		drones[ drones.size ] = level.remote_uav[ "axis" ];
+	}
 
 	if ( isDefined( level.remote_uav[ "allies" ] ) )
+	{
 		drones[ drones.size ] = level.remote_uav[ "allies" ];
+	}
 
 	for ( i = drones.size - 1; i >= 0; i-- )
 	{
@@ -570,19 +720,29 @@ watchScrabler_loop()
 			player = level.players[ h ];
 
 			if ( !isReallyAlive( player ) )
+			{
 				continue;
+			}
 
 			if ( isDefined( drone.owner ) && drone.owner == player )
+			{
 				continue;
+			}
 
 			if ( level.teamBased && drone.team == player.team )
+			{
 				continue;
+			}
 
 			if ( player _hasPerk( "specialty_spygame" ) )
+			{
 				continue;
+			}
 
 			if ( DistanceSquared( player.origin, drone.origin ) > 256 * 256 )
+			{
 				continue;
+			}
 
 			player.bot_isScrambled = true;
 		}
@@ -614,7 +774,9 @@ addNotifyOnAirdrops_loop()
 		airdrop = dropCrates[ i ];
 
 		if ( isDefined( airdrop.doingPhysics ) )
+		{
 			continue;
+		}
 
 		airdrop.doingPhysics = true;
 		airdrop thread doNotifyOnAirdrop();
@@ -644,7 +806,9 @@ doNotifyOnAirdrop()
 	self.doingPhysics = false;
 
 	if ( isDefined( self.owner ) )
+	{
 		self.owner notify( "crate_physics_done" );
+	}
 
 	self thread onCarepackageCaptured();
 }
@@ -701,10 +865,14 @@ connected()
 	self endon( "disconnect" );
 
 	if ( !isDefined( self.pers[ "bot_host" ] ) )
+	{
 		self thread doHostCheck();
+	}
 
 	if ( !self is_bot() )
+	{
 		return;
+	}
 
 	if ( !isDefined( self.pers[ "isBot" ] ) )
 	{
@@ -745,25 +913,39 @@ watchBotDebugEvent()
 			big_str = "Bot Warfare debug: " + self.name + ": " + msg;
 
 			if ( isDefined( str ) && isString( str ) )
+			{
 				big_str += ", " + str;
+			}
 
 			if ( isDefined( b ) && isString( b ) )
+			{
 				big_str += ", " + b;
+			}
 
 			if ( isDefined( c ) && isString( c ) )
+			{
 				big_str += ", " + c;
+			}
 
 			if ( isDefined( d ) && isString( d ) )
+			{
 				big_str += ", " + d;
+			}
 
 			if ( isDefined( e ) && isString( e ) )
+			{
 				big_str += ", " + e;
+			}
 
 			if ( isDefined( f ) && isString( f ) )
+			{
 				big_str += ", " + f;
+			}
 
 			if ( isDefined( g ) && isString( g ) )
+			{
 				big_str += ", " + g;
+			}
 
 			BotBuiltinPrintConsole( big_str );
 		}
@@ -825,10 +1007,14 @@ diffBots_loop()
 			player = level.players[ i ];
 
 			if ( !isDefined( player.pers[ "team" ] ) )
+			{
 				continue;
+			}
 
 			if ( !player is_bot() )
+			{
 				continue;
+			}
 
 			if ( player.pers[ "team" ] == "axis" )
 			{
@@ -843,7 +1029,9 @@ diffBots_loop()
 					player.pers[ "bots" ][ "skill" ][ "base" ] = 4;
 				}
 				else
+				{
 					player.pers[ "bots" ][ "skill" ][ "base" ] = 1;
+				}
 			}
 			else if ( player.pers[ "team" ] == "allies" )
 			{
@@ -858,7 +1046,9 @@ diffBots_loop()
 					player.pers[ "bots" ][ "skill" ][ "base" ] = 4;
 				}
 				else
+				{
 					player.pers[ "bots" ][ "skill" ][ "base" ] = 1;
+				}
 			}
 		}
 	}
@@ -871,7 +1061,9 @@ diffBots_loop()
 			player = level.players[ i ];
 
 			if ( !player is_bot() )
+			{
 				continue;
+			}
 
 			player.pers[ "bots" ][ "skill" ][ "base" ] = var_skill;
 		}
@@ -886,7 +1078,9 @@ diffBots_loop()
 		player = level.players[ i ];
 
 		if ( !player is_bot() )
+		{
 			continue;
+		}
 
 		player.pers[ "bots" ][ "skill" ][ "base" ] = int( clamp( player.pers[ "bots" ][ "skill" ][ "base" ], min_diff, max_diff ) );
 	}
@@ -925,21 +1119,31 @@ teamBots_loop()
 		player = level.players[ i ];
 
 		if ( !isDefined( player.pers[ "team" ] ) )
+		{
 			continue;
+		}
 
 		if ( player is_bot() )
 		{
 			if ( player.pers[ "team" ] == "allies" )
+			{
 				alliesbots++;
+			}
 			else if ( player.pers[ "team" ] == "axis" )
+			{
 				axisbots++;
+			}
 		}
 		else
 		{
 			if ( player.pers[ "team" ] == "allies" )
+			{
 				alliesplayers++;
+			}
 			else if ( player.pers[ "team" ] == "axis" )
+			{
 				axisplayers++;
+			}
 		}
 	}
 
@@ -963,7 +1167,9 @@ teamBots_loop()
 					toTeam = "axis";
 
 					if ( axis > allies )
+					{
 						toTeam = "allies";
+					}
 				}
 			}
 
@@ -976,20 +1182,32 @@ teamBots_loop()
 					player = level.players[ i ];
 
 					if ( !isDefined( player.pers[ "team" ] ) )
+					{
 						continue;
+					}
 
 					if ( !player is_bot() )
+					{
 						continue;
+					}
 
 					if ( player.pers[ "team" ] == toTeam )
+					{
 						continue;
+					}
 
 					if ( toTeam == "allies" )
+					{
 						player thread [[ level.allies ]]();
+					}
 					else if ( toTeam == "axis" )
+					{
 						player thread [[ level.axis ]]();
+					}
 					else
+					{
 						player thread [[ level.spectator ]]();
+					}
 
 					break;
 				}
@@ -1005,10 +1223,14 @@ teamBots_loop()
 			player = level.players[ i ];
 
 			if ( !isDefined( player.pers[ "team" ] ) )
+			{
 				continue;
+			}
 
 			if ( !player is_bot() )
+			{
 				continue;
+			}
 
 			if ( player.pers[ "team" ] == "axis" )
 			{
@@ -1059,7 +1281,9 @@ addBots_loop()
 		SetDvar( "bots_manage_add", 0 );
 
 		if ( botsToAdd > 64 )
+		{
 			botsToAdd = 64;
+		}
 
 		for ( ; botsToAdd > 0; botsToAdd-- )
 		{
@@ -1071,7 +1295,9 @@ addBots_loop()
 	fillMode = getDVarInt( "bots_manage_fill_mode" );
 
 	if ( fillMode == 2 || fillMode == 3 )
+	{
 		setDvar( "bots_manage_fill", getGoodMapAmount() );
+	}
 
 	fillAmount = getDvarInt( "bots_manage_fill" );
 
@@ -1086,11 +1312,17 @@ addBots_loop()
 		player = level.players[ i ];
 
 		if ( player is_bot() )
+		{
 			bots++;
+		}
 		else if ( !isDefined( player.pers[ "team" ] ) || ( player.pers[ "team" ] != "axis" && player.pers[ "team" ] != "allies" ) )
+		{
 			spec++;
+		}
 		else
+		{
 			players++;
+		}
 	}
 
 	if ( !randomInt( 999 ) )
@@ -1113,15 +1345,23 @@ addBots_loop()
 			player = level.players[ i ];
 
 			if ( player is_bot() )
+			{
 				continue;
+			}
 
 			if ( !isDefined( player.pers[ "team" ] ) )
+			{
 				continue;
+			}
 
 			if ( player.pers[ "team" ] == "axis" )
+			{
 				axisplayers++;
+			}
 			else if ( player.pers[ "team" ] == "allies" )
+			{
 				alliesplayers++;
+			}
 		}
 
 		result = fillAmount - abs( axisplayers - alliesplayers ) + bots;
@@ -1129,11 +1369,17 @@ addBots_loop()
 		if ( players == 0 )
 		{
 			if ( bots < fillAmount )
+			{
 				result = fillAmount - 1;
+			}
 			else if ( bots > fillAmount )
+			{
 				result = fillAmount + 1;
+			}
 			else
+			{
 				result = fillAmount;
+			}
 		}
 
 		bots = result;
@@ -1142,19 +1388,27 @@ addBots_loop()
 	amount = bots;
 
 	if ( fillMode == 0 || fillMode == 2 )
+	{
 		amount += players;
+	}
 
 	if ( getDVarInt( "bots_manage_fill_spec" ) )
+	{
 		amount += spec;
+	}
 
 	if ( amount < fillAmount )
+	{
 		setDvar( "bots_manage_add", 1 );
+	}
 	else if ( amount > fillAmount && getDvarInt( "bots_manage_fill_kick" ) )
 	{
 		tempBot = getBotToKick();
 
 		if ( isDefined( tempBot ) )
+		{
 			kick( tempBot getEntityNumber() );
+		}
 	}
 }
 
@@ -1187,14 +1441,20 @@ onGrenadeFire()
 		self waittill ( "grenade_fire", grenade, weaponName );
 
 		if ( !isDefined( grenade ) )
+		{
 			continue;
+		}
 
 		grenade.name = weaponName;
 
 		if ( weaponName == "smoke_grenade_mp" )
+		{
 			grenade thread AddToSmokeList();
+		}
 		else if ( isSubStr( weaponName, "frag_" ) )
+		{
 			grenade thread AddToFragList( self );
+		}
 	}
 }
 
