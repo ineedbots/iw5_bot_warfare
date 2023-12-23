@@ -68,7 +68,7 @@ bot_get_prestige()
 	{
 		for ( i = 0; i < level.players.size; i++ )
 		{
-			player = level.players[i];
+			player = level.players[ i ];
 
 			if ( !isDefined( player.team ) )
 				continue;
@@ -108,7 +108,7 @@ bot_get_rank()
 
 		for ( i = level.players.size - 1; i >= 0; i-- )
 		{
-			player = level.players[i];
+			player = level.players[ i ];
 
 			if ( player == self )
 				continue;
@@ -174,7 +174,7 @@ getCardTitles()
 		if ( !isSubStr( card_name, "cardtitle_" ) )
 			continue;
 
-		cards[cards.size] = i;
+		cards[ cards.size ] = i;
 	}
 
 	return cards;
@@ -197,7 +197,7 @@ getCardIcons()
 		if ( !isSubStr( card_name, "cardicon_" ) )
 			continue;
 
-		cards[cards.size] = i;
+		cards[ cards.size ] = i;
 	}
 
 	return cards;
@@ -231,11 +231,11 @@ getAttachmentsForGun( gun )
 
 		if ( attachmentName == "" )
 		{
-			attachments[attachments.size] = "none";
+			attachments[ attachments.size ] = "none";
 			break;
 		}
 
-		attachments[attachments.size] = attachmentName;
+		attachments[ attachments.size ] = attachmentName;
 	}
 
 	return attachments;
@@ -260,7 +260,7 @@ getPrimaries()
 		if ( isSubStr( weapon_name, "jugg" ) )
 			continue;
 
-		primaries[primaries.size] = weapon_name;
+		primaries[ primaries.size ] = weapon_name;
 	}
 
 	return primaries;
@@ -285,7 +285,7 @@ getSecondaries()
 		if ( weapon_name == "gl" || isSubStr( weapon_name, "jugg" ) )
 			continue;
 
-		secondaries[secondaries.size] = weapon_name;
+		secondaries[ secondaries.size ] = weapon_name;
 	}
 
 	return secondaries;
@@ -305,7 +305,7 @@ getCamos()
 		if ( camo_name == "" )
 			continue;
 
-		camos[camos.size] = camo_name;
+		camos[ camos.size ] = camo_name;
 	}
 
 	return camos;
@@ -325,7 +325,7 @@ getReticles()
 		if ( reticle_name == "" )
 			continue;
 
-		reticles[reticles.size] = reticle_name;
+		reticles[ reticles.size ] = reticle_name;
 	}
 
 	return reticles;
@@ -350,7 +350,7 @@ getPerks( perktype )
 		if ( perk_name == "specialty_uav" )
 			continue;
 
-		perks[perks.size] = perk_name;
+		perks[ perks.size ] = perk_name;
 	}
 
 	return perks;
@@ -387,7 +387,7 @@ getKillstreaks()
 		if ( isSubstr( streak_name, "specialty_" ) && isSubstr( streak_name, "_pro" ) )
 			continue;
 
-		killstreaks[killstreaks.size] = streak_name;
+		killstreaks[ killstreaks.size ] = streak_name;
 	}
 
 	return killstreaks;
@@ -402,53 +402,53 @@ getWeaponProfs( weapClass )
 
 	if ( weapClass == "weapon_assault" )
 	{
-		answer[answer.size] = "specialty_bling";
-		answer[answer.size] = "specialty_bulletpenetration";
-		answer[answer.size] = "specialty_marksman";
-		answer[answer.size] = "specialty_sharp_focus";
-		answer[answer.size] = "specialty_holdbreathwhileads";
-		answer[answer.size] = "specialty_reducedsway";
+		answer[ answer.size ] = "specialty_bling";
+		answer[ answer.size ] = "specialty_bulletpenetration";
+		answer[ answer.size ] = "specialty_marksman";
+		answer[ answer.size ] = "specialty_sharp_focus";
+		answer[ answer.size ] = "specialty_holdbreathwhileads";
+		answer[ answer.size ] = "specialty_reducedsway";
 	}
 	else if ( weapClass == "weapon_smg" )
 	{
-		answer[answer.size] = "specialty_bling";
-		answer[answer.size] = "specialty_marksman";
-		answer[answer.size] = "specialty_sharp_focus";
-		answer[answer.size] = "specialty_reducedsway";
-		answer[answer.size] = "specialty_longerrange";
-		answer[answer.size] = "specialty_fastermelee";
+		answer[ answer.size ] = "specialty_bling";
+		answer[ answer.size ] = "specialty_marksman";
+		answer[ answer.size ] = "specialty_sharp_focus";
+		answer[ answer.size ] = "specialty_reducedsway";
+		answer[ answer.size ] = "specialty_longerrange";
+		answer[ answer.size ] = "specialty_fastermelee";
 	}
 	else if ( weapClass == "weapon_lmg" )
 	{
-		answer[answer.size] = "specialty_bling";
-		answer[answer.size] = "specialty_bulletpenetration";
-		answer[answer.size] = "specialty_marksman";
-		answer[answer.size] = "specialty_sharp_focus";
-		answer[answer.size] = "specialty_reducedsway";
-		answer[answer.size] = "specialty_lightweight";
+		answer[ answer.size ] = "specialty_bling";
+		answer[ answer.size ] = "specialty_bulletpenetration";
+		answer[ answer.size ] = "specialty_marksman";
+		answer[ answer.size ] = "specialty_sharp_focus";
+		answer[ answer.size ] = "specialty_reducedsway";
+		answer[ answer.size ] = "specialty_lightweight";
 	}
 	else if ( weapClass == "weapon_sniper" )
 	{
-		answer[answer.size] = "specialty_bling";
-		answer[answer.size] = "specialty_bulletpenetration";
-		answer[answer.size] = "specialty_marksman";
-		answer[answer.size] = "specialty_sharp_focus";
-		answer[answer.size] = "specialty_reducedsway";
-		answer[answer.size] = "specialty_lightweight";
+		answer[ answer.size ] = "specialty_bling";
+		answer[ answer.size ] = "specialty_bulletpenetration";
+		answer[ answer.size ] = "specialty_marksman";
+		answer[ answer.size ] = "specialty_sharp_focus";
+		answer[ answer.size ] = "specialty_reducedsway";
+		answer[ answer.size ] = "specialty_lightweight";
 	}
 	else if ( weapClass == "weapon_shotgun" )
 	{
-		answer[answer.size] = "specialty_bling";
-		answer[answer.size] = "specialty_marksman";
-		answer[answer.size] = "specialty_sharp_focus";
-		answer[answer.size] = "specialty_longerrange";
-		answer[answer.size] = "specialty_fastermelee";
-		answer[answer.size] = "specialty_moredamage";
+		answer[ answer.size ] = "specialty_bling";
+		answer[ answer.size ] = "specialty_marksman";
+		answer[ answer.size ] = "specialty_sharp_focus";
+		answer[ answer.size ] = "specialty_longerrange";
+		answer[ answer.size ] = "specialty_fastermelee";
+		answer[ answer.size ] = "specialty_moredamage";
 	}
 	else if ( weapClass == "weapon_riot" )
 	{
-		answer[answer.size] = "specialty_fastermelee";
-		answer[answer.size] = "specialty_lightweight";
+		answer[ answer.size ] = "specialty_fastermelee";
+		answer[ answer.size ] = "specialty_lightweight";
 	}
 
 	return answer;
@@ -502,7 +502,7 @@ chooseRandomPerk( perkkind )
 			continue;
 
 		if ( RandomFloatRange( 0, 1 ) < ( ( rank / level.maxRank ) + 0.1 ) )
-			self.pers["bots"]["unlocks"]["upgraded_" + perk] = true;
+			self.pers[ "bots" ][ "unlocks" ][ "upgraded_" + perk ] = true;
 
 		return perk;
 	}
@@ -618,7 +618,7 @@ chooseRandomBuff( weap )
 	allowOp = ( getDvarInt( "bots_loadout_allow_op" ) >= 1 );
 	reasonable = getDvarInt( "bots_loadout_reasonable" );
 
-	buffs[buffs.size] = "specialty_null";
+	buffs[ buffs.size ] = "specialty_null";
 
 	if ( RandomFloatRange( 0, 1 ) >= ( ( rank / level.maxRank ) + 0.1 ) )
 	{
@@ -646,8 +646,8 @@ chooseRandomAttachmentComboForGun( gun )
 	if ( RandomFloatRange( 0, 1 ) >= ( ( rank / level.maxRank ) + 0.1 ) )
 	{
 		retAtts = [];
-		retAtts[0] = "none";
-		retAtts[1] = "none";
+		retAtts[ 0 ] = "none";
+		retAtts[ 1 ] = "none";
 
 		return retAtts;
 	}
@@ -671,8 +671,8 @@ chooseRandomAttachmentComboForGun( gun )
 		}
 
 		retAtts = [];
-		retAtts[0] = att1;
-		retAtts[1] = att2;
+		retAtts[ 0 ] = att1;
+		retAtts[ 1 ] = att2;
 
 		return retAtts;
 	}
@@ -784,7 +784,7 @@ chooseRandomKillstreaks( type, perks )
 	{
 		streak = random( allStreaks );
 
-		if ( isDefined( chooseStreaks[streak] ) )
+		if ( isDefined( chooseStreaks[ streak ] ) )
 			continue;
 
 		if ( type == "streaktype_specialist" )
@@ -792,12 +792,12 @@ chooseRandomKillstreaks( type, perks )
 			if ( !isSubStr( streak, "specialty_" ) )
 				continue;
 
-			perk = strTok( streak, "_ks" )[0];
+			perk = strTok( streak, "_ks" )[ 0 ];
 
 			if ( !self isItemUnlocked( perk ) )
 				continue;
 
-			if ( isDefined( perks[perk] ) )
+			if ( isDefined( perks[ perk ] ) )
 				continue;
 		}
 		else
@@ -809,20 +809,20 @@ chooseRandomKillstreaks( type, perks )
 					if ( type == "streaktype_support" )
 					{
 						if ( i == 2 )
-							answers[answers.size] = "uav_support";
+							answers[ answers.size ] = "uav_support";
 						else if ( i == 1 )
-							answers[answers.size] = "sam_turret";
+							answers[ answers.size ] = "sam_turret";
 						else
-							answers[answers.size] = "triple_uav";
+							answers[ answers.size ] = "triple_uav";
 					}
 					else
 					{
 						if ( i == 2 )
-							answers[answers.size] = "uav";
+							answers[ answers.size ] = "uav";
 						else if ( i == 1 )
-							answers[answers.size] = "predator_missile";
+							answers[ answers.size ] = "predator_missile";
 						else
-							answers[answers.size] = "helicopter";
+							answers[ answers.size ] = "helicopter";
 					}
 				}
 
@@ -847,8 +847,8 @@ chooseRandomKillstreaks( type, perks )
 			}
 		}
 
-		answers[answers.size] = streak;
-		chooseStreaks[streak] = true;
+		answers[ answers.size ] = streak;
+		chooseStreaks[ streak ] = true;
 		availUnlocks--;
 
 		if ( answers.size > 2 )
@@ -867,7 +867,7 @@ isColidingKillstreak( killstreaks, killstreak )
 
 	for ( i = 0; i < killstreaks.size; i++ )
 	{
-		ks = killstreaks[i];
+		ks = killstreaks[ i ];
 
 		if ( ks == "" )
 			continue;
@@ -903,8 +903,8 @@ setClasses()
 
 	if ( RandomFloatRange( 0, 1 ) < ( ( rank / level.maxRank ) + 0.1 ) )
 	{
-		self.pers["bots"]["unlocks"]["ghillie"] = true;
-		self.pers["bots"]["behavior"]["quickscope"] = true;
+		self.pers[ "bots" ][ "unlocks" ][ "ghillie" ] = true;
+		self.pers[ "bots" ][ "behavior" ][ "quickscope" ] = true;
 	}
 
 	whereToSave = "customClasses";
@@ -941,12 +941,12 @@ setClasses()
 		{
 			secondaryReticle = "none";
 			secondaryCamo = "none";
-			secondaryAtts[1] = "none";
+			secondaryAtts[ 1 ] = "none";
 		}
-		else if ( !isDefined( self.pers["bots"]["unlocks"]["upgraded_specialty_twoprimaries"] ) )
+		else if ( !isDefined( self.pers[ "bots" ][ "unlocks" ][ "upgraded_specialty_twoprimaries" ] ) )
 		{
-			secondaryAtts[0] = "none";
-			secondaryAtts[1] = "none";
+			secondaryAtts[ 0 ] = "none";
+			secondaryAtts[ 1 ] = "none";
 		}
 
 		perk1 = chooseRandomPerk( "perk1" );
@@ -956,23 +956,23 @@ setClasses()
 		tactical = chooseRandomTactical();
 
 		perks = [];
-		perks[perk1] = true;
-		perks[perk2] = true;
-		perks[perk3] = true;
+		perks[ perk1 ] = true;
+		perks[ perk2 ] = true;
+		perks[ perk3 ] = true;
 
 		ksType = chooseRandomPerk( "perk5" );
 		killstreaks = chooseRandomKillstreaks( ksType, perks );
 
 		self setPlayerData( whereToSave, i, "weaponSetups", 0, "weapon", primary );
-		self setPlayerData( whereToSave, i, "weaponSetups", 0, "attachment", 0, primaryAtts[0] );
-		self setPlayerData( whereToSave, i, "weaponSetups", 0, "attachment", 1, primaryAtts[1] );
+		self setPlayerData( whereToSave, i, "weaponSetups", 0, "attachment", 0, primaryAtts[ 0 ] );
+		self setPlayerData( whereToSave, i, "weaponSetups", 0, "attachment", 1, primaryAtts[ 1 ] );
 		self setPlayerData( whereToSave, i, "weaponSetups", 0, "camo", primaryCamo );
 		self setPlayerData( whereToSave, i, "weaponSetups", 0, "reticle", primaryReticle );
 		self setPlayerData( whereToSave, i, "weaponSetups", 0, "buff", primaryBuff );
 
 		self setPlayerData( whereToSave, i, "weaponSetups", 1, "weapon", secondary );
-		self setPlayerData( whereToSave, i, "weaponSetups", 1, "attachment", 0, secondaryAtts[0] );
-		self setPlayerData( whereToSave, i, "weaponSetups", 1, "attachment", 1, secondaryAtts[1] );
+		self setPlayerData( whereToSave, i, "weaponSetups", 1, "attachment", 0, secondaryAtts[ 0 ] );
+		self setPlayerData( whereToSave, i, "weaponSetups", 1, "attachment", 1, secondaryAtts[ 1 ] );
 		self setPlayerData( whereToSave, i, "weaponSetups", 1, "camo", secondaryCamo );
 		self setPlayerData( whereToSave, i, "weaponSetups", 1, "reticle", secondaryReticle );
 		self setPlayerData( whereToSave, i, "weaponSetups", 1, "buff", secondaryBuff );
@@ -1003,9 +1003,9 @@ setClasses()
 				break;
 		}
 
-		self setPlayerData( whereToSave, i, playerData, 0, killstreaks[0] );
-		self setPlayerData( whereToSave, i, playerData, 1, killstreaks[1] );
-		self setPlayerData( whereToSave, i, playerData, 2, killstreaks[2] );
+		self setPlayerData( whereToSave, i, playerData, 0, killstreaks[ 0 ] );
+		self setPlayerData( whereToSave, i, playerData, 1, killstreaks[ 1 ] );
+		self setPlayerData( whereToSave, i, playerData, 2, killstreaks[ 2 ] );
 	}
 }
 
@@ -1104,7 +1104,7 @@ bot_cry_for_help( attacker )
 
 	for ( i = level.players.size - 1; i >= 0; i-- )
 	{
-		player = level.players[i];
+		player = level.players[ i ];
 
 		if ( !player is_bot() )
 		{
@@ -1129,7 +1129,7 @@ bot_cry_for_help( attacker )
 			continue;
 		}
 
-		dist = player.pers["bots"]["skill"]["help_dist"];
+		dist = player.pers[ "bots" ][ "skill" ][ "help_dist" ];
 		dist *= dist;
 
 		if ( DistanceSquared( self.origin, player.origin ) > dist )
@@ -1193,17 +1193,17 @@ classWatch()
 
 	for ( ;; )
 	{
-		while ( !isdefined( self.pers["team"] ) || !allowClassChoice() )
+		while ( !isdefined( self.pers[ "team" ] ) || !allowClassChoice() )
 			wait .05;
 
 		wait 0.5;
 
 		if ( !isValidClass( self.class ) || !isDefined( self.bot_change_class ) )
-			self notify( "menuresponse", game["menu_changeclass"], self chooseRandomClass() );
+			self notify( "menuresponse", game[ "menu_changeclass" ], self chooseRandomClass() );
 
 		self.bot_change_class = true;
 
-		while ( isdefined( self.pers["team"] ) && isValidClass( self.class ) && isDefined( self.bot_change_class ) )
+		while ( isdefined( self.pers[ "team" ] ) && isValidClass( self.class ) && isDefined( self.bot_change_class ) )
 			wait .05;
 	}
 }
@@ -1302,15 +1302,15 @@ teamWatch()
 
 	for ( ;; )
 	{
-		while ( !isdefined( self.pers["team"] ) || !allowTeamChoice() )
+		while ( !isdefined( self.pers[ "team" ] ) || !allowTeamChoice() )
 			wait .05;
 
 		wait 0.1;
 
 		if ( self.team != "axis" && self.team != "allies" )
-			self notify( "menuresponse", game["menu_team"], getDvar( "bots_team" ) );
+			self notify( "menuresponse", game[ "menu_team" ], getDvar( "bots_team" ) );
 
-		while ( isdefined( self.pers["team"] ) )
+		while ( isdefined( self.pers[ "team" ] ) )
 			wait .05;
 	}
 }
@@ -1326,230 +1326,230 @@ difficulty()
 	{
 		if ( GetDvarInt( "bots_skill" ) != 9 )
 		{
-			switch ( self.pers["bots"]["skill"]["base"] )
+			switch ( self.pers[ "bots" ][ "skill" ][ "base" ] )
 			{
 				case 1:
-					self.pers["bots"]["skill"]["aim_time"] = 0.6;
-					self.pers["bots"]["skill"]["init_react_time"] = 1500;
-					self.pers["bots"]["skill"]["reaction_time"] = 1000;
-					self.pers["bots"]["skill"]["no_trace_ads_time"] = 500;
-					self.pers["bots"]["skill"]["no_trace_look_time"] = 600;
-					self.pers["bots"]["skill"]["remember_time"] = 750;
-					self.pers["bots"]["skill"]["fov"] = 0.7;
-					self.pers["bots"]["skill"]["dist_max"] = 2500;
-					self.pers["bots"]["skill"]["dist_start"] = 1000;
-					self.pers["bots"]["skill"]["spawn_time"] = 0.75;
-					self.pers["bots"]["skill"]["help_dist"] = 0;
-					self.pers["bots"]["skill"]["semi_time"] = 0.9;
-					self.pers["bots"]["skill"]["shoot_after_time"] = 1;
-					self.pers["bots"]["skill"]["aim_offset_time"] = 1.5;
-					self.pers["bots"]["skill"]["aim_offset_amount"] = 4;
-					self.pers["bots"]["skill"]["bone_update_interval"] = 2;
-					self.pers["bots"]["skill"]["bones"] = "j_spineupper,j_ankle_le,j_ankle_ri";
-					self.pers["bots"]["skill"]["ads_fov_multi"] = 0.5;
-					self.pers["bots"]["skill"]["ads_aimspeed_multi"] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "aim_time" ] = 0.6;
+					self.pers[ "bots" ][ "skill" ][ "init_react_time" ] = 1500;
+					self.pers[ "bots" ][ "skill" ][ "reaction_time" ] = 1000;
+					self.pers[ "bots" ][ "skill" ][ "no_trace_ads_time" ] = 500;
+					self.pers[ "bots" ][ "skill" ][ "no_trace_look_time" ] = 600;
+					self.pers[ "bots" ][ "skill" ][ "remember_time" ] = 750;
+					self.pers[ "bots" ][ "skill" ][ "fov" ] = 0.7;
+					self.pers[ "bots" ][ "skill" ][ "dist_max" ] = 2500;
+					self.pers[ "bots" ][ "skill" ][ "dist_start" ] = 1000;
+					self.pers[ "bots" ][ "skill" ][ "spawn_time" ] = 0.75;
+					self.pers[ "bots" ][ "skill" ][ "help_dist" ] = 0;
+					self.pers[ "bots" ][ "skill" ][ "semi_time" ] = 0.9;
+					self.pers[ "bots" ][ "skill" ][ "shoot_after_time" ] = 1;
+					self.pers[ "bots" ][ "skill" ][ "aim_offset_time" ] = 1.5;
+					self.pers[ "bots" ][ "skill" ][ "aim_offset_amount" ] = 4;
+					self.pers[ "bots" ][ "skill" ][ "bone_update_interval" ] = 2;
+					self.pers[ "bots" ][ "skill" ][ "bones" ] = "j_spineupper,j_ankle_le,j_ankle_ri";
+					self.pers[ "bots" ][ "skill" ][ "ads_fov_multi" ] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "ads_aimspeed_multi" ] = 0.5;
 
-					self.pers["bots"]["behavior"]["strafe"] = 0;
-					self.pers["bots"]["behavior"]["nade"] = 10;
-					self.pers["bots"]["behavior"]["sprint"] = 30;
-					self.pers["bots"]["behavior"]["camp"] = 5;
-					self.pers["bots"]["behavior"]["follow"] = 5;
-					self.pers["bots"]["behavior"]["crouch"] = 20;
-					self.pers["bots"]["behavior"]["switch"] = 2;
-					self.pers["bots"]["behavior"]["class"] = 2;
-					self.pers["bots"]["behavior"]["jump"] = 0;
+					self.pers[ "bots" ][ "behavior" ][ "strafe" ] = 0;
+					self.pers[ "bots" ][ "behavior" ][ "nade" ] = 10;
+					self.pers[ "bots" ][ "behavior" ][ "sprint" ] = 30;
+					self.pers[ "bots" ][ "behavior" ][ "camp" ] = 5;
+					self.pers[ "bots" ][ "behavior" ][ "follow" ] = 5;
+					self.pers[ "bots" ][ "behavior" ][ "crouch" ] = 20;
+					self.pers[ "bots" ][ "behavior" ][ "switch" ] = 2;
+					self.pers[ "bots" ][ "behavior" ][ "class" ] = 2;
+					self.pers[ "bots" ][ "behavior" ][ "jump" ] = 0;
 					break;
 
 				case 2:
-					self.pers["bots"]["skill"]["aim_time"] = 0.55;
-					self.pers["bots"]["skill"]["init_react_time"] = 1000;
-					self.pers["bots"]["skill"]["reaction_time"] = 800;
-					self.pers["bots"]["skill"]["no_trace_ads_time"] = 1000;
-					self.pers["bots"]["skill"]["no_trace_look_time"] = 1250;
-					self.pers["bots"]["skill"]["remember_time"] = 1500;
-					self.pers["bots"]["skill"]["fov"] = 0.65;
-					self.pers["bots"]["skill"]["dist_max"] = 3000;
-					self.pers["bots"]["skill"]["dist_start"] = 1500;
-					self.pers["bots"]["skill"]["spawn_time"] = 0.65;
-					self.pers["bots"]["skill"]["help_dist"] = 500;
-					self.pers["bots"]["skill"]["semi_time"] = 0.75;
-					self.pers["bots"]["skill"]["shoot_after_time"] = 0.75;
-					self.pers["bots"]["skill"]["aim_offset_time"] = 1;
-					self.pers["bots"]["skill"]["aim_offset_amount"] = 3;
-					self.pers["bots"]["skill"]["bone_update_interval"] = 1.5;
-					self.pers["bots"]["skill"]["bones"] = "j_spineupper,j_ankle_le,j_ankle_ri,j_head";
-					self.pers["bots"]["skill"]["ads_fov_multi"] = 0.5;
-					self.pers["bots"]["skill"]["ads_aimspeed_multi"] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "aim_time" ] = 0.55;
+					self.pers[ "bots" ][ "skill" ][ "init_react_time" ] = 1000;
+					self.pers[ "bots" ][ "skill" ][ "reaction_time" ] = 800;
+					self.pers[ "bots" ][ "skill" ][ "no_trace_ads_time" ] = 1000;
+					self.pers[ "bots" ][ "skill" ][ "no_trace_look_time" ] = 1250;
+					self.pers[ "bots" ][ "skill" ][ "remember_time" ] = 1500;
+					self.pers[ "bots" ][ "skill" ][ "fov" ] = 0.65;
+					self.pers[ "bots" ][ "skill" ][ "dist_max" ] = 3000;
+					self.pers[ "bots" ][ "skill" ][ "dist_start" ] = 1500;
+					self.pers[ "bots" ][ "skill" ][ "spawn_time" ] = 0.65;
+					self.pers[ "bots" ][ "skill" ][ "help_dist" ] = 500;
+					self.pers[ "bots" ][ "skill" ][ "semi_time" ] = 0.75;
+					self.pers[ "bots" ][ "skill" ][ "shoot_after_time" ] = 0.75;
+					self.pers[ "bots" ][ "skill" ][ "aim_offset_time" ] = 1;
+					self.pers[ "bots" ][ "skill" ][ "aim_offset_amount" ] = 3;
+					self.pers[ "bots" ][ "skill" ][ "bone_update_interval" ] = 1.5;
+					self.pers[ "bots" ][ "skill" ][ "bones" ] = "j_spineupper,j_ankle_le,j_ankle_ri,j_head";
+					self.pers[ "bots" ][ "skill" ][ "ads_fov_multi" ] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "ads_aimspeed_multi" ] = 0.5;
 
-					self.pers["bots"]["behavior"]["strafe"] = 10;
-					self.pers["bots"]["behavior"]["nade"] = 15;
-					self.pers["bots"]["behavior"]["sprint"] = 45;
-					self.pers["bots"]["behavior"]["camp"] = 5;
-					self.pers["bots"]["behavior"]["follow"] = 5;
-					self.pers["bots"]["behavior"]["crouch"] = 15;
-					self.pers["bots"]["behavior"]["switch"] = 2;
-					self.pers["bots"]["behavior"]["class"] = 2;
-					self.pers["bots"]["behavior"]["jump"] = 10;
+					self.pers[ "bots" ][ "behavior" ][ "strafe" ] = 10;
+					self.pers[ "bots" ][ "behavior" ][ "nade" ] = 15;
+					self.pers[ "bots" ][ "behavior" ][ "sprint" ] = 45;
+					self.pers[ "bots" ][ "behavior" ][ "camp" ] = 5;
+					self.pers[ "bots" ][ "behavior" ][ "follow" ] = 5;
+					self.pers[ "bots" ][ "behavior" ][ "crouch" ] = 15;
+					self.pers[ "bots" ][ "behavior" ][ "switch" ] = 2;
+					self.pers[ "bots" ][ "behavior" ][ "class" ] = 2;
+					self.pers[ "bots" ][ "behavior" ][ "jump" ] = 10;
 					break;
 
 				case 3:
-					self.pers["bots"]["skill"]["aim_time"] = 0.4;
-					self.pers["bots"]["skill"]["init_react_time"] = 750;
-					self.pers["bots"]["skill"]["reaction_time"] = 500;
-					self.pers["bots"]["skill"]["no_trace_ads_time"] = 1000;
-					self.pers["bots"]["skill"]["no_trace_look_time"] = 1500;
-					self.pers["bots"]["skill"]["remember_time"] = 2000;
-					self.pers["bots"]["skill"]["fov"] = 0.6;
-					self.pers["bots"]["skill"]["dist_max"] = 4000;
-					self.pers["bots"]["skill"]["dist_start"] = 2250;
-					self.pers["bots"]["skill"]["spawn_time"] = 0.5;
-					self.pers["bots"]["skill"]["help_dist"] = 750;
-					self.pers["bots"]["skill"]["semi_time"] = 0.65;
-					self.pers["bots"]["skill"]["shoot_after_time"] = 0.65;
-					self.pers["bots"]["skill"]["aim_offset_time"] = 0.75;
-					self.pers["bots"]["skill"]["aim_offset_amount"] = 2.5;
-					self.pers["bots"]["skill"]["bone_update_interval"] = 1;
-					self.pers["bots"]["skill"]["bones"] = "j_spineupper,j_spineupper,j_ankle_le,j_ankle_ri,j_head";
-					self.pers["bots"]["skill"]["ads_fov_multi"] = 0.5;
-					self.pers["bots"]["skill"]["ads_aimspeed_multi"] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "aim_time" ] = 0.4;
+					self.pers[ "bots" ][ "skill" ][ "init_react_time" ] = 750;
+					self.pers[ "bots" ][ "skill" ][ "reaction_time" ] = 500;
+					self.pers[ "bots" ][ "skill" ][ "no_trace_ads_time" ] = 1000;
+					self.pers[ "bots" ][ "skill" ][ "no_trace_look_time" ] = 1500;
+					self.pers[ "bots" ][ "skill" ][ "remember_time" ] = 2000;
+					self.pers[ "bots" ][ "skill" ][ "fov" ] = 0.6;
+					self.pers[ "bots" ][ "skill" ][ "dist_max" ] = 4000;
+					self.pers[ "bots" ][ "skill" ][ "dist_start" ] = 2250;
+					self.pers[ "bots" ][ "skill" ][ "spawn_time" ] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "help_dist" ] = 750;
+					self.pers[ "bots" ][ "skill" ][ "semi_time" ] = 0.65;
+					self.pers[ "bots" ][ "skill" ][ "shoot_after_time" ] = 0.65;
+					self.pers[ "bots" ][ "skill" ][ "aim_offset_time" ] = 0.75;
+					self.pers[ "bots" ][ "skill" ][ "aim_offset_amount" ] = 2.5;
+					self.pers[ "bots" ][ "skill" ][ "bone_update_interval" ] = 1;
+					self.pers[ "bots" ][ "skill" ][ "bones" ] = "j_spineupper,j_spineupper,j_ankle_le,j_ankle_ri,j_head";
+					self.pers[ "bots" ][ "skill" ][ "ads_fov_multi" ] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "ads_aimspeed_multi" ] = 0.5;
 
-					self.pers["bots"]["behavior"]["strafe"] = 20;
-					self.pers["bots"]["behavior"]["nade"] = 20;
-					self.pers["bots"]["behavior"]["sprint"] = 50;
-					self.pers["bots"]["behavior"]["camp"] = 5;
-					self.pers["bots"]["behavior"]["follow"] = 5;
-					self.pers["bots"]["behavior"]["crouch"] = 10;
-					self.pers["bots"]["behavior"]["switch"] = 2;
-					self.pers["bots"]["behavior"]["class"] = 2;
-					self.pers["bots"]["behavior"]["jump"] = 25;
+					self.pers[ "bots" ][ "behavior" ][ "strafe" ] = 20;
+					self.pers[ "bots" ][ "behavior" ][ "nade" ] = 20;
+					self.pers[ "bots" ][ "behavior" ][ "sprint" ] = 50;
+					self.pers[ "bots" ][ "behavior" ][ "camp" ] = 5;
+					self.pers[ "bots" ][ "behavior" ][ "follow" ] = 5;
+					self.pers[ "bots" ][ "behavior" ][ "crouch" ] = 10;
+					self.pers[ "bots" ][ "behavior" ][ "switch" ] = 2;
+					self.pers[ "bots" ][ "behavior" ][ "class" ] = 2;
+					self.pers[ "bots" ][ "behavior" ][ "jump" ] = 25;
 					break;
 
 				case 4:
-					self.pers["bots"]["skill"]["aim_time"] = 0.3;
-					self.pers["bots"]["skill"]["init_react_time"] = 600;
-					self.pers["bots"]["skill"]["reaction_time"] = 400;
-					self.pers["bots"]["skill"]["no_trace_ads_time"] = 1500;
-					self.pers["bots"]["skill"]["no_trace_look_time"] = 2000;
-					self.pers["bots"]["skill"]["remember_time"] = 3000;
-					self.pers["bots"]["skill"]["fov"] = 0.55;
-					self.pers["bots"]["skill"]["dist_max"] = 5000;
-					self.pers["bots"]["skill"]["dist_start"] = 3350;
-					self.pers["bots"]["skill"]["spawn_time"] = 0.35;
-					self.pers["bots"]["skill"]["help_dist"] = 1000;
-					self.pers["bots"]["skill"]["semi_time"] = 0.5;
-					self.pers["bots"]["skill"]["shoot_after_time"] = 0.5;
-					self.pers["bots"]["skill"]["aim_offset_time"] = 0.5;
-					self.pers["bots"]["skill"]["aim_offset_amount"] = 2;
-					self.pers["bots"]["skill"]["bone_update_interval"] = 0.75;
-					self.pers["bots"]["skill"]["bones"] = "j_spineupper,j_spineupper,j_ankle_le,j_ankle_ri,j_head,j_head";
-					self.pers["bots"]["skill"]["ads_fov_multi"] = 0.5;
-					self.pers["bots"]["skill"]["ads_aimspeed_multi"] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "aim_time" ] = 0.3;
+					self.pers[ "bots" ][ "skill" ][ "init_react_time" ] = 600;
+					self.pers[ "bots" ][ "skill" ][ "reaction_time" ] = 400;
+					self.pers[ "bots" ][ "skill" ][ "no_trace_ads_time" ] = 1500;
+					self.pers[ "bots" ][ "skill" ][ "no_trace_look_time" ] = 2000;
+					self.pers[ "bots" ][ "skill" ][ "remember_time" ] = 3000;
+					self.pers[ "bots" ][ "skill" ][ "fov" ] = 0.55;
+					self.pers[ "bots" ][ "skill" ][ "dist_max" ] = 5000;
+					self.pers[ "bots" ][ "skill" ][ "dist_start" ] = 3350;
+					self.pers[ "bots" ][ "skill" ][ "spawn_time" ] = 0.35;
+					self.pers[ "bots" ][ "skill" ][ "help_dist" ] = 1000;
+					self.pers[ "bots" ][ "skill" ][ "semi_time" ] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "shoot_after_time" ] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "aim_offset_time" ] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "aim_offset_amount" ] = 2;
+					self.pers[ "bots" ][ "skill" ][ "bone_update_interval" ] = 0.75;
+					self.pers[ "bots" ][ "skill" ][ "bones" ] = "j_spineupper,j_spineupper,j_ankle_le,j_ankle_ri,j_head,j_head";
+					self.pers[ "bots" ][ "skill" ][ "ads_fov_multi" ] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "ads_aimspeed_multi" ] = 0.5;
 
-					self.pers["bots"]["behavior"]["strafe"] = 30;
-					self.pers["bots"]["behavior"]["nade"] = 25;
-					self.pers["bots"]["behavior"]["sprint"] = 55;
-					self.pers["bots"]["behavior"]["camp"] = 5;
-					self.pers["bots"]["behavior"]["follow"] = 5;
-					self.pers["bots"]["behavior"]["crouch"] = 10;
-					self.pers["bots"]["behavior"]["switch"] = 2;
-					self.pers["bots"]["behavior"]["class"] = 2;
-					self.pers["bots"]["behavior"]["jump"] = 35;
+					self.pers[ "bots" ][ "behavior" ][ "strafe" ] = 30;
+					self.pers[ "bots" ][ "behavior" ][ "nade" ] = 25;
+					self.pers[ "bots" ][ "behavior" ][ "sprint" ] = 55;
+					self.pers[ "bots" ][ "behavior" ][ "camp" ] = 5;
+					self.pers[ "bots" ][ "behavior" ][ "follow" ] = 5;
+					self.pers[ "bots" ][ "behavior" ][ "crouch" ] = 10;
+					self.pers[ "bots" ][ "behavior" ][ "switch" ] = 2;
+					self.pers[ "bots" ][ "behavior" ][ "class" ] = 2;
+					self.pers[ "bots" ][ "behavior" ][ "jump" ] = 35;
 					break;
 
 				case 5:
-					self.pers["bots"]["skill"]["aim_time"] = 0.25;
-					self.pers["bots"]["skill"]["init_react_time"] = 500;
-					self.pers["bots"]["skill"]["reaction_time"] = 300;
-					self.pers["bots"]["skill"]["no_trace_ads_time"] = 2500;
-					self.pers["bots"]["skill"]["no_trace_look_time"] = 3000;
-					self.pers["bots"]["skill"]["remember_time"] = 4000;
-					self.pers["bots"]["skill"]["fov"] = 0.5;
-					self.pers["bots"]["skill"]["dist_max"] = 7500;
-					self.pers["bots"]["skill"]["dist_start"] = 5000;
-					self.pers["bots"]["skill"]["spawn_time"] = 0.25;
-					self.pers["bots"]["skill"]["help_dist"] = 1500;
-					self.pers["bots"]["skill"]["semi_time"] = 0.4;
-					self.pers["bots"]["skill"]["shoot_after_time"] = 0.35;
-					self.pers["bots"]["skill"]["aim_offset_time"] = 0.35;
-					self.pers["bots"]["skill"]["aim_offset_amount"] = 1.5;
-					self.pers["bots"]["skill"]["bone_update_interval"] = 0.5;
-					self.pers["bots"]["skill"]["bones"] = "j_spineupper,j_head";
-					self.pers["bots"]["skill"]["ads_fov_multi"] = 0.5;
-					self.pers["bots"]["skill"]["ads_aimspeed_multi"] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "aim_time" ] = 0.25;
+					self.pers[ "bots" ][ "skill" ][ "init_react_time" ] = 500;
+					self.pers[ "bots" ][ "skill" ][ "reaction_time" ] = 300;
+					self.pers[ "bots" ][ "skill" ][ "no_trace_ads_time" ] = 2500;
+					self.pers[ "bots" ][ "skill" ][ "no_trace_look_time" ] = 3000;
+					self.pers[ "bots" ][ "skill" ][ "remember_time" ] = 4000;
+					self.pers[ "bots" ][ "skill" ][ "fov" ] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "dist_max" ] = 7500;
+					self.pers[ "bots" ][ "skill" ][ "dist_start" ] = 5000;
+					self.pers[ "bots" ][ "skill" ][ "spawn_time" ] = 0.25;
+					self.pers[ "bots" ][ "skill" ][ "help_dist" ] = 1500;
+					self.pers[ "bots" ][ "skill" ][ "semi_time" ] = 0.4;
+					self.pers[ "bots" ][ "skill" ][ "shoot_after_time" ] = 0.35;
+					self.pers[ "bots" ][ "skill" ][ "aim_offset_time" ] = 0.35;
+					self.pers[ "bots" ][ "skill" ][ "aim_offset_amount" ] = 1.5;
+					self.pers[ "bots" ][ "skill" ][ "bone_update_interval" ] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "bones" ] = "j_spineupper,j_head";
+					self.pers[ "bots" ][ "skill" ][ "ads_fov_multi" ] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "ads_aimspeed_multi" ] = 0.5;
 
-					self.pers["bots"]["behavior"]["strafe"] = 40;
-					self.pers["bots"]["behavior"]["nade"] = 35;
-					self.pers["bots"]["behavior"]["sprint"] = 60;
-					self.pers["bots"]["behavior"]["camp"] = 5;
-					self.pers["bots"]["behavior"]["follow"] = 5;
-					self.pers["bots"]["behavior"]["crouch"] = 10;
-					self.pers["bots"]["behavior"]["switch"] = 2;
-					self.pers["bots"]["behavior"]["class"] = 2;
-					self.pers["bots"]["behavior"]["jump"] = 50;
+					self.pers[ "bots" ][ "behavior" ][ "strafe" ] = 40;
+					self.pers[ "bots" ][ "behavior" ][ "nade" ] = 35;
+					self.pers[ "bots" ][ "behavior" ][ "sprint" ] = 60;
+					self.pers[ "bots" ][ "behavior" ][ "camp" ] = 5;
+					self.pers[ "bots" ][ "behavior" ][ "follow" ] = 5;
+					self.pers[ "bots" ][ "behavior" ][ "crouch" ] = 10;
+					self.pers[ "bots" ][ "behavior" ][ "switch" ] = 2;
+					self.pers[ "bots" ][ "behavior" ][ "class" ] = 2;
+					self.pers[ "bots" ][ "behavior" ][ "jump" ] = 50;
 					break;
 
 				case 6:
-					self.pers["bots"]["skill"]["aim_time"] = 0.2;
-					self.pers["bots"]["skill"]["init_react_time"] = 250;
-					self.pers["bots"]["skill"]["reaction_time"] = 150;
-					self.pers["bots"]["skill"]["no_trace_ads_time"] = 2500;
-					self.pers["bots"]["skill"]["no_trace_look_time"] = 4000;
-					self.pers["bots"]["skill"]["remember_time"] = 5000;
-					self.pers["bots"]["skill"]["fov"] = 0.45;
-					self.pers["bots"]["skill"]["dist_max"] = 10000;
-					self.pers["bots"]["skill"]["dist_start"] = 7500;
-					self.pers["bots"]["skill"]["spawn_time"] = 0.2;
-					self.pers["bots"]["skill"]["help_dist"] = 2000;
-					self.pers["bots"]["skill"]["semi_time"] = 0.25;
-					self.pers["bots"]["skill"]["shoot_after_time"] = 0.25;
-					self.pers["bots"]["skill"]["aim_offset_time"] = 0.25;
-					self.pers["bots"]["skill"]["aim_offset_amount"] = 1;
-					self.pers["bots"]["skill"]["bone_update_interval"] = 0.25;
-					self.pers["bots"]["skill"]["bones"] = "j_spineupper,j_head,j_head";
-					self.pers["bots"]["skill"]["ads_fov_multi"] = 0.5;
-					self.pers["bots"]["skill"]["ads_aimspeed_multi"] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "aim_time" ] = 0.2;
+					self.pers[ "bots" ][ "skill" ][ "init_react_time" ] = 250;
+					self.pers[ "bots" ][ "skill" ][ "reaction_time" ] = 150;
+					self.pers[ "bots" ][ "skill" ][ "no_trace_ads_time" ] = 2500;
+					self.pers[ "bots" ][ "skill" ][ "no_trace_look_time" ] = 4000;
+					self.pers[ "bots" ][ "skill" ][ "remember_time" ] = 5000;
+					self.pers[ "bots" ][ "skill" ][ "fov" ] = 0.45;
+					self.pers[ "bots" ][ "skill" ][ "dist_max" ] = 10000;
+					self.pers[ "bots" ][ "skill" ][ "dist_start" ] = 7500;
+					self.pers[ "bots" ][ "skill" ][ "spawn_time" ] = 0.2;
+					self.pers[ "bots" ][ "skill" ][ "help_dist" ] = 2000;
+					self.pers[ "bots" ][ "skill" ][ "semi_time" ] = 0.25;
+					self.pers[ "bots" ][ "skill" ][ "shoot_after_time" ] = 0.25;
+					self.pers[ "bots" ][ "skill" ][ "aim_offset_time" ] = 0.25;
+					self.pers[ "bots" ][ "skill" ][ "aim_offset_amount" ] = 1;
+					self.pers[ "bots" ][ "skill" ][ "bone_update_interval" ] = 0.25;
+					self.pers[ "bots" ][ "skill" ][ "bones" ] = "j_spineupper,j_head,j_head";
+					self.pers[ "bots" ][ "skill" ][ "ads_fov_multi" ] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "ads_aimspeed_multi" ] = 0.5;
 
-					self.pers["bots"]["behavior"]["strafe"] = 50;
-					self.pers["bots"]["behavior"]["nade"] = 45;
-					self.pers["bots"]["behavior"]["sprint"] = 65;
-					self.pers["bots"]["behavior"]["camp"] = 5;
-					self.pers["bots"]["behavior"]["follow"] = 5;
-					self.pers["bots"]["behavior"]["crouch"] = 10;
-					self.pers["bots"]["behavior"]["switch"] = 2;
-					self.pers["bots"]["behavior"]["class"] = 2;
-					self.pers["bots"]["behavior"]["jump"] = 75;
+					self.pers[ "bots" ][ "behavior" ][ "strafe" ] = 50;
+					self.pers[ "bots" ][ "behavior" ][ "nade" ] = 45;
+					self.pers[ "bots" ][ "behavior" ][ "sprint" ] = 65;
+					self.pers[ "bots" ][ "behavior" ][ "camp" ] = 5;
+					self.pers[ "bots" ][ "behavior" ][ "follow" ] = 5;
+					self.pers[ "bots" ][ "behavior" ][ "crouch" ] = 10;
+					self.pers[ "bots" ][ "behavior" ][ "switch" ] = 2;
+					self.pers[ "bots" ][ "behavior" ][ "class" ] = 2;
+					self.pers[ "bots" ][ "behavior" ][ "jump" ] = 75;
 					break;
 
 				case 7:
-					self.pers["bots"]["skill"]["aim_time"] = 0.1;
-					self.pers["bots"]["skill"]["init_react_time"] = 100;
-					self.pers["bots"]["skill"]["reaction_time"] = 50;
-					self.pers["bots"]["skill"]["no_trace_ads_time"] = 2500;
-					self.pers["bots"]["skill"]["no_trace_look_time"] = 4000;
-					self.pers["bots"]["skill"]["remember_time"] = 7500;
-					self.pers["bots"]["skill"]["fov"] = 0.4;
-					self.pers["bots"]["skill"]["dist_max"] = 15000;
-					self.pers["bots"]["skill"]["dist_start"] = 10000;
-					self.pers["bots"]["skill"]["spawn_time"] = 0.05;
-					self.pers["bots"]["skill"]["help_dist"] = 3000;
-					self.pers["bots"]["skill"]["semi_time"] = 0.1;
-					self.pers["bots"]["skill"]["shoot_after_time"] = 0;
-					self.pers["bots"]["skill"]["aim_offset_time"] = 0;
-					self.pers["bots"]["skill"]["aim_offset_amount"] = 0;
-					self.pers["bots"]["skill"]["bone_update_interval"] = 0.05;
-					self.pers["bots"]["skill"]["bones"] = "j_head";
-					self.pers["bots"]["skill"]["ads_fov_multi"] = 0.5;
-					self.pers["bots"]["skill"]["ads_aimspeed_multi"] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "aim_time" ] = 0.1;
+					self.pers[ "bots" ][ "skill" ][ "init_react_time" ] = 100;
+					self.pers[ "bots" ][ "skill" ][ "reaction_time" ] = 50;
+					self.pers[ "bots" ][ "skill" ][ "no_trace_ads_time" ] = 2500;
+					self.pers[ "bots" ][ "skill" ][ "no_trace_look_time" ] = 4000;
+					self.pers[ "bots" ][ "skill" ][ "remember_time" ] = 7500;
+					self.pers[ "bots" ][ "skill" ][ "fov" ] = 0.4;
+					self.pers[ "bots" ][ "skill" ][ "dist_max" ] = 15000;
+					self.pers[ "bots" ][ "skill" ][ "dist_start" ] = 10000;
+					self.pers[ "bots" ][ "skill" ][ "spawn_time" ] = 0.05;
+					self.pers[ "bots" ][ "skill" ][ "help_dist" ] = 3000;
+					self.pers[ "bots" ][ "skill" ][ "semi_time" ] = 0.1;
+					self.pers[ "bots" ][ "skill" ][ "shoot_after_time" ] = 0;
+					self.pers[ "bots" ][ "skill" ][ "aim_offset_time" ] = 0;
+					self.pers[ "bots" ][ "skill" ][ "aim_offset_amount" ] = 0;
+					self.pers[ "bots" ][ "skill" ][ "bone_update_interval" ] = 0.05;
+					self.pers[ "bots" ][ "skill" ][ "bones" ] = "j_head";
+					self.pers[ "bots" ][ "skill" ][ "ads_fov_multi" ] = 0.5;
+					self.pers[ "bots" ][ "skill" ][ "ads_aimspeed_multi" ] = 0.5;
 
-					self.pers["bots"]["behavior"]["strafe"] = 65;
-					self.pers["bots"]["behavior"]["nade"] = 65;
-					self.pers["bots"]["behavior"]["sprint"] = 70;
-					self.pers["bots"]["behavior"]["camp"] = 5;
-					self.pers["bots"]["behavior"]["follow"] = 5;
-					self.pers["bots"]["behavior"]["crouch"] = 5;
-					self.pers["bots"]["behavior"]["switch"] = 2;
-					self.pers["bots"]["behavior"]["class"] = 2;
-					self.pers["bots"]["behavior"]["jump"] = 90;
+					self.pers[ "bots" ][ "behavior" ][ "strafe" ] = 65;
+					self.pers[ "bots" ][ "behavior" ][ "nade" ] = 65;
+					self.pers[ "bots" ][ "behavior" ][ "sprint" ] = 70;
+					self.pers[ "bots" ][ "behavior" ][ "camp" ] = 5;
+					self.pers[ "bots" ][ "behavior" ][ "follow" ] = 5;
+					self.pers[ "bots" ][ "behavior" ][ "crouch" ] = 5;
+					self.pers[ "bots" ][ "behavior" ][ "switch" ] = 2;
+					self.pers[ "bots" ][ "behavior" ][ "class" ] = 2;
+					self.pers[ "bots" ][ "behavior" ][ "jump" ] = 90;
 					break;
 			}
 		}
@@ -1568,48 +1568,48 @@ set_diff()
 	switch ( rankVar )
 	{
 		case 0:
-			self.pers["bots"]["skill"]["base"] = Round( random_normal_distribution( 3.5, 1.75, 1, 7 ) );
+			self.pers[ "bots" ][ "skill" ][ "base" ] = Round( random_normal_distribution( 3.5, 1.75, 1, 7 ) );
 			break;
 
 		case 8:
 			break;
 
 		case 9:
-			self.pers["bots"]["skill"]["base"] = randomIntRange( 1, 7 );
-			self.pers["bots"]["skill"]["aim_time"] = 0.05 * randomIntRange( 1, 20 );
-			self.pers["bots"]["skill"]["init_react_time"] = 50 * randomInt( 100 );
-			self.pers["bots"]["skill"]["reaction_time"] = 50 * randomInt( 100 );
-			self.pers["bots"]["skill"]["remember_time"] = 50 * randomInt( 100 );
-			self.pers["bots"]["skill"]["no_trace_ads_time"] = 50 * randomInt( 100 );
-			self.pers["bots"]["skill"]["no_trace_look_time"] = 50 * randomInt( 100 );
-			self.pers["bots"]["skill"]["fov"] = randomFloatRange( -1, 1 );
+			self.pers[ "bots" ][ "skill" ][ "base" ] = randomIntRange( 1, 7 );
+			self.pers[ "bots" ][ "skill" ][ "aim_time" ] = 0.05 * randomIntRange( 1, 20 );
+			self.pers[ "bots" ][ "skill" ][ "init_react_time" ] = 50 * randomInt( 100 );
+			self.pers[ "bots" ][ "skill" ][ "reaction_time" ] = 50 * randomInt( 100 );
+			self.pers[ "bots" ][ "skill" ][ "remember_time" ] = 50 * randomInt( 100 );
+			self.pers[ "bots" ][ "skill" ][ "no_trace_ads_time" ] = 50 * randomInt( 100 );
+			self.pers[ "bots" ][ "skill" ][ "no_trace_look_time" ] = 50 * randomInt( 100 );
+			self.pers[ "bots" ][ "skill" ][ "fov" ] = randomFloatRange( -1, 1 );
 
 			randomNum = randomIntRange( 500, 25000 );
-			self.pers["bots"]["skill"]["dist_start"] = randomNum;
-			self.pers["bots"]["skill"]["dist_max"] = randomNum * 2;
+			self.pers[ "bots" ][ "skill" ][ "dist_start" ] = randomNum;
+			self.pers[ "bots" ][ "skill" ][ "dist_max" ] = randomNum * 2;
 
-			self.pers["bots"]["skill"]["spawn_time"] = 0.05 * randomInt( 20 );
-			self.pers["bots"]["skill"]["help_dist"] = randomIntRange( 500, 25000 );
-			self.pers["bots"]["skill"]["semi_time"] = randomFloatRange( 0.05, 1 );
-			self.pers["bots"]["skill"]["shoot_after_time"] = randomFloatRange( 0.05, 1 );
-			self.pers["bots"]["skill"]["aim_offset_time"] = randomFloatRange( 0.05, 1 );
-			self.pers["bots"]["skill"]["aim_offset_amount"] = randomFloatRange( 0.05, 1 );
-			self.pers["bots"]["skill"]["bone_update_interval"] = randomFloatRange( 0.05, 1 );
-			self.pers["bots"]["skill"]["bones"] = "j_head,j_spineupper,j_ankle_le,j_ankle_ri";
+			self.pers[ "bots" ][ "skill" ][ "spawn_time" ] = 0.05 * randomInt( 20 );
+			self.pers[ "bots" ][ "skill" ][ "help_dist" ] = randomIntRange( 500, 25000 );
+			self.pers[ "bots" ][ "skill" ][ "semi_time" ] = randomFloatRange( 0.05, 1 );
+			self.pers[ "bots" ][ "skill" ][ "shoot_after_time" ] = randomFloatRange( 0.05, 1 );
+			self.pers[ "bots" ][ "skill" ][ "aim_offset_time" ] = randomFloatRange( 0.05, 1 );
+			self.pers[ "bots" ][ "skill" ][ "aim_offset_amount" ] = randomFloatRange( 0.05, 1 );
+			self.pers[ "bots" ][ "skill" ][ "bone_update_interval" ] = randomFloatRange( 0.05, 1 );
+			self.pers[ "bots" ][ "skill" ][ "bones" ] = "j_head,j_spineupper,j_ankle_le,j_ankle_ri";
 
-			self.pers["bots"]["behavior"]["strafe"] = randomInt( 100 );
-			self.pers["bots"]["behavior"]["nade"] = randomInt( 100 );
-			self.pers["bots"]["behavior"]["sprint"] = randomInt( 100 );
-			self.pers["bots"]["behavior"]["camp"] = randomInt( 100 );
-			self.pers["bots"]["behavior"]["follow"] = randomInt( 100 );
-			self.pers["bots"]["behavior"]["crouch"] = randomInt( 100 );
-			self.pers["bots"]["behavior"]["switch"] = randomInt( 100 );
-			self.pers["bots"]["behavior"]["class"] = randomInt( 100 );
-			self.pers["bots"]["behavior"]["jump"] = randomInt( 100 );
+			self.pers[ "bots" ][ "behavior" ][ "strafe" ] = randomInt( 100 );
+			self.pers[ "bots" ][ "behavior" ][ "nade" ] = randomInt( 100 );
+			self.pers[ "bots" ][ "behavior" ][ "sprint" ] = randomInt( 100 );
+			self.pers[ "bots" ][ "behavior" ][ "camp" ] = randomInt( 100 );
+			self.pers[ "bots" ][ "behavior" ][ "follow" ] = randomInt( 100 );
+			self.pers[ "bots" ][ "behavior" ][ "crouch" ] = randomInt( 100 );
+			self.pers[ "bots" ][ "behavior" ][ "switch" ] = randomInt( 100 );
+			self.pers[ "bots" ][ "behavior" ][ "class" ] = randomInt( 100 );
+			self.pers[ "bots" ][ "behavior" ][ "jump" ] = randomInt( 100 );
 			break;
 
 		default:
-			self.pers["bots"]["skill"]["base"] = rankVar;
+			self.pers[ "bots" ][ "skill" ][ "base" ] = rankVar;
 			break;
 	}
 }
@@ -1672,7 +1672,7 @@ onSpawned()
 	{
 		self waittill( "spawned_player" );
 
-		if ( randomInt( 100 ) <= self.pers["bots"]["behavior"]["class"] )
+		if ( randomInt( 100 ) <= self.pers[ "bots" ][ "behavior" ][ "class" ] )
 			self.bot_change_class = undefined;
 
 		self.bot_lock_goal = false;
@@ -2046,8 +2046,8 @@ bot_array_nearest_curorigin( array )
 	result = undefined;
 
 	for ( i = 0; i < array.size; i++ )
-		if ( !isDefined( result ) || DistanceSquared( self.origin, array[i].curorigin ) < DistanceSquared( self.origin, result.curorigin ) )
-			result = array[i];
+		if ( !isDefined( result ) || DistanceSquared( self.origin, array[ i ].curorigin ) < DistanceSquared( self.origin, result.curorigin ) )
+			result = array[ i ];
 
 	return result;
 }
@@ -2126,7 +2126,7 @@ follow_target()
 		if ( !isPlayer( threat ) )
 			continue;
 
-		if ( randomInt( 100 ) > self.pers["bots"]["behavior"]["follow"] * 5 )
+		if ( randomInt( 100 ) > self.pers[ "bots" ][ "behavior" ][ "follow" ] * 5 )
 			continue;
 
 		self BotNotifyBotEvent( "follow_threat", "start", threat );
@@ -2188,7 +2188,7 @@ bot_think_camp()
 		if ( self HasScriptGoal() || self.bot_lock_goal || self HasScriptAimPos() )
 			continue;
 
-		if ( randomInt( 100 ) > self.pers["bots"]["behavior"]["camp"] )
+		if ( randomInt( 100 ) > self.pers[ "bots" ][ "behavior" ][ "camp" ] )
 			continue;
 
 		self bot_think_camp_loop();
@@ -2269,11 +2269,11 @@ bot_wait_stop_move()
 bot_think_follow_loop()
 {
 	follows = [];
-	distSq = self.pers["bots"]["skill"]["help_dist"] * self.pers["bots"]["skill"]["help_dist"];
+	distSq = self.pers[ "bots" ][ "skill" ][ "help_dist" ] * self.pers[ "bots" ][ "skill" ][ "help_dist" ];
 
 	for ( i = level.players.size - 1; i >= 0; i-- )
 	{
-		player = level.players[i];
+		player = level.players[ i ];
 
 		if ( player == self )
 			continue;
@@ -2287,7 +2287,7 @@ bot_think_follow_loop()
 		if ( DistanceSquared( player.origin, self.origin ) > distSq )
 			continue;
 
-		follows[follows.size] = player;
+		follows[ follows.size ] = player;
 	}
 
 	toFollow = random( follows );
@@ -2321,7 +2321,7 @@ bot_think_follow()
 		if ( self HasScriptGoal() || self.bot_lock_goal || self HasScriptAimPos() )
 			continue;
 
-		if ( randomInt( 100 ) > self.pers["bots"]["behavior"]["follow"] )
+		if ( randomInt( 100 ) > self.pers[ "bots" ][ "behavior" ][ "follow" ] )
 			continue;
 
 		if ( !level.teamBased )
@@ -2415,7 +2415,7 @@ bot_use_tube_think_loop( data )
 	{
 		wait randomintRange( 3, 7 );
 
-		chance = self.pers["bots"]["behavior"]["nade"] / 2;
+		chance = self.pers[ "bots" ][ "behavior" ][ "nade" ] / 2;
 
 		if ( chance > 20 )
 			chance = 20;
@@ -2459,7 +2459,7 @@ bot_use_tube_think_loop( data )
 		{
 			traceForward = BulletTrace( myEye, myEye + AnglesToForward( self GetPlayerAngles() ) * 900 * 5, false, self );
 
-			loc = traceForward["position"];
+			loc = traceForward[ "position" ];
 			dist = DistanceSquared( self.origin, loc );
 
 			if ( dist < level.bots_minGrenadeDistance || dist > level.bots_maxGrenadeDistance * 5 )
@@ -2546,7 +2546,7 @@ bot_use_equipment_think_loop( data )
 	{
 		wait randomintRange( 2, 4 );
 
-		chance = self.pers["bots"]["behavior"]["nade"] / 2;
+		chance = self.pers[ "bots" ][ "behavior" ][ "nade" ] / 2;
 
 		if ( chance > 20 )
 			chance = 20;
@@ -2681,7 +2681,7 @@ bot_use_grenade_think_loop( data )
 	{
 		wait randomintRange( 4, 7 );
 
-		chance = self.pers["bots"]["behavior"]["nade"] / 2;
+		chance = self.pers[ "bots" ][ "behavior" ][ "nade" ] / 2;
 
 		if ( chance > 20 )
 			chance = 20;
@@ -2725,7 +2725,7 @@ bot_use_grenade_think_loop( data )
 		{
 			traceForward = BulletTrace( myEye, myEye + AnglesToForward( self GetPlayerAngles() ) * 900, false, self );
 
-			loc = traceForward["position"];
+			loc = traceForward[ "position" ];
 			dist = DistanceSquared( self.origin, loc );
 
 			if ( dist < level.bots_minGrenadeDistance || dist > level.bots_maxGrenadeDistance )
@@ -2823,7 +2823,7 @@ bot_watch_think_mw2_loop()
 	if ( self GetCurrentWeapon() == tube )
 		return;
 
-	if ( randomInt( 100 ) > self.pers["bots"]["behavior"]["nade"] )
+	if ( randomInt( 100 ) > self.pers[ "bots" ][ "behavior" ][ "nade" ] )
 		return;
 
 	self thread ChangeToWeapon( tube );
@@ -2880,14 +2880,14 @@ bot_watch_riot_weapons_loop()
 		if ( dist <= level.bots_minGrenadeDistance || dist >= level.bots_maxGrenadeDistance )
 			return;
 
-		if ( randomInt( 100 ) > self.pers["bots"]["behavior"]["nade"] )
+		if ( randomInt( 100 ) > self.pers[ "bots" ][ "behavior" ][ "nade" ] )
 			return;
 
 		self botThrowGrenade( nade );
 	}
 	else
 	{
-		if ( randomInt( 100 ) > self.pers["bots"]["behavior"]["switch"] * 10 )
+		if ( randomInt( 100 ) > self.pers[ "bots" ][ "behavior" ][ "switch" ] * 10 )
 			return;
 
 		weaponslist = self getweaponslistall();
@@ -2895,7 +2895,7 @@ bot_watch_riot_weapons_loop()
 
 		while ( weaponslist.size )
 		{
-			weapon = weaponslist[randomInt( weaponslist.size )];
+			weapon = weaponslist[ randomInt( weaponslist.size ) ];
 			weaponslist = array_remove( weaponslist, weapon );
 
 			if ( !self getAmmoCount( weapon ) )
@@ -2964,7 +2964,7 @@ bot_jav_loc_think_loop( data )
 	{
 		wait randomintRange( 2, 4 );
 
-		chance = self.pers["bots"]["behavior"]["nade"] / 2;
+		chance = self.pers[ "bots" ][ "behavior" ][ "nade" ] / 2;
 
 		if ( chance > 20 )
 			chance = 20;
@@ -3007,7 +3007,7 @@ bot_jav_loc_think_loop( data )
 			if ( !isDefined( traceForward ) )
 				return;
 
-			loc = traceForward[0];
+			loc = traceForward[ 0 ];
 
 			if ( self maps\mp\_javelin::TargetPointTooClose( loc ) )
 				return;
@@ -3091,7 +3091,7 @@ bot_equipment_kill_think_loop()
 	// check legacy nades, c4 and claymores
 	for ( i = 0; i < grenades.size; i++ )
 	{
-		item = grenades[i];
+		item = grenades[ i ];
 
 		if ( !isDefined( item ) )
 			continue;
@@ -3125,7 +3125,7 @@ bot_equipment_kill_think_loop()
 	{
 		for ( i = 0; i < level.players.size; i++ )
 		{
-			player = level.players[i];
+			player = level.players[ i ];
 
 			if ( player == self )
 				continue;
@@ -3141,7 +3141,7 @@ bot_equipment_kill_think_loop()
 			{
 				for ( h = 0; h < player.trophyArray.size; h++ )
 				{
-					item = player.trophyArray[h];
+					item = player.trophyArray[ h ];
 
 					if ( !isDefined( item ) )
 						continue;
@@ -3256,7 +3256,7 @@ bot_equipment_kill_think_loop()
 
 		for ( i = 0; i < imsKeys.size; i++ )
 		{
-			item = level.ims[imsKeys[i]];
+			item = level.ims[ imsKeys[ i ] ];
 
 			if ( !isDefined( item ) )
 				continue;
@@ -3291,7 +3291,7 @@ bot_equipment_kill_think_loop()
 	{
 		for ( i = 0; i < level.vest_boxes.size; i++ )
 		{
-			item = level.vest_boxes[i];
+			item = level.vest_boxes[ i ];
 
 			if ( !isDefined( item ) )
 				continue;
@@ -3324,7 +3324,7 @@ bot_equipment_kill_think_loop()
 	{
 		for ( i = 0; i < level.scramblers.size; i++ )
 		{
-			item = level.scramblers[i];
+			item = level.scramblers[ i ];
 
 			if ( !isDefined( item ) )
 				continue;
@@ -3357,7 +3357,7 @@ bot_equipment_kill_think_loop()
 	{
 		for ( i = 0; i < level.mines.size; i++ )
 		{
-			item = level.mines[i];
+			item = level.mines[ i ];
 
 			if ( !isDefined( item ) )
 				continue;
@@ -3405,7 +3405,7 @@ bot_equipment_kill_think_loop()
 		if ( path != "goal" || !isDefined( target ) )
 			return;
 
-		if ( randomInt( 100 ) < self.pers["bots"]["behavior"]["camp"] * 8 )
+		if ( randomInt( 100 ) < self.pers[ "bots" ][ "behavior" ][ "camp" ] * 8 )
 		{
 			self BotNotifyBotEvent( "attack_equ", "camp_ti", target );
 
@@ -3448,7 +3448,7 @@ bot_equipment_kill_think()
 		if ( self HasScriptEnemy() )
 			continue;
 
-		if ( self.pers["bots"]["skill"]["base"] <= 1 )
+		if ( self.pers[ "bots" ][ "skill" ][ "base" ] <= 1 )
 			continue;
 
 		self bot_equipment_kill_think_loop();
@@ -3495,7 +3495,7 @@ bot_listen_to_steps_loop()
 
 	for ( i = level.players.size - 1 ; i >= 0; i-- )
 	{
-		player = level.players[i];
+		player = level.players[ i ];
 
 		if ( player == self )
 			continue;
@@ -3529,7 +3529,7 @@ bot_listen_to_steps_loop()
 	{
 		for ( i = level.players.size - 1 ; i >= 0; i-- )
 		{
-			player = level.players[i];
+			player = level.players[ i ];
 
 			if ( player == self )
 				continue;
@@ -3597,7 +3597,7 @@ bot_listen_to_steps()
 	{
 		wait 1;
 
-		if ( self.pers["bots"]["skill"]["base"] < 3 )
+		if ( self.pers[ "bots" ][ "skill" ][ "base" ] < 3 )
 			continue;
 
 		self bot_listen_to_steps_loop();
@@ -3616,21 +3616,21 @@ bot_uav_think_loop()
 		if ( self isEMPed() || self.bot_isScrambled || self isNuked() )
 			return;
 
-		if ( ( level.teamBased && level.activeCounterUAVs[level.otherTeam[self.team]] ) || ( !level.teamBased && self.isRadarBlocked ) )
+		if ( ( level.teamBased && level.activeCounterUAVs[ level.otherTeam[ self.team ] ] ) || ( !level.teamBased && self.isRadarBlocked ) )
 			return;
 	}
 
-	hasRadar = ( ( level.teamBased && level.activeUAVs[self.team] ) || ( !level.teamBased && level.activeUAVs[self.guid] ) );
+	hasRadar = ( ( level.teamBased && level.activeUAVs[ self.team ] ) || ( !level.teamBased && level.activeUAVs[ self.guid ] ) );
 
 	if ( level.hardcoreMode && !hasRadar )
 		return;
 
-	dist = self.pers["bots"]["skill"]["help_dist"];
+	dist = self.pers[ "bots" ][ "skill" ][ "help_dist" ];
 	dist *= dist * 8;
 
 	for ( i = level.players.size - 1; i >= 0; i-- )
 	{
-		player = level.players[i];
+		player = level.players[ i ];
 
 		if ( player == self )
 			continue;
@@ -3656,7 +3656,7 @@ bot_uav_think_loop()
 		{
 			self BotNotifyBotEvent( "uav_target", "start", player );
 
-			distSq = self.pers["bots"]["skill"]["help_dist"] * self.pers["bots"]["skill"]["help_dist"];
+			distSq = self.pers[ "bots" ][ "skill" ][ "help_dist" ] * self.pers[ "bots" ][ "skill" ][ "help_dist" ];
 
 			if ( distFromPlayer < distSq && bulletTracePassed( self getEye(), player getTagOrigin( "j_spineupper" ), false, player ) )
 			{
@@ -3691,7 +3691,7 @@ bot_uav_think()
 	{
 		wait 0.75;
 
-		if ( self.pers["bots"]["skill"]["base"] <= 1 || self IsUsingRemote() )
+		if ( self.pers[ "bots" ][ "skill" ][ "base" ] <= 1 || self IsUsingRemote() )
 			continue;
 
 		self bot_uav_think_loop();
@@ -3706,7 +3706,7 @@ bot_revenge_think()
 	self endon( "death" );
 	self endon( "disconnect" );
 
-	if ( self.pers["bots"]["skill"]["base"] <= 1 )
+	if ( self.pers[ "bots" ][ "skill" ][ "base" ] <= 1 )
 		return;
 
 	if ( isDefined( self.lastKiller ) && isReallyAlive( self.lastKiller ) )
@@ -3810,7 +3810,7 @@ bot_turret_think_loop()
 		return;
 	}
 
-	if ( self.pers["bots"]["skill"]["base"] <= 1 )
+	if ( self.pers[ "bots" ][ "skill" ][ "base" ] <= 1 )
 		return;
 
 	if ( self HasScriptEnemy() || self IsUsingRemote() )
@@ -3821,7 +3821,7 @@ bot_turret_think_loop()
 
 	for ( i = turretsKeys.size - 1; i >= 0; i-- )
 	{
-		tempTurret = level.turrets[turretsKeys[i]];
+		tempTurret = level.turrets[ turretsKeys[ i ] ];
 
 		if ( !isDefined( tempTurret ) )
 			continue;
@@ -3965,7 +3965,7 @@ bot_box_think_loop( data )
 
 	for ( i = 0; i < level.vest_boxes.size; i++ )
 	{
-		item = level.vest_boxes[i];
+		item = level.vest_boxes[ i ];
 
 		if ( !isDefined( item ) )
 			continue;
@@ -4054,7 +4054,7 @@ bot_watch_stuck_on_crate_loop()
 
 	for ( i = crates.size - 1; i >= 0; i-- )
 	{
-		tempCrate = crates[i];
+		tempCrate = crates[ i ];
 
 		if ( !isDefined( tempCrate ) )
 			continue;
@@ -4156,7 +4156,7 @@ bot_crate_think_loop( data )
 
 		for ( i = crates.size - 1; i >= 0; i-- )
 		{
-			tempCrate = crates[i];
+			tempCrate = crates[ i ];
 
 			if ( !isDefined( tempCrate ) )
 				continue;
@@ -4311,7 +4311,7 @@ doReloadCancel_loop()
 	}
 
 	// check difficulty
-	if ( self.pers["bots"]["skill"]["base"] <= 3 )
+	if ( self.pers[ "bots" ][ "skill" ][ "base" ] <= 3 )
 		return;
 
 	// check if got another weapon
@@ -4320,7 +4320,7 @@ doReloadCancel_loop()
 
 	while ( weaponslist.size )
 	{
-		weapon = weaponslist[randomInt( weaponslist.size )];
+		weapon = weaponslist[ randomInt( weaponslist.size ) ];
 		weaponslist = array_remove( weaponslist, weapon );
 
 		if ( !maps\mp\gametypes\_weapons::isPrimaryWeapon( weapon ) )
@@ -4408,14 +4408,14 @@ bot_weapon_think_loop( data )
 	{
 		data.first = false;
 
-		if ( randomInt( 100 ) > self.pers["bots"]["behavior"]["initswitch"] )
+		if ( randomInt( 100 ) > self.pers[ "bots" ][ "behavior" ][ "initswitch" ] )
 			return;
 	}
 	else
 	{
 		if ( curWeap != "none" && self getAmmoCount( curWeap ) && curWeap != "stinger_mp" && curWeap != "javelin_mp" )
 		{
-			if ( randomInt( 100 ) > self.pers["bots"]["behavior"]["switch"] )
+			if ( randomInt( 100 ) > self.pers[ "bots" ][ "behavior" ][ "switch" ] )
 				return;
 
 			if ( hasTarget )
@@ -4430,7 +4430,7 @@ bot_weapon_think_loop( data )
 
 	while ( weaponslist.size )
 	{
-		weapon = weaponslist[randomInt( weaponslist.size )];
+		weapon = weaponslist[ randomInt( weaponslist.size ) ];
 		weaponslist = array_remove( weaponslist, weapon );
 
 		if ( !self getAmmoCount( weapon ) && !force )
@@ -4491,7 +4491,7 @@ bot_target_vehicle_loop()
 
 	for ( i = targets.size - 1; i >= 0; i-- )
 	{
-		tempTarget = targets[i];
+		tempTarget = targets[ i ];
 
 		if ( isPlayer( tempTarget ) )
 			continue;
@@ -4553,7 +4553,7 @@ bot_target_vehicle()
 	{
 		wait randomIntRange( 2, 4 );
 
-		if ( self.pers["bots"]["skill"]["base"] <= 1 )
+		if ( self.pers[ "bots" ][ "skill" ][ "base" ] <= 1 )
 			continue;
 
 		if ( self HasScriptEnemy() )
@@ -4614,7 +4614,7 @@ bot_watch_use_remote_turret()
 		if ( self InLastStand() && !self InFinalStand() )
 			continue;
 
-		if ( !isDefined( self.remoteTurretList ) || !isDefined( self.remoteTurretList[0] ) )
+		if ( !isDefined( self.remoteTurretList ) || !isDefined( self.remoteTurretList[ 0 ] ) )
 			continue;
 
 		self thread BotPressUse( 3 );
@@ -4632,7 +4632,7 @@ getKillstreakTargetLocation()
 
 	for ( i = level.players.size - 1; i >= 0; i-- )
 	{
-		player = level.players[i];
+		player = level.players[ i ];
 
 		if ( player == self )
 			continue;
@@ -4652,17 +4652,17 @@ getKillstreakTargetLocation()
 		if ( player _hasPerk( "specialty_blindeye" ) )
 			continue;
 
-		if ( !bulletTracePassed( player.origin, player.origin + ( 0, 0, 2048 ), false, player ) && self.pers["bots"]["skill"]["base"] > 3 )
+		if ( !bulletTracePassed( player.origin, player.origin + ( 0, 0, 2048 ), false, player ) && self.pers[ "bots" ][ "skill" ][ "base" ] > 3 )
 			continue;
 
-		players[players.size] = player;
+		players[ players.size ] = player;
 	}
 
 	target = random( players );
 
 	if ( isDefined( target ) )
-		location = target.origin + ( randomIntRange( ( 8 - self.pers["bots"]["skill"]["base"] ) * -75, ( 8 - self.pers["bots"]["skill"]["base"] ) * 75 ), randomIntRange( ( 8 - self.pers["bots"]["skill"]["base"] ) * -75, ( 8 - self.pers["bots"]["skill"]["base"] ) * 75 ), 0 );
-	else if ( self.pers["bots"]["skill"]["base"] <= 3 )
+		location = target.origin + ( randomIntRange( ( 8 - self.pers[ "bots" ][ "skill" ][ "base" ] ) * -75, ( 8 - self.pers[ "bots" ][ "skill" ][ "base" ] ) * 75 ), randomIntRange( ( 8 - self.pers[ "bots" ][ "skill" ][ "base" ] ) * -75, ( 8 - self.pers[ "bots" ][ "skill" ][ "base" ] ) * 75 ), 0 );
+	else if ( self.pers[ "bots" ][ "skill" ][ "base" ] <= 3 )
 		location = self.origin + ( randomIntRange( -512, 512 ), randomIntRange( -512, 512 ), 0 );
 
 	return location;
@@ -4733,21 +4733,21 @@ bot_killstreak_think_loop( data )
 
 	if ( !isDefined( data.doFastContinue ) )
 	{
-		if ( self.pers["killstreaks"][0].available )
-			useableStreaks[useableStreaks.size] = 0;
+		if ( self.pers[ "killstreaks" ][ 0 ].available )
+			useableStreaks[ useableStreaks.size ] = 0;
 
-		if ( self.pers["killstreaks"][1].available && self.streakType != "specialist" )
-			useableStreaks[useableStreaks.size] = 1;
+		if ( self.pers[ "killstreaks" ][ 1 ].available && self.streakType != "specialist" )
+			useableStreaks[ useableStreaks.size ] = 1;
 
-		if ( self.pers["killstreaks"][2].available && self.streakType != "specialist" )
-			useableStreaks[useableStreaks.size] = 2;
+		if ( self.pers[ "killstreaks" ][ 2 ].available && self.streakType != "specialist" )
+			useableStreaks[ useableStreaks.size ] = 2;
 
-		if ( self.pers["killstreaks"][3].available && self.streakType != "specialist" )
-			useableStreaks[useableStreaks.size] = 3;
+		if ( self.pers[ "killstreaks" ][ 3 ].available && self.streakType != "specialist" )
+			useableStreaks[ useableStreaks.size ] = 3;
 	}
 	else
 	{
-		useableStreaks[0] = data.doFastContinue;
+		useableStreaks[ 0 ] = data.doFastContinue;
 		data.doFastContinue = undefined;
 	}
 
@@ -4755,7 +4755,7 @@ bot_killstreak_think_loop( data )
 		return;
 
 	self.killstreakIndexWeapon = random( useableStreaks );
-	streakName = self.pers["killstreaks"][self.killstreakIndexWeapon].streakName;
+	streakName = self.pers[ "killstreaks" ][ self.killstreakIndexWeapon ].streakName;
 
 	if ( level.inGracePeriod && maps\mp\killstreaks\_killstreaks::deadlyKillstreak( streakName ) )
 		return;
@@ -4765,7 +4765,7 @@ bot_killstreak_think_loop( data )
 	if ( curWeap == "none" || !isWeaponPrimary( curWeap ) )
 		curWeap = self GetLastWeapon();
 
-	lifeId = self.pers["killstreaks"][0].lifeId;
+	lifeId = self.pers[ "killstreaks" ][ 0 ].lifeId;
 
 	if ( !isDefined( lifeId ) )
 		lifeId = -1;
@@ -4800,7 +4800,7 @@ bot_killstreak_think_loop( data )
 
 			if ( streakName == "remote_uav" || streakName == "remote_tank" )
 			{
-				if ( ( isDefined( level.remote_uav[self.team] ) || level.littleBirds.size >= 4 ) && streakName == "remote_uav" )
+				if ( ( isDefined( level.remote_uav[ self.team ] ) || level.littleBirds.size >= 4 ) && streakName == "remote_uav" )
 					return;
 
 				if ( currentActiveVehicleCount() >= maxVehiclesAllowed() || level.fauxVehicleCount + 1 >= maxVehiclesAllowed() )
@@ -4851,7 +4851,7 @@ bot_killstreak_think_loop( data )
 					break;
 			}
 
-			if ( DistanceSquared( self.origin, forwardTrace["position"] ) < distCheck && self.pers["bots"]["skill"]["base"] > 3 )
+			if ( DistanceSquared( self.origin, forwardTrace[ "position" ] ) < distCheck && self.pers[ "bots" ][ "skill" ][ "base" ] > 3 )
 				return;
 
 			self BotNotifyBotEvent( "killstreak", "call", streakName );
@@ -4860,7 +4860,7 @@ bot_killstreak_think_loop( data )
 				self BotRandomStance();
 
 			self BotStopMoving( true );
-			self SetScriptAimPos( forwardTrace["position"] );
+			self SetScriptAimPos( forwardTrace[ "position" ] );
 
 			if ( !self changeToWeapon( ksWeap ) )
 			{
@@ -4919,11 +4919,11 @@ bot_killstreak_think_loop( data )
 			self thread maps\mp\killstreaks\_killstreaks::updateKillstreaks();
 			self maps\mp\killstreaks\_killstreaks::usedKillstreak( streakName, true );
 
-			rocket = MagicBullet( "remotemissile_projectile_mp", self.origin + ( 0.0, 0.0, 7000.0 - ( self.pers["bots"]["skill"]["base"] * 400 ) ), location, self );
+			rocket = MagicBullet( "remotemissile_projectile_mp", self.origin + ( 0.0, 0.0, 7000.0 - ( self.pers[ "bots" ][ "skill" ][ "base" ] * 400 ) ), location, self );
 			rocket.lifeId = lifeId;
 			rocket.type = "remote";
 
-			rocket thread maps\mp\gametypes\_weapons::AddMissileToSightTraces( self.pers["team"] );
+			rocket thread maps\mp\gametypes\_weapons::AddMissileToSightTraces( self.pers[ "team" ] );
 			rocket thread maps\mp\killstreaks\_remotemissile::handleDamage();
 			thread maps\mp\killstreaks\_remotemissile::MissileEyes( self, rocket );
 
@@ -4989,13 +4989,13 @@ bot_killstreak_think_loop( data )
 
 			forwardTrace = bulletTrace( myEye, myEye + AnglesToForward( angles ) * 128, false, self );
 
-			if ( DistanceSquared( self.origin, forwardTrace["position"] ) < 96 * 96 && self.pers["bots"]["skill"]["base"] > 3 )
+			if ( DistanceSquared( self.origin, forwardTrace[ "position" ] ) < 96 * 96 && self.pers[ "bots" ][ "skill" ][ "base" ] > 3 )
 				return;
 
 			self BotNotifyBotEvent( "killstreak", "call", streakName );
 
 			self BotStopMoving( true );
-			self SetScriptAimPos( forwardTrace["position"] );
+			self SetScriptAimPos( forwardTrace[ "position" ] );
 
 			if ( !self changeToWeapon( ksWeap ) )
 			{
@@ -5033,7 +5033,7 @@ bot_killstreak_think_loop( data )
 			if ( IsSubStr( toLower( streakName ), "escort_airdrop" ) && isDefined( level.chopper ) )
 				return;
 
-			if ( !bulletTracePassed( self.origin, self.origin + ( 0, 0, 2048 ), false, self ) && self.pers["bots"]["skill"]["base"] > 3 )
+			if ( !bulletTracePassed( self.origin, self.origin + ( 0, 0, 2048 ), false, self ) && self.pers[ "bots" ][ "skill" ][ "base" ] > 3 )
 				return;
 
 			myEye = self GetEye();
@@ -5041,16 +5041,16 @@ bot_killstreak_think_loop( data )
 
 			forwardTrace = bulletTrace( myEye, myEye + AnglesToForward( angles ) * 256, false, self );
 
-			if ( DistanceSquared( self.origin, forwardTrace["position"] ) < 96 * 96 && self.pers["bots"]["skill"]["base"] > 3 )
+			if ( DistanceSquared( self.origin, forwardTrace[ "position" ] ) < 96 * 96 && self.pers[ "bots" ][ "skill" ][ "base" ] > 3 )
 				return;
 
-			if ( !bulletTracePassed( forwardTrace["position"], forwardTrace["position"] + ( 0, 0, 2048 ), false, self ) && self.pers["bots"]["skill"]["base"] > 3 )
+			if ( !bulletTracePassed( forwardTrace[ "position" ], forwardTrace[ "position" ] + ( 0, 0, 2048 ), false, self ) && self.pers[ "bots" ][ "skill" ][ "base" ] > 3 )
 				return;
 
 			self BotNotifyBotEvent( "killstreak", "call", streakName );
 
 			self BotStopMoving( true );
-			self SetScriptAimPos( forwardTrace["position"] );
+			self SetScriptAimPos( forwardTrace[ "position" ] );
 
 			if ( !self changeToWeapon( ksWeap ) )
 			{
@@ -5083,13 +5083,13 @@ bot_killstreak_think_loop( data )
 			if ( streakName == "nuke" && isDefined( level.nukeIncoming ) )
 				return;
 
-			if ( streakName == "counter_uav" && self.pers["bots"]["skill"]["base"] > 3 && ( ( level.teamBased && level.activeCounterUAVs[self.team] ) || ( !level.teamBased && level.activeCounterUAVs[self.guid] ) ) )
+			if ( streakName == "counter_uav" && self.pers[ "bots" ][ "skill" ][ "base" ] > 3 && ( ( level.teamBased && level.activeCounterUAVs[ self.team ] ) || ( !level.teamBased && level.activeCounterUAVs[ self.guid ] ) ) )
 				return;
 
-			if ( ( streakName == "uav" || streakName == "uav_support" || streakName == "triple_uav" ) && self.pers["bots"]["skill"]["base"] > 3 && ( ( level.teamBased && ( level.activeUAVs[self.team] || level.activeCounterUAVs[level.otherTeam[self.team]] ) ) || ( !level.teamBased && ( level.activeUAVs[self.guid] || self.isRadarBlocked ) ) ) )
+			if ( ( streakName == "uav" || streakName == "uav_support" || streakName == "triple_uav" ) && self.pers[ "bots" ][ "skill" ][ "base" ] > 3 && ( ( level.teamBased && ( level.activeUAVs[ self.team ] || level.activeCounterUAVs[ level.otherTeam[ self.team ] ] ) ) || ( !level.teamBased && ( level.activeUAVs[ self.guid ] || self.isRadarBlocked ) ) ) )
 				return;
 
-			if ( streakName == "emp" && self.pers["bots"]["skill"]["base"] > 3 && ( ( level.teamBased && level.teamEMPed[level.otherTeam[self.team]] ) || ( !level.teamBased && isDefined( level.empPlayer ) ) ) )
+			if ( streakName == "emp" && self.pers[ "bots" ][ "skill" ][ "base" ] > 3 && ( ( level.teamBased && level.teamEMPed[ level.otherTeam[ self.team ] ] ) || ( !level.teamBased && isDefined( level.empPlayer ) ) ) )
 				return;
 
 			if ( streakName == "littlebird_flock" || streakName == "helicopter" || streakName == "helicopter_flares" || streakName == "littlebird_support" )
@@ -5243,7 +5243,7 @@ BotLookAtRandomThing( obj_target )
 
 	for ( i = 0; i < level.players.size; i++ )
 	{
-		player = level.players[i];
+		player = level.players[ i ];
 
 		if ( !isDefined( player ) || !isDefined( player.team ) )
 			continue;
@@ -5263,11 +5263,11 @@ BotLookAtRandomThing( obj_target )
 	origin = ( 0, 0, self GetPlayerViewHeight() );
 
 	if ( isDefined( nearestEnemy ) && DistanceSquared( self.origin, nearestEnemy.origin ) < 1024 * 1024 && rand < 40 )
-		origin += ( nearestEnemy.origin[0], nearestEnemy.origin[1], self.origin[2] );
+		origin += ( nearestEnemy.origin[ 0 ], nearestEnemy.origin[ 1 ], self.origin[ 2 ] );
 	else if ( isDefined( obj_target ) && rand < 50 )
-		origin += ( obj_target.origin[0], obj_target.origin[1], self.origin[2] );
+		origin += ( obj_target.origin[ 0 ], obj_target.origin[ 1 ], self.origin[ 2 ] );
 	else if ( rand < 85 )
-		origin += self.origin + AnglesToForward( ( 0, self.angles[1] - 180, 0 ) ) * 1024;
+		origin += self.origin + AnglesToForward( ( 0, self.angles[ 1 ] - 180, 0 ) ) * 1024;
 	else
 		origin += self.origin + AnglesToForward( ( 0, RandomInt( 360 ), 0 ) ) * 1024;
 
@@ -5329,10 +5329,10 @@ bot_dom_spawn_kill_think_loop()
 
 	for ( i = 0; i < level.flags.size; i++ )
 	{
-		if ( level.flags[i] maps\mp\gametypes\dom::getFlagTeam() == myTeam )
+		if ( level.flags[ i ] maps\mp\gametypes\dom::getFlagTeam() == myTeam )
 			continue;
 
-		flag = level.flags[i];
+		flag = level.flags[ i ];
 	}
 
 	if ( !isDefined( flag ) )
@@ -5410,14 +5410,14 @@ bot_dom_def_think_loop()
 
 	for ( i = 0; i < level.flags.size; i++ )
 	{
-		if ( level.flags[i] maps\mp\gametypes\dom::getFlagTeam() != myTeam )
+		if ( level.flags[ i ] maps\mp\gametypes\dom::getFlagTeam() != myTeam )
 			continue;
 
-		if ( !level.flags[i].useObj.objPoints[myTeam].isFlashing )
+		if ( !level.flags[ i ].useObj.objPoints[ myTeam ].isFlashing )
 			continue;
 
-		if ( !isDefined( flag ) || DistanceSquared( self.origin, level.flags[i].origin ) < DistanceSquared( self.origin, flag.origin ) )
-			flag = level.flags[i];
+		if ( !isDefined( flag ) || DistanceSquared( self.origin, level.flags[ i ].origin ) < DistanceSquared( self.origin, flag.origin ) )
+			flag = level.flags[ i ];
 	}
 
 	if ( !isDefined( flag ) )
@@ -5479,7 +5479,7 @@ bot_dom_watch_for_flashing( flag, myTeam )
 		if ( !isDefined( flag ) )
 			break;
 
-		if ( flag maps\mp\gametypes\dom::getFlagTeam() != myTeam || !flag.useObj.objPoints[myTeam].isFlashing )
+		if ( flag maps\mp\gametypes\dom::getFlagTeam() != myTeam || !flag.useObj.objPoints[ myTeam ].isFlashing )
 			break;
 	}
 
@@ -5501,7 +5501,7 @@ bot_dom_cap_think_loop()
 
 	otherFlagCount = maps\mp\gametypes\dom::getTeamFlagCount( otherTeam );
 
-	if ( game["teamScores"][myteam] >= game["teamScores"][otherTeam] )
+	if ( game[ "teamScores" ][ myteam ] >= game[ "teamScores" ][ otherTeam ] )
 	{
 		if ( myFlagCount < otherFlagCount )
 		{
@@ -5525,18 +5525,18 @@ bot_dom_cap_think_loop()
 
 	for ( i = 0; i < level.flags.size; i++ )
 	{
-		if ( level.flags[i] maps\mp\gametypes\dom::getFlagTeam() == myTeam )
+		if ( level.flags[ i ] maps\mp\gametypes\dom::getFlagTeam() == myTeam )
 			continue;
 
-		flags[flags.size] = level.flags[i];
+		flags[ flags.size ] = level.flags[ i ];
 	}
 
 	if ( randomInt( 100 ) > 30 )
 	{
 		for ( i = 0; i < flags.size; i++ )
 		{
-			if ( !isDefined( flag ) || DistanceSquared( self.origin, level.flags[i].origin ) < DistanceSquared( self.origin, flag.origin ) )
-				flag = level.flags[i];
+			if ( !isDefined( flag ) || DistanceSquared( self.origin, level.flags[ i ].origin ) < DistanceSquared( self.origin, flag.origin ) )
+				flag = level.flags[ i ];
 		}
 	}
 	else if ( flags.size )
@@ -5655,7 +5655,7 @@ bot_hq_loop()
 
 	radio = level.radio;
 	gameobj = radio.gameobject;
-	origin = ( radio.origin[0], radio.origin[1], radio.origin[2] + 5 );
+	origin = ( radio.origin[ 0 ], radio.origin[ 1 ], radio.origin[ 2 ] + 5 );
 
 	//if neut or enemy
 	if ( gameobj.ownerTeam != myTeam )
@@ -5723,7 +5723,7 @@ bot_hq_loop()
 	}
 	else//we own it
 	{
-		if ( gameobj.objPoints[myteam].isFlashing ) //underattack
+		if ( gameobj.objPoints[ myteam ].isFlashing ) //underattack
 		{
 			self BotNotifyBotEvent( "hq", "start", "defend" );
 
@@ -5834,7 +5834,7 @@ bot_hq_watch_flashing( obj, radio )
 		if ( !isDefined( obj ) )
 			break;
 
-		if ( !obj.objPoints[myteam].isFlashing )
+		if ( !obj.objPoints[ myteam ].isFlashing )
 			break;
 
 		if ( level.radio != radio )
@@ -5860,8 +5860,8 @@ bot_sab_loop()
 	// the bomb is ours, we are on the offence
 	if ( bombteam == myTeam )
 	{
-		site = level.bombZones[otherTeam];
-		origin = ( site.curorigin[0] + 50, site.curorigin[1] + 50, site.curorigin[2] + 5 );
+		site = level.bombZones[ otherTeam ];
+		origin = ( site.curorigin[ 0 ] + 50, site.curorigin[ 1 ] + 50, site.curorigin[ 2 ] + 5 );
 
 		// protect our planted bomb
 		if ( level.bombPlanted )
@@ -5960,7 +5960,7 @@ bot_sab_loop()
 	}
 	else if ( bombteam == otherTeam ) // the bomb is theirs, we are on the defense
 	{
-		site = level.bombZones[myteam];
+		site = level.bombZones[ myteam ];
 
 		if ( !isDefined( site.bots ) )
 			site.bots = 0;
@@ -5989,7 +5989,7 @@ bot_sab_loop()
 			}
 
 			//protect bomb site
-			origin = ( site.curorigin[0] + 50, site.curorigin[1] + 50, site.curorigin[2] + 5 );
+			origin = ( site.curorigin[ 0 ] + 50, site.curorigin[ 1 ] + 50, site.curorigin[ 2 ] + 5 );
 
 			self thread bot_inc_bots( site );
 
@@ -6033,7 +6033,7 @@ bot_sab_loop()
 		}
 
 		// bomb is planted we need to defuse
-		origin = ( site.curorigin[0] + 50, site.curorigin[1] + 50, site.curorigin[2] + 5 );
+		origin = ( site.curorigin[ 0 ] + 50, site.curorigin[ 1 ] + 50, site.curorigin[ 2 ] + 5 );
 
 		// someone else is defusing, lets just hang around
 		if ( site.bots > 1 )
@@ -6090,7 +6090,7 @@ bot_sab_loop()
 	}
 	else // we need to go get the bomb!
 	{
-		origin = ( bomb.curorigin[0], bomb.curorigin[1], bomb.curorigin[2] + 5 );
+		origin = ( bomb.curorigin[ 0 ], bomb.curorigin[ 1 ], bomb.curorigin[ 2 ] + 5 );
 
 		self BotNotifyBotEvent( "sab", "start", "bomb" );
 
@@ -6167,7 +6167,7 @@ bot_sd_defenders_loop( data )
 
 			if ( !isDefined( carrier ) )
 			{
-				origin = ( bomb.curorigin[0], bomb.curorigin[1], bomb.curorigin[2] + 5 );
+				origin = ( bomb.curorigin[ 0 ], bomb.curorigin[ 1 ], bomb.curorigin[ 2 ] + 5 );
 
 				//hang around the bomb
 				if ( self HasScriptGoal() )
@@ -6195,7 +6195,7 @@ bot_sd_defenders_loop( data )
 
 		for ( i = 0; i < level.bombZones.size; i++ )
 		{
-			sites[sites.size] = level.bombZones[i];
+			sites[ sites.size ] = level.bombZones[ i ];
 		}
 
 		if ( !sites.size )
@@ -6209,7 +6209,7 @@ bot_sd_defenders_loop( data )
 		if ( !isDefined( site ) )
 			return;
 
-		origin = ( site.curorigin[0] + 50, site.curorigin[1] + 50, site.curorigin[2] + 5 );
+		origin = ( site.curorigin[ 0 ] + 50, site.curorigin[ 1 ] + 50, site.curorigin[ 2 ] + 5 );
 
 		if ( site isInUse() ) //somebody is planting
 		{
@@ -6252,7 +6252,7 @@ bot_sd_defenders_loop( data )
 	if ( !isDefined( defuse.bots ) )
 		defuse.bots = 0;
 
-	origin = ( defuse.curorigin[0], defuse.curorigin[1], defuse.curorigin[2] + 5 );
+	origin = ( defuse.curorigin[ 0 ], defuse.curorigin[ 1 ], defuse.curorigin[ 2 ] + 5 );
 
 	// someone is going to go defuse ,lets just hang around
 	if ( defuse.bots > 1 )
@@ -6319,7 +6319,7 @@ bot_sd_defenders()
 	if ( level.gametype != "sd" )
 		return;
 
-	if ( self.team == game["attackers"] )
+	if ( self.team == game[ "attackers" ] )
 		return;
 
 	data = spawnStruct();
@@ -6367,7 +6367,7 @@ bot_sd_attackers_loop( data )
 
 		site = level.defuseObject;
 
-		origin = ( site.curorigin[0], site.curorigin[1], site.curorigin[2] + 5 );
+		origin = ( site.curorigin[ 0 ], site.curorigin[ 1 ], site.curorigin[ 2 ] + 5 );
 
 		if ( site IsInUse() ) //somebody is defusing
 		{
@@ -6438,7 +6438,7 @@ bot_sd_attackers_loop( data )
 		if ( !isDefined( bomb.bots ) )
 			bomb.bots = 0;
 
-		origin = ( bomb.curorigin[0], bomb.curorigin[1], bomb.curorigin[2] + 5 );
+		origin = ( bomb.curorigin[ 0 ], bomb.curorigin[ 1 ], bomb.curorigin[ 2 ] + 5 );
 
 		//hang around the bomb if other is going to go get it
 		if ( bomb.bots > 1 )
@@ -6487,7 +6487,7 @@ bot_sd_attackers_loop( data )
 
 	for ( i = 0; i < level.bombZones.size; i++ )
 	{
-		sites[sites.size] = level.bombZones[i];
+		sites[ sites.size ] = level.bombZones[ i ];
 	}
 
 	if ( !sites.size )
@@ -6501,7 +6501,7 @@ bot_sd_attackers_loop( data )
 	if ( !isDefined( plant ) )
 		return;
 
-	origin = ( plant.curorigin[0] + 50, plant.curorigin[1] + 50, plant.curorigin[2] + 5 );
+	origin = ( plant.curorigin[ 0 ] + 50, plant.curorigin[ 1 ] + 50, plant.curorigin[ 2 ] + 5 );
 
 	self BotNotifyBotEvent( "sd", "go", "plant", plant );
 
@@ -6548,7 +6548,7 @@ bot_sd_attackers()
 	if ( level.gametype != "sd" )
 		return;
 
-	if ( self.team != game["attackers"] )
+	if ( self.team != game[ "attackers" ] )
 		return;
 
 	data = spawnStruct();
@@ -6569,11 +6569,11 @@ bot_cap_loop()
 	myTeam = self.pers[ "team" ];
 	otherTeam = getOtherTeam( myTeam );
 
-	myflag = level.teamFlags[myteam];
-	myzone = level.capZones[myteam];
+	myflag = level.teamFlags[ myteam ];
+	myzone = level.capZones[ myteam ];
 
-	theirflag = level.teamFlags[otherTeam];
-	theirzone = level.capZones[otherTeam];
+	theirflag = level.teamFlags[ otherTeam ];
+	theirzone = level.capZones[ otherTeam ];
 
 	if ( !myflag maps\mp\gametypes\_gameobjects::isHome() )
 	{
@@ -6869,7 +6869,7 @@ bot_dem_attackers_loop()
 
 	for ( i = 0; i < level.bombZones.size; i++ )
 	{
-		bomb = level.bombZones[i];
+		bomb = level.bombZones[ i ];
 
 		if ( isDefined( bomb.bombExploded ) && bomb.bombExploded )
 		{
@@ -6880,9 +6880,9 @@ bot_dem_attackers_loop()
 		if ( bomb.label == "_a" )
 		{
 			if ( level.bombAPlanted )
-				bombs[bombs.size] = bomb;
+				bombs[ bombs.size ] = bomb;
 			else
-				sites[sites.size] = bomb;
+				sites[ sites.size ] = bomb;
 
 			continue;
 		}
@@ -6890,9 +6890,9 @@ bot_dem_attackers_loop()
 		if ( bomb.label == "_b" )
 		{
 			if ( level.bombBPlanted )
-				bombs[bombs.size] = bomb;
+				bombs[ bombs.size ] = bomb;
 			else
-				sites[sites.size] = bomb;
+				sites[ sites.size ] = bomb;
 
 			continue;
 		}
@@ -6900,7 +6900,7 @@ bot_dem_attackers_loop()
 
 	timeleft = maps\mp\gametypes\_gamelogic::getTimeRemaining() / 1000;
 
-	shouldLet = ( game["teamScores"][myteam] > game["teamScores"][otherTeam] && timeleft < 90 && bombed == 1 );
+	shouldLet = ( game[ "teamScores" ][ myteam ] > game[ "teamScores" ][ otherTeam ] && timeleft < 90 && bombed == 1 );
 
 	//spawnkill conditions
 	//if we have bombed one site or 1 bomb is planted with lots of time left, spawn kill
@@ -6960,7 +6960,7 @@ bot_dem_attackers_loop()
 	if ( bombs.size && timeleft < 90 && ( !sites.size || randomInt( 100 ) < 95 ) )
 	{
 		site = self bot_array_nearest_curorigin( bombs );
-		origin = ( site.curorigin[0] + 50, site.curorigin[1] + 50, site.curorigin[2] + 5 );
+		origin = ( site.curorigin[ 0 ] + 50, site.curorigin[ 1 ] + 50, site.curorigin[ 2 ] + 5 );
 
 		if ( site IsInUse() ) //somebody is defusing
 		{
@@ -7006,7 +7006,7 @@ bot_dem_attackers_loop()
 	if ( !isDefined( plant.bots ) )
 		plant.bots = 0;
 
-	origin = ( plant.curorigin[0] + 50, plant.curorigin[1] + 50, plant.curorigin[2] + 5 );
+	origin = ( plant.curorigin[ 0 ] + 50, plant.curorigin[ 1 ] + 50, plant.curorigin[ 2 ] + 5 );
 
 	//hang around the site if lots of time left
 	if ( plant.bots > 1 && timeleft >= 60 )
@@ -7074,7 +7074,7 @@ bot_dem_attackers()
 	if ( level.gametype != "dd" )
 		return;
 
-	if ( self.team != game["attackers"] )
+	if ( self.team != game[ "attackers" ] )
 		return;
 
 	if ( inOvertime() )
@@ -7110,7 +7110,7 @@ bot_dem_defenders_loop()
 
 	for ( i = 0; i < level.bombZones.size; i++ )
 	{
-		bomb = level.bombZones[i];
+		bomb = level.bombZones[ i ];
 
 		if ( isDefined( bomb.bombExploded ) && bomb.bombExploded )
 		{
@@ -7121,9 +7121,9 @@ bot_dem_defenders_loop()
 		if ( bomb.label == "_a" )
 		{
 			if ( level.bombAPlanted )
-				bombs[bombs.size] = bomb;
+				bombs[ bombs.size ] = bomb;
 			else
-				sites[sites.size] = bomb;
+				sites[ sites.size ] = bomb;
 
 			continue;
 		}
@@ -7131,9 +7131,9 @@ bot_dem_defenders_loop()
 		if ( bomb.label == "_b" )
 		{
 			if ( level.bombBPlanted )
-				bombs[bombs.size] = bomb;
+				bombs[ bombs.size ] = bomb;
 			else
-				sites[sites.size] = bomb;
+				sites[ sites.size ] = bomb;
 
 			continue;
 		}
@@ -7141,7 +7141,7 @@ bot_dem_defenders_loop()
 
 	timeleft = maps\mp\gametypes\_gamelogic::getTimeRemaining() / 1000;
 
-	shouldLet = ( timeleft < 60 && ( ( bombed == 0 && bombs.size != 2 ) || ( game["teamScores"][myteam] > game["teamScores"][otherTeam] && bombed == 1 ) ) && randomInt( 100 ) < 98 );
+	shouldLet = ( timeleft < 60 && ( ( bombed == 0 && bombs.size != 2 ) || ( game[ "teamScores" ][ myteam ] > game[ "teamScores" ][ otherTeam ] && bombed == 1 ) ) && randomInt( 100 ) < 98 );
 
 	//spawnkill conditions
 	//if nothing to defuse with a lot of time left, spawn kill
@@ -7201,7 +7201,7 @@ bot_dem_defenders_loop()
 	if ( !bombs.size && timeleft < 60 && randomInt( 100 ) < 95 && sites.size )
 	{
 		site = self bot_array_nearest_curorigin( sites );
-		origin = ( site.curorigin[0] + 50, site.curorigin[1] + 50, site.curorigin[2] + 5 );
+		origin = ( site.curorigin[ 0 ] + 50, site.curorigin[ 1 ] + 50, site.curorigin[ 2 ] + 5 );
 
 		if ( site IsInUse() ) //somebody is planting
 		{
@@ -7249,7 +7249,7 @@ bot_dem_defenders_loop()
 	if ( !isDefined( defuse.bots ) )
 		defuse.bots = 0;
 
-	origin = ( defuse.curorigin[0] + 50, defuse.curorigin[1] + 50, defuse.curorigin[2] + 5 );
+	origin = ( defuse.curorigin[ 0 ] + 50, defuse.curorigin[ 1 ] + 50, defuse.curorigin[ 2 ] + 5 );
 
 	//hang around the site if not in danger of losing
 	if ( defuse.bots > 1 && bombed + bombs.size != 2 )
@@ -7318,7 +7318,7 @@ bot_dem_defenders()
 	if ( level.gametype != "dd" )
 		return;
 
-	if ( self.team == game["attackers"] )
+	if ( self.team == game[ "attackers" ] )
 		return;
 
 	if ( inOvertime() )
@@ -7367,7 +7367,7 @@ bot_dem_overtime()
 		if ( !isDefined( level.bombZones ) || !level.bombZones.size )
 			continue;
 
-		if ( !level.bombZones[0].bombPlanted || !level.bombZones[0] maps\mp\gametypes\_gameobjects::isFriendlyTeam( self.team ) )
+		if ( !level.bombZones[ 0 ].bombPlanted || !level.bombZones[ 0 ] maps\mp\gametypes\_gameobjects::isFriendlyTeam( self.team ) )
 		{
 			self bot_dem_attackers_loop();
 			continue;
@@ -7438,7 +7438,7 @@ bot_think_revive_loop()
 
 	for ( i = 0; i < level.players.size; i++ )
 	{
-		player = level.players[i];
+		player = level.players[ i ];
 
 		if ( player.team != self.team )
 			continue;
@@ -7447,7 +7447,7 @@ bot_think_revive_loop()
 			continue;
 
 		if ( player inLastStand() )
-			needsRevives[needsRevives.size] = player;
+			needsRevives[ needsRevives.size ] = player;
 	}
 
 	if ( !needsRevives.size )
@@ -7527,8 +7527,8 @@ bot_gtnw_loop()
 	origin = level.nukeSite.trigger.origin;
 	trigger = level.nukeSite.trigger;
 
-	ourCapCount = level.nukeSite.touchList[myteam];
-	theirCapCount = level.nukeSite.touchList[theirteam];
+	ourCapCount = level.nukeSite.touchList[ myteam ];
+	theirCapCount = level.nukeSite.touchList[ theirteam ];
 	rand = self BotGetRandom();
 
 	if ( ( !ourCapCount && !theirCapCount ) || rand <= 20 )
@@ -7637,10 +7637,10 @@ bot_oneflag_loop()
 	myTeam = self.pers[ "team" ];
 	otherTeam = getOtherTeam( myTeam );
 
-	if ( myteam == game["attackers"] )
+	if ( myteam == game[ "attackers" ] )
 	{
-		myzone = level.capZones[myteam];
-		theirflag = level.teamFlags[otherTeam];
+		myzone = level.capZones[ myteam ];
+		theirflag = level.teamFlags[ otherTeam ];
 
 		if ( self isFlagCarrier() )
 		{
@@ -7693,8 +7693,8 @@ bot_oneflag_loop()
 	}
 	else
 	{
-		myflag = level.teamFlags[myteam];
-		theirzone = level.capZones[otherTeam];
+		myflag = level.teamFlags[ myteam ];
+		theirzone = level.capZones[ otherTeam ];
 
 		if ( !myflag maps\mp\gametypes\_gameobjects::isHome() )
 		{
@@ -7887,7 +7887,7 @@ bot_vip_loop()
 
 	for ( i = 0; i < level.players.size; i++ )
 	{
-		player = level.players[i];
+		player = level.players[ i ];
 
 		if ( !isReallyAlive( player ) )
 			continue;
@@ -7896,7 +7896,7 @@ bot_vip_loop()
 			vip = player;
 	}
 
-	if ( self.team == game["defenders"] )
+	if ( self.team == game[ "defenders" ] )
 	{
 		if ( isDefined( self.isVip ) && self.isVip )
 		{
@@ -7992,7 +7992,7 @@ bot_conf_loop()
 
 	for ( i = 0; i < dog_tag_keys.size; i++ )
 	{
-		temp_tag = level.dogtags[dog_tag_keys[i]];
+		temp_tag = level.dogtags[ dog_tag_keys[ i ] ];
 
 		if ( !isDefined( temp_tag ) )
 			continue;
@@ -8006,14 +8006,14 @@ bot_conf_loop()
 		if ( temp_tag.bots >= 2 )
 			continue;
 
-		tags[tags.size] = temp_tag;
+		tags[ tags.size ] = temp_tag;
 	}
 
 	if ( randomInt( 2 ) )
 	{
 		for ( i = 0; i < tags.size; i++ )
 		{
-			temp_tag = tags[i];
+			temp_tag = tags[ i ];
 
 			if ( !isDefined( tag ) || DistanceSquared( self.origin, temp_tag.trigger.origin ) < DistanceSquared( self.origin, tag.trigger.origin ) )
 			{
@@ -8109,20 +8109,20 @@ bots_watch_grnd()
 */
 bot_grnd_loop()
 {
-	if ( isDefined( self.inGrindZone ) && self.inGrindZone && isReallyAlive( self ) && self.pers["team"] != "spectator" && self maps\mp\gametypes\grnd::isingrindzone() )
+	if ( isDefined( self.inGrindZone ) && self.inGrindZone && isReallyAlive( self ) && self.pers[ "team" ] != "spectator" && self maps\mp\gametypes\grnd::isingrindzone() )
 	{
 		// in the grnd zone
 
-		if ( level.grnd_numplayers[level.otherTeam[self.team]] )
+		if ( level.grnd_numplayers[ level.otherTeam[ self.team ] ] )
 		{
 			// hunt enemy in drop zone
 			target = undefined;
 
 			for ( i = 0; i < level.players.size; i++ )
 			{
-				player = level.players[i];
+				player = level.players[ i ];
 
-				if ( isDefined( player.inGrindZone ) && player.inGrindZone && isReallyAlive( player ) && player.pers["team"] != "spectator" && player maps\mp\gametypes\grnd::isingrindzone() )
+				if ( isDefined( player.inGrindZone ) && player.inGrindZone && isReallyAlive( player ) && player.pers[ "team" ] != "spectator" && player maps\mp\gametypes\grnd::isingrindzone() )
 				{
 					target = player;
 
@@ -8154,7 +8154,7 @@ bot_grnd_loop()
 
 			while ( self HasScriptGoal() && self GetScriptGoal() == goal && self maps\mp\gametypes\grnd::isingrindzone() )
 			{
-				if ( level.grnd_numplayers[level.otherTeam[self.team]] )
+				if ( level.grnd_numplayers[ level.otherTeam[ self.team ] ] )
 					break;
 
 				wait 0.5;
@@ -8171,7 +8171,7 @@ bot_grnd_loop()
 		return;
 	}
 
-	if ( randomInt( 100 ) < 40 || level.grnd_numplayers[self.team] <= 0 )
+	if ( randomInt( 100 ) < 40 || level.grnd_numplayers[ self.team ] <= 0 )
 	{
 		self BotNotifyBotEvent( "grnd", "start", "go_cap" );
 
@@ -8226,7 +8226,7 @@ bot_tdef_loop()
 {
 	if ( isDefined( level.gameFlag.carrier ) )
 	{
-		if ( level.gameFlag maps\mp\gametypes\_gameobjects::getOwnerTeam() == level.otherTeam[self.team] )
+		if ( level.gameFlag maps\mp\gametypes\_gameobjects::getOwnerTeam() == level.otherTeam[ self.team ] )
 		{
 			if ( self HasScriptGoal() )
 				return;
@@ -8261,7 +8261,7 @@ bot_tdef_loop()
 
 			for ( i = 0; i < level.players.size; i++ )
 			{
-				player = level.players[i];
+				player = level.players[ i ];
 
 				if ( !isDefined( player.team ) )
 					continue;
@@ -8283,12 +8283,12 @@ bot_tdef_loop()
 
 				for ( i = 0; i < level.waypoints.size; i++ )
 				{
-					wp = level.waypoints[i];
+					wp = level.waypoints[ i ];
 
 					if ( DistanceSquared( wp.origin, avg_org ) < 1024 * 1024 )
 						continue;
 
-					wps[wps.size] = wp;
+					wps[ wps.size ] = wp;
 				}
 
 				wp = random( wps );
@@ -8361,7 +8361,7 @@ bot_infect_loop()
 
 		for ( i = 0; i < level.players.size; i++ )
 		{
-			player = level.players[i];
+			player = level.players[ i ];
 
 			if ( player == self )
 				continue;

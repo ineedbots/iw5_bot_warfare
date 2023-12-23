@@ -33,9 +33,9 @@ wait_for_builtins()
 */
 BotBuiltinPrintConsole( s )
 {
-	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins["printconsole"] ) )
+	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins[ "printconsole" ] ) )
 	{
-		[[ level.bot_builtins["printconsole" ]]]( s );
+		[[ level.bot_builtins[ "printconsole" ] ]]( s );
 	}
 }
 
@@ -44,9 +44,9 @@ BotBuiltinPrintConsole( s )
 */
 BotBuiltinFileWrite( file, contents, mode )
 {
-	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins["filewrite"] ) )
+	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins[ "filewrite" ] ) )
 	{
-		[[ level.bot_builtins["filewrite" ]]]( file, contents, mode );
+		[[ level.bot_builtins[ "filewrite" ] ]]( file, contents, mode );
 	}
 }
 
@@ -55,9 +55,9 @@ BotBuiltinFileWrite( file, contents, mode )
 */
 BotBuiltinFileRead( file )
 {
-	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins["fileread"] ) )
+	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins[ "fileread" ] ) )
 	{
-		return [[ level.bot_builtins["fileread" ]]]( file );
+		return [[ level.bot_builtins[ "fileread" ] ]]( file );
 	}
 
 	return undefined;
@@ -68,9 +68,9 @@ BotBuiltinFileRead( file )
 */
 BotBuiltinFileExists( file )
 {
-	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins["fileexists"] ) )
+	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins[ "fileexists" ] ) )
 	{
-		return [[ level.bot_builtins["fileexists" ]]]( file );
+		return [[ level.bot_builtins[ "fileexists" ] ]]( file );
 	}
 
 	return false;
@@ -82,9 +82,9 @@ BotBuiltinFileExists( file )
 */
 BotBuiltinBotAction( action )
 {
-	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins["botaction"] ) )
+	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins[ "botaction" ] ) )
 	{
-		self [[ level.bot_builtins["botaction" ]]]( action );
+		self [[ level.bot_builtins[ "botaction" ] ]]( action );
 	}
 }
 
@@ -94,9 +94,9 @@ BotBuiltinBotAction( action )
 */
 BotBuiltinBotStop()
 {
-	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins["botstop"] ) )
+	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins[ "botstop" ] ) )
 	{
-		self [[ level.bot_builtins["botstop" ]]]();
+		self [[ level.bot_builtins[ "botstop" ] ]]();
 	}
 }
 
@@ -106,9 +106,9 @@ BotBuiltinBotStop()
 */
 BotBuiltinBotMovement( forward, right )
 {
-	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins["botmovement"] ) )
+	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins[ "botmovement" ] ) )
 	{
-		self [[ level.bot_builtins["botmovement" ]]]( forward, right );
+		self [[ level.bot_builtins[ "botmovement" ] ]]( forward, right );
 	}
 }
 
@@ -117,9 +117,9 @@ BotBuiltinBotMovement( forward, right )
 */
 BotBuiltinBotMeleeParams( entNum, dist )
 {
-	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins["botmeleeparams"] ) )
+	if ( isDefined( level.bot_builtins ) && isDefined( level.bot_builtins[ "botmeleeparams" ] ) )
 	{
-		self [[ level.bot_builtins["botmeleeparams" ]]]( entNum, dist );
+		self [[ level.bot_builtins[ "botmeleeparams" ] ]]( entNum, dist );
 	}
 }
 
@@ -128,7 +128,7 @@ BotBuiltinBotMeleeParams( entNum, dist )
 */
 is_host()
 {
-	return ( isDefined( self.pers["bot_host"] ) && self.pers["bot_host"] );
+	return ( isDefined( self.pers[ "bot_host" ] ) && self.pers[ "bot_host" ] );
 }
 
 /*
@@ -136,7 +136,7 @@ is_host()
 */
 doHostCheck()
 {
-	self.pers["bot_host"] = false;
+	self.pers[ "bot_host" ] = false;
 
 	if ( self is_bot() )
 		return;
@@ -164,7 +164,7 @@ doHostCheck()
 
 		for ( i = 0; i < guids.size; i++ )
 		{
-			if ( self getguid() + "" == guids[i] )
+			if ( self getguid() + "" == guids[ i ] )
 				result = true;
 		}
 	}
@@ -172,7 +172,7 @@ doHostCheck()
 	if ( !self isHost() && !result )
 		return;
 
-	self.pers["bot_host"] = true;
+	self.pers[ "bot_host" ] = true;
 }
 
 /*
@@ -183,7 +183,7 @@ is_bot()
 	assert( isDefined( self ) );
 	assert( isPlayer( self ) );
 
-	return ( ( isDefined( self.pers["isBot"] ) && self.pers["isBot"] ) || ( isDefined( self.pers["isBotWarfare"] ) && self.pers["isBotWarfare"] ) || isSubStr( self getguid() + "", "bot" ) );
+	return ( ( isDefined( self.pers[ "isBot" ] ) && self.pers[ "isBot" ] ) || ( isDefined( self.pers[ "isBotWarfare" ] ) && self.pers[ "isBotWarfare" ] ) || isSubStr( self getguid() + "", "bot" ) );
 }
 
 /*
@@ -608,7 +608,7 @@ getValidTube()
 
 	for ( i = 0; i < weaps.size; i++ )
 	{
-		weap = weaps[i];
+		weap = weaps[ i ];
 
 		if ( !self getAmmoCount( weap ) )
 			continue;
@@ -647,25 +647,25 @@ waittill_either_return( str1, str2 )
 getValidGrenade()
 {
 	grenadeTypes = [];
-	grenadeTypes[grenadeTypes.size] = "frag_grenade_mp";
-	grenadeTypes[grenadeTypes.size] = "smoke_grenade_mp";
-	grenadeTypes[grenadeTypes.size] = "flash_grenade_mp";
-	grenadeTypes[grenadeTypes.size] = "concussion_grenade_mp";
-	grenadeTypes[grenadeTypes.size] = "semtex_mp";
-	grenadeTypes[grenadeTypes.size] = "throwingknife_mp";
-	grenadeTypes[grenadeTypes.size] = "emp_grenade_mp";
+	grenadeTypes[ grenadeTypes.size ] = "frag_grenade_mp";
+	grenadeTypes[ grenadeTypes.size ] = "smoke_grenade_mp";
+	grenadeTypes[ grenadeTypes.size ] = "flash_grenade_mp";
+	grenadeTypes[ grenadeTypes.size ] = "concussion_grenade_mp";
+	grenadeTypes[ grenadeTypes.size ] = "semtex_mp";
+	grenadeTypes[ grenadeTypes.size ] = "throwingknife_mp";
+	grenadeTypes[ grenadeTypes.size ] = "emp_grenade_mp";
 
 	possibles = [];
 
 	for ( i = 0; i < grenadeTypes.size; i++ )
 	{
-		if ( !self hasWeapon( grenadeTypes[i] ) )
+		if ( !self hasWeapon( grenadeTypes[ i ] ) )
 			continue;
 
-		if ( !self getAmmoCount( grenadeTypes[i] ) )
+		if ( !self getAmmoCount( grenadeTypes[ i ] ) )
 			continue;
 
-		possibles[possibles.size] = grenadeTypes[i];
+		possibles[ possibles.size ] = grenadeTypes[ i ];
 	}
 
 	return random( possibles );
@@ -697,7 +697,7 @@ WeaponIsFullAuto( weap )
 	if ( weaptoks.size < 2 )
 		return false;
 
-	return isDefined( level.bots_fullautoguns[weaptoks[1]] );
+	return isDefined( level.bots_fullautoguns[ weaptoks[ 1 ] ] );
 }
 
 /*
@@ -732,7 +732,7 @@ getBotToKick()
 {
 	bots = getBotArray();
 
-	if ( !isDefined( bots ) || !isDefined( bots.size ) || bots.size <= 0 || !isDefined( bots[0] ) )
+	if ( !isDefined( bots ) || !isDefined( bots.size ) || bots.size <= 0 || !isDefined( bots[ 0 ] ) )
 		return undefined;
 
 	tokick = undefined;
@@ -743,7 +743,7 @@ getBotToKick()
 	// count teams
 	for ( i = 0; i < bots.size; i++ )
 	{
-		bot = bots[i];
+		bot = bots[ i ];
 
 		if ( !isDefined( bot ) || !isDefined( bot.team ) )
 			continue;
@@ -777,7 +777,7 @@ getBotToKick()
 	// get the bot on this team with lowest skill
 	for ( i = 0; i < bots.size; i++ )
 	{
-		bot = bots[i];
+		bot = bots[ i ];
 
 		if ( !isDefined( bot ) || !isDefined( bot.team ) )
 			continue;
@@ -785,10 +785,10 @@ getBotToKick()
 		if ( bot.team != team )
 			continue;
 
-		if ( !isDefined( bot.pers ) || !isDefined( bot.pers["bots"] ) || !isDefined( bot.pers["bots"]["skill"] ) || !isDefined( bot.pers["bots"]["skill"]["base"] ) )
+		if ( !isDefined( bot.pers ) || !isDefined( bot.pers[ "bots" ] ) || !isDefined( bot.pers[ "bots" ][ "skill" ] ) || !isDefined( bot.pers[ "bots" ][ "skill" ][ "base" ] ) )
 			continue;
 
-		if ( isDefined( tokick ) && bot.pers["bots"]["skill"]["base"] > tokick.pers["bots"]["skill"]["base"] )
+		if ( isDefined( tokick ) && bot.pers[ "bots" ][ "skill" ][ "base" ] > tokick.pers[ "bots" ][ "skill" ][ "base" ] )
 			continue;
 
 		tokick = bot;
@@ -800,15 +800,15 @@ getBotToKick()
 	// just kick lowest skill
 	for ( i = 0; i < bots.size; i++ )
 	{
-		bot = bots[i];
+		bot = bots[ i ];
 
 		if ( !isDefined( bot ) || !isDefined( bot.team ) )
 			continue;
 
-		if ( !isDefined( bot.pers ) || !isDefined( bot.pers["bots"] ) || !isDefined( bot.pers["bots"]["skill"] ) || !isDefined( bot.pers["bots"]["skill"]["base"] ) )
+		if ( !isDefined( bot.pers ) || !isDefined( bot.pers[ "bots" ] ) || !isDefined( bot.pers[ "bots" ][ "skill" ] ) || !isDefined( bot.pers[ "bots" ][ "skill" ][ "base" ] ) )
 			continue;
 
-		if ( isDefined( tokick ) && bot.pers["bots"]["skill"]["base"] > tokick.pers["bots"]["skill"]["base"] )
+		if ( isDefined( tokick ) && bot.pers[ "bots" ][ "skill" ][ "base" ] > tokick.pers[ "bots" ][ "skill" ][ "base" ] )
 			continue;
 
 		tokick = bot;
@@ -824,7 +824,7 @@ GetHostPlayer()
 {
 	for ( i = 0; i < level.players.size; i++ )
 	{
-		player = level.players[i];
+		player = level.players[ i ];
 
 		if ( !player is_host() )
 			continue;
@@ -895,11 +895,11 @@ RaySphereIntersect( start, end, spherePos, radius )
 
 	// check if the line made by start and end intersect the sphere
 	dp = end - start;
-	a = dp[0] * dp[0] + dp[1] * dp[1] + dp[2] * dp[2];
-	b = 2 * ( dp[0] * ( start[0] - spherePos[0] ) + dp[1] * ( start[1] - spherePos[1] ) + dp[2] * ( start[2] - spherePos[2] ) );
-	c = spherePos[0] * spherePos[0] + spherePos[1] * spherePos[1] + spherePos[2] * spherePos[2];
-	c += start[0] * start[0] + start[1] * start[1] + start[2] * start[2];
-	c -= 2.0 * ( spherePos[0] * start[0] + spherePos[1] * start[1] + spherePos[2] * start[2] );
+	a = dp[ 0 ] * dp[ 0 ] + dp[ 1 ] * dp[ 1 ] + dp[ 2 ] * dp[ 2 ];
+	b = 2 * ( dp[ 0 ] * ( start[ 0 ] - spherePos[ 0 ] ) + dp[ 1 ] * ( start[ 1 ] - spherePos[ 1 ] ) + dp[ 2 ] * ( start[ 2 ] - spherePos[ 2 ] ) );
+	c = spherePos[ 0 ] * spherePos[ 0 ] + spherePos[ 1 ] * spherePos[ 1 ] + spherePos[ 2 ] * spherePos[ 2 ];
+	c += start[ 0 ] * start[ 0 ] + start[ 1 ] * start[ 1 ] + start[ 2 ] * start[ 2 ];
+	c -= 2.0 * ( spherePos[ 0 ] * start[ 0 ] + spherePos[ 1 ] * start[ 1 ] + spherePos[ 2 ] * start[ 2 ] );
 	c -= radius * radius;
 	bb4ac = b * b - 4.0 * a * c;
 
@@ -935,7 +935,7 @@ SmokeTrace( start, end, rad )
 {
 	for ( i = level.bots_smokeList.count - 1; i >= 0; i-- )
 	{
-		nade = level.bots_smokeList.data[i];
+		nade = level.bots_smokeList.data[ i ];
 
 		if ( nade.state != "smoking" )
 			continue;
@@ -964,8 +964,8 @@ getConeDot( to, from, dir )
 */
 DistanceSquared2D( to, from )
 {
-	to = ( to[0], to[1], 0 );
-	from = ( from[0], from[1], 0 );
+	to = ( to[ 0 ], to[ 1 ], 0 );
+	from = ( from[ 0 ], from[ 1 ], 0 );
 
 	return DistanceSquared( to, from );
 }
@@ -1013,38 +1013,38 @@ parseTokensIntoWaypoint( tokens )
 {
 	waypoint = spawnStruct();
 
-	orgStr = tokens[0];
+	orgStr = tokens[ 0 ];
 	orgToks = strtok( orgStr, " " );
-	waypoint.origin = ( float_old( orgToks[0] ), float_old( orgToks[1] ), float_old( orgToks[2] ) );
+	waypoint.origin = ( float_old( orgToks[ 0 ] ), float_old( orgToks[ 1 ] ), float_old( orgToks[ 2 ] ) );
 
-	childStr = tokens[1];
+	childStr = tokens[ 1 ];
 	childToks = strtok( childStr, " " );
 	waypoint.children = [];
 
 	for ( j = 0; j < childToks.size; j++ )
-		waypoint.children[j] = int( childToks[j] );
+		waypoint.children[ j ] = int( childToks[ j ] );
 
-	type = tokens[2];
+	type = tokens[ 2 ];
 	waypoint.type = type;
 
-	anglesStr = tokens[3];
+	anglesStr = tokens[ 3 ];
 
 	if ( isDefined( anglesStr ) && anglesStr != "" )
 	{
 		anglesToks = strtok( anglesStr, " " );
 
 		if ( anglesToks.size >= 3 )
-			waypoint.angles = ( float_old( anglesToks[0] ), float_old( anglesToks[1] ), float_old( anglesToks[2] ) );
+			waypoint.angles = ( float_old( anglesToks[ 0 ] ), float_old( anglesToks[ 1 ] ), float_old( anglesToks[ 2 ] ) );
 	}
 
-	javStr = tokens[4];
+	javStr = tokens[ 4 ];
 
 	if ( isDefined( javStr ) && javStr != "" )
 	{
 		javToks = strtok( javStr, " " );
 
 		if ( javToks.size >= 3 )
-			waypoint.jav_point = ( float_old( javToks[0] ), float_old( javToks[1] ), float_old( javToks[2] ) );
+			waypoint.jav_point = ( float_old( javToks[ 0 ] ), float_old( javToks[ 1 ] ), float_old( javToks[ 2 ] ) );
 	}
 
 	return waypoint;
@@ -1075,13 +1075,13 @@ getWaypointLinesFromFile( filename )
 	for ( i = 0; i < waypointStr.size; i++ )
 	{
 		// Check for newline characters '\n' or '\r'.
-		if ( waypointStr[i] == "\n" || waypointStr[i] == "\r" )
+		if ( waypointStr[ i ] == "\n" || waypointStr[ i ] == "\r" )
 		{
 			// Extract the current line using 'getSubStr' and store it in the result array.
-			result.lines[result.lines.size] = getSubStr( waypointStr, linestart, linestart + linecount );
+			result.lines[ result.lines.size ] = getSubStr( waypointStr, linestart, linestart + linecount );
 
 			// If the newline is '\r\n', skip the next character.
-			if ( waypointStr[i] == "\r" && i < waypointStr.size - 1 && waypointStr[i + 1] == "\n" )
+			if ( waypointStr[ i ] == "\r" && i < waypointStr.size - 1 && waypointStr[ i + 1 ] == "\n" )
 				i++;
 
 			// Reset linecount and update linestart for the next line.
@@ -1095,7 +1095,7 @@ getWaypointLinesFromFile( filename )
 	}
 
 	// Store the last line (or the only line if there are no newline characters) in the result array.
-	result.lines[result.lines.size] = getSubStr( waypointStr, linestart, linestart + linecount );
+	result.lines[ result.lines.size ] = getSubStr( waypointStr, linestart, linestart + linecount );
 
 	// Return the result structure containing the array of extracted lines.
 	return result;
@@ -1119,15 +1119,15 @@ readWpsFromFile( mapname )
 
 	BotBuiltinPrintConsole( "Attempting to read waypoints from " + filename );
 
-	waypointCount = int( res.lines[0] );
+	waypointCount = int( res.lines[ 0 ] );
 
 	for ( i = 1; i <= waypointCount; i++ )
 	{
-		tokens = strtok( res.lines[i], "," );
+		tokens = strtok( res.lines[ i ], "," );
 
 		waypoint = parseTokensIntoWaypoint( tokens );
 
-		waypoints[i - 1] = waypoint;
+		waypoints[ i - 1 ] = waypoint;
 	}
 
 	return waypoints;
@@ -1142,8 +1142,8 @@ load_waypoints()
 {
 	level.waypointCount = 0;
 	level.waypointUsage = [];
-	level.waypointUsage["allies"] = [];
-	level.waypointUsage["axis"] = [];
+	level.waypointUsage[ "allies" ] = [];
+	level.waypointUsage[ "axis" ] = [];
 
 	if ( !isDefined( level.waypoints ) )
 		level.waypoints = [];
@@ -1179,14 +1179,14 @@ load_waypoints()
 
 	for ( i = 0; i < level.waypointCount; i++ )
 	{
-		if ( !isDefined( level.waypoints[i].children ) || !isDefined( level.waypoints[i].children.size ) )
-			level.waypoints[i].children = [];
+		if ( !isDefined( level.waypoints[ i ].children ) || !isDefined( level.waypoints[ i ].children.size ) )
+			level.waypoints[ i ].children = [];
 
-		if ( !isDefined( level.waypoints[i].origin ) )
-			level.waypoints[i].origin = ( 0, 0, 0 );
+		if ( !isDefined( level.waypoints[ i ].origin ) )
+			level.waypoints[ i ].origin = ( 0, 0, 0 );
 
-		if ( !isDefined( level.waypoints[i].type ) )
-			level.waypoints[i].type = "crouch";
+		if ( !isDefined( level.waypoints[ i ].type ) )
+			level.waypoints[ i ].type = "crouch";
 	}
 }
 
@@ -1199,7 +1199,7 @@ nearAnyOfWaypoints( dist, waypoints )
 
 	for ( i = 0; i < waypoints.size; i++ )
 	{
-		waypoint = level.waypoints[waypoints[i]];
+		waypoint = level.waypoints[ waypoints[ i ] ];
 
 		if ( DistanceSquared( waypoint.origin, self.origin ) > dist )
 			continue;
@@ -1221,12 +1221,12 @@ waypointsNear( waypoints, dist )
 
 	for ( i = 0; i < waypoints.size; i++ )
 	{
-		wp = level.waypoints[waypoints[i]];
+		wp = level.waypoints[ waypoints[ i ] ];
 
 		if ( DistanceSquared( wp.origin, self.origin ) > dist )
 			continue;
 
-		answer[answer.size] = waypoints[i];
+		answer[ answer.size ] = waypoints[ i ];
 	}
 
 	return answer;
@@ -1242,13 +1242,13 @@ getNearestWaypointOfWaypoints( waypoints )
 
 	for ( i = 0; i < waypoints.size; i++ )
 	{
-		waypoint = level.waypoints[waypoints[i]];
+		waypoint = level.waypoints[ waypoints[ i ] ];
 		thisDist = DistanceSquared( self.origin, waypoint.origin );
 
 		if ( isDefined( answer ) && thisDist > closestDist )
 			continue;
 
-		answer = waypoints[i];
+		answer = waypoints[ i ];
 		closestDist = thisDist;
 	}
 
@@ -1264,7 +1264,7 @@ getWaypointsOfType( type )
 
 	for ( i = 0; i < level.waypointCount; i++ )
 	{
-		wp = level.waypoints[i];
+		wp = level.waypoints[ i ];
 
 		if ( type == "camp" )
 		{
@@ -1277,7 +1277,7 @@ getWaypointsOfType( type )
 		else if ( type != wp.type )
 			continue;
 
-		answer[answer.size] = i;
+		answer[ answer.size ] = i;
 	}
 
 	return answer;
@@ -1291,7 +1291,7 @@ getWaypointForIndex( i )
 	if ( !isDefined( i ) )
 		return undefined;
 
-	return level.waypoints[i];
+	return level.waypoints[ i ];
 }
 
 /*
@@ -1462,12 +1462,12 @@ getBotArray()
 
 	for ( i = 0; i < playercount; i++ )
 	{
-		player = level.players[i];
+		player = level.players[ i ];
 
 		if ( !player is_bot() )
 			continue;
 
-		result[result.size] = player;
+		result[ result.size ] = player;
 	}
 
 	return result;
@@ -1514,14 +1514,14 @@ _WaypointsToKDTree( waypoints, dem )
 
 	for ( i = 0; i < waypoints.size; i++ )
 	{
-		heap HeapInsert( waypoints[i] );
+		heap HeapInsert( waypoints[ i ] );
 	}
 
 	sorted = [];
 
 	while ( heap.data.size )
 	{
-		sorted[sorted.size] = heap.data[0];
+		sorted[ sorted.size ] = heap.data[ 0 ];
 		heap HeapRemove();
 	}
 
@@ -1532,11 +1532,11 @@ _WaypointsToKDTree( waypoints, dem )
 
 	for ( i = 0; i < sorted.size; i++ )
 		if ( i < median )
-			right[right.size] = sorted[i];
+			right[ right.size ] = sorted[ i ];
 		else if ( i > median )
-			left[left.size] = sorted[i];
+			left[ left.size ] = sorted[ i ];
 
-	self KDTreeInsert( sorted[median] );
+	self KDTreeInsert( sorted[ median ] );
 
 	_WaypointsToKDTree( left, ( dem + 1 ) % 3 );
 
@@ -1560,7 +1560,7 @@ List()
 */
 ListAdd( thing )
 {
-	self.data[self.count] = thing;
+	self.data[ self.count ] = thing;
 
 	self.count++;
 }
@@ -1572,10 +1572,10 @@ ListAddFirst( thing )
 {
 	for ( i = self.count - 1; i >= 0; i-- )
 	{
-		self.data[i + 1] = self.data[i];
+		self.data[ i + 1 ] = self.data[ i ];
 	}
 
-	self.data[0] = thing;
+	self.data[ 0 ] = thing;
 	self.count++;
 }
 
@@ -1586,15 +1586,15 @@ ListRemove( thing )
 {
 	for ( i = 0; i < self.count; i++ )
 	{
-		if ( self.data[i] == thing )
+		if ( self.data[ i ] == thing )
 		{
 			while ( i < self.count - 1 )
 			{
-				self.data[i] = self.data[i + 1];
+				self.data[ i ] = self.data[ i + 1 ];
 				i++;
 			}
 
-			self.data[i] = undefined;
+			self.data[ i ] = undefined;
 			self.count--;
 			break;
 		}
@@ -1647,26 +1647,26 @@ _KDTreeInsert( node, data, dem, x0, y0, z0, x1, y1, z1 )
 	switch ( dem )
 	{
 		case 0:
-			if ( data.origin[0] < node.data.origin[0] )
-				node.left = self _KDTreeInsert( node.left, data, 1, x0, y0, z0, node.data.origin[0], y1, z1 );
+			if ( data.origin[ 0 ] < node.data.origin[ 0 ] )
+				node.left = self _KDTreeInsert( node.left, data, 1, x0, y0, z0, node.data.origin[ 0 ], y1, z1 );
 			else
-				node.right = self _KDTreeInsert( node.right, data, 1, node.data.origin[0], y0, z0, x1, y1, z1 );
+				node.right = self _KDTreeInsert( node.right, data, 1, node.data.origin[ 0 ], y0, z0, x1, y1, z1 );
 
 			break;
 
 		case 1:
-			if ( data.origin[1] < node.data.origin[1] )
-				node.left = self _KDTreeInsert( node.left, data, 2, x0, y0, z0, x1, node.data.origin[1], z1 );
+			if ( data.origin[ 1 ] < node.data.origin[ 1 ] )
+				node.left = self _KDTreeInsert( node.left, data, 2, x0, y0, z0, x1, node.data.origin[ 1 ], z1 );
 			else
-				node.right = self _KDTreeInsert( node.right, data, 2, x0, node.data.origin[1], z0, x1, y1, z1 );
+				node.right = self _KDTreeInsert( node.right, data, 2, x0, node.data.origin[ 1 ], z0, x1, y1, z1 );
 
 			break;
 
 		case 2:
-			if ( data.origin[2] < node.data.origin[2] )
-				node.left = self _KDTreeInsert( node.left, data, 0, x0, y0, z0, x1, y1, node.data.origin[2] );
+			if ( data.origin[ 2 ] < node.data.origin[ 2 ] )
+				node.left = self _KDTreeInsert( node.left, data, 0, x0, y0, z0, x1, y1, node.data.origin[ 2 ] );
 			else
-				node.right = self _KDTreeInsert( node.right, data, 0, x0, y0, node.data.origin[2], x1, y1, z1 );
+				node.right = self _KDTreeInsert( node.right, data, 0, x0, y0, node.data.origin[ 2 ], x1, y1, z1 );
 
 			break;
 	}
@@ -1708,7 +1708,7 @@ _KDTreeNearest( node, point, closest, closestdist, dem )
 		near = node.left;
 		far = node.right;
 
-		if ( point[dem] > node.data.origin[dem] )
+		if ( point[ dem ] > node.data.origin[ dem ] )
 		{
 			near = node.right;
 			far = node.left;
@@ -1731,21 +1731,21 @@ RectDistanceSquared( origin )
 	dy = 0;
 	dz = 0;
 
-	if ( origin[0] < self.x0 )
-		dx = origin[0] - self.x0;
-	else if ( origin[0] > self.x1 )
-		dx = origin[0] - self.x1;
+	if ( origin[ 0 ] < self.x0 )
+		dx = origin[ 0 ] - self.x0;
+	else if ( origin[ 0 ] > self.x1 )
+		dx = origin[ 0 ] - self.x1;
 
-	if ( origin[1] < self.y0 )
-		dy = origin[1] - self.y0;
-	else if ( origin[1] > self.y1 )
-		dy = origin[1] - self.y1;
+	if ( origin[ 1 ] < self.y0 )
+		dy = origin[ 1 ] - self.y0;
+	else if ( origin[ 1 ] > self.y1 )
+		dy = origin[ 1 ] - self.y1;
 
 
-	if ( origin[2] < self.z0 )
-		dz = origin[2] - self.z0;
-	else if ( origin[2] > self.z1 )
-		dz = origin[2] - self.z1;
+	if ( origin[ 2 ] < self.z0 )
+		dz = origin[ 2 ] - self.z0;
+	else if ( origin[ 2 ] > self.z1 )
+		dz = origin[ 2 ] - self.z1;
 
 	return dx * dx + dy * dy + dz * dz;
 }
@@ -1763,7 +1763,7 @@ doExtraCheck()
 */
 HeapSortCoordX( item, item2 )
 {
-	return item.origin[0] > item2.origin[0];
+	return item.origin[ 0 ] > item2.origin[ 0 ];
 }
 
 /*
@@ -1771,7 +1771,7 @@ HeapSortCoordX( item, item2 )
 */
 HeapSortCoordY( item, item2 )
 {
-	return item.origin[1] > item2.origin[1];
+	return item.origin[ 1 ] > item2.origin[ 1 ];
 }
 
 /*
@@ -1779,7 +1779,7 @@ HeapSortCoordY( item, item2 )
 */
 HeapSortCoordZ( item, item2 )
 {
-	return item.origin[2] > item2.origin[2];
+	return item.origin[ 2 ] > item2.origin[ 2 ];
 }
 
 /*
@@ -1803,7 +1803,7 @@ ReverseHeap( item, item2 )
 */
 HeapTraceFraction( item, item2 )
 {
-	return item["fraction"] > item2["fraction"];
+	return item[ "fraction" ] > item2[ "fraction" ];
 }
 
 /*
@@ -1824,7 +1824,7 @@ NewHeap( compare )
 HeapInsert( item )
 {
 	insert = self.data.size;
-	self.data[insert] = item;
+	self.data[ insert ] = item;
 
 	current = insert + 1;
 
@@ -1833,11 +1833,11 @@ HeapInsert( item )
 		last = current;
 		current = int( current / 2 );
 
-		if ( ![[self.compare]]( item, self.data[current - 1] ) )
+		if ( ![[ self.compare ]]( item, self.data[ current - 1 ] ) )
 			break;
 
-		self.data[last - 1] = self.data[current - 1];
-		self.data[current - 1] = item;
+		self.data[ last - 1 ] = self.data[ current - 1 ];
+		self.data[ current - 1 ] = item;
 	}
 }
 
@@ -1855,7 +1855,7 @@ _HeapNextChild( node, hsize )
 	if ( right > hsize )
 		return left;
 
-	if ( [[self.compare]]( self.data[left - 1], self.data[right - 1] ) )
+	if ( [[ self.compare ]]( self.data[ left - 1 ], self.data[ right - 1 ] ) )
 		return left;
 	else
 		return right;
@@ -1871,9 +1871,9 @@ HeapRemove()
 	if ( !remove )
 		return remove;
 
-	move = self.data[remove - 1];
-	self.data[0] = move;
-	self.data[remove - 1] = undefined;
+	move = self.data[ remove - 1 ];
+	self.data[ 0 ] = move;
+	self.data[ remove - 1 ] = undefined;
 	remove--;
 
 	if ( !remove )
@@ -1884,11 +1884,11 @@ HeapRemove()
 
 	while ( next != -1 )
 	{
-		if ( [[self.compare]]( move, self.data[next - 1] ) )
+		if ( [[ self.compare ]]( move, self.data[ next - 1 ] ) )
 			break;
 
-		self.data[last - 1] = self.data[next - 1];
-		self.data[next - 1] = move;
+		self.data[ last - 1 ] = self.data[ next - 1 ];
+		self.data[ next - 1 ] = move;
 
 		last = next;
 		next = self _HeapNextChild( next, remove );
@@ -1913,13 +1913,13 @@ RemoveWaypointUsage( wp, team )
 	if ( !isDefined( level.waypointUsage ) )
 		return;
 
-	if ( !isDefined( level.waypointUsage[team][wp + ""] ) )
+	if ( !isDefined( level.waypointUsage[ team ][ wp + "" ] ) )
 		return;
 
-	level.waypointUsage[team][wp + ""]--;
+	level.waypointUsage[ team ][ wp + "" ]--;
 
-	if ( level.waypointUsage[team][wp + ""] <= 0 )
-		level.waypointUsage[team][wp + ""] = undefined;
+	if ( level.waypointUsage[ team ][ wp + "" ] <= 0 )
+		level.waypointUsage[ team ][ wp + "" ] = undefined;
 }
 
 /*
@@ -1932,10 +1932,10 @@ GetNearestWaypointWithSight( pos )
 
 	for ( i = 0; i < level.waypointCount; i++ )
 	{
-		if ( !bulletTracePassed( pos + ( 0, 0, 15 ), level.waypoints[i].origin + ( 0, 0, 15 ), false, undefined ) )
+		if ( !bulletTracePassed( pos + ( 0, 0, 15 ), level.waypoints[ i ].origin + ( 0, 0, 15 ), false, undefined ) )
 			continue;
 
-		curdis = DistanceSquared( level.waypoints[i].origin, pos );
+		curdis = DistanceSquared( level.waypoints[ i ].origin, pos );
 
 		if ( curdis > dist )
 			continue;
@@ -1957,7 +1957,7 @@ GetNearestWaypoint( pos )
 
 	for ( i = 0; i < level.waypointCount; i++ )
 	{
-		curdis = DistanceSquared( level.waypoints[i].origin, pos );
+		curdis = DistanceSquared( level.waypoints[ i ].origin, pos );
 
 		if ( curdis > dist )
 			continue;
@@ -1988,7 +1988,7 @@ AStarSearch( start, goal, team, greedy_path )
 
 	_startwp = undefined;
 
-	if ( !bulletTracePassed( start + ( 0, 0, 15 ), level.waypoints[startWp].origin + ( 0, 0, 15 ), false, undefined ) )
+	if ( !bulletTracePassed( start + ( 0, 0, 15 ), level.waypoints[ startWp ].origin + ( 0, 0, 15 ), false, undefined ) )
 		_startwp = GetNearestWaypointWithSight( start );
 
 	if ( isDefined( _startwp ) )
@@ -2002,7 +2002,7 @@ AStarSearch( start, goal, team, greedy_path )
 
 	_goalWp = undefined;
 
-	if ( !bulletTracePassed( goal + ( 0, 0, 15 ), level.waypoints[goalWp].origin + ( 0, 0, 15 ), false, undefined ) )
+	if ( !bulletTracePassed( goal + ( 0, 0, 15 ), level.waypoints[ goalWp ].origin + ( 0, 0, 15 ), false, undefined ) )
 		_goalwp = GetNearestWaypointWithSight( goal );
 
 	if ( isDefined( _goalwp ) )
@@ -2011,23 +2011,23 @@ AStarSearch( start, goal, team, greedy_path )
 
 	node = spawnStruct();
 	node.g = 0; //path dist so far
-	node.h = DistanceSquared( level.waypoints[startWp].origin, level.waypoints[goalWp].origin ); //herustic, distance to goal for path finding
+	node.h = DistanceSquared( level.waypoints[ startWp ].origin, level.waypoints[ goalWp ].origin ); //herustic, distance to goal for path finding
 	node.f = node.h + node.g; // combine path dist and heru, use reverse heap to sort the priority queue by this attru
 	node.index = startWp;
 	node.parent = undefined; //we are start, so we have no parent
 
 	//push node onto queue
-	openset[node.index + ""] = node;
+	openset[ node.index + "" ] = node;
 	open HeapInsert( node );
 
 	//while the queue is not empty
 	while ( open.data.size )
 	{
 		//pop bestnode from queue
-		bestNode = open.data[0];
+		bestNode = open.data[ 0 ];
 		open HeapRemove();
-		openset[bestNode.index + ""] = undefined;
-		wp = level.waypoints[bestNode.index];
+		openset[ bestNode.index + "" ] = undefined;
+		wp = level.waypoints[ bestNode.index ];
 
 		//check if we made it to the goal
 		if ( bestNode.index == goalWp )
@@ -2038,14 +2038,14 @@ AStarSearch( start, goal, team, greedy_path )
 			{
 				if ( isdefined( team ) && isDefined( level.waypointUsage ) )
 				{
-					if ( !isDefined( level.waypointUsage[team][bestNode.index + ""] ) )
-						level.waypointUsage[team][bestNode.index + ""] = 0;
+					if ( !isDefined( level.waypointUsage[ team ][ bestNode.index + "" ] ) )
+						level.waypointUsage[ team ][ bestNode.index + "" ] = 0;
 
-					level.waypointUsage[team][bestNode.index + ""]++;
+					level.waypointUsage[ team ][ bestNode.index + "" ]++;
 				}
 
 				//construct path
-				path[path.size] = bestNode.index;
+				path[ path.size ] = bestNode.index;
 
 				bestNode = bestNode.parent;
 			}
@@ -2056,8 +2056,8 @@ AStarSearch( start, goal, team, greedy_path )
 		//for each child of bestnode
 		for ( i = wp.children.size - 1; i >= 0; i-- )
 		{
-			child = wp.children[i];
-			childWp = level.waypoints[child];
+			child = wp.children[ i ];
+			childWp = level.waypoints[ child ];
 
 			penalty = 1;
 
@@ -2065,8 +2065,8 @@ AStarSearch( start, goal, team, greedy_path )
 			{
 				temppen = 1;
 
-				if ( isDefined( level.waypointUsage[team][child + ""] ) )
-					temppen = level.waypointUsage[team][child + ""]; //consider how many bots are taking this path
+				if ( isDefined( level.waypointUsage[ team ][ child + "" ] ) )
+					temppen = level.waypointUsage[ team ][ child + "" ]; //consider how many bots are taking this path
 
 				if ( temppen > 1 )
 					penalty = temppen;
@@ -2080,45 +2080,45 @@ AStarSearch( start, goal, team, greedy_path )
 			newg = bestNode.g + DistanceSquared( wp.origin, childWp.origin ) * penalty; //bots on same team's path are more expensive
 
 			//check if this child is in open or close with a g value less than newg
-			inopen = isDefined( openset[child + ""] );
+			inopen = isDefined( openset[ child + "" ] );
 
-			if ( inopen && openset[child + ""].g <= newg )
+			if ( inopen && openset[ child + "" ].g <= newg )
 				continue;
 
-			inclosed = isDefined( closed[child + ""] );
+			inclosed = isDefined( closed[ child + "" ] );
 
-			if ( inclosed && closed[child + ""].g <= newg )
+			if ( inclosed && closed[ child + "" ].g <= newg )
 				continue;
 
 			node = undefined;
 
 			if ( inopen )
-				node = openset[child + ""];
+				node = openset[ child + "" ];
 			else if ( inclosed )
-				node = closed[child + ""];
+				node = closed[ child + "" ];
 			else
 				node = spawnStruct();
 
 			node.parent = bestNode;
 			node.g = newg;
-			node.h = DistanceSquared( childWp.origin, level.waypoints[goalWp].origin );
+			node.h = DistanceSquared( childWp.origin, level.waypoints[ goalWp ].origin );
 			node.f = node.g + node.h;
 			node.index = child;
 
 			//check if in closed, remove it
 			if ( inclosed )
-				closed[child + ""] = undefined;
+				closed[ child + "" ] = undefined;
 
 			//check if not in open, add it
 			if ( !inopen )
 			{
 				open HeapInsert( node );
-				openset[child + ""] = node;
+				openset[ child + "" ] = node;
 			}
 		}
 
 		//done with children, push onto closed
-		closed[bestNode.index + ""] = bestNode;
+		closed[ bestNode.index + "" ] = bestNode;
 	}
 
 	return [];
@@ -2135,7 +2135,7 @@ array_average( array )
 
 	for ( i = 0; i < array.size; i++ )
 	{
-		total += array[i];
+		total += array[ i ];
 	}
 
 	return ( total / array.size );
@@ -2152,14 +2152,14 @@ array_std_deviation( array, mean )
 
 	for ( i = 0; i < array.size; i++ )
 	{
-		tmp[i] = ( array[i] - mean ) * ( array[i] - mean );
+		tmp[ i ] = ( array[ i ] - mean ) * ( array[ i ] - mean );
 	}
 
 	total = 0;
 
 	for ( i = 0; i < tmp.size; i++ )
 	{
-		total = total + tmp[i];
+		total = total + tmp[ i ];
 	}
 
 	return Sqrt( total / array.size );
@@ -2205,25 +2205,25 @@ random_normal_distribution( mean, std_deviation, lower_bound, upper_bound )
 */
 onUsePlantObjectFix( player )
 {
-	if ( !maps\mp\gametypes\_gameobjects::isFriendlyTeam( player.pers["team"] ) )
+	if ( !maps\mp\gametypes\_gameobjects::isFriendlyTeam( player.pers[ "team" ] ) )
 	{
 		level thread bombPlantedFix( self, player );
 
 		for ( i = 0; i < level.bombZones.size; i++ )
 		{
-			if ( level.bombZones[i] == self )
+			if ( level.bombZones[ i ] == self )
 				continue;
 
-			level.bombZones[i] maps\mp\gametypes\_gameobjects::disableObject();
+			level.bombZones[ i ] maps\mp\gametypes\_gameobjects::disableObject();
 		}
 
 		player playsound( "mp_bomb_plant" );
 		player notify( "bomb_planted" );
 		player notify( "objective",  "plant"  );
 		player maps\mp\_utility::incPersStat( "plants", 1 );
-		player maps\mp\gametypes\_persistence::statSetChild( "round", "plants", player.pers["plants"] );
+		player maps\mp\gametypes\_persistence::statSetChild( "round", "plants", player.pers[ "plants" ] );
 
-		if ( isdefined( level.sd_loadout ) && isdefined( level.sd_loadout[player.team] ) )
+		if ( isdefined( level.sd_loadout ) && isdefined( level.sd_loadout[ player.team ] ) )
 			player thread maps\mp\gametypes\sd::removeBombCarrierClass();
 
 		maps\mp\_utility::leaderDialog( "bomb_planted" );
@@ -2244,8 +2244,8 @@ bombPlantedFix( var_0, var_1 )
 {
 	maps\mp\gametypes\_gamelogic::pauseTimer();
 	level.bombPlanted = 1;
-	var_0.visuals[0] thread maps\mp\gametypes\_gamelogic::playTickingSound();
-	level.tickingObject = var_0.visuals[0];
+	var_0.visuals[ 0 ] thread maps\mp\gametypes\_gamelogic::playTickingSound();
+	level.tickingObject = var_0.visuals[ 0 ];
 	level.timeLimitOverride = 1;
 	setgameendtime( int( gettime() + level.bombTimer * 1000 ) );
 	setdvar( "ui_bomb_timer", 1 );
@@ -2255,22 +2255,22 @@ bombPlantedFix( var_0, var_1 )
 		level.sdBomb maps\mp\gametypes\_gameobjects::allowCarry( "none" );
 		level.sdBomb maps\mp\gametypes\_gameobjects::setVisibleTeam( "none" );
 		level.sdBomb maps\mp\gametypes\_gameobjects::setDropped();
-		level.sdBombModel = level.sdBomb.visuals[0];
+		level.sdBombModel = level.sdBomb.visuals[ 0 ];
 	}
 	else
 	{
 		for ( var_2 = 0; var_2 < level.players.size; var_2++ )
 		{
-			if ( isdefined( level.players[var_2].carryIcon ) )
-				level.players[var_2].carryIcon maps\mp\gametypes\_hud_util::destroyElem();
+			if ( isdefined( level.players[ var_2 ].carryIcon ) )
+				level.players[ var_2 ].carryIcon maps\mp\gametypes\_hud_util::destroyElem();
 		}
 
 		var_3 = bullettrace( var_1.origin + ( 0, 0, 20 ), var_1.origin - ( 0, 0, 2000 ), 0, var_1 );
 		var_4 = randomfloat( 360 );
 		var_5 = ( cos( var_4 ), sin( var_4 ), 0 );
-		var_5 = vectornormalize( var_5 - var_3["normal"] * vectordot( var_5, var_3["normal"] ) );
+		var_5 = vectornormalize( var_5 - var_3[ "normal" ] * vectordot( var_5, var_3[ "normal" ] ) );
 		var_6 = vectortoangles( var_5 );
-		level.sdBombModel = spawn( "script_model", var_3["position"] );
+		level.sdBombModel = spawn( "script_model", var_3[ "position" ] );
 		level.sdBombModel.angles = var_6;
 		level.sdBombModel setmodel( "prop_suitcase_bomb" );
 	}
@@ -2281,7 +2281,7 @@ bombPlantedFix( var_0, var_1 )
 	var_8 = var_0.bombDefuseTrig;
 	var_8.origin = level.sdBombModel.origin;
 	var_9 = [];
-	defuseObject = maps\mp\gametypes\_gameobjects::createUseObject( game["defenders"], var_8, var_9, ( 0, 0, 32 ) );
+	defuseObject = maps\mp\gametypes\_gameobjects::createUseObject( game[ "defenders" ], var_8, var_9, ( 0, 0, 32 ) );
 	defuseObject maps\mp\gametypes\_gameobjects::allowUse( "friendly" );
 	defuseObject maps\mp\gametypes\_gameobjects::setUseTime( level.defuseTime );
 	defuseObject maps\mp\gametypes\_gameobjects::setUseText( &"MP_DEFUSING_EXPLOSIVE" );
@@ -2301,7 +2301,7 @@ bombPlantedFix( var_0, var_1 )
 
 	maps\mp\gametypes\sd::BombTimerWait();
 	setdvar( "ui_bomb_timer", 0 );
-	var_0.visuals[0] maps\mp\gametypes\_gamelogic::stopTickingSound();
+	var_0.visuals[ 0 ] maps\mp\gametypes\_gamelogic::stopTickingSound();
 
 	if ( level.gameEnded || level.bombDefused )
 		return;
@@ -2312,15 +2312,15 @@ bombPlantedFix( var_0, var_1 )
 
 	if ( isdefined( var_1 ) )
 	{
-		var_0.visuals[0] radiusdamage( var_11, 512, 200, 20, var_1, "MOD_EXPLOSIVE", "bomb_site_mp" );
+		var_0.visuals[ 0 ] radiusdamage( var_11, 512, 200, 20, var_1, "MOD_EXPLOSIVE", "bomb_site_mp" );
 		var_1 maps\mp\_utility::incPersStat( "destructions", 1 );
-		var_1 maps\mp\gametypes\_persistence::statSetChild( "round", "destructions", var_1.pers["destructions"] );
+		var_1 maps\mp\gametypes\_persistence::statSetChild( "round", "destructions", var_1.pers[ "destructions" ] );
 	}
 	else
-		var_0.visuals[0] radiusdamage( var_11, 512, 200, 20, undefined, "MOD_EXPLOSIVE", "bomb_site_mp" );
+		var_0.visuals[ 0 ] radiusdamage( var_11, 512, 200, 20, undefined, "MOD_EXPLOSIVE", "bomb_site_mp" );
 
 	var_12 = randomfloat( 360 );
-	var_13 = spawnfx( level._effect["bombexplosion"], var_11 + ( 0, 0, 50 ), ( 0, 0, 1 ), ( cos( var_12 ), sin( var_12 ), 0 ) );
+	var_13 = spawnfx( level._effect[ "bombexplosion" ], var_11 + ( 0, 0, 50 ), ( 0, 0, 1 ), ( cos( var_12 ), sin( var_12 ), 0 ) );
 	triggerfx( var_13 );
 	playrumbleonposition( "grenade_rumble", var_11 );
 	earthquake( 0.75, 2.0, var_11, 2000 );
@@ -2330,12 +2330,12 @@ bombPlantedFix( var_0, var_1 )
 		common_scripts\utility::exploder( var_0.exploderIndex );
 
 	for ( var_2 = 0; var_2 < level.bombZones.size; var_2++ )
-		level.bombZones[var_2] maps\mp\gametypes\_gameobjects::disableObject();
+		level.bombZones[ var_2 ] maps\mp\gametypes\_gameobjects::disableObject();
 
 	defuseObject maps\mp\gametypes\_gameobjects::disableObject();
 	setgameendtime( 0 );
 	wait 3;
-	maps\mp\gametypes\sd::sd_endGame( game["attackers"], game["strings"]["target_destroyed"] );
+	maps\mp\gametypes\sd::sd_endGame( game[ "attackers" ], game[ "strings" ][ "target_destroyed" ] );
 }
 
 /*
@@ -2375,31 +2375,31 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 
 	clonedLoadout = [];
 
-	if ( isdefined( self.pers["copyCatLoadout"] ) && self.pers["copyCatLoadout"]["inUse"] && allowCopycat )
+	if ( isdefined( self.pers[ "copyCatLoadout" ] ) && self.pers[ "copyCatLoadout" ][ "inUse" ] && allowCopycat )
 	{
 		self maps\mp\gametypes\_class::setClass( "copycat" );
 		self.class_num = maps\mp\gametypes\_class::getClassIndex( "copycat" );
-		clonedLoadout = self.pers["copyCatLoadout"];
-		loadoutPrimary = clonedLoadout["loadoutPrimary"];
-		loadoutPrimaryAttachment = clonedLoadout["loadoutPrimaryAttachment"];
-		loadoutPrimaryAttachment2 = clonedLoadout["loadoutPrimaryAttachment2"];
-		loadoutPrimaryBuff = clonedLoadout["loadoutPrimaryBuff"];
-		loadoutPrimaryCamo = clonedLoadout["loadoutPrimaryCamo"];
-		loadoutPrimaryReticle = clonedLoadout["loadoutPrimaryReticle"];
-		loadoutSecondary = clonedLoadout["loadoutSecondary"];
-		loadoutSecondaryAttachment = clonedLoadout["loadoutSecondaryAttachment"];
-		loadoutSecondaryAttachment2 = clonedLoadout["loadoutSecondaryAttachment2"];
-		loadoutSecondaryBuff = clonedLoadout["loadoutSecondaryBuff"];
-		loadoutSecondaryCamo = clonedLoadout["loadoutSecondaryCamo"];
-		loadoutSecondaryReticle = clonedLoadout["loadoutSecondaryReticle"];
-		loadoutEquipment = clonedLoadout["loadoutEquipment"];
-		loadoutPerk1 = clonedLoadout["loadoutPerk1"];
-		loadoutPerk2 = clonedLoadout["loadoutPerk2"];
-		loadoutPerk3 = clonedLoadout["loadoutPerk3"];
-		loadoutStreakType = clonedLoadout["loadoutStreakType"];
-		loadoutOffhand = clonedLoadout["loadoutOffhand"];
-		loadoutDeathStreak = clonedLoadout["loadoutDeathstreak"];
-		loadoutAmmoType = clonedLoadout["loadoutAmmoType"];
+		clonedLoadout = self.pers[ "copyCatLoadout" ];
+		loadoutPrimary = clonedLoadout[ "loadoutPrimary" ];
+		loadoutPrimaryAttachment = clonedLoadout[ "loadoutPrimaryAttachment" ];
+		loadoutPrimaryAttachment2 = clonedLoadout[ "loadoutPrimaryAttachment2" ];
+		loadoutPrimaryBuff = clonedLoadout[ "loadoutPrimaryBuff" ];
+		loadoutPrimaryCamo = clonedLoadout[ "loadoutPrimaryCamo" ];
+		loadoutPrimaryReticle = clonedLoadout[ "loadoutPrimaryReticle" ];
+		loadoutSecondary = clonedLoadout[ "loadoutSecondary" ];
+		loadoutSecondaryAttachment = clonedLoadout[ "loadoutSecondaryAttachment" ];
+		loadoutSecondaryAttachment2 = clonedLoadout[ "loadoutSecondaryAttachment2" ];
+		loadoutSecondaryBuff = clonedLoadout[ "loadoutSecondaryBuff" ];
+		loadoutSecondaryCamo = clonedLoadout[ "loadoutSecondaryCamo" ];
+		loadoutSecondaryReticle = clonedLoadout[ "loadoutSecondaryReticle" ];
+		loadoutEquipment = clonedLoadout[ "loadoutEquipment" ];
+		loadoutPerk1 = clonedLoadout[ "loadoutPerk1" ];
+		loadoutPerk2 = clonedLoadout[ "loadoutPerk2" ];
+		loadoutPerk3 = clonedLoadout[ "loadoutPerk3" ];
+		loadoutStreakType = clonedLoadout[ "loadoutStreakType" ];
+		loadoutOffhand = clonedLoadout[ "loadoutOffhand" ];
+		loadoutDeathStreak = clonedLoadout[ "loadoutDeathstreak" ];
+		loadoutAmmoType = clonedLoadout[ "loadoutAmmoType" ];
 	}
 	else if ( teamName != "none" )
 	{
@@ -2517,19 +2517,19 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 	}
 	else if ( class == "gamemode" )
 	{
-		gamemodeLoadout = self.pers["gamemodeLoadout"];
-		loadoutPrimary = gamemodeLoadout["loadoutPrimary"];
-		loadoutPrimaryAttachment = gamemodeLoadout["loadoutPrimaryAttachment"];
-		loadoutPrimaryAttachment2 = gamemodeLoadout["loadoutPrimaryAttachment2"];
-		loadoutPrimaryBuff = gamemodeLoadout["loadoutPrimaryBuff"];
-		loadoutPrimaryCamo = gamemodeLoadout["loadoutPrimaryCamo"];
-		loadoutPrimaryReticle = gamemodeLoadout["loadoutPrimaryReticle"];
-		loadoutSecondary = gamemodeLoadout["loadoutSecondary"];
-		loadoutSecondaryAttachment = gamemodeLoadout["loadoutSecondaryAttachment"];
-		loadoutSecondaryAttachment2 = gamemodeLoadout["loadoutSecondaryAttachment2"];
-		loadoutSecondaryBuff = gamemodeLoadout["loadoutSecondaryBuff"];
-		loadoutSecondaryCamo = gamemodeLoadout["loadoutSecondaryCamo"];
-		loadoutSecondaryReticle = gamemodeLoadout["loadoutSecondaryReticle"];
+		gamemodeLoadout = self.pers[ "gamemodeLoadout" ];
+		loadoutPrimary = gamemodeLoadout[ "loadoutPrimary" ];
+		loadoutPrimaryAttachment = gamemodeLoadout[ "loadoutPrimaryAttachment" ];
+		loadoutPrimaryAttachment2 = gamemodeLoadout[ "loadoutPrimaryAttachment2" ];
+		loadoutPrimaryBuff = gamemodeLoadout[ "loadoutPrimaryBuff" ];
+		loadoutPrimaryCamo = gamemodeLoadout[ "loadoutPrimaryCamo" ];
+		loadoutPrimaryReticle = gamemodeLoadout[ "loadoutPrimaryReticle" ];
+		loadoutSecondary = gamemodeLoadout[ "loadoutSecondary" ];
+		loadoutSecondaryAttachment = gamemodeLoadout[ "loadoutSecondaryAttachment" ];
+		loadoutSecondaryAttachment2 = gamemodeLoadout[ "loadoutSecondaryAttachment2" ];
+		loadoutSecondaryBuff = gamemodeLoadout[ "loadoutSecondaryBuff" ];
+		loadoutSecondaryCamo = gamemodeLoadout[ "loadoutSecondaryCamo" ];
+		loadoutSecondaryReticle = gamemodeLoadout[ "loadoutSecondaryReticle" ];
 
 		if ( ( loadoutPrimary == "throwingknife" || loadoutPrimary == "none" ) && loadoutSecondary != "none" )
 		{
@@ -2553,15 +2553,15 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 			loadoutPrimaryAttachment = "tactical";
 		}
 
-		loadoutEquipment = gamemodeLoadout["loadoutEquipment"];
-		loadoutOffhand = gamemodeLoadout["loadoutOffhand"];
+		loadoutEquipment = gamemodeLoadout[ "loadoutEquipment" ];
+		loadoutOffhand = gamemodeLoadout[ "loadoutOffhand" ];
 
 		if ( loadoutOffhand == "specialty_null" )
 			loadoutOffhand = "none";
 
-		loadoutPerk1 = gamemodeLoadout["loadoutPerk1"];
-		loadoutPerk2 = gamemodeLoadout["loadoutPerk2"];
-		loadoutPerk3 = gamemodeLoadout["loadoutPerk3"];
+		loadoutPerk1 = gamemodeLoadout[ "loadoutPerk1" ];
+		loadoutPerk2 = gamemodeLoadout[ "loadoutPerk2" ];
+		loadoutPerk3 = gamemodeLoadout[ "loadoutPerk3" ];
 
 		if ( loadoutSecondary != "none" && !maps\mp\gametypes\_class::isValidSecondary( loadoutSecondary, loadoutPerk2, 0 ) )
 		{
@@ -2573,12 +2573,12 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 			loadoutSecondaryReticle = "none";
 		}
 
-		if ( level.killstreakRewards && isdefined( gamemodeLoadout["loadoutStreakType"] ) && gamemodeLoadout["loadoutStreakType"] != "specialty_null" )
+		if ( level.killstreakRewards && isdefined( gamemodeLoadout[ "loadoutStreakType" ] ) && gamemodeLoadout[ "loadoutStreakType" ] != "specialty_null" )
 		{
-			loadoutStreakType = gamemodeLoadout["loadoutStreakType"];
-			loadoutKillstreak1 = gamemodeLoadout["loadoutKillstreak1"];
-			loadoutKillstreak2 = gamemodeLoadout["loadoutKillstreak2"];
-			loadoutKillstreak3 = gamemodeLoadout["loadoutKillstreak3"];
+			loadoutStreakType = gamemodeLoadout[ "loadoutStreakType" ];
+			loadoutKillstreak1 = gamemodeLoadout[ "loadoutKillstreak1" ];
+			loadoutKillstreak2 = gamemodeLoadout[ "loadoutKillstreak2" ];
+			loadoutKillstreak3 = gamemodeLoadout[ "loadoutKillstreak3" ];
 		}
 		else if ( level.killstreakRewards && isdefined( self.streakType ) )
 			loadoutStreakType = maps\mp\gametypes\_class::getLoadoutStreakTypeFromStreakType( self.streakType );
@@ -2590,9 +2590,9 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 			loadoutKillstreak3 = "none";
 		}
 
-		loadoutDeathStreak = gamemodeLoadout["loadoutDeathstreak"];
+		loadoutDeathStreak = gamemodeLoadout[ "loadoutDeathstreak" ];
 
-		if ( gamemodeLoadout["loadoutJuggernaut"] )
+		if ( gamemodeLoadout[ "loadoutJuggernaut" ] )
 		{
 			self.health = self.maxHealth;
 			self thread recipeClassApplyJuggernaut( isJuggernaut() );
@@ -2709,7 +2709,7 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 	isRecipeClass = issubstr( class, "recipe" );
 	isGameModeClass = ( class == "gamemode" );
 
-	if ( !isGameModeClass && !isRecipeClass && !( isdefined( self.pers["copyCatLoadout"] ) && self.pers["copyCatLoadout"]["inUse"] && allowCopycat ) )
+	if ( !isGameModeClass && !isRecipeClass && !( isdefined( self.pers[ "copyCatLoadout" ] ) && self.pers[ "copyCatLoadout" ][ "inUse" ] && allowCopycat ) )
 	{
 		if ( !maps\mp\gametypes\_class::isValidPrimary( loadoutPrimary ) )
 			loadoutPrimary = maps\mp\gametypes\_class::table_getWeapon( level.classTableName, 10, 0 );
@@ -2810,12 +2810,12 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 		self _giveWeapon( secondaryName );
 		weaponTokens = strtok( secondaryName, "_" );
 
-		if ( weaponTokens[0] == "iw5" )
-			weaponTokens[0] = weaponTokens[0] + "_" + weaponTokens[1];
-		else if ( weaponTokens[0] == "alt" )
-			weaponTokens[0] = weaponTokens[1] + "_" + weaponTokens[2];
+		if ( weaponTokens[ 0 ] == "iw5" )
+			weaponTokens[ 0 ] = weaponTokens[ 0 ] + "_" + weaponTokens[ 1 ];
+		else if ( weaponTokens[ 0 ] == "alt" )
+			weaponTokens[ 0 ] = weaponTokens[ 1 ] + "_" + weaponTokens[ 2 ];
 
-		weaponName = weaponTokens[0];
+		weaponName = weaponTokens[ 0 ];
 		curWeaponRank = self maps\mp\gametypes\_rank::getWeaponRank( weaponName );
 		curWeaponStatRank = self getplayerdata( "weaponRank", weaponName );
 
@@ -2851,27 +2851,27 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 	if ( !self _hasPerk( "specialty_blindeye" ) && self.avoidKillstreakOnSpawnTimer > 0 )
 		self thread maps\mp\perks\_perks::giveBlindEyeAfterSpawn();
 
-	if ( self.pers["cur_death_streak"] > 0 )
+	if ( self.pers[ "cur_death_streak" ] > 0 )
 	{
 		deathStreaks = [];
 
 		if ( loadoutDeathStreak != "specialty_null" )
-			deathStreaks[loadoutDeathStreak] = int( tablelookup( "mp/perkTable.csv", 1, loadoutDeathStreak, 6 ) );
+			deathStreaks[ loadoutDeathStreak ] = int( tablelookup( "mp/perkTable.csv", 1, loadoutDeathStreak, 6 ) );
 
 		if ( self getPerkUpgrade( loadoutPerk1 ) == "specialty_rollover" || self getPerkUpgrade( loadoutPerk2 ) == "specialty_rollover" || getPerkUpgrade( loadoutPerk3 ) == "specialty_rollover" )
 		{
 			foreach ( key, value in deathStreaks )
-				deathStreaks[key] -= 1;
+				deathStreaks[ key ] -= 1;
 		}
 
 		foreach ( key, value in deathStreaks )
 		{
-			if ( self.pers["cur_death_streak"] >= value )
+			if ( self.pers[ "cur_death_streak" ] >= value )
 			{
-				if ( key == "specialty_carepackage" && self.pers["cur_death_streak"] > value )
+				if ( key == "specialty_carepackage" && self.pers[ "cur_death_streak" ] > value )
 					continue;
 
-				if ( key == "specialty_uav" && self.pers["cur_death_streak"] > value )
+				if ( key == "specialty_uav" && self.pers[ "cur_death_streak" ] > value )
 					continue;
 
 				self thread givePerk( key, true );
@@ -2882,11 +2882,11 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 
 	if ( level.killstreakRewards && !isdefined( loadoutKillstreak1 ) && !isdefined( loadoutKillstreak2 ) && !isdefined( loadoutKillstreak3 ) )
 	{
-		if ( isdefined( self.pers["copyCatLoadout"] ) && self.pers["copyCatLoadout"]["inUse"] && allowCopycat )
+		if ( isdefined( self.pers[ "copyCatLoadout" ] ) && self.pers[ "copyCatLoadout" ][ "inUse" ] && allowCopycat )
 		{
-			loadoutKillstreak1 = clonedLoadout["loadoutKillstreak1"];
-			loadoutKillstreak2 = clonedLoadout["loadoutKillstreak2"];
-			loadoutKillstreak3 = clonedLoadout["loadoutKillstreak3"];
+			loadoutKillstreak1 = clonedLoadout[ "loadoutKillstreak1" ];
+			loadoutKillstreak2 = clonedLoadout[ "loadoutKillstreak2" ];
+			loadoutKillstreak3 = clonedLoadout[ "loadoutKillstreak3" ];
 		}
 		else
 		{
@@ -2953,9 +2953,9 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 
 				if ( isGameModeClass && self.streakType == "specialist" )
 				{
-					self.pers["gamemodeLoadout"]["loadoutKillstreak1"] = loadoutKillstreak1;
-					self.pers["gamemodeLoadout"]["loadoutKillstreak2"] = loadoutKillstreak2;
-					self.pers["gamemodeLoadout"]["loadoutKillstreak3"] = loadoutKillstreak3;
+					self.pers[ "gamemodeLoadout" ][ "loadoutKillstreak1" ] = loadoutKillstreak1;
+					self.pers[ "gamemodeLoadout" ][ "loadoutKillstreak2" ] = loadoutKillstreak2;
+					self.pers[ "gamemodeLoadout" ][ "loadoutKillstreak3" ] = loadoutKillstreak3;
 				}
 			}
 
@@ -3011,22 +3011,22 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 			streakNames = [];
 			inc = 0;
 
-			if ( self.pers["killstreaks"].size > 5 )
+			if ( self.pers[ "killstreaks" ].size > 5 )
 			{
-				for ( i = 5; i < self.pers["killstreaks"].size; i++ )
+				for ( i = 5; i < self.pers[ "killstreaks" ].size; i++ )
 				{
-					streakNames[inc] = self.pers["killstreaks"][i].streakName;
+					streakNames[ inc ] = self.pers[ "killstreaks" ][ i ].streakName;
 					inc++;
 				}
 			}
 
-			if ( self.pers["killstreaks"].size )
+			if ( self.pers[ "killstreaks" ].size )
 			{
 				for ( i = 1; i < 4; i++ )
 				{
-					if ( isdefined( self.pers["killstreaks"][i] ) && isdefined( self.pers["killstreaks"][i].streakName ) && self.pers["killstreaks"][i].available && !self.pers["killstreaks"][i].isSpecialist )
+					if ( isdefined( self.pers[ "killstreaks" ][ i ] ) && isdefined( self.pers[ "killstreaks" ][ i ].streakName ) && self.pers[ "killstreaks" ][ i ].available && !self.pers[ "killstreaks" ][ i ].isSpecialist )
 					{
-						streakNames[inc] = self.pers["killstreaks"][i].streakName;
+						streakNames[ inc ] = self.pers[ "killstreaks" ][ i ].streakName;
 						inc++;
 					}
 				}
@@ -3036,7 +3036,7 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 			self maps\mp\killstreaks\_killstreaks::clearKillstreaks();
 
 			for ( i = 0; i < streakNames.size; i++ )
-				self maps\mp\killstreaks\_killstreaks::giveKillstreak( streakNames[i] );
+				self maps\mp\killstreaks\_killstreaks::giveKillstreak( streakNames[ i ] );
 		}
 	}
 
@@ -3045,14 +3045,14 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 		if ( isdefined( self.lastClass ) && self.lastClass != "" && self.lastClass != self.class )
 			self incPlayerStat( "mostclasseschanged", 1 );
 
-		self.pers["lastClass"] = self.class;
+		self.pers[ "lastClass" ] = self.class;
 		self.lastClass = self.class;
 	}
 
 	if ( isdefined( self.gamemode_chosenclass ) )
 	{
-		self.pers["class"] = self.gamemode_chosenclass;
-		self.pers["lastClass"] = self.gamemode_chosenclass;
+		self.pers[ "class" ] = self.gamemode_chosenclass;
+		self.pers[ "lastClass" ] = self.gamemode_chosenclass;
 		self.class = self.gamemode_chosenclass;
 		self.lastClass = self.gamemode_chosenclass;
 		self.gamemode_chosenclass = undefined;
@@ -3063,12 +3063,12 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 	self switchtoweapon( primaryName );
 	weaponTokens = strtok( primaryName, "_" );
 
-	if ( weaponTokens[0] == "iw5" )
-		weaponName = weaponTokens[0] + "_" + weaponTokens[1];
-	else if ( weaponTokens[0] == "alt" )
-		weaponName = weaponTokens[1] + "_" + weaponTokens[2];
+	if ( weaponTokens[ 0 ] == "iw5" )
+		weaponName = weaponTokens[ 0 ] + "_" + weaponTokens[ 1 ];
+	else if ( weaponTokens[ 0 ] == "alt" )
+		weaponName = weaponTokens[ 1 ] + "_" + weaponTokens[ 2 ];
 	else
-		weaponName = weaponTokens[0];
+		weaponName = weaponTokens[ 0 ];
 
 	curWeaponRank = self maps\mp\gametypes\_rank::getWeaponRank( weaponName );
 	curWeaponStatRank = self getplayerdata( "weaponRank", weaponName );
@@ -3085,7 +3085,7 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 	if ( setPrimarySpawnWeapon )
 		self setspawnweapon( primaryName );
 
-	self.pers["primaryWeapon"] = weaponName;
+	self.pers[ "primaryWeapon" ] = weaponName;
 	primaryTokens = strtok( primaryName, "_" );
 	offhandSecondaryWeapon = loadoutOffhand;
 
@@ -3133,7 +3133,7 @@ botGiveLoadout( team, class, allowCopycat, setPrimarySpawnWeapon ) // setPrimary
 		self setweaponammostock( self.primaryWeapon, 0 );
 	}
 
-	self playerModelForWeapon( self.pers["primaryWeapon"], getBaseWeaponName( secondaryName ) );
+	self playerModelForWeapon( self.pers[ "primaryWeapon" ], getBaseWeaponName( secondaryName ) );
 	self.isSniper = ( weaponclass( self.primaryWeapon ) == "sniper" );
 	self maps\mp\gametypes\_weapons::updateMoveSpeedScale();
 	self maps\mp\perks\_perks::cac_selector();
@@ -3151,7 +3151,7 @@ getPerkUpgrade( perkName )
 	if ( perkUpgrade == "" || perkUpgrade == "specialty_null" )
 		return "specialty_null";
 
-	if ( !isDefined( self.pers["bots"]["unlocks"]["upgraded_" + perkName] ) || !self.pers["bots"]["unlocks"]["upgraded_" + perkName] )
+	if ( !isDefined( self.pers[ "bots" ][ "unlocks" ][ "upgraded_" + perkName ] ) || !self.pers[ "bots" ][ "unlocks" ][ "upgraded_" + perkName ] )
 		return "specialty_null";
 
 	return ( perkUpgrade );
@@ -3196,30 +3196,30 @@ loadoutAllPerks( loadoutEquipment, loadoutPerk1, loadoutPerk2, loadoutPerk3, loa
 	if ( loadoutPrimaryBuff != "specialty_null" )
 		self givePerk( loadoutPrimaryBuff, true );
 
-	perkUpgrd[0] = tablelookup( "mp/perktable.csv", 1, loadoutPerk1, 8 );
-	perkUpgrd[1] = tablelookup( "mp/perktable.csv", 1, loadoutPerk2, 8 );
-	perkUpgrd[2] = tablelookup( "mp/perktable.csv", 1, loadoutPerk3, 8 );
+	perkUpgrd[ 0 ] = tablelookup( "mp/perktable.csv", 1, loadoutPerk1, 8 );
+	perkUpgrd[ 1 ] = tablelookup( "mp/perktable.csv", 1, loadoutPerk2, 8 );
+	perkUpgrd[ 2 ] = tablelookup( "mp/perktable.csv", 1, loadoutPerk3, 8 );
 
-	perks[0] = loadoutPerk1;
-	perks[1] = loadoutPerk2;
-	perks[2] = loadoutPerk3;
+	perks[ 0 ] = loadoutPerk1;
+	perks[ 1 ] = loadoutPerk2;
+	perks[ 2 ] = loadoutPerk3;
 
 	for ( i = 0; i < perkUpgrd.size; i++ )
 	{
-		upgrade = perkUpgrd[i];
-		perk = perks[i];
+		upgrade = perkUpgrd[ i ];
+		perk = perks[ i ];
 
 		if ( upgrade == "" || upgrade == "specialty_null" )
 			continue;
 
-		if ( isDefined( self.pers["bots"]["unlocks"]["upgraded_" + perk] ) && self.pers["bots"]["unlocks"]["upgraded_" + perk] )
+		if ( isDefined( self.pers[ "bots" ][ "unlocks" ][ "upgraded_" + perk ] ) && self.pers[ "bots" ][ "unlocks" ][ "upgraded_" + perk ] )
 		{
 			self givePerk( upgrade, true );
 		}
 	}
 
 	if ( !self _hasPerk( "specialty_assists" ) )
-		self.pers["assistsToKill"] = 0;
+		self.pers[ "assistsToKill" ] = 0;
 }
 
 /*
@@ -3229,9 +3229,9 @@ playerModelForWeapon( weapon, secondary )
 {
 	team = self.team;
 
-	if ( isdefined( game[team + "_model"][weapon] ) )
+	if ( isdefined( game[ team + "_model" ][ weapon ] ) )
 	{
-		[[ game[team + "_model"][weapon] ]]();
+		[[ game[ team + "_model" ][ weapon ] ]]();
 		return;
 	}
 
@@ -3240,38 +3240,38 @@ playerModelForWeapon( weapon, secondary )
 	switch ( weaponClass )
 	{
 		case "weapon_smg":
-			[[ game[team + "_model"]["SMG"] ]]();
+			[[ game[ team + "_model" ][ "SMG" ] ]]();
 			break;
 
 		case "weapon_assault":
-			[[ game[team + "_model"]["ASSAULT"] ]]();
+			[[ game[ team + "_model" ][ "ASSAULT" ] ]]();
 			break;
 
 		case "weapon_sniper":
-			if ( level.environment != "" && game[team] != "opforce_africa" && isDefined( self.pers["bots"]["unlocks"]["ghillie"] ) && self.pers["bots"]["unlocks"]["ghillie"] )
-				[[ game[team + "_model"]["GHILLIE"] ]]();
+			if ( level.environment != "" && game[ team ] != "opforce_africa" && isDefined( self.pers[ "bots" ][ "unlocks" ][ "ghillie" ] ) && self.pers[ "bots" ][ "unlocks" ][ "ghillie" ] )
+				[[ game[ team + "_model" ][ "GHILLIE" ] ]]();
 			else
-				[[ game[team + "_model"]["SNIPER"] ]]();
+				[[ game[ team + "_model" ][ "SNIPER" ] ]]();
 
 			break;
 
 		case "weapon_lmg":
-			[[ game[team + "_model"]["LMG"] ]]();
+			[[ game[ team + "_model" ][ "LMG" ] ]]();
 			break;
 
 		case "weapon_riot":
-			[[ game[team + "_model"]["RIOT"] ]]();
+			[[ game[ team + "_model" ][ "RIOT" ] ]]();
 			break;
 
 		case "weapon_shotgun":
-			[[ game[team + "_model"]["SHOTGUN"] ]]();
+			[[ game[ team + "_model" ][ "SHOTGUN" ] ]]();
 			break;
 
 		default:
-			[[ game[team + "_model"]["ASSAULT"] ]]();
+			[[ game[ team + "_model" ][ "ASSAULT" ] ]]();
 			break;
 	}
 
 	if ( isJuggernaut() )
-		[[ game[team + "_model"]["JUGGERNAUT"] ]]();
+		[[ game[ team + "_model" ][ "JUGGERNAUT" ] ]]();
 }

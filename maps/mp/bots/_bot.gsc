@@ -137,8 +137,8 @@ init()
 	if ( getDvar( "bots_play_aim" ) == "" )
 		setDvar( "bots_play_aim", true );
 
-	if ( !isDefined( game["botWarfare"] ) )
-		game["botWarfare"] = true;
+	if ( !isDefined( game[ "botWarfare" ] ) )
+		game[ "botWarfare" ] = true;
 
 	level.defuseObject = undefined;
 	level.bots_smokeList = List();
@@ -165,36 +165,36 @@ init()
 	level.bots = [];
 
 	level.bots_fullautoguns = [];
-	level.bots_fullautoguns["fmg9"] = true;
-	level.bots_fullautoguns["skorpion"] = true;
-	level.bots_fullautoguns["mp9"] = true;
-	level.bots_fullautoguns["g18"] = true;
-	level.bots_fullautoguns["mp5"] = true;
-	level.bots_fullautoguns["m9"] = true;
-	level.bots_fullautoguns["p90"] = true;
-	level.bots_fullautoguns["pp90m1"] = true;
-	level.bots_fullautoguns["ump45"] = true;
-	level.bots_fullautoguns["mp7"] = true;
-	level.bots_fullautoguns["ak47"] = true;
-	level.bots_fullautoguns["m4"] = true;
-	level.bots_fullautoguns["fad"] = true;
-	level.bots_fullautoguns["acr"] = true;
-	level.bots_fullautoguns["scar"] = true;
-	level.bots_fullautoguns["g36c"] = true;
-	level.bots_fullautoguns["cm901"] = true;
-	level.bots_fullautoguns["aa12"] = true;
-	level.bots_fullautoguns["m60"] = true;
-	level.bots_fullautoguns["mk46"] = true;
-	level.bots_fullautoguns["pecheneg"] = true;
-	level.bots_fullautoguns["sa80"] = true;
-	level.bots_fullautoguns["mg36"] = true;
+	level.bots_fullautoguns[ "fmg9" ] = true;
+	level.bots_fullautoguns[ "skorpion" ] = true;
+	level.bots_fullautoguns[ "mp9" ] = true;
+	level.bots_fullautoguns[ "g18" ] = true;
+	level.bots_fullautoguns[ "mp5" ] = true;
+	level.bots_fullautoguns[ "m9" ] = true;
+	level.bots_fullautoguns[ "p90" ] = true;
+	level.bots_fullautoguns[ "pp90m1" ] = true;
+	level.bots_fullautoguns[ "ump45" ] = true;
+	level.bots_fullautoguns[ "mp7" ] = true;
+	level.bots_fullautoguns[ "ak47" ] = true;
+	level.bots_fullautoguns[ "m4" ] = true;
+	level.bots_fullautoguns[ "fad" ] = true;
+	level.bots_fullautoguns[ "acr" ] = true;
+	level.bots_fullautoguns[ "scar" ] = true;
+	level.bots_fullautoguns[ "g36c" ] = true;
+	level.bots_fullautoguns[ "cm901" ] = true;
+	level.bots_fullautoguns[ "aa12" ] = true;
+	level.bots_fullautoguns[ "m60" ] = true;
+	level.bots_fullautoguns[ "mk46" ] = true;
+	level.bots_fullautoguns[ "pecheneg" ] = true;
+	level.bots_fullautoguns[ "sa80" ] = true;
+	level.bots_fullautoguns[ "mg36" ] = true;
 
-	level.bots_fullautoguns["ak74u"] = true;
+	level.bots_fullautoguns[ "ak74u" ] = true;
 
-	level.bots_fullautoguns["25mm"] = true;
-	level.bots_fullautoguns["40mm"] = true;
-	level.bots_fullautoguns["105mm"] = true;
-	level.bots_fullautoguns["remote"] = true;
+	level.bots_fullautoguns[ "25mm" ] = true;
+	level.bots_fullautoguns[ "40mm" ] = true;
+	level.bots_fullautoguns[ "105mm" ] = true;
+	level.bots_fullautoguns[ "remote" ] = true;
 
 	level thread fixGamemodes();
 
@@ -228,7 +228,7 @@ handleBots()
 
 	for ( i = 0; i < bots.size; i++ )
 	{
-		kick( bots[i] getEntityNumber() );
+		kick( bots[ i ] getEntityNumber() );
 	}
 }
 
@@ -243,7 +243,7 @@ onPlayerDamage( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon,
 		self maps\mp\bots\_bot_script::onDamage( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, timeOffset );
 	}
 
-	self [[level.prevCallbackPlayerDamage]]( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, timeOffset );
+	self [[ level.prevCallbackPlayerDamage ]]( eInflictor, eAttacker, iDamage, iDFlags, sMeansOfDeath, sWeapon, vPoint, vDir, sHitLoc, timeOffset );
 }
 
 /*
@@ -257,7 +257,7 @@ onPlayerKilled( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sH
 		self maps\mp\bots\_bot_script::onKilled( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, timeOffset, deathAnimDuration );
 	}
 
-	self [[level.prevCallbackPlayerKilled]]( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, timeOffset, deathAnimDuration );
+	self [[ level.prevCallbackPlayerKilled ]]( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, timeOffset, deathAnimDuration );
 }
 
 /*
@@ -284,7 +284,7 @@ fixGamemodes()
 		if ( isDefined( level.bombZones ) && level.gametype == "sd" )
 		{
 			for ( i = 0; i < level.bombZones.size; i++ )
-				level.bombZones[i].onUse = ::onUsePlantObjectFix;
+				level.bombZones[ i ].onUse = ::onUsePlantObjectFix;
 
 			break;
 		}
@@ -319,10 +319,10 @@ fixDem()
 
 		for ( i = 0; i < level.bombZones.size; i++ )
 		{
-			if ( isDefined( level.bombZones[i].trigger.trigger_off ) )
-				level.bombZones[i].bombExploded = true;
+			if ( isDefined( level.bombZones[ i ].trigger.trigger_off ) )
+				level.bombZones[ i ].bombExploded = true;
 			else
-				level.bombZones[i].bombExploded = undefined;
+				level.bombZones[ i ].bombExploded = undefined;
 		}
 
 		wait 0.05;
@@ -347,10 +347,10 @@ fixKoth()
 
 		for ( i = level.radios.size - 1; i >= 0; i-- )
 		{
-			if ( level.radioObject != level.radios[i].gameobject )
+			if ( level.radioObject != level.radios[ i ].gameobject )
 				continue;
 
-			level.radio = level.radios[i];
+			level.radio = level.radios[ i ];
 			break;
 		}
 
@@ -368,7 +368,7 @@ auditModels_loop()
 
 	for ( i = s_models.size - 1; i >= 0; i-- )
 	{
-		model = s_models[i];
+		model = s_models[ i ];
 
 		if ( !isDefined( model ) )
 			continue;
@@ -379,7 +379,7 @@ auditModels_loop()
 		if ( model.model == "com_deploy_ballistic_vest_friend_world" )
 		{
 			model.bot_audit_model = true;
-			level.vest_boxes[level.vest_boxes.size] = model;
+			level.vest_boxes[ level.vest_boxes.size ] = model;
 		}
 	}
 }
@@ -408,13 +408,13 @@ watchRadar_loop()
 {
 	for ( i = level.players.size - 1; i >= 0; i-- )
 	{
-		player = level.players[i];
+		player = level.players[ i ];
 		player.bot_isInRadar = false;
 	}
 
 	for ( i = level.players.size - 1; i >= 0; i-- )
 	{
-		grenade = level.players[i].deployedPortableRadar;
+		grenade = level.players[ i ].deployedPortableRadar;
 
 		if ( !isDefined( grenade ) )
 			continue;
@@ -424,7 +424,7 @@ watchRadar_loop()
 
 		for ( h = level.players.size - 1; h >= 0; h-- )
 		{
-			player = level.players[h];
+			player = level.players[ h ];
 
 			if ( !isReallyAlive( player ) )
 				continue;
@@ -447,29 +447,29 @@ watchRadar_loop()
 
 	for ( i = level.players.size - 1; i >= 0; i-- )
 	{
-		if ( !isDefined( level.players[i].personalRadar ) )
+		if ( !isDefined( level.players[ i ].personalRadar ) )
 			continue;
 
-		if ( !isReallyAlive( level.players[i] ) )
+		if ( !isReallyAlive( level.players[ i ] ) )
 			continue;
 
 		for ( h = level.players.size - 1; h >= 0; h-- )
 		{
-			player = level.players[h];
+			player = level.players[ h ];
 
 			if ( !isReallyAlive( player ) )
 				continue;
 
-			if ( level.players[i] == player )
+			if ( level.players[ i ] == player )
 				continue;
 
-			if ( level.teamBased && level.players[i].team == player.team )
+			if ( level.teamBased && level.players[ i ].team == player.team )
 				continue;
 
 			if ( player _hasPerk( "specialty_coldblooded" ) )
 				continue;
 
-			if ( DistanceSquared( player.origin, level.players[i].origin ) > 256 * 256 )
+			if ( DistanceSquared( player.origin, level.players[ i ].origin ) > 256 * 256 )
 				continue;
 
 			player.bot_isInRadar = true;
@@ -480,7 +480,7 @@ watchRadar_loop()
 	{
 		for ( h = level.players.size - 1; h >= 0; h-- )
 		{
-			player = level.players[h];
+			player = level.players[ h ];
 
 			if ( !isReallyAlive( player ) )
 				continue;
@@ -519,20 +519,20 @@ watchScrabler_loop()
 {
 	for ( i = level.players.size - 1; i >= 0; i-- )
 	{
-		player = level.players[i];
+		player = level.players[ i ];
 		player.bot_isScrambled = false;
 	}
 
 	for ( i = level.scramblers.size - 1; i >= 0; i-- )
 	{
-		scrambler = level.scramblers[i];
+		scrambler = level.scramblers[ i ];
 
 		if ( !isDefined( scrambler ) )
 			continue;
 
 		for ( h = level.players.size - 1; h >= 0; h-- )
 		{
-			player = level.players[h];
+			player = level.players[ h ];
 
 			if ( !isReallyAlive( player ) )
 				continue;
@@ -555,19 +555,19 @@ watchScrabler_loop()
 
 	drones = [];
 
-	if ( isDefined( level.remote_uav["axis"] ) )
-		drones[drones.size] = level.remote_uav["axis"];
+	if ( isDefined( level.remote_uav[ "axis" ] ) )
+		drones[ drones.size ] = level.remote_uav[ "axis" ];
 
-	if ( isDefined( level.remote_uav["allies"] ) )
-		drones[drones.size] = level.remote_uav["allies"];
+	if ( isDefined( level.remote_uav[ "allies" ] ) )
+		drones[ drones.size ] = level.remote_uav[ "allies" ];
 
 	for ( i = drones.size - 1; i >= 0; i-- )
 	{
-		drone = drones[i];
+		drone = drones[ i ];
 
 		for ( h = level.players.size - 1; h >= 0; h-- )
 		{
-			player = level.players[h];
+			player = level.players[ h ];
 
 			if ( !isReallyAlive( player ) )
 				continue;
@@ -611,7 +611,7 @@ addNotifyOnAirdrops_loop()
 
 	for ( i = dropCrates.size - 1; i >= 0; i-- )
 	{
-		airdrop = dropCrates[i];
+		airdrop = dropCrates[ i ];
 
 		if ( isDefined( airdrop.doingPhysics ) )
 			continue;
@@ -700,28 +700,28 @@ connected()
 {
 	self endon( "disconnect" );
 
-	if ( !isDefined( self.pers["bot_host"] ) )
+	if ( !isDefined( self.pers[ "bot_host" ] ) )
 		self thread doHostCheck();
 
 	if ( !self is_bot() )
 		return;
 
-	if ( !isDefined( self.pers["isBot"] ) )
+	if ( !isDefined( self.pers[ "isBot" ] ) )
 	{
 		// fast_restart occured...
-		self.pers["isBot"] = true;
+		self.pers[ "isBot" ] = true;
 	}
 
-	if ( !isDefined( self.pers["isBotWarfare"] ) )
+	if ( !isDefined( self.pers[ "isBotWarfare" ] ) )
 	{
-		self.pers["isBotWarfare"] = true;
+		self.pers[ "isBotWarfare" ] = true;
 		self thread added();
 	}
 
 	self thread maps\mp\bots\_bot_internal::connected();
 	self thread maps\mp\bots\_bot_script::connected();
 
-	level.bots[level.bots.size] = self;
+	level.bots[ level.bots.size ] = self;
 	self thread onDisconnect();
 
 	level notify( "bot_connected", self );
@@ -794,8 +794,8 @@ add_bot()
 
 	if ( isdefined( bot ) )
 	{
-		bot.pers["isBot"] = true;
-		bot.pers["isBotWarfare"] = true;
+		bot.pers[ "isBot" ] = true;
+		bot.pers[ "isBotWarfare" ] = true;
 		bot thread added();
 	}
 }
@@ -822,43 +822,43 @@ diffBots_loop()
 
 		for ( i = 0; i < playercount; i++ )
 		{
-			player = level.players[i];
+			player = level.players[ i ];
 
-			if ( !isDefined( player.pers["team"] ) )
+			if ( !isDefined( player.pers[ "team" ] ) )
 				continue;
 
 			if ( !player is_bot() )
 				continue;
 
-			if ( player.pers["team"] == "axis" )
+			if ( player.pers[ "team" ] == "axis" )
 			{
 				if ( axis_hard < var_axis_hard )
 				{
 					axis_hard++;
-					player.pers["bots"]["skill"]["base"] = 7;
+					player.pers[ "bots" ][ "skill" ][ "base" ] = 7;
 				}
 				else if ( axis_med < var_axis_med )
 				{
 					axis_med++;
-					player.pers["bots"]["skill"]["base"] = 4;
+					player.pers[ "bots" ][ "skill" ][ "base" ] = 4;
 				}
 				else
-					player.pers["bots"]["skill"]["base"] = 1;
+					player.pers[ "bots" ][ "skill" ][ "base" ] = 1;
 			}
-			else if ( player.pers["team"] == "allies" )
+			else if ( player.pers[ "team" ] == "allies" )
 			{
 				if ( allies_hard < var_allies_hard )
 				{
 					allies_hard++;
-					player.pers["bots"]["skill"]["base"] = 7;
+					player.pers[ "bots" ][ "skill" ][ "base" ] = 7;
 				}
 				else if ( allies_med < var_allies_med )
 				{
 					allies_med++;
-					player.pers["bots"]["skill"]["base"] = 4;
+					player.pers[ "bots" ][ "skill" ][ "base" ] = 4;
 				}
 				else
-					player.pers["bots"]["skill"]["base"] = 1;
+					player.pers[ "bots" ][ "skill" ][ "base" ] = 1;
 			}
 		}
 	}
@@ -868,12 +868,12 @@ diffBots_loop()
 
 		for ( i = 0; i < playercount; i++ )
 		{
-			player = level.players[i];
+			player = level.players[ i ];
 
 			if ( !player is_bot() )
 				continue;
 
-			player.pers["bots"]["skill"]["base"] = var_skill;
+			player.pers[ "bots" ][ "skill" ][ "base" ] = var_skill;
 		}
 	}
 
@@ -883,12 +883,12 @@ diffBots_loop()
 
 	for ( i = 0; i < playercount; i++ )
 	{
-		player = level.players[i];
+		player = level.players[ i ];
 
 		if ( !player is_bot() )
 			continue;
 
-		player.pers["bots"]["skill"]["base"] = int( clamp( player.pers["bots"]["skill"]["base"], min_diff, max_diff ) );
+		player.pers[ "bots" ][ "skill" ][ "base" ] = int( clamp( player.pers[ "bots" ][ "skill" ][ "base" ], min_diff, max_diff ) );
 	}
 }
 
@@ -922,23 +922,23 @@ teamBots_loop()
 
 	for ( i = 0; i < playercount; i++ )
 	{
-		player = level.players[i];
+		player = level.players[ i ];
 
-		if ( !isDefined( player.pers["team"] ) )
+		if ( !isDefined( player.pers[ "team" ] ) )
 			continue;
 
 		if ( player is_bot() )
 		{
-			if ( player.pers["team"] == "allies" )
+			if ( player.pers[ "team" ] == "allies" )
 				alliesbots++;
-			else if ( player.pers["team"] == "axis" )
+			else if ( player.pers[ "team" ] == "axis" )
 				axisbots++;
 		}
 		else
 		{
-			if ( player.pers["team"] == "allies" )
+			if ( player.pers[ "team" ] == "allies" )
 				alliesplayers++;
-			else if ( player.pers["team"] == "axis" )
+			else if ( player.pers[ "team" ] == "axis" )
 				axisplayers++;
 		}
 	}
@@ -973,23 +973,23 @@ teamBots_loop()
 
 				for ( i = 0; i < playercount; i++ )
 				{
-					player = level.players[i];
+					player = level.players[ i ];
 
-					if ( !isDefined( player.pers["team"] ) )
+					if ( !isDefined( player.pers[ "team" ] ) )
 						continue;
 
 					if ( !player is_bot() )
 						continue;
 
-					if ( player.pers["team"] == toTeam )
+					if ( player.pers[ "team" ] == toTeam )
 						continue;
 
 					if ( toTeam == "allies" )
-						player thread [[level.allies]]();
+						player thread [[ level.allies ]]();
 					else if ( toTeam == "axis" )
-						player thread [[level.axis]]();
+						player thread [[ level.axis ]]();
 					else
-						player thread [[level.spectator]]();
+						player thread [[ level.spectator ]]();
 
 					break;
 				}
@@ -1002,19 +1002,19 @@ teamBots_loop()
 
 		for ( i = 0; i < playercount; i++ )
 		{
-			player = level.players[i];
+			player = level.players[ i ];
 
-			if ( !isDefined( player.pers["team"] ) )
+			if ( !isDefined( player.pers[ "team" ] ) )
 				continue;
 
 			if ( !player is_bot() )
 				continue;
 
-			if ( player.pers["team"] == "axis" )
+			if ( player.pers[ "team" ] == "axis" )
 			{
 				if ( axis > teamAmount )
 				{
-					player thread [[level.allies]]();
+					player thread [[ level.allies ]]();
 					break;
 				}
 			}
@@ -1022,12 +1022,12 @@ teamBots_loop()
 			{
 				if ( axis < teamAmount )
 				{
-					player thread [[level.axis]]();
+					player thread [[ level.axis ]]();
 					break;
 				}
-				else if ( player.pers["team"] != "allies" )
+				else if ( player.pers[ "team" ] != "allies" )
 				{
-					player thread [[level.allies]]();
+					player thread [[ level.allies ]]();
 					break;
 				}
 			}
@@ -1083,11 +1083,11 @@ addBots_loop()
 
 	for ( i = 0; i < playercount; i++ )
 	{
-		player = level.players[i];
+		player = level.players[ i ];
 
 		if ( player is_bot() )
 			bots++;
-		else if ( !isDefined( player.pers["team"] ) || ( player.pers["team"] != "axis" && player.pers["team"] != "allies" ) )
+		else if ( !isDefined( player.pers[ "team" ] ) || ( player.pers[ "team" ] != "axis" && player.pers[ "team" ] != "allies" ) )
 			spec++;
 		else
 			players++;
@@ -1110,17 +1110,17 @@ addBots_loop()
 
 		for ( i = 0; i < playercount; i++ )
 		{
-			player = level.players[i];
+			player = level.players[ i ];
 
 			if ( player is_bot() )
 				continue;
 
-			if ( !isDefined( player.pers["team"] ) )
+			if ( !isDefined( player.pers[ "team" ] ) )
 				continue;
 
-			if ( player.pers["team"] == "axis" )
+			if ( player.pers[ "team" ] == "axis" )
 				axisplayers++;
-			else if ( player.pers["team"] == "allies" )
+			else if ( player.pers[ "team" ] == "allies" )
 				alliesplayers++;
 		}
 

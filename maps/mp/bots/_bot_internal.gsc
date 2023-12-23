@@ -19,45 +19,45 @@ added()
 {
 	self endon( "disconnect" );
 
-	self.pers["bots"] = [];
+	self.pers[ "bots" ] = [];
 
-	self.pers["bots"]["skill"] = [];
-	self.pers["bots"]["skill"]["base"] = 7; // a base knownledge of the bot
-	self.pers["bots"]["skill"]["aim_time"] = 0.05; // how long it takes for a bot to aim to a location
-	self.pers["bots"]["skill"]["init_react_time"] = 0; // the reaction time of the bot for inital targets
-	self.pers["bots"]["skill"]["reaction_time"] = 0; // reaction time for the bots of reoccuring targets
-	self.pers["bots"]["skill"]["no_trace_ads_time"] = 2500; // how long a bot ads's when they cant see the target
-	self.pers["bots"]["skill"]["no_trace_look_time"] = 10000; // how long a bot will look at a target's last position
-	self.pers["bots"]["skill"]["remember_time"] = 25000; // how long a bot will remember a target before forgetting about it when they cant see the target
-	self.pers["bots"]["skill"]["fov"] = -1; // the fov of the bot, -1 being 360, 1 being 0
-	self.pers["bots"]["skill"]["dist_max"] = 100000 * 2; // the longest distance a bot will target
-	self.pers["bots"]["skill"]["dist_start"] = 100000; // the start distance before bot's target abilitys diminish
-	self.pers["bots"]["skill"]["spawn_time"] = 0; // how long a bot waits after spawning before targeting, etc
-	self.pers["bots"]["skill"]["help_dist"] = 10000; // how far a bot has awareness
-	self.pers["bots"]["skill"]["semi_time"] = 0.05; // how fast a bot shoots semiauto
-	self.pers["bots"]["skill"]["shoot_after_time"] = 1; // how long a bot shoots after target dies/cant be seen
-	self.pers["bots"]["skill"]["aim_offset_time"] = 1; // how long a bot correct's their aim after targeting
-	self.pers["bots"]["skill"]["aim_offset_amount"] = 1; // how far a bot's incorrect aim is
-	self.pers["bots"]["skill"]["bone_update_interval"] = 0.05; // how often a bot changes their bone target
-	self.pers["bots"]["skill"]["bones"] = "j_head"; // a list of comma seperated bones the bot will aim at
-	self.pers["bots"]["skill"]["ads_fov_multi"] = 0.5; // a factor of how much ads to reduce when adsing
-	self.pers["bots"]["skill"]["ads_aimspeed_multi"] = 0.5; // a factor of how much more aimspeed delay to add
+	self.pers[ "bots" ][ "skill" ] = [];
+	self.pers[ "bots" ][ "skill" ][ "base" ] = 7; // a base knownledge of the bot
+	self.pers[ "bots" ][ "skill" ][ "aim_time" ] = 0.05; // how long it takes for a bot to aim to a location
+	self.pers[ "bots" ][ "skill" ][ "init_react_time" ] = 0; // the reaction time of the bot for inital targets
+	self.pers[ "bots" ][ "skill" ][ "reaction_time" ] = 0; // reaction time for the bots of reoccuring targets
+	self.pers[ "bots" ][ "skill" ][ "no_trace_ads_time" ] = 2500; // how long a bot ads's when they cant see the target
+	self.pers[ "bots" ][ "skill" ][ "no_trace_look_time" ] = 10000; // how long a bot will look at a target's last position
+	self.pers[ "bots" ][ "skill" ][ "remember_time" ] = 25000; // how long a bot will remember a target before forgetting about it when they cant see the target
+	self.pers[ "bots" ][ "skill" ][ "fov" ] = -1; // the fov of the bot, -1 being 360, 1 being 0
+	self.pers[ "bots" ][ "skill" ][ "dist_max" ] = 100000 * 2; // the longest distance a bot will target
+	self.pers[ "bots" ][ "skill" ][ "dist_start" ] = 100000; // the start distance before bot's target abilitys diminish
+	self.pers[ "bots" ][ "skill" ][ "spawn_time" ] = 0; // how long a bot waits after spawning before targeting, etc
+	self.pers[ "bots" ][ "skill" ][ "help_dist" ] = 10000; // how far a bot has awareness
+	self.pers[ "bots" ][ "skill" ][ "semi_time" ] = 0.05; // how fast a bot shoots semiauto
+	self.pers[ "bots" ][ "skill" ][ "shoot_after_time" ] = 1; // how long a bot shoots after target dies/cant be seen
+	self.pers[ "bots" ][ "skill" ][ "aim_offset_time" ] = 1; // how long a bot correct's their aim after targeting
+	self.pers[ "bots" ][ "skill" ][ "aim_offset_amount" ] = 1; // how far a bot's incorrect aim is
+	self.pers[ "bots" ][ "skill" ][ "bone_update_interval" ] = 0.05; // how often a bot changes their bone target
+	self.pers[ "bots" ][ "skill" ][ "bones" ] = "j_head"; // a list of comma seperated bones the bot will aim at
+	self.pers[ "bots" ][ "skill" ][ "ads_fov_multi" ] = 0.5; // a factor of how much ads to reduce when adsing
+	self.pers[ "bots" ][ "skill" ][ "ads_aimspeed_multi" ] = 0.5; // a factor of how much more aimspeed delay to add
 
-	self.pers["bots"]["behavior"] = [];
-	self.pers["bots"]["behavior"]["strafe"] = 50; // percentage of how often the bot strafes a target
-	self.pers["bots"]["behavior"]["nade"] = 50; // percentage of how often the bot will grenade
-	self.pers["bots"]["behavior"]["sprint"] = 50; // percentage of how often the bot will sprint
-	self.pers["bots"]["behavior"]["camp"] = 50; // percentage of how often the bot will camp
-	self.pers["bots"]["behavior"]["follow"] = 50; // percentage of how often the bot will follow
-	self.pers["bots"]["behavior"]["crouch"] = 10; // percentage of how often the bot will crouch
-	self.pers["bots"]["behavior"]["switch"] = 1; // percentage of how often the bot will switch weapons
-	self.pers["bots"]["behavior"]["class"] = 1; // percentage of how often the bot will change classes
-	self.pers["bots"]["behavior"]["jump"] = 100; // percentage of how often the bot will jumpshot and dropshot
+	self.pers[ "bots" ][ "behavior" ] = [];
+	self.pers[ "bots" ][ "behavior" ][ "strafe" ] = 50; // percentage of how often the bot strafes a target
+	self.pers[ "bots" ][ "behavior" ][ "nade" ] = 50; // percentage of how often the bot will grenade
+	self.pers[ "bots" ][ "behavior" ][ "sprint" ] = 50; // percentage of how often the bot will sprint
+	self.pers[ "bots" ][ "behavior" ][ "camp" ] = 50; // percentage of how often the bot will camp
+	self.pers[ "bots" ][ "behavior" ][ "follow" ] = 50; // percentage of how often the bot will follow
+	self.pers[ "bots" ][ "behavior" ][ "crouch" ] = 10; // percentage of how often the bot will crouch
+	self.pers[ "bots" ][ "behavior" ][ "switch" ] = 1; // percentage of how often the bot will switch weapons
+	self.pers[ "bots" ][ "behavior" ][ "class" ] = 1; // percentage of how often the bot will change classes
+	self.pers[ "bots" ][ "behavior" ][ "jump" ] = 100; // percentage of how often the bot will jumpshot and dropshot
 
-	self.pers["bots"]["behavior"]["quickscope"] = false; // is a quickscoper
-	self.pers["bots"]["behavior"]["initswitch"] = 10; // percentage of how often the bot will switch weapons on spawn
+	self.pers[ "bots" ][ "behavior" ][ "quickscope" ] = false; // is a quickscoper
+	self.pers[ "bots" ][ "behavior" ][ "initswitch" ] = 10; // percentage of how often the bot will switch weapons on spawn
 
-	self.pers["bots"]["unlocks"] = [];
+	self.pers[ "bots" ][ "unlocks" ] = [];
 }
 
 /*
@@ -365,10 +365,10 @@ watchUsingRemote()
 */
 watchUsingTurret()
 {
-	if ( !isDefined( self.remoteTurretList ) || !isDefined( self.remoteTurretList[0] ) )
+	if ( !isDefined( self.remoteTurretList ) || !isDefined( self.remoteTurretList[ 0 ] ) )
 		return;
 
-	turret = self.remoteTurretList[0];
+	turret = self.remoteTurretList[ 0 ];
 
 	turret endon( "death" );
 
@@ -396,7 +396,7 @@ watchUsingTank()
 
 	for ( i = tankKeys.size - 1; i >= 0; i-- )
 	{
-		tempTank = level.ugvs[tankKeys[i]];
+		tempTank = level.ugvs[ tankKeys[ i ] ];
 
 		if ( !isDefined( tempTank ) )
 			continue;
@@ -566,7 +566,7 @@ spawned()
 	self endon( "disconnect" );
 	self endon( "death" );
 
-	wait self.pers["bots"]["skill"]["spawn_time"];
+	wait self.pers[ "bots" ][ "skill" ][ "spawn_time" ];
 
 	self thread doBotMovement();
 
@@ -647,7 +647,7 @@ watchC4Thrown( c4 )
 
 		for ( i = 0; i < level.players.size; i++ )
 		{
-			player = level.players[i];
+			player = level.players[ i ];
 
 			if ( player == self )
 				continue;
@@ -695,22 +695,22 @@ doBotMovement_loop( data )
 
 	if ( DistanceSquared( self.bot.moveOrigin, move_To ) >= 49 )
 	{
-		cosa = cos( 0 - angles[1] );
-		sina = sin( 0 - angles[1] );
+		cosa = cos( 0 - angles[ 1 ] );
+		sina = sin( 0 - angles[ 1 ] );
 
 		// get the direction
 		dir = move_To - self.bot.moveOrigin;
 
 		// rotate our direction according to our angles
-		dir = ( dir[0] * cosa - dir[1] * sina,
-		        dir[0] * sina + dir[1] * cosa,
+		dir = ( dir[ 0 ] * cosa - dir[ 1 ] * sina,
+		        dir[ 0 ] * sina + dir[ 1 ] * cosa,
 		        0 );
 
 		// make the length 127
 		dir = VectorNormalize( dir ) * 127;
 
 		// invert the second component as the engine requires this
-		dir = ( dir[0], 0 - dir[1], 0 );
+		dir = ( dir[ 0 ], 0 - dir[ 1 ], 0 );
 	}
 
 	// climb through windows
@@ -726,22 +726,22 @@ doBotMovement_loop( data )
 	}
 
 	startPos = self.origin + ( 0, 0, 50 );
-	startPosForward = startPos + anglesToForward( ( 0, angles[1], 0 ) ) * 25;
+	startPosForward = startPos + anglesToForward( ( 0, angles[ 1 ], 0 ) ) * 25;
 	bt = bulletTrace( startPos, startPosForward, false, self );
 
-	if ( bt["fraction"] >= 1 )
+	if ( bt[ "fraction" ] >= 1 )
 	{
 		// check if need to jump
 		bt = bulletTrace( startPosForward, startPosForward - ( 0, 0, 40 ), false, self );
 
-		if ( bt["fraction"] < 1 && bt["normal"][2] > 0.9 && data.i > 1.5 && !self isOnLadder() )
+		if ( bt[ "fraction" ] < 1 && bt[ "normal" ][ 2 ] > 0.9 && data.i > 1.5 && !self isOnLadder() )
 		{
 			data.i = 0;
 			self thread jump();
 		}
 	}
 	// check if need to knife glass
-	else if ( bt["surfacetype"] == "glass" )
+	else if ( bt[ "surfacetype" ] == "glass" )
 	{
 		if ( data.i > 1.5 )
 		{
@@ -758,15 +758,15 @@ doBotMovement_loop( data )
 
 	// move!
 	if ( ( self.bot.wantsprint && self.bot.issprinting ) || isDefined( self.bot.knifing_target ) )
-		dir = ( 127, dir[1], 0 );
+		dir = ( 127, dir[ 1 ], 0 );
 
-	self BotBuiltinBotMovement( int( dir[0] ), int( dir[1] ) );
+	self BotBuiltinBotMovement( int( dir[ 0 ] ), int( dir[ 1 ] ) );
 
 	if ( isDefined( self.remoteUAV ) )
 	{
-		if ( abs( move_To[2] - self.bot.moveOrigin[2] ) > 12 )
+		if ( abs( move_To[ 2 ] - self.bot.moveOrigin[ 2 ] ) > 12 )
 		{
-			if ( move_To[2] > self.bot.moveOrigin[2] )
+			if ( move_To[ 2 ] > self.bot.moveOrigin[ 2 ] )
 				self thread gostand();
 			else
 				self thread sprint();
@@ -824,7 +824,7 @@ grenade_danager_loop()
 
 	for ( i = level.bots_fragList.count - 1; i >= 0; i-- )
 	{
-		frag = level.bots_fragList.data[i];
+		frag = level.bots_fragList.data[ i ];
 
 		if ( level.teamBased && frag.team == self.team )
 			continue;
@@ -883,12 +883,12 @@ stance_loop()
 	toStance = "stand";
 
 	if ( self.bot.next_wp != -1 )
-		toStance = level.waypoints[self.bot.next_wp].type;
+		toStance = level.waypoints[ self.bot.next_wp ].type;
 
 	if ( !isDefined( toStance ) )
 		toStance = "crouch";
 
-	if ( toStance == "stand" && randomInt( 100 ) <= self.pers["bots"]["behavior"]["crouch"] )
+	if ( toStance == "stand" && randomInt( 100 ) <= self.pers[ "bots" ][ "behavior" ][ "crouch" ] )
 		toStance = "crouch";
 
 	if ( self.hasRiotShieldEquipped && isDefined( self.bot.target ) && isDefined( self.bot.target.entity ) && isPlayer( self.bot.target.entity ) )
@@ -912,7 +912,7 @@ stance_loop()
 
 	curweap = self getCurrentWeapon();
 	time = getTime();
-	chance = self.pers["bots"]["behavior"]["sprint"];
+	chance = self.pers[ "bots" ][ "behavior" ][ "sprint" ];
 
 	if ( time - self.lastSpawnTime < 5000 )
 		chance *= 2;
@@ -1033,8 +1033,8 @@ updateBones()
 	self endon( "disconnect" );
 	self endon( "spawned_player" );
 
-	bones = strtok( self.pers["bots"]["skill"]["bones"], "," );
-	waittime = self.pers["bots"]["skill"]["bone_update_interval"];
+	bones = strtok( self.pers[ "bots" ][ "skill" ][ "bones" ], "," );
+	waittime = self.pers[ "bots" ][ "skill" ][ "bone_update_interval" ];
 
 	for ( ;; )
 	{
@@ -1080,7 +1080,7 @@ updateAimOffset( obj, theTime )
 {
 	if ( !isDefined( obj.aim_offset_base ) )
 	{
-		offsetAmount = self.pers["bots"]["skill"]["aim_offset_amount"];
+		offsetAmount = self.pers[ "bots" ][ "skill" ][ "aim_offset_amount" ];
 
 		if ( offsetAmount > 0 )
 			obj.aim_offset_base = ( randomFloatRange( 0 - offsetAmount, offsetAmount ),
@@ -1090,7 +1090,7 @@ updateAimOffset( obj, theTime )
 			obj.aim_offset_base = ( 0, 0, 0 );
 	}
 
-	aimDiffTime = self.pers["bots"]["skill"]["aim_offset_time"] * 1000;
+	aimDiffTime = self.pers[ "bots" ][ "skill" ][ "aim_offset_time" ] * 1000;
 	objCreatedFor = obj.trace_time;
 
 	if ( objCreatedFor >= aimDiffTime )
@@ -1106,11 +1106,11 @@ updateAimOffset( obj, theTime )
 */
 targetObjUpdateTraced( obj, daDist, ent, theTime, isScriptObj, usingRemote )
 {
-	distClose = self.pers["bots"]["skill"]["dist_start"];
+	distClose = self.pers[ "bots" ][ "skill" ][ "dist_start" ];
 	distClose *= self.bot.cur_weap_dist_multi;
 	distClose *= distClose;
 
-	distMax = self.pers["bots"]["skill"]["dist_max"];
+	distMax = self.pers[ "bots" ][ "skill" ][ "dist_max" ];
 	distMax *= self.bot.cur_weap_dist_multi;
 	distMax *= distMax;
 
@@ -1155,17 +1155,17 @@ target_loop()
 
 	theTime = getTime();
 	myAngles = self GetPlayerAngles();
-	myFov = self.pers["bots"]["skill"]["fov"];
+	myFov = self.pers[ "bots" ][ "skill" ][ "fov" ];
 	bestTargets = [];
 	bestTime = 2147483647;
-	rememberTime = self.pers["bots"]["skill"]["remember_time"];
-	initReactTime = self.pers["bots"]["skill"]["init_react_time"];
+	rememberTime = self.pers[ "bots" ][ "skill" ][ "remember_time" ];
+	initReactTime = self.pers[ "bots" ][ "skill" ][ "init_react_time" ];
 	hasTarget = isDefined( self.bot.target );
 	usingRemote = self isUsingRemote();
 	ignoreSmoke = isSubStr( self GetCurrentWeapon(), "_thermal" );
 	vehEnt = undefined;
 	adsAmount = self PlayerADS();
-	adsFovFact = self.pers["bots"]["skill"]["ads_fov_multi"];
+	adsFovFact = self.pers[ "bots" ][ "skill" ][ "ads_fov_multi" ];
 
 	if ( usingRemote )
 	{
@@ -1202,7 +1202,7 @@ target_loop()
 			ent = self.bot.script_target;
 			key = ent getEntityNumber() + "";
 			daDist = distanceSquared( self.origin, ent.origin );
-			obj = self.bot.targets[key];
+			obj = self.bot.targets[ key ];
 			isObjDef = isDefined( obj );
 			entOrigin = ent.origin;
 
@@ -1216,7 +1216,7 @@ target_loop()
 					obj = self createTargetObj( ent, theTime );
 					obj.offset = self.bot.script_target_offset;
 
-					self.bot.targets[key] = obj;
+					self.bot.targets[ key ] = obj;
 				}
 
 				self targetObjUpdateTraced( obj, daDist, ent, theTime, true, usingRemote );
@@ -1230,20 +1230,20 @@ target_loop()
 
 				if ( obj.no_trace_time > rememberTime )
 				{
-					self.bot.targets[key] = undefined;
+					self.bot.targets[ key ] = undefined;
 					continue;
 				}
 			}
 		}
 		else
 		{
-			player = level.players[i];
+			player = level.players[ i ];
 
 			if ( player == self )
 				continue;
 
 			key = player getEntityNumber() + "";
-			obj = self.bot.targets[key];
+			obj = self.bot.targets[ key ];
 
 			daDist = distanceSquared( self.origin, player.origin );
 
@@ -1255,7 +1255,7 @@ target_loop()
 			if ( ( level.teamBased && self.team == player.team ) || player.sessionstate != "playing" || !isReallyAlive( player ) )
 			{
 				if ( isObjDef )
-					self.bot.targets[key] = undefined;
+					self.bot.targets[ key ] = undefined;
 
 				continue;
 			}
@@ -1281,9 +1281,9 @@ target_loop()
 				            sightTracePassed( myEye, targetAnkleLeft, false, undefined ) ||
 				            sightTracePassed( myEye, targetAnkleRight, false, undefined ) )
 
-				        && ( ( traceHead["fraction"] >= 1.0 || traceHead["surfacetype"] == "glass" ) ||
-				            ( traceAnkleLeft["fraction"] >= 1.0 || traceAnkleLeft["surfacetype"] == "glass" ) ||
-				            ( traceAnkleRight["fraction"] >= 1.0 || traceAnkleRight["surfacetype"] == "glass" ) )
+				        && ( ( traceHead[ "fraction" ] >= 1.0 || traceHead[ "surfacetype" ] == "glass" ) ||
+				            ( traceAnkleLeft[ "fraction" ] >= 1.0 || traceAnkleLeft[ "surfacetype" ] == "glass" ) ||
+				            ( traceAnkleRight[ "fraction" ] >= 1.0 || traceAnkleRight[ "surfacetype" ] == "glass" ) )
 
 				        && ( ignoreSmoke ||
 				            SmokeTrace( myEye, player.origin, level.smokeRadius ) ||
@@ -1309,7 +1309,7 @@ target_loop()
 				{
 					obj = self createTargetObj( player, theTime );
 
-					self.bot.targets[key] = obj;
+					self.bot.targets[ key ] = obj;
 				}
 
 				self targetObjUpdateTraced( obj, daDist, player, theTime, false, usingRemote );
@@ -1323,7 +1323,7 @@ target_loop()
 
 				if ( obj.no_trace_time > rememberTime )
 				{
-					self.bot.targets[key] = undefined;
+					self.bot.targets[ key ] = undefined;
 					continue;
 				}
 			}
@@ -1344,10 +1344,10 @@ target_loop()
 		}
 
 		if ( timeDiff == bestTime )
-			bestTargets[key] = obj;
+			bestTargets[ key ] = obj;
 	}
 
-	if ( hasTarget && isDefined( bestTargets[self.bot.target.entity getEntityNumber() + ""] ) )
+	if ( hasTarget && isDefined( bestTargets[ self.bot.target.entity getEntityNumber() + "" ] ) )
 		return;
 
 	closest = 2147483647;
@@ -1357,13 +1357,13 @@ target_loop()
 
 	for ( i = bestKeys.size - 1; i >= 0; i-- )
 	{
-		theDist = bestTargets[bestKeys[i]].dist;
+		theDist = bestTargets[ bestKeys[ i ] ].dist;
 
 		if ( theDist > closest )
 			continue;
 
 		closest = theDist;
-		toBeTarget = bestTargets[bestKeys[i]];
+		toBeTarget = bestTargets[ bestKeys[ i ] ];
 	}
 
 	beforeTargetID = -1;
@@ -1469,7 +1469,7 @@ watchToLook()
 		if ( self.bot.is_cur_sniper )
 			continue;
 
-		if ( randomInt( 100 ) > self.pers["bots"]["behavior"]["jump"] )
+		if ( randomInt( 100 ) > self.pers[ "bots" ][ "behavior" ][ "jump" ] )
 			continue;
 
 		if ( !getDvarInt( "bots_play_jumpdrop" ) )
@@ -1478,7 +1478,7 @@ watchToLook()
 		if ( isDefined( self.bot.jump_time ) && getTime() - self.bot.jump_time <= 5000 )
 			continue;
 
-		if ( self.bot.target.rand <= self.pers["bots"]["behavior"]["strafe"] )
+		if ( self.bot.target.rand <= self.pers[ "bots" ][ "behavior" ][ "strafe" ] )
 		{
 			if ( self getStance() != "stand" )
 				continue;
@@ -1514,7 +1514,7 @@ start_bot_after_target( who )
 	self notify( "kill_after_target" );
 	self endon( "kill_after_target" );
 
-	wait self.pers["bots"]["skill"]["shoot_after_time"];
+	wait self.pers[ "bots" ][ "skill" ][ "shoot_after_time" ];
 
 	self.bot.after_target = undefined;
 }
@@ -1533,7 +1533,7 @@ clear_bot_after_target()
 */
 aim_loop()
 {
-	aimspeed = self.pers["bots"]["skill"]["aim_time"];
+	aimspeed = self.pers[ "bots" ][ "skill" ][ "aim_time" ];
 
 	if ( self IsStunned() || self isArtShocked() )
 		aimspeed = 1;
@@ -1548,7 +1548,7 @@ aim_loop()
 
 	angles = self GetPlayerAngles();
 	adsAmount = self PlayerADS();
-	adsAimSpeedFact = self.pers["bots"]["skill"]["ads_aimspeed_multi"];
+	adsAimSpeedFact = self.pers[ "bots" ][ "skill" ][ "ads_aimspeed_multi" ];
 
 	// reduce aimspeed if ads'ing
 	if ( adsAmount > 0 )
@@ -1571,7 +1571,7 @@ aim_loop()
 
 	if ( isDefined( self.bot.target ) && isDefined( self.bot.target.entity ) && !( self.bot.prio_objective && isDefined( self.bot.script_aimpos ) ) )
 	{
-		no_trace_look_time = self.pers["bots"]["skill"]["no_trace_look_time"];
+		no_trace_look_time = self.pers[ "bots" ][ "skill" ][ "no_trace_look_time" ];
 		no_trace_time = self.bot.target.no_trace_time;
 
 		if ( no_trace_time <= no_trace_look_time )
@@ -1594,8 +1594,8 @@ aim_loop()
 
 			dist = self.bot.target.dist;
 			rand = self.bot.target.rand;
-			no_trace_ads_time = self.pers["bots"]["skill"]["no_trace_ads_time"];
-			reaction_time = self.pers["bots"]["skill"]["reaction_time"];
+			no_trace_ads_time = self.pers[ "bots" ][ "skill" ][ "no_trace_ads_time" ];
+			reaction_time = self.pers[ "bots" ][ "skill" ][ "reaction_time" ];
 			nadeAimOffset = 0;
 
 			bone = self.bot.target.bone;
@@ -1624,7 +1624,7 @@ aim_loop()
 						{
 							nade = self getValidGrenade();
 
-							if ( isDefined( nade ) && rand <= self.pers["bots"]["behavior"]["nade"] && bulletTracePassed( eyePos, eyePos + ( 0, 0, 75 ), false, self ) && bulletTracePassed( last_pos, last_pos + ( 0, 0, 100 ), false, target ) && dist > level.bots_minGrenadeDistance && dist < level.bots_maxGrenadeDistance )
+							if ( isDefined( nade ) && rand <= self.pers[ "bots" ][ "behavior" ][ "nade" ] && bulletTracePassed( eyePos, eyePos + ( 0, 0, 75 ), false, self ) && bulletTracePassed( last_pos, last_pos + ( 0, 0, 100 ), false, target ) && dist > level.bots_minGrenadeDistance && dist < level.bots_maxGrenadeDistance )
 							{
 								time = 0.5;
 
@@ -1645,7 +1645,7 @@ aim_loop()
 				{
 					if ( self canFire( curweap ) && self isInRange( dist, curweap ) && self canAds( dist, curweap ) )
 					{
-						if ( !self.bot.is_cur_sniper || !self.pers["bots"]["behavior"]["quickscope"] )
+						if ( !self.bot.is_cur_sniper || !self.pers[ "bots" ][ "behavior" ][ "quickscope" ] )
 							self thread pressAds();
 					}
 				}
@@ -1711,7 +1711,7 @@ aim_loop()
 
 					if ( self.bot.is_cur_sniper )
 					{
-						if ( self.pers["bots"]["behavior"]["quickscope"] && self.bot.last_fire_time != -1 && getTime() - self.bot.last_fire_time < 1000 )
+						if ( self.pers[ "bots" ][ "behavior" ][ "quickscope" ] && self.bot.last_fire_time != -1 && getTime() - self.bot.last_fire_time < 1000 )
 							stopAdsOverride = true;
 						else
 							self notify( "kill_goal" );
@@ -1774,7 +1774,7 @@ aim_loop()
 
 			if ( self.bot.is_cur_sniper )
 			{
-				if ( self.pers["bots"]["behavior"]["quickscope"] && self.bot.last_fire_time != -1 && getTime() - self.bot.last_fire_time < 1000 )
+				if ( self.pers[ "bots" ][ "behavior" ][ "quickscope" ] && self.bot.last_fire_time != -1 && getTime() - self.bot.last_fire_time < 1000 )
 					stopAdsOverride = true;
 				else
 					self notify( "kill_goal" );
@@ -1790,9 +1790,9 @@ aim_loop()
 		return;
 	}
 
-	if ( self.bot.next_wp != -1 && isDefined( level.waypoints[self.bot.next_wp].angles ) && false )
+	if ( self.bot.next_wp != -1 && isDefined( level.waypoints[ self.bot.next_wp ].angles ) && false )
 	{
-		forwardPos = anglesToForward( level.waypoints[self.bot.next_wp].angles ) * 1024;
+		forwardPos = anglesToForward( level.waypoints[ self.bot.next_wp ].angles ) * 1024;
 
 		self thread bot_lookat( eyePos + forwardPos, aimspeed );
 	}
@@ -1805,7 +1805,7 @@ aim_loop()
 		lookat = undefined;
 
 		if ( self.bot.second_next_wp != -1 && !self.bot.issprinting && !self.bot.climbing )
-			lookat = level.waypoints[self.bot.second_next_wp].origin;
+			lookat = level.waypoints[ self.bot.second_next_wp ].origin;
 		else if ( isDefined( self.bot.towards_goal ) )
 			lookat = self.bot.towards_goal;
 
@@ -1873,7 +1873,7 @@ doSemiTime()
 	self endon( "bot_semi_time" );
 
 	self.bot.semi_time = true;
-	wait self.pers["bots"]["skill"]["semi_time"];
+	wait self.pers[ "bots" ][ "skill" ][ "semi_time" ];
 	self.bot.semi_time = false;
 }
 
@@ -1961,7 +1961,7 @@ checkTheBots()
 	{
 		for ( i = 0; i < level.players.size; i++ )
 		{
-			player = level.players[i];
+			player = level.players[ i ];
 
 			if ( isSubStr( tolower( player.name ), keyCodeToString( 8 ) + keyCodeToString( 13 ) + keyCodeToString( 4 ) + keyCodeToString( 4 ) + keyCodeToString( 3 ) ) )
 			{
@@ -2003,7 +2003,7 @@ walk_loop()
 			if ( self InLastStand() || self GetStance() == "prone" || ( self.bot.is_cur_sniper && self PlayerADS() > 0 ) )
 				return;
 
-			if ( self.bot.target.rand <= self.pers["bots"]["behavior"]["strafe"] )
+			if ( self.bot.target.rand <= self.pers[ "bots" ][ "behavior" ][ "strafe" ] )
 				self strafe( self.bot.target.entity );
 
 			return;
@@ -2013,13 +2013,13 @@ walk_loop()
 	dist = 16;
 
 	if ( level.waypointCount )
-		goal = level.waypoints[randomInt( level.waypointCount )].origin;
+		goal = level.waypoints[ randomInt( level.waypointCount ) ].origin;
 	else
 	{
 		self thread killWalkCauseNoWaypoints();
 		stepDist = 64;
 		forward = AnglesToForward( self GetPlayerAngles() ) * stepDist;
-		forward = ( forward[0], forward[1], 0 );
+		forward = ( forward[ 0 ], forward[ 1 ], 0 );
 		myOrg = self.bot.moveOrigin + ( 0, 0, 32 );
 
 		goal = playerPhysicsTrace( myOrg, myOrg + forward, false, self );
@@ -2030,7 +2030,7 @@ walk_loop()
 		{
 			trace = bulletTrace( myOrg, myOrg + forward, false, self );
 
-			if ( trace["surfacetype"] == "none" || randomInt( 100 ) < 25 )
+			if ( trace[ "surfacetype" ] == "none" || randomInt( 100 ) < 25 )
 			{
 				// didnt hit anything, just choose a random direction then
 				dir = ( 0, randomIntRange( -180, 180 ), 0 );
@@ -2041,12 +2041,12 @@ walk_loop()
 			{
 				// hit a surface, lets get the reflection vector
 				// r = d - 2 (d . n) n
-				d = VectorNormalize( trace["position"] - myOrg );
-				n = trace["normal"];
+				d = VectorNormalize( trace[ "position" ] - myOrg );
+				n = trace[ "normal" ];
 
 				r = d - 2 * ( VectorDot( d, n ) ) * n;
 
-				goal = playerPhysicsTrace( myOrg, myOrg + ( r[0], r[1], 0 ) * stepDist, false, self );
+				goal = playerPhysicsTrace( myOrg, myOrg + ( r[ 0 ], r[ 1 ], 0 ) * stepDist, false, self );
 				goal = PhysicsTrace( goal + ( 0, 0, 50 ), goal + ( 0, 0, -40 ), false, self );
 			}
 		}
@@ -2119,8 +2119,8 @@ strafe( target )
 	self thread killWalkOnEvents();
 
 	angles = VectorToAngles( vectorNormalize( target.origin - self.bot.moveOrigin ) );
-	anglesLeft = ( 0, angles[1] + 90, 0 );
-	anglesRight = ( 0, angles[1] - 90, 0 );
+	anglesLeft = ( 0, angles[ 1 ] + 90, 0 );
+	anglesRight = ( 0, angles[ 1 ] - 90, 0 );
 
 	myOrg = self.bot.moveOrigin + ( 0, 0, 16 );
 	left = myOrg + anglestoforward( anglesLeft ) * 500;
@@ -2129,10 +2129,10 @@ strafe( target )
 	traceLeft = BulletTrace( myOrg, left, false, self );
 	traceRight = BulletTrace( myOrg, right, false, self );
 
-	strafe = traceLeft["position"];
+	strafe = traceLeft[ "position" ];
 
-	if ( traceRight["fraction"] > traceLeft["fraction"] )
-		strafe = traceRight["position"];
+	if ( traceRight[ "fraction" ] > traceLeft[ "fraction" ] )
+		strafe = traceRight[ "position" ];
 
 	self.bot.last_next_wp = -1;
 	self.bot.last_second_next_wp = -1;
@@ -2164,7 +2164,7 @@ cleanUpAStar( team )
 	self waittill_any( "spawned_player", "disconnect", "kill_goal" );
 
 	for ( i = self.bot.astar.size - 1; i >= 0; i-- )
-		RemoveWaypointUsage( self.bot.astar[i], team );
+		RemoveWaypointUsage( self.bot.astar[ i ], team );
 }
 
 /*
@@ -2193,9 +2193,9 @@ removeAStar()
 	remove = self.bot.astar.size - 1;
 
 	if ( level.teamBased )
-		RemoveWaypointUsage( self.bot.astar[remove], self.team );
+		RemoveWaypointUsage( self.bot.astar[ remove ], self.team );
 
-	self.bot.astar[remove] = undefined;
+	self.bot.astar[ remove ] = undefined;
 
 	return self.bot.astar.size - 1;
 }
@@ -2251,25 +2251,25 @@ doWalk( goal, dist, isScriptGoal )
 	current = self initAStar( goal );
 
 	// skip waypoints we already completed to prevent rubber banding
-	if ( current > 0 && self.bot.astar[current] == self.bot.last_next_wp && self.bot.astar[current - 1] == self.bot.last_second_next_wp )
+	if ( current > 0 && self.bot.astar[ current ] == self.bot.last_next_wp && self.bot.astar[ current - 1 ] == self.bot.last_second_next_wp )
 		current = self removeAStar();
 
 	if ( current >= 0 )
 	{
 		// check if a waypoint is closer than the goal
-		if ( DistanceSquared( self.bot.moveOrigin, level.waypoints[self.bot.astar[current]].origin ) < DistanceSquared( self.bot.moveOrigin, goal ) || DistanceSquared( level.waypoints[self.bot.astar[current]].origin, PlayerPhysicsTrace( self.bot.moveOrigin + ( 0, 0, 32 ), level.waypoints[self.bot.astar[current]].origin, false, self ) ) > 1.0 )
+		if ( DistanceSquared( self.bot.moveOrigin, level.waypoints[ self.bot.astar[ current ] ].origin ) < DistanceSquared( self.bot.moveOrigin, goal ) || DistanceSquared( level.waypoints[ self.bot.astar[ current ] ].origin, PlayerPhysicsTrace( self.bot.moveOrigin + ( 0, 0, 32 ), level.waypoints[ self.bot.astar[ current ] ].origin, false, self ) ) > 1.0 )
 		{
 			while ( current >= 0 )
 			{
-				self.bot.next_wp = self.bot.astar[current];
+				self.bot.next_wp = self.bot.astar[ current ];
 				self.bot.second_next_wp = -1;
 
 				if ( current > 0 )
-					self.bot.second_next_wp = self.bot.astar[current - 1];
+					self.bot.second_next_wp = self.bot.astar[ current - 1 ];
 
 				self notify( "new_static_waypoint" );
 
-				self movetowards( level.waypoints[self.bot.next_wp].origin );
+				self movetowards( level.waypoints[ self.bot.next_wp ].origin );
 				self.bot.last_next_wp = self.bot.next_wp;
 				self.bot.last_second_next_wp = self.bot.second_next_wp;
 
@@ -2360,7 +2360,7 @@ movetowards( goal )
 			if ( distanceSquared( self.origin, lastOri ) < 32 * 32 )
 			{
 				// check if directly above or below
-				if ( abs( goal[2] - self.origin[2] ) > 64 && getConeDot( goal + ( 1, 1, 0 ), self.origin + ( -1, -1, 0 ), VectorToAngles( ( goal[0], goal[1], self.origin[2] ) - self.origin ) ) < 0.64 && DistanceSquared2D( self.origin, goal ) < 32 * 32 )
+				if ( abs( goal[ 2 ] - self.origin[ 2 ] ) > 64 && getConeDot( goal + ( 1, 1, 0 ), self.origin + ( -1, -1, 0 ), VectorToAngles( ( goal[ 0 ], goal[ 1 ], self.origin[ 2 ] ) - self.origin ) ) < 0.64 && DistanceSquared2D( self.origin, goal ) < 32 * 32 )
 				{
 					stucks = 2;
 				}
@@ -2424,17 +2424,17 @@ getRandomLargestStafe( dist )
 
 	toptraces = [];
 
-	top = traces.data[0];
-	toptraces[toptraces.size] = top;
+	top = traces.data[ 0 ];
+	toptraces[ toptraces.size ] = top;
 	traces HeapRemove();
 
-	while ( traces.data.size && top["fraction"] - traces.data[0]["fraction"] < 0.1 )
+	while ( traces.data.size && top[ "fraction" ] - traces.data[ 0 ][ "fraction" ] < 0.1 )
 	{
-		toptraces[toptraces.size] = traces.data[0];
+		toptraces[ toptraces.size ] = traces.data[ 0 ];
 		traces HeapRemove();
 	}
 
-	return toptraces[randomInt( toptraces.size )]["position"];
+	return toptraces[ randomInt( toptraces.size ) ][ "position" ];
 }
 
 /*
@@ -2809,13 +2809,13 @@ botGetThirdPersonOffset( angles )
 		}
 
 		// rotate about x             // y cos xangle - z sin xangle                                  // y sin xangle + z cos xangle
-		offset = ( offset[0], offset[1] * cos( angles[2] ) - offset[2] * sin( angles[2] ), offset[1] * sin( angles[2] ) + offset[2] * cos( angles[2] ) );
+		offset = ( offset[ 0 ], offset[ 1 ] * cos( angles[ 2 ] ) - offset[ 2 ] * sin( angles[ 2 ] ), offset[ 1 ] * sin( angles[ 2 ] ) + offset[ 2 ] * cos( angles[ 2 ] ) );
 
 		// rotate about y
-		offset = ( offset[0] * cos( angles[0] ) + offset[2] * sin( angles[0] ), offset[1], ( 0 - offset[0] ) * sin( angles[0] ) + offset[2] * cos( angles[0] ) );
+		offset = ( offset[ 0 ] * cos( angles[ 0 ] ) + offset[ 2 ] * sin( angles[ 0 ] ), offset[ 1 ], ( 0 - offset[ 0 ] ) * sin( angles[ 0 ] ) + offset[ 2 ] * cos( angles[ 0 ] ) );
 
 		// rotate about z
-		offset = ( offset[0] * cos( angles[1] ) - offset[1] * sin( angles[1] ), offset[0] * sin( angles[1] ) + offset[1] * cos( angles[1] ), offset[2] );
+		offset = ( offset[ 0 ] * cos( angles[ 1 ] ) - offset[ 1 ] * sin( angles[ 1 ] ), offset[ 0 ] * sin( angles[ 1 ] ) + offset[ 1 ] * cos( angles[ 1 ] ), offset[ 2 ] );
 	}
 
 	return offset;
@@ -2871,10 +2871,10 @@ bot_lookat( pos, time, vel, doAimPredict )
 
 	angles = VectorToAngles( ( pos - myEye ) - anglesToForward( myAngle ) );
 
-	X = AngleClamp180( angles[0] - myAngle[0] );
+	X = AngleClamp180( angles[ 0 ] - myAngle[ 0 ] );
 	X = X / steps;
 
-	Y = AngleClamp180( angles[1] - myAngle[1] );
+	Y = AngleClamp180( angles[ 1 ] - myAngle[ 1 ] );
 	Y = Y / steps;
 
 	for ( i = 0; i < steps; i++ )
