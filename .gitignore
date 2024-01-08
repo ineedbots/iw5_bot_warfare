@@ -4,5 +4,5 @@
 logs/
 demos/
 missingasset.csv
-*.gscbin
 *.exe
+compiled/
