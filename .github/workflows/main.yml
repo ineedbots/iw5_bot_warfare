@@ -13,6 +13,8 @@ jobs:
 
       - name: Setup gsc-tool
         uses: xensik/setup-gsc-tool@v1
+        with:
+          version: '1.4.0'
 
       - name: Run script
         run: |
