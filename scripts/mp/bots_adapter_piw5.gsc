@@ -49,5 +49,5 @@ do_botmovement( forward, right )
 
 do_botmeleeparams( entNum, dist )
 {
-	// self botmeleeparams( entNum, dist );
+	self botmeleeparams( entNum, dist );
 }
