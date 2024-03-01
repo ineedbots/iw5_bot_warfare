@@ -112,6 +112,13 @@ You can find the ModDB release post [here](https://www.moddb.com/mods/bot-warfar
 | bots_play_aim                    | If the bots can aim.                                                                           | 1          |
 
 ## Changelog
+- v2.2.0
+  - Bots can now melee lunge
+  - Fixed some chat related script runtime errors
+  - Waypoints only load from csv now
+  - Fix bots possibly being stuck in sab
+  - Major cleanup
+
 - v2.1.0
   - Initial release (sync'd versions with other Bot Warfares)
 
