@@ -115,7 +115,6 @@ You can find the ModDB release post [here](https://www.moddb.com/mods/bot-warfar
 - v2.2.0
   - Bots can now melee lunge
   - Fixed some chat related script runtime errors
-  - Waypoints only load from csv now
   - Fix bots possibly being stuck in sab
   - Major cleanup
 
