@@ -7,4 +7,4 @@ if not exist ".\source\maps\" mkdir .\source\maps\
 xcopy /y /s /e .\scripts\ .\source\scripts\
 xcopy /y /s /e .\maps\ .\source\maps\
 
-preGSC.exe -noforeach -nopause
+preGSC.exe -noforeach -nopause -infold .\source\ -outfold .\pregsc\
