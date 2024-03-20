@@ -1,0 +1,16 @@
+name: pregsc
+
+on: [push]
+
+jobs:
+  main-win:
+    name: Run on Windows
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out files
+        uses: actions/checkout@main
+
+      - name: Run script
+        run: |
+          ci/pregsc.bat

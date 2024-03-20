@@ -1,10 +1,10 @@
-name: main
+name: gsc-tool
 
 on: [push]
 
 jobs:
   main-win:
-    name: Test on Windows
+    name: Compile on Windows
     runs-on: windows-latest
 
     steps:
@@ -18,4 +18,4 @@ jobs:
 
       - name: Run script
         run: |
-          ci/main.bat
+          ci/gsc-tool.bat

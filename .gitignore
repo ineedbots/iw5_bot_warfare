@@ -4,5 +4,3 @@
 logs/
 demos/
 missingasset.csv
-*.exe
-compiled/
