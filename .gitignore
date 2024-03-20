@@ -2,6 +2,9 @@
 *.log
 *.stat
 *.exe
+*.gscbin
+!ci/
+out/
 logs/
 demos/
 missingasset.csv
