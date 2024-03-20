@@ -4,3 +4,8 @@
 logs/
 demos/
 missingasset.csv
+compiled/
+source/
+maps/maps/
+maps/scripts/
+pregsc.dat
