@@ -1548,7 +1548,7 @@ target_loop()
 	initReactTime = self.pers[ "bots" ][ "skill" ][ "init_react_time" ];
 	hasTarget = isdefined( self.bot.target );
 	usingRemote = self isusingremote();
-	ignoreSmoke = issubstr( self getcurrentweapon(), "_thermal" );
+	ignoreSmoke = issubstr( self getcurrentweapon(), "_thermal" ) && !self isemped() && !self isnuked();
 	vehEnt = undefined;
 	adsAmount = self playerads();
 	adsFovFact = self.pers[ "bots" ][ "skill" ][ "ads_fov_multi" ];
