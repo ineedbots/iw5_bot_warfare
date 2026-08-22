@@ -1675,7 +1675,7 @@ target_loop()
 							player checkTraceForBone( myEye, "j_ankle_le" ) ||
 							player checkTraceForBone( myEye, "j_ankle_ri" ) )
 							
-						&& ( ignoreSmoke ||
+						&& ( ( ignoreSmoke && !player _hasperk( "specialty_coldblooded" ) ) ||
 							SmokeTrace( myEye, player.origin, level.smokeradius ) ||
 							daDist < level.bots_maxknifedistance * 4 )
 							
