@@ -141,6 +141,7 @@ You can find the ModDB release post [here](https://www.moddb.com/mods/bot-warfar
   - Added bots_skill_dynamic and bots_skill_dynamic_players dvars, bot difficulty by amount of players or by KDR
   - Added bots_main_xp_kill and bots_main_xp_weapon dvars to scale the XP for killing bots
   - Fixed two unreachable waypoints on Erosion
+  - Fixed the game crashing ("Couldn't find tag_player on player's view-link parent") on Osprey Gunner killcams: those kills skip the killcam and never become the final killcam
 
 - v2.3.0
   - Fixed bots aiming in ac130/chopper being broken at times

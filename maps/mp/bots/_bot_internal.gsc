@@ -141,9 +141,10 @@ resetBotVars()
 	self.bot.cur_weap_dist_multi = 1;
 	self.bot.is_cur_sniper = false;
 	self.bot.is_cur_akimbo = false;
-
+	
 	self.bot.recoil = ( 0, 0, 0 ); // pitch, yaw of simulated recoil
-
+	self.bot.last_recoil_time = 0;
+	
 	self.bot.prio_objective = false;
 	
 	self.bot.rand = randomint( 100 );
@@ -216,7 +217,7 @@ IsWeapSniper( weap )
 	{
 		return false;
 	}
-
+	
 	return true;
 }
 
@@ -826,7 +827,7 @@ spawned()
 	self thread watchGrenadeFire();
 	self thread watchPickupGun();
 	self thread watchRecoil();
-
+	
 	self notify( "bot_spawned" );
 }
 
@@ -837,21 +838,40 @@ watchRecoil()
 {
 	self endon( "disconnect" );
 	self endon( "death" );
-
+	
+	self thread watchRecoilRecover();
+	
 	for ( ;; )
 	{
-		if ( self waittill_any_timeout( 0.05, "weapon_fired" ) == "weapon_fired" )
-		{
-			self addRecoil( self getcurrentweapon() );
-		}
-		else
-		{
-			self.bot.recoil *= 0.75;
+		self waittill( "weapon_fired" );
+		
+		self.bot.last_recoil_time = gettime();
+		self addRecoil( self getcurrentweapon() );
+	}
+}
 
-			if ( lengthsquared( self.bot.recoil ) < 0.0001 )
-			{
-				self.bot.recoil = ( 0, 0, 0 );
-			}
+/*
+	Recovers the bot's recoil when it is not firing
+*/
+watchRecoilRecover()
+{
+	self endon( "disconnect" );
+	self endon( "death" );
+	
+	for ( ;; )
+	{
+		wait 0.05;
+		
+		if ( self.bot.recoil == ( 0, 0, 0 ) || gettime() - self.bot.last_recoil_time < 100 )
+		{
+			continue;
+		}
+		
+		self.bot.recoil *= 0.75;
+		
+		if ( lengthsquared( self.bot.recoil ) < 0.0001 )
+		{
+			self.bot.recoil = ( 0, 0, 0 );
 		}
 	}
 }
@@ -862,44 +882,44 @@ watchRecoil()
 addRecoil( weap )
 {
 	scale = getdvarfloat( "bots_play_recoil" );
-
+	
 	if ( scale <= 0 || weap == "none" || self isusingremote() )
 	{
 		return;
 	}
-
+	
 	switch ( weaponclass( weap ) )
 	{
 		case "rifle":
 			kick = 0.3;
 			break;
-
+		
 		case "smg":
 			kick = 0.35;
 			break;
-
+		
 		case "mg":
 			kick = 0.45;
 			break;
-
+		
 		case "pistol":
 			kick = 0.5;
 			break;
-
+		
 		default:
 			return;
 	}
-
+	
 	// harder bots control recoil better
 	kick *= scale * ( 1.5 - self.pers[ "bots" ][ "skill" ][ "base" ] * 0.15 );
-
+	
 	if ( self playerads() >= 1 )
 	{
 		kick *= 0.75;
 	}
-
+	
 	stance = self getstance();
-
+	
 	if ( stance == "crouch" )
 	{
 		kick *= 0.85;
@@ -908,10 +928,10 @@ addRecoil( weap )
 	{
 		kick *= 0.7;
 	}
-
+	
 	pitch = min( self.bot.recoil[ 0 ] + kick, 8 * scale );
 	yaw = clamp( self.bot.recoil[ 1 ] + randomfloatrange( kick * -0.5, kick * 0.5 ), -4 * scale, 4 * scale );
-
+	
 	self.bot.recoil = ( pitch, yaw, 0 );
 }
 
@@ -924,9 +944,9 @@ getRecoilOffset( aimpos, eyePos, angles )
 	{
 		return ( 0, 0, 0 );
 	}
-
+	
 	dist = distance( aimpos, eyePos );
-
+	
 	return anglestoup( angles ) * ( dist * tan( self.bot.recoil[ 0 ] ) ) + anglestoright( angles ) * ( dist * tan( self.bot.recoil[ 1 ] ) );
 }
 
@@ -2247,7 +2267,7 @@ aim_loop()
 					aimpos += aimoffset;
 					aimpos += ( 0, 0, nadeAimOffset );
 					aimpos += self getRecoilOffset( aimpos, eyePos, angles );
-
+					
 					conedot = getConeDot( aimpos, eyePos, angles );
 					
 					if ( isdefined( self.bot.knifing_target ) && self.bot.knifing_target == target )
@@ -2270,7 +2290,7 @@ aim_loop()
 					aimpos += aimoffset;
 					aimpos += ( 0, 0, nadeAimOffset );
 					aimpos += self getRecoilOffset( aimpos, eyePos, angles );
-
+					
 					conedot = getConeDot( aimpos, eyePos, angles );
 					
 					if ( !nadeAimOffset && conedot > 0.999995 && lengthsquared( aimoffset ) < 0.05 )
@@ -3192,15 +3212,15 @@ sprint()
 	self endon( "disconnect" );
 	self notify( "bot_sprint" );
 	self endon( "bot_sprint" );
-
+	
 	// sprinting would make the bot stand up
 	forcedStance = getForcedStance();
-
+	
 	if ( forcedStance != "" && forcedStance != "stand" )
 	{
 		return;
 	}
-
+	
 	self BotBuiltinBotAction( "+sprint" );
 	wait 0.05;
 	self BotBuiltinBotAction( "-sprint" );
@@ -3522,12 +3542,12 @@ jump()
 getForcedStance()
 {
 	stance = getdvar( "bots_play_stance" );
-
+	
 	if ( stance != "stand" && stance != "crouch" && stance != "prone" )
 	{
 		return "";
 	}
-
+	
 	return stance;
 }
 
@@ -3541,19 +3561,19 @@ doForcedStance()
 	{
 		return false;
 	}
-
+	
 	switch ( getForcedStance() )
 	{
 		case "stand":
 			self BotBuiltinBotAction( "-gocrouch" );
 			self BotBuiltinBotAction( "-goprone" );
 			return true;
-
+		
 		case "crouch":
 			self BotBuiltinBotAction( "+gocrouch" );
 			self BotBuiltinBotAction( "-goprone" );
 			return true;
-
+		
 		case "prone":
 			if ( self.hasriotshieldequipped )
 			{
@@ -3566,10 +3586,10 @@ doForcedStance()
 				self BotBuiltinBotAction( "-gocrouch" );
 				self BotBuiltinBotAction( "+goprone" );
 			}
-
+			
 			return true;
 	}
-
+	
 	return false;
 }
 
@@ -3582,12 +3602,12 @@ stand()
 	{
 		return;
 	}
-
+	
 	if ( self doForcedStance() )
 	{
 		return;
 	}
-
+	
 	self BotBuiltinBotAction( "-gocrouch" );
 	self BotBuiltinBotAction( "-goprone" );
 }
@@ -3601,12 +3621,12 @@ crouch()
 	{
 		return;
 	}
-
+	
 	if ( self doForcedStance() )
 	{
 		return;
 	}
-
+	
 	self BotBuiltinBotAction( "+gocrouch" );
 	self BotBuiltinBotAction( "-goprone" );
 }
@@ -3620,17 +3640,17 @@ prone()
 	{
 		return;
 	}
-
+	
 	if ( self doForcedStance() )
 	{
 		return;
 	}
-
+	
 	if ( self.hasriotshieldequipped )
 	{
 		return;
 	}
-
+	
 	self BotBuiltinBotAction( "-gocrouch" );
 	self BotBuiltinBotAction( "+goprone" );
 }
@@ -3750,14 +3770,14 @@ bot_lookat( pos, time, vel, doAimPredict )
 	
 	Y = angleclamp180( angles[ 1 ] - myAngle[ 1 ] );
 	Y = Y / steps;
-
+	
 	// the botangles builtin breaks bots' aim in third person, setplayerangles works there (but not in remote killstreaks)
 	useSetPlayerAngles = ( getdvarint( "camera_thirdPerson" ) && !self isusingremote() );
-
+	
 	for ( i = 0; i < steps; i++ )
 	{
 		myAngle = ( angleclamp180( myAngle[ 0 ] + X ), angleclamp180( myAngle[ 1 ] + Y ), 0 );
-
+		
 		if ( useSetPlayerAngles )
 		{
 			self setplayerangles( myAngle );
@@ -3766,7 +3786,7 @@ bot_lookat( pos, time, vel, doAimPredict )
 		{
 			self BotBuiltinBotAngles( myAngle );
 		}
-
+		
 		wait 0.05;
 	}
 }

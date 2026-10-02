@@ -219,40 +219,40 @@ init()
 	{
 		setdvar( "bots_play_aim", true );
 	}
-
+	
 	if ( getdvar( "bots_play_stance" ) == "" ) // force bots to only use this stance (stand, crouch or prone), anything else is normal
 	{
 		setdvar( "bots_play_stance", "none" );
 	}
-
+	
 	if ( getdvar( "bots_play_recoil" ) == "" ) // how much weapon recoil affects the bots' aim, 0 disables
 	{
 		setdvar( "bots_play_recoil", 1.0 );
 	}
-
+	
 	if ( getdvar( "bots_skill_dynamic" ) == "" ) // 0 off, 1 bots' difficulty by amount of human players, 2 bots' difficulty adapts to their kdr
 	{
 		setdvar( "bots_skill_dynamic", 0 );
 	}
-
+	
 	if ( getdvar( "bots_skill_dynamic_players" ) == "" ) // bots_skill_dynamic 1, the difficulty for 1, 2, 3... human players, the last value is used for anything more
 	{
 		setdvar( "bots_skill_dynamic_players", "2,2,2,4,4,4,4,7" );
 	}
-
+	
 	if ( getdvar( "bots_main_xp_kill" ) == "" ) // multiplier of the kill xp players get for killing a bot
 	{
 		setdvar( "bots_main_xp_kill", 1.0 );
 	}
-
+	
 	if ( getdvar( "bots_main_xp_weapon" ) == "" ) // multiplier of the weapon xp players get for killing a bot
 	{
 		setdvar( "bots_main_xp_weapon", 1.0 );
 	}
-
+	
 	// overrides the bots' difficulty behavior values, -1 uses the difficulty's value
 	behaviors = strtok( "strafe,nade,sprint,camp,follow,crouch,switch,class,jump", "," );
-
+	
 	for ( i = 0; i < behaviors.size; i++ )
 	{
 		if ( getdvar( "bots_behavior_" + behaviors[ i ] ) == "" )
@@ -260,9 +260,9 @@ init()
 			setdvar( "bots_behavior_" + behaviors[ i ], -1 );
 		}
 	}
-
+	
 	level.bot_behavior_overrides = behaviors;
-
+	
 	if ( !isdefined( game[ "botWarfare" ] ) )
 	{
 		game[ "botWarfare" ] = true;
@@ -413,8 +413,16 @@ onPlayerKilled( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sH
 		self maps\mp\bots\_bot_script::onKilled( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, timeOffset, deathAnimDuration );
 	}
 	
+	// the osprey gunner killcam crashes the game ("G_GetPlayerViewOrigin: Couldn't find tag_player on
+	// player's view-link parent"), so those kills get no killcam and never become the final killcam
+	if ( isdefined( sWeapon ) && sWeapon == "osprey_player_minigun_mp" )
+	{
+		self thread skipKillcam();
+		level thread keepFinalKillcam( eAttacker );
+	}
+	
 	self [[ level.prevcallbackplayerkilled ]]( eInflictor, eAttacker, iDamage, sMeansOfDeath, sWeapon, vDir, sHitLoc, timeOffset, deathAnimDuration );
-
+	
 	if ( self is_bot() )
 	{
 		self scaleKillXP( eAttacker, sWeapon, sMeansOfDeath );
@@ -430,80 +438,80 @@ scaleKillXP( attacker, sWeapon, sMeansOfDeath )
 	{
 		return;
 	}
-
+	
 	if ( !isplayer( attacker ) && isdefined( attacker.owner ) )
 	{
 		attacker = attacker.owner;
 	}
-
+	
 	if ( !isplayer( attacker ) || attacker == self || attacker is_bot() || !attacker rankingenabled() )
 	{
 		return;
 	}
-
+	
 	if ( level.teambased && ( attacker.team == self.team || !level.teamcount[ "allies" ] || !level.teamcount[ "axis" ] ) )
 	{
 		return;
 	}
-
+	
 	xpScale = getdvarfloat( "bots_main_xp_kill" );
-
+	
 	if ( xpScale != 1 && !isdefined( attacker.ischeater ) )
 	{
 		xpScaler = 1;
-
+		
 		if ( isdefined( attacker.xpscaler ) )
 		{
 			xpScaler = attacker.xpscaler;
 		}
-
+		
 		xp = int( maps\mp\gametypes\_rank::getscoreinfovalue( "kill" ) * xpScaler * level.xpscale * ( xpScale - 1 ) );
-
+		
 		if ( xp != 0 )
 		{
 			oldXp = attacker maps\mp\gametypes\_rank::getrankxp();
-
+			
 			if ( oldXp + xp < 0 )
 			{
 				xp = 0 - oldXp;
 			}
-
+			
 			attacker maps\mp\gametypes\_rank::incrankxp( xp );
-
+			
 			if ( attacker maps\mp\gametypes\_rank::updaterank( oldXp ) )
 			{
 				attacker thread maps\mp\gametypes\_rank::updaterankannouncehud();
 			}
-
+			
 			attacker maps\mp\gametypes\_rank::syncxpstat();
-
+			
 			if ( xp > 0 )
 			{
 				attacker thread maps\mp\gametypes\_rank::xppointspopup( xp, 0, ( 1, 1, 0.5 ), 0 );
 			}
 		}
 	}
-
+	
 	weapScale = getdvarfloat( "bots_main_xp_weapon" );
-
+	
 	if ( weapScale == 1 || !isdefined( sWeapon ) || !attacker maps\mp\gametypes\_rank::weaponshouldgetxp( sWeapon, sMeansOfDeath ) )
 	{
 		return;
 	}
-
+	
 	if ( !isdefined( attacker.primaryweapon ) || !isdefined( attacker.secondaryweapon ) )
 	{
 		return;
 	}
-
+	
 	if ( attacker.primaryweapon != sWeapon && attacker.secondaryweapon != sWeapon && weaponaltweaponname( attacker.primaryweapon ) != sWeapon )
 	{
 		return;
 	}
-
+	
 	// get the base weapon name the same way the stock rank script does
 	toks = strtok( sWeapon, "_" );
-
+	
 	if ( toks[ 0 ] == "iw5" )
 	{
 		baseWeap = toks[ 0 ] + "_" + toks[ 1 ];
@@ -516,31 +524,190 @@ scaleKillXP( attacker, sWeapon, sMeansOfDeath )
 	{
 		baseWeap = toks[ 0 ];
 	}
-
+	
 	if ( toks[ 0 ] == "gl" )
 	{
 		baseWeap = toks[ 1 ];
 	}
-
+	
 	if ( !attacker isitemunlocked( baseWeap ) )
 	{
 		return;
 	}
-
-	// stock gives 100 weapon xp per kill
+	
+	// stock gives 100 weapon xp per kill, and skips weapons that are max rank (or have no ranks, like secondaries)
 	oldWeapXp = attacker maps\mp\gametypes\_rank::getweaponrankxp( baseWeap );
-	newWeapXp = int( clamp( oldWeapXp + int( 100 * ( weapScale - 1 ) ), 0, attacker maps\mp\gametypes\_rank::getweaponmaxrankxp( baseWeap ) ) );
-
+	maxWeapXp = attacker maps\mp\gametypes\_rank::getweaponmaxrankxp( baseWeap );
+	
+	if ( maxWeapXp <= 0 || oldWeapXp >= maxWeapXp )
+	{
+		return;
+	}
+	
+	newWeapXp = int( clamp( oldWeapXp + int( 100 * ( weapScale - 1 ) ), 0, maxWeapXp ) );
+	
 	if ( newWeapXp == oldWeapXp )
 	{
 		return;
 	}
-
+	
 	attacker setplayerdata( "weaponXP", baseWeap, newWeapXp );
-
+	
 	if ( attacker maps\mp\gametypes\_rank::updateweaponrank( newWeapXp, baseWeap ) )
 	{
 		attacker thread maps\mp\gametypes\_rank::updateweaponrankannouncehud();
+	}
+}
+
+/*
+	Skips this death's killcam. The game clears cancelKillcam a moment after death and checks it about
+	a second later, so it is kept set until then.
+*/
+skipKillcam()
+{
+	self endon( "disconnect" );
+	self endon( "spawned_player" );
+	
+	for ( i = 0; i < 70; i++ )
+	{
+		self.cancelKillcam = true;
+		wait 0.05;
+	}
+}
+
+/*
+	Puts the final killcam recording back to what it was before this kill, once the game has recorded it.
+*/
+keepFinalKillcam( attacker )
+{
+	if ( !isdefined( level.finalKillCam_attacker ) )
+	{
+		return;
+	}
+	
+	keys = [];
+	keys[ keys.size ] = "none";
+	
+	if ( level.teambased && isdefined( attacker ) && isdefined( attacker.team ) )
+	{
+		keys[ keys.size ] = attacker.team;
+	}
+	
+	names = strtok( "delay victim attacker attackerNum killCamEntityIndex killCamEntityStartTime sWeapon deathTimeOffset psOffsetTime timeRecorded timeGameEnded", " " );
+	saved = [];
+	
+	for ( i = 0; i < keys.size; i++ )
+	{
+		saved[ i ] = [];
+		
+		for ( j = 0; j < names.size; j++ )
+		{
+			saved[ i ][ j ] = getFinalKillcamField( names[ j ], keys[ i ] );
+		}
+	}
+	
+	waittillframeend;
+	
+	for ( i = 0; i < keys.size; i++ )
+	{
+		for ( j = 0; j < names.size; j++ )
+		{
+			setFinalKillcamField( names[ j ], keys[ i ], saved[ i ][ j ] );
+		}
+	}
+}
+
+/*
+	Reads one of the game's level.finalKillCam_<name>[ key ] values.
+*/
+getFinalKillcamField( name, key )
+{
+	switch ( name )
+	{
+		case "delay":
+			return level.finalKillCam_delay[ key ];
+			
+		case "victim":
+			return level.finalKillCam_victim[ key ];
+			
+		case "attacker":
+			return level.finalKillCam_attacker[ key ];
+			
+		case "attackerNum":
+			return level.finalKillCam_attackerNum[ key ];
+			
+		case "killCamEntityIndex":
+			return level.finalKillCam_killCamEntityIndex[ key ];
+			
+		case "killCamEntityStartTime":
+			return level.finalKillCam_killCamEntityStartTime[ key ];
+			
+		case "sWeapon":
+			return level.finalKillCam_sWeapon[ key ];
+			
+		case "deathTimeOffset":
+			return level.finalKillCam_deathTimeOffset[ key ];
+			
+		case "psOffsetTime":
+			return level.finalKillCam_psOffsetTime[ key ];
+			
+		case "timeRecorded":
+			return level.finalKillCam_timeRecorded[ key ];
+	}
+	
+	return level.finalKillCam_timeGameEnded[ key ];
+}
+
+/*
+	Writes one of the game's level.finalKillCam_<name>[ key ] values.
+*/
+setFinalKillcamField( name, key, value )
+{
+	switch ( name )
+	{
+		case "delay":
+			level.finalKillCam_delay[ key ] = value;
+			break;
+			
+		case "victim":
+			level.finalKillCam_victim[ key ] = value;
+			break;
+			
+		case "attacker":
+			level.finalKillCam_attacker[ key ] = value;
+			break;
+			
+		case "attackerNum":
+			level.finalKillCam_attackerNum[ key ] = value;
+			break;
+			
+		case "killCamEntityIndex":
+			level.finalKillCam_killCamEntityIndex[ key ] = value;
+			break;
+			
+		case "killCamEntityStartTime":
+			level.finalKillCam_killCamEntityStartTime[ key ] = value;
+			break;
+			
+		case "sWeapon":
+			level.finalKillCam_sWeapon[ key ] = value;
+			break;
+			
+		case "deathTimeOffset":
+			level.finalKillCam_deathTimeOffset[ key ] = value;
+			break;
+			
+		case "psOffsetTime":
+			level.finalKillCam_psOffsetTime[ key ] = value;
+			break;
+			
+		case "timeRecorded":
+			level.finalKillCam_timeRecorded[ key ] = value;
+			break;
+			
+		default:
+			level.finalKillCam_timeGameEnded[ key ] = value;
+			break;
 	}
 }
 
@@ -1293,15 +1460,22 @@ diffBots_loop()
 			player.pers[ "bots" ][ "skill" ][ "base" ] = var_skill;
 		}
 	}
-
+	
 	if ( var_skill != 8 && var_skill != 9 )
 	{
 		dynamicBotsDiff( var_skill );
 	}
-
+	
 	playercount = level.players.size;
 	min_diff = getdvarint( "bots_skill_min" );
 	max_diff = getdvarint( "bots_skill_max" );
+	
+	if ( min_diff > max_diff )
+	{
+		temp = min_diff;
+		min_diff = max_diff;
+		max_diff = temp;
+	}
 	
 	for ( i = 0; i < playercount; i++ )
 	{
@@ -1322,19 +1496,36 @@ diffBots_loop()
 dynamicBotsDiff( var_skill )
 {
 	mode = getdvarint( "bots_skill_dynamic" );
-
+	playercount = level.players.size;
+	
 	if ( mode != 1 && mode != 2 )
 	{
+		// turned off, put the bots back to the difficulty they had before
+		for ( i = 0; i < playercount; i++ )
+		{
+			player = level.players[ i ];
+			
+			if ( !player is_bot() || !isdefined( player.pers[ "bots" ][ "skill" ][ "dynamic_base" ] ) )
+			{
+				continue;
+			}
+			
+			if ( var_skill == 0 )
+			{
+				player.pers[ "bots" ][ "skill" ][ "base" ] = player.pers[ "bots" ][ "skill" ][ "dynamic_base" ];
+			}
+			
+			player.pers[ "bots" ][ "skill" ][ "dynamic_base" ] = undefined;
+		}
+		
 		return;
 	}
-
-	playercount = level.players.size;
-
+	
 	if ( mode == 1 )
 	{
 		// difficulty from the amount of human players
 		humans = 0;
-
+		
 		for ( i = 0; i < playercount; i++ )
 		{
 			if ( !level.players[ i ] is_bot() )
@@ -1342,73 +1533,78 @@ dynamicBotsDiff( var_skill )
 				humans++;
 			}
 		}
-
+		
 		skills = strtok( getdvar( "bots_skill_dynamic_players" ), "," );
-
+		
 		if ( !skills.size )
 		{
 			return;
 		}
-
+		
 		skill = int( skills[ int( clamp( humans - 1, 0, skills.size - 1 ) ) ] );
-
+		
 		for ( i = 0; i < playercount; i++ )
 		{
 			player = level.players[ i ];
-
+			
 			if ( !player is_bot() )
 			{
 				continue;
 			}
-
+			
+			if ( !isdefined( player.pers[ "bots" ][ "skill" ][ "dynamic_base" ] ) )
+			{
+				player.pers[ "bots" ][ "skill" ][ "dynamic_base" ] = player.pers[ "bots" ][ "skill" ][ "base" ];
+			}
+			
 			player.pers[ "bots" ][ "skill" ][ "base" ] = skill;
 		}
-
+		
 		return;
 	}
-
+	
 	// difficulty adapts to each bot's kdr, the worse the bot is doing the harder it gets
 	for ( i = 0; i < playercount; i++ )
 	{
 		player = level.players[ i ];
-
+		
 		if ( !player is_bot() )
 		{
 			continue;
 		}
-
+		
 		if ( !isdefined( player.pers[ "bots" ][ "skill" ][ "dynamic_base" ] ) )
 		{
 			player.pers[ "bots" ][ "skill" ][ "dynamic_base" ] = player.pers[ "bots" ][ "skill" ][ "base" ];
 		}
-
+		
 		base = player.pers[ "bots" ][ "skill" ][ "dynamic_base" ];
-
+		
 		if ( var_skill != 0 )
 		{
 			base = var_skill;
 		}
-
+		
 		kills = 0;
 		deaths = 0;
-
+		
 		if ( isdefined( player.pers[ "kills" ] ) )
 		{
 			kills = player.pers[ "kills" ];
 		}
-
+		
 		if ( isdefined( player.pers[ "deaths" ] ) )
 		{
 			deaths = player.pers[ "deaths" ];
 		}
-
+		
 		adjust = 0;
-
+		
 		// wait for a few kills/deaths before adapting
 		if ( kills + deaths >= 3 )
 		{
 			kdr = ( kills * 1.0 ) / max( deaths, 1 );
-
+			
 			if ( kdr >= 1 )
 			{
 				adjust = 0 - int( min( ( kdr - 1 ) * 2, 3 ) );
@@ -1418,7 +1614,7 @@ dynamicBotsDiff( var_skill )
 				adjust = int( min( ( 1 - kdr ) * 4, 3 ) );
 			}
 		}
-
+		
 		player.pers[ "bots" ][ "skill" ][ "base" ] = base + adjust;
 	}
 }

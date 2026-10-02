@@ -735,14 +735,14 @@ addOptions()
 	
 	if ( _tempDvar )
 	{
-		_temp = "true";
+		_temp = "on";
 	}
 	else
 	{
-		_temp = "false";
+		_temp = "off";
 	}
 	
-	self AddMenu( "man_bots", 7, "Toggle auto bot kicking: " + _temp, ::man_bots, "autokick", _tempDvar );
+	self AddMenu( "man_bots", 7, "Kick bots when there are too many: " + _temp, ::man_bots, "autokick", _tempDvar );
 	
 	_tempDvar = getdvarint( "bots_manage_fill_mode" );
 	
@@ -777,7 +777,7 @@ addOptions()
 			break;
 	}
 	
-	self AddMenu( "man_bots", 8, "Change bot_fill_mode: " + _temp, ::man_bots, "fillmode", _tempDvar );
+	self AddMenu( "man_bots", 8, "Bots to keep in-game counts: " + _temp, ::man_bots, "fillmode", _tempDvar );
 	
 	_tempDvar = getdvarint( "bots_manage_fill" );
 	self AddMenu( "man_bots", 9, "Increase bots to keep in-game: " + _tempDvar, ::man_bots, "fillup", _tempDvar );
@@ -787,18 +787,18 @@ addOptions()
 	
 	if ( _tempDvar )
 	{
-		_temp = "true";
+		_temp = "on";
 	}
 	else
 	{
-		_temp = "false";
+		_temp = "off";
 	}
 	
-	self AddMenu( "man_bots", 11, "Count players for fill on spectator: " + _temp, ::man_bots, "fillspec", _tempDvar );
-
-	self AddMenu( "man_bots", 12, "Wait for a player before adding bots: " + boolText( "bots_manage_fill_watchplayers" ), ::cycle_dvar, "bots_manage_fill_watchplayers", makeList( 0, 1 ) );
-	self AddMenu( "man_bots", 13, "Kick bots at the end of the match: " + boolText( "bots_main_kickBotsAtEnd" ), ::cycle_dvar, "bots_main_kickBotsAtEnd", makeList( 0, 1 ) );
-	self AddMenu( "man_bots", 14, "Bot chat rate: " + getdvarfloat( "bots_main_chat" ), ::cycle_dvar, "bots_main_chat", makeList( 0, 0.5, 1, 2 ) );
+	self AddMenu( "man_bots", 11, "Count spectators as players: " + _temp, ::man_bots, "fillspec", _tempDvar );
+	
+	self AddDvarOption( "man_bots", 12, "bots_manage_fill_watchplayers" );
+	self AddDvarOption( "man_bots", 13, "bots_main_kickBotsAtEnd" );
+	self AddDvarOption( "man_bots", 14, "bots_main_chat" );
 	
 	//
 	
@@ -816,14 +816,14 @@ addOptions()
 	
 	if ( _tempDvar )
 	{
-		_temp = "true";
+		_temp = "on";
 	}
 	else
 	{
-		_temp = "false";
+		_temp = "off";
 	}
 	
-	self AddMenu( "man_team", 3, "Toggle forcing bots on team: " + _temp, ::bot_teams, "teamforce", _tempDvar );
+	self AddMenu( "man_team", 3, "Force bots onto their team: " + _temp, ::bot_teams, "teamforce", _tempDvar );
 	
 	_tempDvar = getdvarint( "bots_team_mode" );
 	
@@ -836,18 +836,18 @@ addOptions()
 		_temp = "everyone";
 	}
 	
-	self AddMenu( "man_team", 4, "Toggle bot_team_bot: " + _temp, ::bot_teams, "teammode", _tempDvar );
+	self AddMenu( "man_team", 4, "Team balancing counts: " + _temp, ::bot_teams, "teammode", _tempDvar );
 	
 	_tempDvar = getdvarint( "bots_skill" );
 	
 	switch ( _tempDvar )
 	{
 		case 0:
-			_temp = "random for all";
+			_temp = "random for each bot";
 			break;
 			
 		case 1:
-			_temp = "too easy";
+			_temp = "easiest";
 			break;
 			
 		case 2:
@@ -879,7 +879,7 @@ addOptions()
 			break;
 			
 		case 9:
-			_temp = "complete random";
+			_temp = "completely random";
 			break;
 			
 		default:
@@ -887,7 +887,7 @@ addOptions()
 			break;
 	}
 	
-	self AddMenu( "man_team", 5, "Change bot difficulty: " + _temp, ::bot_teams, "skill", _tempDvar );
+	self AddMenu( "man_team", 5, "Bot difficulty: " + _temp, ::bot_teams, "skill", _tempDvar );
 	
 	_tempDvar = getdvarint( "bots_skill_axis_hard" );
 	self AddMenu( "man_team", 6, "Increase amount of hard bots on axis team: " + _tempDvar, ::bot_teams, "axishardup", _tempDvar );
@@ -914,11 +914,11 @@ addOptions()
 	
 	if ( _tempDvar )
 	{
-		_temp = "true";
+		_temp = "on";
 	}
 	else
 	{
-		_temp = "false";
+		_temp = "off";
 	}
 	
 	self AddMenu( "set1", 0, "Bots use only good class setups: " + _temp, ::bot_func, "reasonable", _tempDvar );
@@ -927,11 +927,11 @@ addOptions()
 	
 	if ( _tempDvar )
 	{
-		_temp = "true";
+		_temp = "on";
 	}
 	else
 	{
-		_temp = "false";
+		_temp = "off";
 	}
 	
 	self AddMenu( "set1", 1, "Bots can use op and annoying class setups: " + _temp, ::bot_func, "op", _tempDvar );
@@ -940,11 +940,11 @@ addOptions()
 	
 	if ( _tempDvar )
 	{
-		_temp = "true";
+		_temp = "on";
 	}
 	else
 	{
-		_temp = "false";
+		_temp = "off";
 	}
 	
 	self AddMenu( "set1", 2, "Bots can move: " + _temp, ::bot_func, "move", _tempDvar );
@@ -953,11 +953,11 @@ addOptions()
 	
 	if ( _tempDvar )
 	{
-		_temp = "true";
+		_temp = "on";
 	}
 	else
 	{
-		_temp = "false";
+		_temp = "off";
 	}
 	
 	self AddMenu( "set1", 3, "Bots can knife: " + _temp, ::bot_func, "knife", _tempDvar );
@@ -966,11 +966,11 @@ addOptions()
 	
 	if ( _tempDvar )
 	{
-		_temp = "true";
+		_temp = "on";
 	}
 	else
 	{
-		_temp = "false";
+		_temp = "off";
 	}
 	
 	self AddMenu( "set1", 4, "Bots can fire: " + _temp, ::bot_func, "fire", _tempDvar );
@@ -979,11 +979,11 @@ addOptions()
 	
 	if ( _tempDvar )
 	{
-		_temp = "true";
+		_temp = "on";
 	}
 	else
 	{
-		_temp = "false";
+		_temp = "off";
 	}
 	
 	self AddMenu( "set1", 5, "Bots can nade: " + _temp, ::bot_func, "nade", _tempDvar );
@@ -992,11 +992,11 @@ addOptions()
 	
 	if ( _tempDvar )
 	{
-		_temp = "true";
+		_temp = "on";
 	}
 	else
 	{
-		_temp = "false";
+		_temp = "off";
 	}
 	
 	self AddMenu( "set1", 6, "Bots can take carepackages: " + _temp, ::bot_func, "care", _tempDvar );
@@ -1005,11 +1005,11 @@ addOptions()
 	
 	if ( _tempDvar )
 	{
-		_temp = "true";
+		_temp = "on";
 	}
 	else
 	{
-		_temp = "false";
+		_temp = "off";
 	}
 	
 	self AddMenu( "set1", 7, "Bots play the objective: " + _temp, ::bot_func, "obj", _tempDvar );
@@ -1018,11 +1018,11 @@ addOptions()
 	
 	if ( _tempDvar )
 	{
-		_temp = "true";
+		_temp = "on";
 	}
 	else
 	{
-		_temp = "false";
+		_temp = "off";
 	}
 	
 	self AddMenu( "set1", 8, "Bots can camp: " + _temp, ::bot_func, "camp", _tempDvar );
@@ -1031,11 +1031,11 @@ addOptions()
 	
 	if ( _tempDvar )
 	{
-		_temp = "true";
+		_temp = "on";
 	}
 	else
 	{
-		_temp = "false";
+		_temp = "off";
 	}
 	
 	self AddMenu( "set1", 9, "Bots can jump and dropshot: " + _temp, ::bot_func, "jump", _tempDvar );
@@ -1044,24 +1044,24 @@ addOptions()
 	
 	if ( _tempDvar )
 	{
-		_temp = "true";
+		_temp = "on";
 	}
 	else
 	{
-		_temp = "false";
+		_temp = "off";
 	}
 	
-	self AddMenu( "set1", 10, "Bots can target other script objects: " + _temp, ::bot_func, "targetother", _tempDvar );
+	self AddMenu( "set1", 10, "Bots shoot killstreaks and equipment: " + _temp, ::bot_func, "targetother", _tempDvar );
 	
 	_tempDvar = getdvarint( "bots_play_killstreak" );
 	
 	if ( _tempDvar )
 	{
-		_temp = "true";
+		_temp = "on";
 	}
 	else
 	{
-		_temp = "false";
+		_temp = "off";
 	}
 	
 	self AddMenu( "set1", 11, "Bots can use killstreaks: " + _temp, ::bot_func, "killstreak", _tempDvar );
@@ -1070,93 +1070,44 @@ addOptions()
 	
 	if ( _tempDvar )
 	{
-		_temp = "true";
+		_temp = "on";
 	}
 	else
 	{
-		_temp = "false";
+		_temp = "off";
 	}
 	
-	self AddMenu( "set1", 12, "Bots can ads: " + _temp, ::bot_func, "ads", _tempDvar );
-
-	self AddMenu( "set1", 13, "Bots can aim: " + boolText( "bots_play_aim" ), ::cycle_dvar, "bots_play_aim", makeList( 0, 1 ) );
-	self AddMenu( "set1", 14, "Bots only use stance: " + getdvar( "bots_play_stance" ), ::cycle_dvar, "bots_play_stance", makeList( "none", "crouch", "prone", "stand" ) );
-	self AddMenu( "set1", 15, "Bots weapon recoil: " + getdvarfloat( "bots_play_recoil" ), ::cycle_dvar, "bots_play_recoil", makeList( 0, 0.5, 1, 1.5, 2 ) );
-
+	self AddMenu( "set1", 12, "Bots can aim down sights: " + _temp, ::bot_func, "ads", _tempDvar );
+	
+	self AddDvarOption( "set1", 13, "bots_play_aim" );
+	self AddDvarOption( "set1", 14, "bots_play_stance" );
+	self AddDvarOption( "set1", 15, "bots_play_recoil" );
+	
 	//
-
+	
 	self AddMenu( "Main", 3, "Bot behavior", ::OpenSub, "behavior", "" );
 	self AddBack( "behavior", "Main" );
-
-	behaviorValues = makeList( -1, 0, 5, 10, 25, 50, 75, 100 );
-	self AddMenu( "behavior", 0, "Strafe chance: " + behaviorText( "strafe" ), ::cycle_dvar, "bots_behavior_strafe", behaviorValues );
-	self AddMenu( "behavior", 1, "Grenade chance: " + behaviorText( "nade" ), ::cycle_dvar, "bots_behavior_nade", behaviorValues );
-	self AddMenu( "behavior", 2, "Sprint chance: " + behaviorText( "sprint" ), ::cycle_dvar, "bots_behavior_sprint", behaviorValues );
-	self AddMenu( "behavior", 3, "Camp chance: " + behaviorText( "camp" ), ::cycle_dvar, "bots_behavior_camp", behaviorValues );
-	self AddMenu( "behavior", 4, "Follow chance: " + behaviorText( "follow" ), ::cycle_dvar, "bots_behavior_follow", behaviorValues );
-	self AddMenu( "behavior", 5, "Crouch chance: " + behaviorText( "crouch" ), ::cycle_dvar, "bots_behavior_crouch", behaviorValues );
-	self AddMenu( "behavior", 6, "Weapon switch chance: " + behaviorText( "switch" ), ::cycle_dvar, "bots_behavior_switch", behaviorValues );
-	self AddMenu( "behavior", 7, "Class change chance: " + behaviorText( "class" ), ::cycle_dvar, "bots_behavior_class", behaviorValues );
-	self AddMenu( "behavior", 8, "Jump/dropshot chance: " + behaviorText( "jump" ), ::cycle_dvar, "bots_behavior_jump", behaviorValues );
-
+	
+	behaviors = strtok( "strafe,nade,sprint,camp,follow,crouch,switch,class,jump", "," );
+	
+	for ( i = 0; i < behaviors.size; i++ )
+	{
+		self AddDvarOption( "behavior", i, "bots_behavior_" + behaviors[ i ] );
+	}
+	
 	//
-
+	
 	self AddMenu( "Main", 4, "More settings", ::OpenSub, "set2", "" );
 	self AddBack( "set2", "Main" );
-
-	skillValues = makeList( 1, 2, 3, 4, 5, 6, 7 );
-	self AddMenu( "set2", 0, "Min bot difficulty: " + getdvarint( "bots_skill_min" ), ::cycle_dvar, "bots_skill_min", skillValues );
-	self AddMenu( "set2", 1, "Max bot difficulty: " + getdvarint( "bots_skill_max" ), ::cycle_dvar, "bots_skill_max", skillValues );
-
-	switch ( getdvarint( "bots_skill_dynamic" ) )
-	{
-		case 1:
-			_temp = "by amount of players";
-			break;
-
-		case 2:
-			_temp = "by bot's kdr";
-			break;
-
-		default:
-			_temp = "off";
-			break;
-	}
-
-	self AddMenu( "set2", 2, "Dynamic difficulty: " + _temp, ::cycle_dvar, "bots_skill_dynamic", makeList( 0, 1, 2 ) );
-	self AddMenu( "set2", 3, "Difficulty for 1, 2, 3... players: " + getdvar( "bots_skill_dynamic_players" ), ::cycle_dvar, "bots_skill_dynamic_players", makeList( "2,2,2,4,4,4,4,7", "1,2,3,4,5,6,7", "7,6,5,4,3,2,1", "1,1,4,4,7" ) );
-
-	_tempDvar = getdvarint( "bots_loadout_rank" );
-	_temp = "" + _tempDvar;
-
-	if ( _tempDvar == -1 )
-	{
-		_temp = "average of players";
-	}
-	else if ( _tempDvar == 0 )
-	{
-		_temp = "random";
-	}
-
-	self AddMenu( "set2", 4, "Bot rank: " + _temp, ::cycle_dvar, "bots_loadout_rank", makeList( -1, 0, 1, 10, 20, 40, 60, 80 ) );
-
-	_tempDvar = getdvarint( "bots_loadout_prestige" );
-	_temp = "" + _tempDvar;
-
-	if ( _tempDvar == -1 )
-	{
-		_temp = "same as host";
-	}
-	else if ( _tempDvar == -2 )
-	{
-		_temp = "random";
-	}
-
-	self AddMenu( "set2", 5, "Bot prestige: " + _temp, ::cycle_dvar, "bots_loadout_prestige", makeList( -1, -2, 0, 5, 10, 15, 20 ) );
-
-	xpValues = makeList( 0, 0.5, 1, 2, 3 );
-	self AddMenu( "set2", 6, "Kill xp from bots multiplier: " + getdvarfloat( "bots_main_xp_kill" ), ::cycle_dvar, "bots_main_xp_kill", xpValues );
-	self AddMenu( "set2", 7, "Weapon xp from bots multiplier: " + getdvarfloat( "bots_main_xp_weapon" ), ::cycle_dvar, "bots_main_xp_weapon", xpValues );
+	
+	self AddDvarOption( "set2", 0, "bots_skill_min" );
+	self AddDvarOption( "set2", 1, "bots_skill_max" );
+	self AddDvarOption( "set2", 2, "bots_skill_dynamic" );
+	self AddDvarOption( "set2", 3, "bots_skill_dynamic_players" );
+	self AddDvarOption( "set2", 4, "bots_loadout_rank" );
+	self AddDvarOption( "set2", 5, "bots_loadout_prestige" );
+	self AddDvarOption( "set2", 6, "bots_main_xp_kill" );
+	self AddDvarOption( "set2", 7, "bots_main_xp_weapon" );
 }
 
 /*
@@ -1165,85 +1116,379 @@ addOptions()
 makeList( a, b, c, d, e, f, g, h )
 {
 	list = [];
-
+	
 	if ( isdefined( a ) )
 	{
 		list[ list.size ] = a;
 	}
-
+	
 	if ( isdefined( b ) )
 	{
 		list[ list.size ] = b;
 	}
-
+	
 	if ( isdefined( c ) )
 	{
 		list[ list.size ] = c;
 	}
-
+	
 	if ( isdefined( d ) )
 	{
 		list[ list.size ] = d;
 	}
-
+	
 	if ( isdefined( e ) )
 	{
 		list[ list.size ] = e;
 	}
-
+	
 	if ( isdefined( f ) )
 	{
 		list[ list.size ] = f;
 	}
-
+	
 	if ( isdefined( g ) )
 	{
 		list[ list.size ] = g;
 	}
-
+	
 	if ( isdefined( h ) )
 	{
 		list[ list.size ] = h;
 	}
-
+	
 	return list;
 }
 
 /*
-	Returns true or false text for the dvar
+	Returns "on" or "off"
 */
-boolText( dvar )
+onOff( value )
 {
-	if ( getdvarint( dvar ) )
+	if ( value )
 	{
-		return "true";
+		return "on";
 	}
-
-	return "false";
+	
+	return "off";
 }
 
 /*
-	Returns the text for a bots_behavior_* dvar
+	Returns the name of the bot difficulty level
 */
-behaviorText( behavior )
+skillName( skill )
 {
-	value = getdvarint( "bots_behavior_" + behavior );
+	switch ( skill )
+	{
+		case 1:
+			return "1 (easiest)";
+			
+		case 2:
+			return "2 (easy)";
+			
+		case 3:
+			return "3 (easy-medium)";
+			
+		case 4:
+			return "4 (medium)";
+			
+		case 5:
+			return "5 (hard)";
+			
+		case 6:
+			return "6 (very hard)";
+			
+		case 7:
+			return "7 (hardest)";
+	}
+	
+	return "" + skill;
+}
 
+/*
+	Returns a multiplier as text, ex. off, normal, x2
+*/
+multiplierText( value )
+{
+	if ( value <= 0 )
+	{
+		return "off";
+	}
+	
+	if ( value == 1 )
+	{
+		return "normal";
+	}
+	
+	return "x" + value;
+}
+
+/*
+	Returns the readable name of a dvar for the menu
+*/
+menuDvarName( dvar )
+{
+	switch ( dvar )
+	{
+		case "bots_manage_fill_watchplayers":
+			return "Wait for a player before adding bots";
+			
+		case "bots_main_kickBotsAtEnd":
+			return "Kick bots when the match ends";
+			
+		case "bots_main_chat":
+			return "Bot chat";
+			
+		case "bots_play_aim":
+			return "Bots can aim";
+			
+		case "bots_play_stance":
+			return "Bot stance";
+			
+		case "bots_play_recoil":
+			return "Bot weapon recoil";
+			
+		case "bots_behavior_strafe":
+			return "How often bots strafe in fights";
+			
+		case "bots_behavior_nade":
+			return "How often bots throw grenades";
+			
+		case "bots_behavior_sprint":
+			return "How often bots sprint";
+			
+		case "bots_behavior_camp":
+			return "How often bots camp";
+			
+		case "bots_behavior_follow":
+			return "How often bots follow others";
+			
+		case "bots_behavior_crouch":
+			return "How often bots crouch";
+			
+		case "bots_behavior_switch":
+			return "How often bots switch weapons";
+			
+		case "bots_behavior_class":
+			return "How often bots change class";
+			
+		case "bots_behavior_jump":
+			return "How often bots jump/drop shot";
+			
+		case "bots_skill_min":
+			return "Lowest bot difficulty";
+			
+		case "bots_skill_max":
+			return "Highest bot difficulty";
+			
+		case "bots_skill_dynamic":
+			return "Auto difficulty";
+			
+		case "bots_skill_dynamic_players":
+			return "By players";
+			
+		case "bots_loadout_rank":
+			return "Bot rank";
+			
+		case "bots_loadout_prestige":
+			return "Bot prestige";
+			
+		case "bots_main_xp_kill":
+			return "XP for killing bots";
+			
+		case "bots_main_xp_weapon":
+			return "Weapon XP for killing bots";
+	}
+	
+	return dvar;
+}
+
+/*
+	Returns the values the menu cycles through for a dvar
+*/
+menuDvarValues( dvar )
+{
+	switch ( dvar )
+	{
+		case "bots_manage_fill_watchplayers":
+		case "bots_main_kickBotsAtEnd":
+		case "bots_play_aim":
+			return makeList( 0, 1 );
+			
+		case "bots_main_chat":
+			return makeList( 0, 0.5, 1, 2 );
+			
+		case "bots_play_stance":
+			return makeList( "none", "crouch", "prone", "stand" );
+			
+		case "bots_play_recoil":
+			return makeList( 0, 0.5, 1, 1.5, 2 );
+			
+		case "bots_skill_min":
+		case "bots_skill_max":
+			return makeList( 1, 2, 3, 4, 5, 6, 7 );
+			
+		case "bots_skill_dynamic":
+			return makeList( 0, 1, 2 );
+			
+		case "bots_skill_dynamic_players":
+			return makeList( "2,2,2,4,4,4,4,7", "1,1,4,4,7", "1,2,3,4,5,6,7", "7,6,5,4,3,2,1" );
+			
+		case "bots_loadout_rank":
+			return makeList( -1, 0, 1, 10, 20, 40, 60, 80 );
+			
+		case "bots_loadout_prestige":
+			return makeList( -1, -2, 0, 5, 10, 15, 20 );
+			
+		case "bots_main_xp_kill":
+		case "bots_main_xp_weapon":
+			return makeList( 0, 0.5, 1, 2, 3 );
+	}
+	
+	// bots_behavior_*
+	return makeList( -1, 0, 5, 10, 25, 50, 75, 100 );
+}
+
+/*
+	Returns the readable text of a dvar's current value for the menu
+*/
+menuDvarValueText( dvar )
+{
+	switch ( dvar )
+	{
+		case "bots_manage_fill_watchplayers":
+		case "bots_main_kickBotsAtEnd":
+		case "bots_play_aim":
+			return onOff( getdvarint( dvar ) );
+			
+		case "bots_main_chat":
+		case "bots_play_recoil":
+		case "bots_main_xp_kill":
+		case "bots_main_xp_weapon":
+			return multiplierText( getdvarfloat( dvar ) );
+			
+		case "bots_play_stance":
+			switch ( getdvar( dvar ) )
+			{
+				case "crouch":
+					return "crouch only";
+					
+				case "prone":
+					return "prone only";
+					
+				case "stand":
+					return "stand only";
+			}
+			
+			return "normal";
+			
+		case "bots_skill_min":
+		case "bots_skill_max":
+			return skillName( getdvarint( dvar ) );
+			
+		case "bots_skill_dynamic":
+			switch ( getdvarint( dvar ) )
+			{
+				case 1:
+					return "by human player count";
+					
+				case 2:
+					return "harder when a bot is losing";
+			}
+			
+			return "off";
+			
+		case "bots_skill_dynamic_players":
+			switch ( getdvar( dvar ) )
+			{
+				case "2,2,2,4,4,4,4,7":
+					return "1-3 easy, 4-7 medium, 8+ hardest";
+					
+				case "1,1,4,4,7":
+					return "1-2 easiest, 3-4 medium, 5+ hardest";
+					
+				case "1,2,3,4,5,6,7":
+					return "harder with more players";
+					
+				case "7,6,5,4,3,2,1":
+					return "easier with more players";
+			}
+			
+			return "custom (" + getdvar( dvar ) + ")";
+			
+		case "bots_loadout_rank":
+			value = getdvarint( dvar );
+			
+			if ( value == -1 )
+			{
+				return "same as the players";
+			}
+			
+			if ( value == 0 )
+			{
+				return "random";
+			}
+			
+			return "level " + value;
+			
+		case "bots_loadout_prestige":
+			value = getdvarint( dvar );
+			
+			if ( value == -1 )
+			{
+				return "same as the host";
+			}
+			
+			if ( value == -2 )
+			{
+				return "random";
+			}
+			
+			if ( value == 0 )
+			{
+				return "none";
+			}
+			
+			return "prestige " + value;
+	}
+	
+	// bots_behavior_*
+	value = getdvarint( dvar );
+	
 	if ( value < 0 )
 	{
-		return "difficulty default";
+		return "by difficulty";
 	}
-
+	
+	if ( value == 0 )
+	{
+		return "never";
+	}
+	
+	if ( value >= 100 )
+	{
+		return "always";
+	}
+	
 	return value + "%";
 }
 
 /*
-	Sets the dvar to the next value in the values, starts over at the first if the current value is not in the values
+	Adds a menu option that cycles through the values of the dvar
 */
-cycle_dvar( dvar, values )
+AddDvarOption( menu, num, dvar )
 {
-	index = -1;
+	self AddMenu( menu, num, menuDvarName( dvar ) + ": " + menuDvarValueText( dvar ), ::cycle_dvar, dvar, undefined );
+}
 
+/*
+	Sets the dvar to its next menu value, starts over at the first if the current value is not one of them
+*/
+cycle_dvar( dvar, unused )
+{
+	values = menuDvarValues( dvar );
+	index = -1;
+	
 	for ( i = 0; i < values.size; i++ )
 	{
 		if ( isstring( values[ i ] ) )
@@ -1257,7 +1502,7 @@ cycle_dvar( dvar, values )
 		else
 		{
 			diff = getdvarfloat( dvar ) - values[ i ];
-
+			
 			if ( diff * diff < 0.0001 )
 			{
 				index = i;
@@ -1265,16 +1510,16 @@ cycle_dvar( dvar, values )
 			}
 		}
 	}
-
+	
 	index++;
-
+	
 	if ( index >= values.size )
 	{
 		index = 0;
 	}
-
+	
 	setdvar( dvar, values[ index ] );
-	self iprintln( dvar + " set to " + values[ index ] );
+	self iprintln( menuDvarName( dvar ) + ": " + menuDvarValueText( dvar ) );
 }
 
 bot_func( a, b )
@@ -1283,67 +1528,67 @@ bot_func( a, b )
 	{
 		case "reasonable":
 			setdvar( "bots_loadout_reasonable", !b );
-			self iprintln( "Bots using reasonable setups: " + !b );
+			self iprintln( "Bots using reasonable setups: " + onOff( !b ) );
 			break;
 			
 		case "op":
 			setdvar( "bots_loadout_allow_op", !b );
-			self iprintln( "Bots using op setups: " + !b );
+			self iprintln( "Bots using op setups: " + onOff( !b ) );
 			break;
 			
 		case "move":
 			setdvar( "bots_play_move", !b );
-			self iprintln( "Bots move: " + !b );
+			self iprintln( "Bots move: " + onOff( !b ) );
 			break;
 			
 		case "knife":
 			setdvar( "bots_play_knife", !b );
-			self iprintln( "Bots knife: " + !b );
+			self iprintln( "Bots knife: " + onOff( !b ) );
 			break;
 			
 		case "fire":
 			setdvar( "bots_play_fire", !b );
-			self iprintln( "Bots fire: " + !b );
+			self iprintln( "Bots fire: " + onOff( !b ) );
 			break;
 			
 		case "nade":
 			setdvar( "bots_play_nade", !b );
-			self iprintln( "Bots nade: " + !b );
+			self iprintln( "Bots nade: " + onOff( !b ) );
 			break;
 			
 		case "care":
 			setdvar( "bots_play_take_carepackages", !b );
-			self iprintln( "Bots take carepackages: " + !b );
+			self iprintln( "Bots take carepackages: " + onOff( !b ) );
 			break;
 			
 		case "obj":
 			setdvar( "bots_play_obj", !b );
-			self iprintln( "Bots play the obj: " + !b );
+			self iprintln( "Bots play the obj: " + onOff( !b ) );
 			break;
 			
 		case "camp":
 			setdvar( "bots_play_camp", !b );
-			self iprintln( "Bots camp: " + !b );
+			self iprintln( "Bots camp: " + onOff( !b ) );
 			break;
 			
 		case "jump":
 			setdvar( "bots_play_jumpdrop", !b );
-			self iprintln( "Bots jump: " + !b );
+			self iprintln( "Bots jump: " + onOff( !b ) );
 			break;
 			
 		case "targetother":
 			setdvar( "bots_play_target_other", !b );
-			self iprintln( "Bots target other: " + !b );
+			self iprintln( "Bots target other: " + onOff( !b ) );
 			break;
 			
 		case "killstreak":
 			setdvar( "bots_play_killstreak", !b );
-			self iprintln( "Bots use killstreaks: " + !b );
+			self iprintln( "Bots use killstreaks: " + onOff( !b ) );
 			break;
 			
 		case "ads":
 			setdvar( "bots_play_ads", !b );
-			self iprintln( "Bots ads: " + !b );
+			self iprintln( "Bots ads: " + onOff( !b ) );
 			break;
 	}
 }
@@ -1390,64 +1635,64 @@ bot_teams( a, b )
 			
 		case "teamforce":
 			setdvar( "bots_team_force", !b );
-			self iprintln( "Forcing bots to team: " + !b );
+			self iprintln( "Force bots onto their team: " + onOff( !b ) );
 			break;
 			
 		case "teammode":
 			setdvar( "bots_team_mode", !b );
-			self iprintln( "Only count bots on team: " + !b );
+			self iprintln( "Team balancing only counts bots: " + onOff( !b ) );
 			break;
 			
 		case "skill":
 			switch ( b )
 			{
 				case 0:
-					self iprintlnbold( "Changed bot skill to easy." );
+					self iprintlnbold( "Bot difficulty: easiest" );
 					setdvar( "bots_skill", 1 );
 					break;
 					
 				case 1:
-					self iprintlnbold( "Changed bot skill to easy-med." );
+					self iprintlnbold( "Bot difficulty: easy" );
 					setdvar( "bots_skill", 2 );
 					break;
 					
 				case 2:
-					self iprintlnbold( "Changed bot skill to medium." );
+					self iprintlnbold( "Bot difficulty: easy-medium" );
 					setdvar( "bots_skill", 3 );
 					break;
 					
 				case 3:
-					self iprintlnbold( "Changed bot skill to med-hard." );
+					self iprintlnbold( "Bot difficulty: medium" );
 					setdvar( "bots_skill", 4 );
 					break;
 					
 				case 4:
-					self iprintlnbold( "Changed bot skill to hard." );
+					self iprintlnbold( "Bot difficulty: hard" );
 					setdvar( "bots_skill", 5 );
 					break;
 					
 				case 5:
-					self iprintlnbold( "Changed bot skill to very hard." );
+					self iprintlnbold( "Bot difficulty: very hard" );
 					setdvar( "bots_skill", 6 );
 					break;
 					
 				case 6:
-					self iprintlnbold( "Changed bot skill to hardest." );
+					self iprintlnbold( "Bot difficulty: hardest" );
 					setdvar( "bots_skill", 7 );
 					break;
 					
 				case 7:
-					self iprintlnbold( "Changed bot skill to custom. Base is easy." );
+					self iprintlnbold( "Bot difficulty: custom (set the hard and medium bots per team below)" );
 					setdvar( "bots_skill", 8 );
 					break;
 					
 				case 8:
-					self iprintlnbold( "Changed bot skill to complete random. Takes effect at restart." );
+					self iprintlnbold( "Bot difficulty: completely random (takes effect after a restart)" );
 					setdvar( "bots_skill", 9 );
 					break;
 					
 				default:
-					self iprintlnbold( "Changed bot skill to random. Takes effect at restart." );
+					self iprintlnbold( "Bot difficulty: random for each bot (takes effect after a restart)" );
 					setdvar( "bots_skill", 0 );
 					break;
 			}
@@ -1539,7 +1784,7 @@ man_bots( a, b )
 			
 		case "autokick":
 			setdvar( "bots_manage_fill_kick", !b );
-			self iprintln( "Kicking bots when bots_fill is exceeded: " + !b );
+			self iprintln( "Kick bots when there are too many: " + onOff( !b ) );
 			break;
 			
 		case "fillmode":
@@ -1547,32 +1792,32 @@ man_bots( a, b )
 			{
 				case 0:
 					setdvar( "bots_manage_fill_mode", 1 );
-					self iprintln( "bot_fill will now count only bots." );
+					self iprintln( "Bots to keep in-game counts: just bots" );
 					break;
 					
 				case 1:
 					setdvar( "bots_manage_fill_mode", 2 );
-					self iprintln( "bot_fill will now count everyone, adjusting to map." );
+					self iprintln( "Bots to keep in-game counts: everyone, adjust to map" );
 					break;
 					
 				case 2:
 					setdvar( "bots_manage_fill_mode", 3 );
-					self iprintln( "bot_fill will now count only bots, adjusting to map." );
+					self iprintln( "Bots to keep in-game counts: just bots, adjust to map" );
 					break;
 					
 				case 3:
 					setdvar( "bots_manage_fill_mode", 4 );
-					self iprintln( "bot_fill will now use bots as team balance." );
+					self iprintln( "Bots to keep in-game counts: bots used as team balance" );
 					break;
 					
 				case 4:
 					setdvar( "bots_manage_fill_mode", 5 );
-					self iprintln( "bot_fill will now use bots as team balance, adjusting to map." );
+					self iprintln( "Bots to keep in-game counts: bots used as team balance, adjust to map" );
 					break;
 					
 				default:
 					setdvar( "bots_manage_fill_mode", 0 );
-					self iprintln( "bot_fill will now count everyone." );
+					self iprintln( "Bots to keep in-game counts: everyone" );
 					break;
 			}
 			
@@ -1590,7 +1835,7 @@ man_bots( a, b )
 			
 		case "fillspec":
 			setdvar( "bots_manage_fill_spec", !b );
-			self iprintln( "Count players on spectator for bots_fill: " + !b );
+			self iprintln( "Count spectators as players: " + onOff( !b ) );
 			break;
 	}
 }
