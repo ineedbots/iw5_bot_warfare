@@ -795,6 +795,10 @@ addOptions()
 	}
 	
 	self AddMenu( "man_bots", 11, "Count players for fill on spectator: " + _temp, ::man_bots, "fillspec", _tempDvar );
+
+	self AddMenu( "man_bots", 12, "Wait for a player before adding bots: " + boolText( "bots_manage_fill_watchplayers" ), ::cycle_dvar, "bots_manage_fill_watchplayers", makeList( 0, 1 ) );
+	self AddMenu( "man_bots", 13, "Kick bots at the end of the match: " + boolText( "bots_main_kickBotsAtEnd" ), ::cycle_dvar, "bots_main_kickBotsAtEnd", makeList( 0, 1 ) );
+	self AddMenu( "man_bots", 14, "Bot chat rate: " + getdvarfloat( "bots_main_chat" ), ::cycle_dvar, "bots_main_chat", makeList( 0, 0.5, 1, 2 ) );
 	
 	//
 	
@@ -1074,6 +1078,203 @@ addOptions()
 	}
 	
 	self AddMenu( "set1", 12, "Bots can ads: " + _temp, ::bot_func, "ads", _tempDvar );
+
+	self AddMenu( "set1", 13, "Bots can aim: " + boolText( "bots_play_aim" ), ::cycle_dvar, "bots_play_aim", makeList( 0, 1 ) );
+	self AddMenu( "set1", 14, "Bots only use stance: " + getdvar( "bots_play_stance" ), ::cycle_dvar, "bots_play_stance", makeList( "none", "crouch", "prone", "stand" ) );
+	self AddMenu( "set1", 15, "Bots weapon recoil: " + getdvarfloat( "bots_play_recoil" ), ::cycle_dvar, "bots_play_recoil", makeList( 0, 0.5, 1, 1.5, 2 ) );
+
+	//
+
+	self AddMenu( "Main", 3, "Bot behavior", ::OpenSub, "behavior", "" );
+	self AddBack( "behavior", "Main" );
+
+	behaviorValues = makeList( -1, 0, 5, 10, 25, 50, 75, 100 );
+	self AddMenu( "behavior", 0, "Strafe chance: " + behaviorText( "strafe" ), ::cycle_dvar, "bots_behavior_strafe", behaviorValues );
+	self AddMenu( "behavior", 1, "Grenade chance: " + behaviorText( "nade" ), ::cycle_dvar, "bots_behavior_nade", behaviorValues );
+	self AddMenu( "behavior", 2, "Sprint chance: " + behaviorText( "sprint" ), ::cycle_dvar, "bots_behavior_sprint", behaviorValues );
+	self AddMenu( "behavior", 3, "Camp chance: " + behaviorText( "camp" ), ::cycle_dvar, "bots_behavior_camp", behaviorValues );
+	self AddMenu( "behavior", 4, "Follow chance: " + behaviorText( "follow" ), ::cycle_dvar, "bots_behavior_follow", behaviorValues );
+	self AddMenu( "behavior", 5, "Crouch chance: " + behaviorText( "crouch" ), ::cycle_dvar, "bots_behavior_crouch", behaviorValues );
+	self AddMenu( "behavior", 6, "Weapon switch chance: " + behaviorText( "switch" ), ::cycle_dvar, "bots_behavior_switch", behaviorValues );
+	self AddMenu( "behavior", 7, "Class change chance: " + behaviorText( "class" ), ::cycle_dvar, "bots_behavior_class", behaviorValues );
+	self AddMenu( "behavior", 8, "Jump/dropshot chance: " + behaviorText( "jump" ), ::cycle_dvar, "bots_behavior_jump", behaviorValues );
+
+	//
+
+	self AddMenu( "Main", 4, "More settings", ::OpenSub, "set2", "" );
+	self AddBack( "set2", "Main" );
+
+	skillValues = makeList( 1, 2, 3, 4, 5, 6, 7 );
+	self AddMenu( "set2", 0, "Min bot difficulty: " + getdvarint( "bots_skill_min" ), ::cycle_dvar, "bots_skill_min", skillValues );
+	self AddMenu( "set2", 1, "Max bot difficulty: " + getdvarint( "bots_skill_max" ), ::cycle_dvar, "bots_skill_max", skillValues );
+
+	switch ( getdvarint( "bots_skill_dynamic" ) )
+	{
+		case 1:
+			_temp = "by amount of players";
+			break;
+
+		case 2:
+			_temp = "by bot's kdr";
+			break;
+
+		default:
+			_temp = "off";
+			break;
+	}
+
+	self AddMenu( "set2", 2, "Dynamic difficulty: " + _temp, ::cycle_dvar, "bots_skill_dynamic", makeList( 0, 1, 2 ) );
+	self AddMenu( "set2", 3, "Difficulty for 1, 2, 3... players: " + getdvar( "bots_skill_dynamic_players" ), ::cycle_dvar, "bots_skill_dynamic_players", makeList( "2,2,2,4,4,4,4,7", "1,2,3,4,5,6,7", "7,6,5,4,3,2,1", "1,1,4,4,7" ) );
+
+	_tempDvar = getdvarint( "bots_loadout_rank" );
+	_temp = "" + _tempDvar;
+
+	if ( _tempDvar == -1 )
+	{
+		_temp = "average of players";
+	}
+	else if ( _tempDvar == 0 )
+	{
+		_temp = "random";
+	}
+
+	self AddMenu( "set2", 4, "Bot rank: " + _temp, ::cycle_dvar, "bots_loadout_rank", makeList( -1, 0, 1, 10, 20, 40, 60, 80 ) );
+
+	_tempDvar = getdvarint( "bots_loadout_prestige" );
+	_temp = "" + _tempDvar;
+
+	if ( _tempDvar == -1 )
+	{
+		_temp = "same as host";
+	}
+	else if ( _tempDvar == -2 )
+	{
+		_temp = "random";
+	}
+
+	self AddMenu( "set2", 5, "Bot prestige: " + _temp, ::cycle_dvar, "bots_loadout_prestige", makeList( -1, -2, 0, 5, 10, 15, 20 ) );
+
+	xpValues = makeList( 0, 0.5, 1, 2, 3 );
+	self AddMenu( "set2", 6, "Kill xp from bots multiplier: " + getdvarfloat( "bots_main_xp_kill" ), ::cycle_dvar, "bots_main_xp_kill", xpValues );
+	self AddMenu( "set2", 7, "Weapon xp from bots multiplier: " + getdvarfloat( "bots_main_xp_weapon" ), ::cycle_dvar, "bots_main_xp_weapon", xpValues );
+}
+
+/*
+	Makes an array of the given values
+*/
+makeList( a, b, c, d, e, f, g, h )
+{
+	list = [];
+
+	if ( isdefined( a ) )
+	{
+		list[ list.size ] = a;
+	}
+
+	if ( isdefined( b ) )
+	{
+		list[ list.size ] = b;
+	}
+
+	if ( isdefined( c ) )
+	{
+		list[ list.size ] = c;
+	}
+
+	if ( isdefined( d ) )
+	{
+		list[ list.size ] = d;
+	}
+
+	if ( isdefined( e ) )
+	{
+		list[ list.size ] = e;
+	}
+
+	if ( isdefined( f ) )
+	{
+		list[ list.size ] = f;
+	}
+
+	if ( isdefined( g ) )
+	{
+		list[ list.size ] = g;
+	}
+
+	if ( isdefined( h ) )
+	{
+		list[ list.size ] = h;
+	}
+
+	return list;
+}
+
+/*
+	Returns true or false text for the dvar
+*/
+boolText( dvar )
+{
+	if ( getdvarint( dvar ) )
+	{
+		return "true";
+	}
+
+	return "false";
+}
+
+/*
+	Returns the text for a bots_behavior_* dvar
+*/
+behaviorText( behavior )
+{
+	value = getdvarint( "bots_behavior_" + behavior );
+
+	if ( value < 0 )
+	{
+		return "difficulty default";
+	}
+
+	return value + "%";
+}
+
+/*
+	Sets the dvar to the next value in the values, starts over at the first if the current value is not in the values
+*/
+cycle_dvar( dvar, values )
+{
+	index = -1;
+
+	for ( i = 0; i < values.size; i++ )
+	{
+		if ( isstring( values[ i ] ) )
+		{
+			if ( getdvar( dvar ) == values[ i ] )
+			{
+				index = i;
+				break;
+			}
+		}
+		else
+		{
+			diff = getdvarfloat( dvar ) - values[ i ];
+
+			if ( diff * diff < 0.0001 )
+			{
+				index = i;
+				break;
+			}
+		}
+	}
+
+	index++;
+
+	if ( index >= values.size )
+	{
+		index = 0;
+	}
+
+	setdvar( dvar, values[ index ] );
+	self iprintln( dvar + " set to " + values[ index ] );
 }
 
 bot_func( a, b )

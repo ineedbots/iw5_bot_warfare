@@ -141,7 +141,9 @@ resetBotVars()
 	self.bot.cur_weap_dist_multi = 1;
 	self.bot.is_cur_sniper = false;
 	self.bot.is_cur_akimbo = false;
-	
+
+	self.bot.recoil = ( 0, 0, 0 ); // pitch, yaw of simulated recoil
+
 	self.bot.prio_objective = false;
 	
 	self.bot.rand = randomint( 100 );
@@ -209,11 +211,12 @@ IsWeapSniper( weap )
 		return false;
 	}
 	
-	if ( weaponclass( weap ) != "sniper" )
+	// some snipers (dragunov, etc) are not of the 'sniper' weaponclass, so also check the statstable
+	if ( weaponclass( weap ) != "sniper" && getweaponclass( weap ) != "weapon_sniper" )
 	{
 		return false;
 	}
-	
+
 	return true;
 }
 
@@ -822,8 +825,109 @@ spawned()
 	self thread watchHoldBreath();
 	self thread watchGrenadeFire();
 	self thread watchPickupGun();
-	
+	self thread watchRecoil();
+
 	self notify( "bot_spawned" );
+}
+
+/*
+	Simulates weapon recoil for the bot, builds up when firing and recovers when not
+*/
+watchRecoil()
+{
+	self endon( "disconnect" );
+	self endon( "death" );
+
+	for ( ;; )
+	{
+		if ( self waittill_any_timeout( 0.05, "weapon_fired" ) == "weapon_fired" )
+		{
+			self addRecoil( self getcurrentweapon() );
+		}
+		else
+		{
+			self.bot.recoil *= 0.75;
+
+			if ( lengthsquared( self.bot.recoil ) < 0.0001 )
+			{
+				self.bot.recoil = ( 0, 0, 0 );
+			}
+		}
+	}
+}
+
+/*
+	Adds recoil from a shot of the weapon
+*/
+addRecoil( weap )
+{
+	scale = getdvarfloat( "bots_play_recoil" );
+
+	if ( scale <= 0 || weap == "none" || self isusingremote() )
+	{
+		return;
+	}
+
+	switch ( weaponclass( weap ) )
+	{
+		case "rifle":
+			kick = 0.3;
+			break;
+
+		case "smg":
+			kick = 0.35;
+			break;
+
+		case "mg":
+			kick = 0.45;
+			break;
+
+		case "pistol":
+			kick = 0.5;
+			break;
+
+		default:
+			return;
+	}
+
+	// harder bots control recoil better
+	kick *= scale * ( 1.5 - self.pers[ "bots" ][ "skill" ][ "base" ] * 0.15 );
+
+	if ( self playerads() >= 1 )
+	{
+		kick *= 0.75;
+	}
+
+	stance = self getstance();
+
+	if ( stance == "crouch" )
+	{
+		kick *= 0.85;
+	}
+	else if ( stance == "prone" )
+	{
+		kick *= 0.7;
+	}
+
+	pitch = min( self.bot.recoil[ 0 ] + kick, 8 * scale );
+	yaw = clamp( self.bot.recoil[ 1 ] + randomfloatrange( kick * -0.5, kick * 0.5 ), -4 * scale, 4 * scale );
+
+	self.bot.recoil = ( pitch, yaw, 0 );
+}
+
+/*
+	Returns the world offset to add to the aim pos for the bot's current recoil
+*/
+getRecoilOffset( aimpos, eyePos, angles )
+{
+	if ( !isdefined( self.bot.recoil ) || self.bot.recoil == ( 0, 0, 0 ) )
+	{
+		return ( 0, 0, 0 );
+	}
+
+	dist = distance( aimpos, eyePos );
+
+	return anglestoup( angles ) * ( dist * tan( self.bot.recoil[ 0 ] ) ) + anglestoright( angles ) * ( dist * tan( self.bot.recoil[ 1 ] ) );
 }
 
 /*
@@ -1198,7 +1302,7 @@ stance_loop()
 		toStance = "crouch";
 	}
 	
-	if ( toStance == "stand" && randomint( 100 ) <= self.pers[ "bots" ][ "behavior" ][ "crouch" ] )
+	if ( toStance == "stand" && randomint( 100 ) < self.pers[ "bots" ][ "behavior" ][ "crouch" ] )
 	{
 		toStance = "crouch";
 	}
@@ -2142,7 +2246,8 @@ aim_loop()
 					aimpos += offset;
 					aimpos += aimoffset;
 					aimpos += ( 0, 0, nadeAimOffset );
-					
+					aimpos += self getRecoilOffset( aimpos, eyePos, angles );
+
 					conedot = getConeDot( aimpos, eyePos, angles );
 					
 					if ( isdefined( self.bot.knifing_target ) && self.bot.knifing_target == target )
@@ -2164,7 +2269,8 @@ aim_loop()
 					aimpos += offset;
 					aimpos += aimoffset;
 					aimpos += ( 0, 0, nadeAimOffset );
-					
+					aimpos += self getRecoilOffset( aimpos, eyePos, angles );
+
 					conedot = getConeDot( aimpos, eyePos, angles );
 					
 					if ( !nadeAimOffset && conedot > 0.999995 && lengthsquared( aimoffset ) < 0.05 )
@@ -3086,7 +3192,15 @@ sprint()
 	self endon( "disconnect" );
 	self notify( "bot_sprint" );
 	self endon( "bot_sprint" );
-	
+
+	// sprinting would make the bot stand up
+	forcedStance = getForcedStance();
+
+	if ( forcedStance != "" && forcedStance != "stand" )
+	{
+		return;
+	}
+
 	self BotBuiltinBotAction( "+sprint" );
 	wait 0.05;
 	self BotBuiltinBotAction( "-sprint" );
@@ -3403,6 +3517,63 @@ jump()
 }
 
 /*
+	Returns the stance bots are forced to be in from the bots_play_stance dvar, or "" if none
+*/
+getForcedStance()
+{
+	stance = getdvar( "bots_play_stance" );
+
+	if ( stance != "stand" && stance != "crouch" && stance != "prone" )
+	{
+		return "";
+	}
+
+	return stance;
+}
+
+/*
+	Does the stance the bot is forced to be in, returns true if it was
+*/
+doForcedStance()
+{
+	// let the bot climb ladders normally
+	if ( self isonladder() )
+	{
+		return false;
+	}
+
+	switch ( getForcedStance() )
+	{
+		case "stand":
+			self BotBuiltinBotAction( "-gocrouch" );
+			self BotBuiltinBotAction( "-goprone" );
+			return true;
+
+		case "crouch":
+			self BotBuiltinBotAction( "+gocrouch" );
+			self BotBuiltinBotAction( "-goprone" );
+			return true;
+
+		case "prone":
+			if ( self.hasriotshieldequipped )
+			{
+				// cant prone with a riot shield
+				self BotBuiltinBotAction( "+gocrouch" );
+				self BotBuiltinBotAction( "-goprone" );
+			}
+			else
+			{
+				self BotBuiltinBotAction( "-gocrouch" );
+				self BotBuiltinBotAction( "+goprone" );
+			}
+
+			return true;
+	}
+
+	return false;
+}
+
+/*
 	Bot will stand.
 */
 stand()
@@ -3411,7 +3582,12 @@ stand()
 	{
 		return;
 	}
-	
+
+	if ( self doForcedStance() )
+	{
+		return;
+	}
+
 	self BotBuiltinBotAction( "-gocrouch" );
 	self BotBuiltinBotAction( "-goprone" );
 }
@@ -3425,7 +3601,12 @@ crouch()
 	{
 		return;
 	}
-	
+
+	if ( self doForcedStance() )
+	{
+		return;
+	}
+
 	self BotBuiltinBotAction( "+gocrouch" );
 	self BotBuiltinBotAction( "-goprone" );
 }
@@ -3435,11 +3616,21 @@ crouch()
 */
 prone()
 {
-	if ( self isusingremote() || self.hasriotshieldequipped )
+	if ( self isusingremote() )
 	{
 		return;
 	}
-	
+
+	if ( self doForcedStance() )
+	{
+		return;
+	}
+
+	if ( self.hasriotshieldequipped )
+	{
+		return;
+	}
+
 	self BotBuiltinBotAction( "-gocrouch" );
 	self BotBuiltinBotAction( "+goprone" );
 }
@@ -3467,7 +3658,7 @@ botGetThirdPersonOffset( angles )
 		{
 			curweap = self getcurrentweapon();
 			
-			if ( ( issubstr( curweap, "_thermal" ) || weaponclass( curweap ) == "sniper" ) && !issubstr( curweap, "_acog" ) )
+			if ( ( issubstr( curweap, "_thermal" ) || IsWeapSniper( curweap ) ) && !issubstr( curweap, "_acog" ) )
 			{
 				offset = ( 0, 0, 0 );
 			}
@@ -3559,11 +3750,23 @@ bot_lookat( pos, time, vel, doAimPredict )
 	
 	Y = angleclamp180( angles[ 1 ] - myAngle[ 1 ] );
 	Y = Y / steps;
-	
+
+	// the botangles builtin breaks bots' aim in third person, setplayerangles works there (but not in remote killstreaks)
+	useSetPlayerAngles = ( getdvarint( "camera_thirdPerson" ) && !self isusingremote() );
+
 	for ( i = 0; i < steps; i++ )
 	{
 		myAngle = ( angleclamp180( myAngle[ 0 ] + X ), angleclamp180( myAngle[ 1 ] + Y ), 0 );
-		self BotBuiltinBotAngles( myAngle );
+
+		if ( useSetPlayerAngles )
+		{
+			self setplayerangles( myAngle );
+		}
+		else
+		{
+			self BotBuiltinBotAngles( myAngle );
+		}
+
 		wait 0.05;
 	}
 }

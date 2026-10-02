@@ -1773,8 +1773,32 @@ difficulty()
 					break;
 			}
 		}
-		
+
+		self applyBehaviorOverrides();
+
 		wait 5;
+	}
+}
+
+/*
+	Applies the bots_behavior_* dvars over the difficulty's behavior values.
+*/
+applyBehaviorOverrides()
+{
+	if ( !isdefined( level.bot_behavior_overrides ) )
+	{
+		return;
+	}
+
+	for ( i = 0; i < level.bot_behavior_overrides.size; i++ )
+	{
+		behavior = level.bot_behavior_overrides[ i ];
+		value = getdvarint( "bots_behavior_" + behavior );
+
+		if ( value >= 0 )
+		{
+			self.pers[ "bots" ][ "behavior" ][ behavior ] = value;
+		}
 	}
 }
 
@@ -1902,7 +1926,7 @@ onSpawned()
 	{
 		self waittill( "spawned_player" );
 		
-		if ( randomint( 100 ) <= self.pers[ "bots" ][ "behavior" ][ "class" ] )
+		if ( randomint( 100 ) < self.pers[ "bots" ][ "behavior" ][ "class" ] )
 		{
 			self.bot_change_class = undefined;
 		}
@@ -5745,13 +5769,19 @@ bot_killstreak_think_loop( data )
 	}
 	
 	ksWeap = maps\mp\killstreaks\_killstreaks::getkillstreakweapon( streakName );
-	
+
+	// players only hold the weapon of one killstreak at a time (on spawn, its the highest cost one), so select it like a player would
+	if ( !self hasweapon( ksWeap ) )
+	{
+		self maps\mp\killstreaks\_killstreaks::giveselectedkillstreakitem();
+	}
+
 	if ( curWeap == "none" || !isWeaponPrimary( curWeap ) )
 	{
 		curWeap = self getlastweapon();
 	}
-	
-	lifeId = self.pers[ "killstreaks" ][ 0 ].lifeid;
+
+	lifeId = self.pers[ "killstreaks" ][ self.killstreakindexweapon ].lifeid;
 	
 	if ( !isdefined( lifeId ) )
 	{
