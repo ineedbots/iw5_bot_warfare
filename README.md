@@ -111,8 +111,38 @@ You can find the ModDB release post [here](https://www.moddb.com/mods/bot-warfar
 | bots_play_killstreak             | If the bots can call in killstreaks.                                                           | 1          |
 | bots_play_ads                    | If the bots can aim down sights.                                                               | 1          |
 | bots_play_aim                    | If the bots can aim.                                                                           | 1          |
+| bots_behavior_strafe             | Overrides the percent chance bots strafe while fighting. `-1` uses the bot's difficulty value.  | -1         |
+| bots_behavior_nade               | Overrides the percent chance bots use grenades. `-1` uses the bot's difficulty value.          | -1         |
+| bots_behavior_sprint             | Overrides the percent chance bots sprint. `-1` uses the bot's difficulty value.                | -1         |
+| bots_behavior_camp               | Overrides the percent chance bots camp. `-1` uses the bot's difficulty value.                  | -1         |
+| bots_behavior_follow             | Overrides the percent chance bots follow others. `-1` uses the bot's difficulty value.         | -1         |
+| bots_behavior_crouch             | Overrides the percent chance bots crouch at each waypoint. `0` never, `100` always. `-1` uses the bot's difficulty value. (for crouch only bots, use `bots_play_stance`) | -1 |
+| bots_behavior_switch             | Overrides the percent chance bots switch weapons. `-1` uses the bot's difficulty value.        | -1         |
+| bots_behavior_class              | Overrides the percent chance bots change class on spawn. `-1` uses the bot's difficulty value. | -1         |
+| bots_behavior_jump               | Overrides the percent chance bots jump/drop shot. `-1` uses the bot's difficulty value.        | -1         |
+| bots_play_stance                 | Forces the bots to only use one stance: `stand`, `crouch` or `prone` (ex. `crouch` for crouch only bots). Bots won't sprint unless it is `stand`, and still stand to climb ladders. Anything else is normal. | none |
+| bots_play_recoil                 | How much weapon recoil affects the bots' aim. Recoil builds up while firing full auto, easier bots control it worse. `0` disables recoil. | 1.0 |
+| bots_skill_dynamic               | Changes the bots' difficulty during the match. Ignored when `bots_skill` is `8` or `9`.<ul><li>`0` - disabled.</li><li>`1` - by the amount of human players (look at `bots_skill_dynamic_players`).</li><li>`2` - each bot adapts to its own KDR, the worse a bot does the harder it gets (up to 3 levels either way).</li></ul> | 0 |
+| bots_skill_dynamic_players       | When `bots_skill_dynamic` is `1`. Comma separated difficulties for 1, 2, 3... human players, the last value is used for any more players. | 2,2,2,4,4,4,4,7 |
+| bots_main_xp_kill                | Multiplier of the kill XP human players get for killing a bot (bonuses like headshots are not affected). `0` gives no kill XP. | 1.0 |
+| bots_main_xp_weapon              | Multiplier of the weapon XP human players get for killing a bot. `0` gives no weapon XP.       | 1.0        |
 
 ## Changelog
+- Unreleased
+  - Fixed bots not using some killstreaks (ex. after dying) because they did not hold the selected killstreak's weapon
+  - Bots camp before using ride killstreaks earned this life again (was reading the wrong killstreak slot)
+  - Fixed bots' third person scoped aim being offset with snipers that are not the 'sniper' weaponclass (ex. Dragunov)
+  - Bots treat all sniper rifles (ex. Dragunov) as snipers
+  - Bots' aim in third person uses setplayerangles again (as in v2.2.0)
+  - Fixed bots always having at least a 1% chance to crouch, even when the crouch behavior is 0
+  - Added bots_behavior_* dvars to override the bots' behavior values
+  - Added bots_play_stance dvar to force bots into one stance (ex. crouch only)
+  - Bots are affected by weapon recoil (bots_play_recoil)
+  - Added bots_skill_dynamic and bots_skill_dynamic_players dvars, bot difficulty by amount of players or by KDR
+  - Added bots_main_xp_kill and bots_main_xp_weapon dvars to scale the XP for killing bots
+  - Fixed two unreachable waypoints on Erosion
+  - Fixed the game crashing ("Couldn't find tag_player on player's view-link parent") on Osprey Gunner killcams: those kills skip the killcam and never become the final killcam
+
 - v2.3.0
   - Fixed bots aiming in ac130/chopper being broken at times
   - Bots properly use pred missiles

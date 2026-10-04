@@ -452,6 +452,7 @@ Erosion()
 	/*  9:53 */waypoints[65].children[0] = 66;
 	/*  9:53 */waypoints[65].children[1] = 92;
 	/*  9:53 */waypoints[65].children[2] = 124;
+	waypoints[65].children[3] = 93;
 	/*  9:53 */waypoints[66] = spawnstruct();
 	/*  9:53 */waypoints[66].origin = ( 218.336, -1099.79, 128.125 );
 	/*  9:53 */waypoints[66].type = "stand";
@@ -607,6 +608,7 @@ Erosion()
 	/*  9:53 */waypoints[93].origin = ( 47.4013, -1166.87, 128.125 );
 	/*  9:53 */waypoints[93].type = "claymore";
 	/*  9:53 */waypoints[93].children[0] = 94;
+	waypoints[93].children[1] = 65;
 	/*  9:53 */waypoints[93].angles = ( 20.9222, 107.498, 0 );
 	/*  9:53 */waypoints[94] = spawnstruct();
 	/*  9:53 */waypoints[94].origin = ( 62.0376, -1207.71, 128.125 );
